@@ -1,0 +1,12 @@
+Package: challengeR
+Type: Package
+Title: Analyzing assessment data of biomedical image analysis competitions and visualization of results
+Version: 0.0.20
+Date: 2019-09-09
+Author: Manuel Wiesenfarth, Annette Kopp-Schneider
+Maintainer: Manuel Wiesenfarth <m.wiesenfarth@dkfz.de>
+Description: Analyzing assessment data of biomedical image analysis competitions and visualization of results.
+License: GPL-3
+Depends: purrr, ggplot2, dplyr, reshape2, relations, colorspace,Rgraphviz
+Imports: plyr, rlang, proto, rmarkdown,viridisLite, methods,pheatmap,graph,grid
+Suggests: foreach, doParallel, ggpubr

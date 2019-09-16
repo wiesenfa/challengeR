@@ -1,0 +1,459 @@
+---
+title: "Challenge visualization"
+author: "created by challengeR package version `r packageVersion('challengeR')` (Manuel Wiesenfarth, Division of Biostatistics, German Cancer Research Center (DKFZ), Heidelberg, Germany)"
+date: "`r Sys.setlocale('LC_TIME', 'English'); format(Sys.time(), '%d %B, %Y')`"
+params:
+  object: NA
+  consensus: NA
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+options(width=80)
+# out.format <- knitr::opts_knit$get("out.format")
+# img_template <- switch( out.format,
+#                      word = list("img-params"=list(fig.width=6,
+#                                                    fig.height=6,
+#                                                    dpi=150)),
+#                      {
+#                        # default
+#                        list("img-params"=list( dpi=150,
+#                                                fig.width=6,
+#                                                fig.height=6,
+#                                                out.width="504px",
+#                                                out.height="504px"))
+#                      } )
+# 
+# knitr::opts_template$set( img_template )
+
+knitr::opts_chunk$set(echo = F,fig.width=7,fig.height = 3,dpi=300)
+# options(replace.assign=TRUE, width=80) 
+# #opts_chunk$set(concordance=TRUE,fig.path=figDir,dev=c('jpeg','postscript','png','pdf'), echo=FALSE, fig.width=7, fig.height=7,results = "verbatim",autodep = TRUE)
+# opts_chunk$set(concordance=TRUE,dev=c(#'jpeg','png',#'postscript',
+#                                       'pdf'),
+#               fig.path="figures/",
+#                echo=F, fig.width=15, fig.height=9,results = "verbatim",autodep = TRUE)
+
+
+
+theme_set(theme_light())
+
+```
+
+
+
+
+```{r }
+# # Chosen Settings
+# 
+# - Uninteresting and target response rate: $p_0$=`r p0`, $p_1$=`r p1`
+# - Beta prior for futility criterion: Beta(`r shape1F`, `r shape2F`)
+# - Beta prior for efficacy criterion: Beta(`r shape1E`, `r shape2E`)
+```
+
+
+
+```{r }
+boot_object = params$object
+ordering_consensus=params$consensus
+
+challenge_multiple=boot_object$data
+
+ranking.fun=boot_object$FUN
+object=challenge_multiple%>%ranking.fun
+
+```
+
+```{r }
+a=challenge_multiple%>%decision.challenge(p.adjust.method="holm")
+aa=lapply(a,as.relation.challenge.incidence)
+names(aa)=names(challenge_multiple)
+
+relensemble= do.call(relation_ensemble,args = aa)
+
+```
+
+
+\section{Raw data visualization}
+Algorithms are ordered according to chosen ranking scheme.
+
+\subsection{Boxplot}
+Boxplots together with horizontally jittered dots
+for the metric values of each test case.
+
+```{r single_rawdata_boxplots1}
+boxplot(challenge_multiple)
+
+```
+
+
+
+\subsection{Podium plots}
+This plot consists of an upper part of
+spaghetti plots and a lower part of bar charts, the so-called
+podium (see Eugster et al, 2008). The x-axis shows as many podium places (i.e., ranks)
+as algorithms. Each algorithm in this plot is associated with
+a specific color, and the legend is sorted according to the
+selected ranking method for this task .
+Algorithms are ordered from left to right for each podium
+place according to the selected ranking.
+In the upper part of the podium plot, the y-axis shows the
+metric values. For each test case, one (decreasing) spaghetti
+is shown which connects DSC values for all algorithms, from
+the highest, ranking 1, to the lowest. The color of each dot
+is determined by the algorithm that achieved this value (and
+rank) and it determines the color of the connecting line down
+to the next dot. The lower part
+of the podium plot summarizes the spaghetti plots in a bar
+chart and presents the relative frequency that each algorithm
+achieved rank $k$. Note that in case of ties (identical ranking
+for at least two algorithms), random ranks are assigned since
+unique ranks are required for this plot. 
+
+```{r single_rawdata_podium1,eval=T,fig.width=12, fig.height=6}
+# gg_color_hue <- function(n) {
+#   hues = seq(15, 375, length = n + 1)
+#   hcl(h = hues, l = 65, c = 100)[1:n]
+# }
+# 
+# cols = gg_color_hue(n)
+
+# Add extra space to right of plot area; change clipping to figure
+par(mar=c(5, 4, 4, 2) + 0.1)
+op <-  par(mar=par()$mar+c(0,0,0,5))
+set.seed(38)
+podium(boot_object$data,
+        ranking.fun=boot_object$FUN, 
+        lines.show = T,lines.alpha = .3,
+        dots.cex=.5,ylab="metric value",
+          legendfn = function(algs, cols) {
+            legend("topright", inset=c(-0.07,0), xpd=TRUE, algs, lwd = 1, col =  cols, bg = NA,cex=.6) 
+          }
+          )
+par(op)
+ 
+```
+
+
+\subsection{Ranking heatmap}
+Shows a matrix of
+frequencies. For each cell $(i;A_j)$ it shows the color-coded
+number of test cases in which algorithm $A_j$ achieved rank
+$i$.
+
+```{r single_rawdata_rankingHeatmap,fig.width=9, fig.height=9,out.width='50%'}
+#
+rankingHeatmap(boot_object$data,ranking.fun=boot_object$FUN,fontsize=25)
+#
+```
+
+
+
+\section{Ranking stability}
+
+
+\subsection{Bootstrap results}
+
+\subsubsection{Blob plot}
+A synopsis of bootstrap results is achieved by
+a blob plot that shows all observed ranks across bootstrap
+samples (y-axis) for each algorithm (x-axis). Whenever a rank
+is achieved in at least one bootstrap sample, this is indicated
+by a dot with the area of the dot proportional to the relative
+frequency the rank was observed across bootstrap samples.
+Additionally, median ranks and 95% bootstrap intervals
+across bootstrap samples are shown in black in addition to
+reflect bootstrap variability.
+
+```{r single_stability_bootstrap_dotplot_xAlgorithm1,fig.width=9, fig.height=9}
+pl=list()
+for (subt in names(boot_object$bootsrappedRanks)){
+  a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
+         matlist=list(boot_object$matlist[[subt]]))
+  names(a$bootsrappedRanks)=names(a$matlist)=subt
+  class(a)="bootstrap.list"
+  r=boot_object$matlist[[subt]]
+
+  pl[[subt]]=stability2(a,max_size = 6,ordering=rownames(r[order(r$rank),]))
+}
+ggpubr::ggarrange(plotlist = pl)
+```
+
+
+\subsubsection{Violin plot of pairwise distances betw. original and bootstrap rankings}
+<!-- pairwise distance (correlation) between ranking based on full data and each bootstrap sample is computed. Then, densities across bootstrap samples are plotted for each subtask. -->
+A comparison of bootstrap results with the full assessment
+data ranking is achieved by evaluating the pairwise correlation
+(e.g., Kendall’s $\tau$ or another appropriate distance measure)
+between the ranking list based on the full assessment data and
+the ranking for each bootstrap sample. We choose Kendall’s $\tau$ 
+because it is bounded on $[-1; 1]$. The values are displayed in a
+violin plot that simultaneously depicts a boxplot and a density
+plot.
+
+```{r single_stability_bootstrap_violin12}
+violin(boot_object)
+```
+
+
+
+\subsection{Testing approach}
+
+\subsubsection{Testing approach summarized by dot-and-diagonal plot}
+
+```{r single_stability_significance_table1,fig.width=4, fig.height=4,out.width='50%'}
+for (Task in names(boot_object$data)){
+  print(significancePlot(rankedMat=object$matlist[[Task]],
+                 relation_object=relensemble[[Task]],shape=15,size=3,depictSignificant = F
+                 )+ggtitle(Task))#+scale_color_manual(name="decision",values=c("white","lightblue")))
+  
+}
+
+```
+
+\subsubsection{Testing approach summarized by contour plot}
+Incidence matrix of pairwise
+significant differences for a given significance level. The one-sided Wilcoxon signed
+rank test based on a 5\% significance level is used with
+adjustment for multiple testing according to Holm. Algorithms
+are given ordered by their rank on both axes. Blue shading
+indicates that the algorithm on the x-axis leads to significantly
+larger metric values than the algorithm on the y-axis, whereas
+red colour indicates no significant difference.
+
+```{r single_stability_significance_table1b,fig.width=4, fig.height=4,out.width='50%'}
+for (Task in names(boot_object$data)){
+  print(significancePlot2(rankedMat=object$matlist[[Task]],
+                 relation_object=relensemble[[Task]]
+                 )+ggtitle(Task))#+scale_color_manual(name="decision",values=c("white","lightblue")))
+  
+}
+
+
+```
+
+\subsubsection{Hasse diagram}
+ 
+```{r single_stability_significance_hasse, fig.height=19}
+plot(relensemble)
+```
+
+
+
+
+\subsection{Ranking stability across ranking methods}
+If
+a challenge separates algorithms well, any ranking method
+targeting the central tendency (take mean or median and then
+rank or vice versa, as well as test based procedures) is expected
+to provide about the same ranking list. The variability of
+ranking across different ranking methods is shown in a line
+plot that joins ranks obtained from different methods, one line
+per algorithm.
+
+```{r single_stability_rankingMethods}
+methodsplot(challenge_multiple)
+```
+
+
+\section{Multiple tasks}
+
+Algorithms are ordered according to chosen consensus ranking.
+
+\subsection{Ranking stability: Variability of achieved rankings across tasks}
+Variability of achieved rankings across tasks: If a
+reasonably large number of tasks is available, a blob plot
+can be drawn, visualizing the distribution
+of ranks each algorithm attained across tasks.
+Displayed are all ranks and their frequency that an algorithm
+achieved in any task. If all tasks would provide the same
+stable ranking, narrow intervals around the diagonal would
+be expected.
+
+```{r multiple_stability_rawdata_dotplot_xAlgorithm}
+stability1.ranked.list(object,ordering=ordering_consensus)
+```
+
+
+\subsection{Ranking stability: Ranking variability via bootstrap approach}
+
+Blob plot of bootstrap results over the different tasks separated
+by algorithm allows another perspective on the assessment data. This gives deeper insights into the characteristics
+of tasks and the ranking uncertainty of the algorithms in each
+task. Each algorithm is shown in a separate blob plot and
+for each task, all observed ranks across bootstrap samples (yaxis)
+are displayed. Additionally, medians and 95\% bootstrap
+intervals are shown in black.
+<!-- 1000 bootstrap Rankings were performed for each subtask. -->
+<!-- Each algorithm is considered separately and for each subtask (x-axis) all observed ranks across bootstrap samples (y-axis) are displayed. Additionally, medians and IQR is shown in black. -->
+
+<!-- We see which algorithm is consistently among best, which is consistently among worst, which vary extremely... -->
+
+
+```{r multiple_stability_bootstrap_dotplot_xTask,fig.width=7,fig.height = 5}
+stability1.bootstrap.list(boot_object,ordering=ordering_consensus)
+```
+
+<!-- Stacked frequencies of observed ranks across bootstrap samples are displayed with colouring according to subtask. Vertical lines provide original (non-bootstrap) rankings for each subtask. -->
+
+An alternative representation is provided by a stacked
+frequency plot of the observed ranks, separated by algorithm. Observed ranks across bootstrap samples are
+displayed with colouring according to task. For algorithms that
+achieve the same rank in different tasks for the full assessment
+data set, vertical lines are on top of each other. Vertical lines
+allow to compare the achieved rank of each algorithm over
+different tasks.
+```{r multiple_stability_bootstrap_stacked_xTask,fig.width=7,fig.height = 5}
+stability1stacked.bootstrap.list(boot_object,ordering=ordering_consensus)
+```
+
+\subsection{Characterization of tasks}
+
+
+\subsubsection{Visualizing bootstrap results}
+To investigate which
+tasks separate algorithms well (i.e., lead to a stable ranking),
+two visualization methods are recommended.
+
+Bootstrap results can be shown in a blob plot showing one plot for each
+task. In this view, the spread of the blobs for each algorithm
+can be compared across tasks. Deviations from the diagonal indicate deviations
+from the consensus ranking (over tasks). Specifically, if rank
+distribution of an algorithm is consistently below the diagonal,
+the algorithm performed better in this task than on average
+across tasks, while if the rank distribution of an algorithm
+is consistently above the diagonal, the algorithm performed
+worse in this task than on average across tasks. At the bottom
+of each panel, ranks for each algorithm in the tasks is provided.
+<!-- Now each subtask is considered separately and for each algorithm (x-axis) all observed ranks across bootstrap samples (y-axis) are displayed. Additionally, medians and IQR is shown in black. -->
+
+<!-- Shows which subtask leads to stable ranking and in which subtask ranking is more uncertain. -->
+
+
+Same as in Section ? but now ordered according to consensus.
+
+```{r multiple_taskCharacterization_bootstrap_dotplot_xAlgorithm}
+stability2.bootstrap.list(boot_object,ordering=ordering_consensus)
+```
+
+
+\subsubsection{Cluster Analysis}
+Quite a different question of interest
+is to investigate the similarity of tasks with respect to their
+rankings, i.e., which tasks lead to similar ranking lists and the
+ranking of which tasks are very different. For this question
+a hierarchical cluster analysis is performed based on the
+distance between ranking lists. Different distance measures
+can be used (here: symmetric distance)
+as well as different agglomeration methods (here: complete and average). 
+<!-- Hierarchical clustering of subtasks based on distance between rankings. -->
+
+<!-- Different distance measures can be used (Kendall's tau, (weighted) Spearman's footrule,...). -->
+
+<!-- Below, symmetric difference distance is used. "This computes the cardinality of the symmetric difference of two relations, i.e., the number of tuples contained in exactly one of two relations. For preference relations, this coincides with the Kemeny-Snell metric (Kemeny and Snell, 1962). For linear orders, it gives Kendall's tau metric (Diaconis, 1988)." -->
+
+<!-- Further, different agglomeration methods can be used as common in hierarchical clustering. In dendrogram below, average agglomeration is used. -->
+
+
+```{r multiple_taskCharacterization_clusteringComplete, fig.width=6, fig.height=5,out.width='60%'}
+#d=relation_dissimilarity.ranked.list(object,method=kendall)
+#d=as.dist(1-relation_dissimilarity.ranked.list(object,method=spearmansFootrule))
+d <- relation_dissimilarity(relensemble, method = "symdiff")
+
+# myplot <-pheatmap(as.matrix(d),color = viridis(n=100, direction = -1))
+# grid.newpage()
+# grid.draw(myplot$gtable)
+
+#plot(hclust(d,method="average"),main="Kendall - average")
+#plot(hclust(d,method="complete"),main="Kendall - complete")
+#par(cex=cex)
+plot(hclust(d,method="complete")) #,main="Symmetric difference distance - complete"
+
+```
+
+
+```{r multiple_taskCharacterization_clusteringAverage, fig.width=6, fig.height=5,out.width='60%'}
+#par(cex=cex)
+plot(hclust(d,method="average")) #,main="Symmetric difference distance - average"
+```
+
+<!-- Alternative representation of distance between rankings of subtask by a graph. -->
+<!-- Nodes are connected by edges starting with the second split in dendrogram. Thick (and dark) edges represent smaller distance. -->
+<!-- Subtasks which had a unique winner are filled with colour of the algorithm. In case there are more then one first-placed algorithm, nodes remain uncoloured. -->
+An alternative representation of
+distances between tasks (see Eugster et al, 2008) is provided by networktype
+graphs.
+Every task is represented by a node and nodes are connected
+by edges. Distance between nodes increase exponentially with
+the chosen distance measure d (here: distance between nodes
+equal to 1:05d). Thick edges represent smaller distance, i.e.,
+the ranking lists of corresponding tasks are similar. Tasks with
+a unique winner are filled to indicate the algorithm. In case
+there are more than one first-ranked algorithm, nodes remain
+uncoloured.
+```{r multiple_taskCharacterization_network, fig.width=6, fig.height=4,out.width='70%'}
+#benchmark:::bsranking() #leads to reversed ordering, modify:
+
+#coloring
+rm <-my.bsranking(relensemble)
+
+uw <- apply(rm, 2,
+            function(x) {
+              w <- which(x == 1)
+              ifelse(length(w) == 1,
+                     names(w), "none")
+            })
+cols=qualitative_hcl(n = nrow(rm), h = c(-221, 360), c = 80, l = 60 )
+names(cols)=rownames(rm)
+
+
+nn=length(unique(c(d))) # ==max(rm) number of different distance levels
+a=my.bsgraph0b(d, ndists.show = nn,
+         edge.col = terrain_hcl(nn, c=c(65,0), l=c(45,90), power=c(1/2,1.5)),
+         edge.lwd =4*rev(1.2^seq_len(length(unique(d)))/(1.2^length((unique(d))))),# seq(1, .001, length.out=nn),
+         node.fill = cols[uw])
+
+
+
+
+graph=a$graph
+nodeAttrs=a$nodeAttrs
+edgeAttrs=a$edgeAttrs
+#bsgraph0.graphNEL(graph, nodeAttrs = nodeAttrs, edgeAttrs = edgeAttrs)
+#bsgraph0.graphNEL
+layoutType = "neato"
+attrs <- Rgraphviz::getDefaultAttrs(layoutType = layoutType)
+#attrs$node$fixedsize <- F
+#attrs$node$fontsize <- 15
+#attrs$node$width <- 10
+ag <- Rgraphviz::agopen(graph, "", layoutType = layoutType, attrs = attrs, nodeAttrs = nodeAttrs, edgeAttrs = edgeAttrs)
+
+#grid::grid.newpage()
+plot(ag)
+
+leg.col=cols[uw][unique(names(cols[uw]))]
+legend("topright", names(leg.col), lwd = 1, col = leg.col, bg = "white")#,cex=1.5)
+
+
+```
+
+
+# Reference
+
+Wiesenfarth, M., Maier-Hein, L., Reinke, A., Cardoso, M.J. and Kopp-Schneider, A.. Challenge Visualization.
+*Journal*.
+
+M. J. A. Eugster, T. Hothorn, and F. Leisch, “Exploratory
+and inferential analysis of benchmark experiments,”
+Institut fuer Statistik, Ludwig-Maximilians-
+Universitaet Muenchen, Germany, Technical Report 30,
+2008. [Online]. Available: http://epub.ub.uni-muenchen.
+de/4134/.
+
+
+
+
+
+
+
