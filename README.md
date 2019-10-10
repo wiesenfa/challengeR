@@ -16,7 +16,7 @@ results
 
 <!-- ``` -->
 
-Requires R version \(\geq 3.5.2\) (<https://www.r-project.org>).
+Requires R version \>= 3.5.2 (<https://www.r-project.org>).
 
 Further, a recent version of Pandoc (\>= 1.12.3) is required. RStudio
 (<https://rstudio.com>) automatically includes this so you do not need
