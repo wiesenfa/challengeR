@@ -60,7 +60,7 @@ if (is.null(lt)) lt=th_get$line$linetype
     geom_abline(slope=1)+
     geom_text(aes(x=algorithm,y=fixy,label=rank),nudge_y=.5, # Set the position of the text to always be at '14.25'
               vjust = 0,
-              size=.2*th_get$text$size,#rel(0.8),
+              size=.25*th_get$text$size,#rel(0.8),
               fontface="plain",family="sans"
     )
 

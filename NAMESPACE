@@ -79,9 +79,9 @@ importFrom("purrr", "%>%")
 importFrom("rmarkdown", "render","word_document","pdf_document","html_document")
 importFrom("viridisLite", "viridis")
 importFrom("ggplot2", "aes","aes_string","geom_abline", "geom_bar", "geom_boxplot", "geom_count", "geom_density", "geom_jitter",
-    "geom_line", "geom_point", "geom_raster", "geom_step", "geom_text", "geom_violin","annotate",
-    "geom_vline", "ggplot", "ggtitle","vars","ylab","scale_size_area","theme_get","rel","geom_hline","ggplot_build",
-    "scale_y_continuous","coord_cartesian", "element_text", "facet_wrap", "position_jitter", "stat", "stat_summary", "theme", "unit")
+    "geom_line", "geom_point", "geom_raster", "geom_step", "geom_text", "geom_violin","annotate","guide_legend",
+    "geom_vline", "ggplot", "ggtitle","vars","xlab","ylab","scale_size_area","theme_get","rel","geom_hline","ggplot_build",
+    "scale_y_continuous","coord_cartesian", "element_text", "facet_wrap", "position_jitter", "stat", "stat_summary", "theme", "unit","guides")
 importFrom("grDevices", "col2rgb", "gray", "rgb")
 importFrom("graphics", "abline", "axis", "barplot", "box", "layout",
                "legend", "par", "plot", "points", "segments","boxplot", "stripchart", "title")
@@ -91,12 +91,12 @@ importFrom("methods", "new")
 importFrom("proto", "proto")
 importFrom("pheatmap", "pheatmap")
 importFrom("relations","relation","as.relation",
-    "relation_domain", "relation_incidence", "relation_is_asymmetric",
+    "relation_domain", "relation_incidence", "relation_is_asymmetric","relation_consensus","relation_ensemble",
     "relation_is_irreflexive", "relation_is_negatively_transitive",
     "relation_is_transitive", "relation_is_trichotomous", "relation_scores",
     "relation_violations","relation_dissimilarity")
 importFrom("graph", "addEdge")
-importFrom("grid", "grid.newpage","grid.draw")
+importFrom("grid", "grid.newpage","grid.draw","pushViewport","viewport")
 
 
 S3method(print, comparedRanks)
@@ -155,6 +155,7 @@ S3method(compareRanks,ranked.list)
 S3method(merge,list)
 
 S3method(melt,ranked.list)
+S3method(melt,ranked)
 S3method(melt,aggregated.list)
 
 S3method(boxplot,challenge)
@@ -219,6 +220,7 @@ S3method(relation_dissimilarity,ranked.list)
 S3method(relation_dissimilarity,default)
  
 S3method(stability1,ranked.list)
+S3method(stability1,bootstrap.list)
 S3method(stability1,default)
 
 S3method(consensus,ranked.list)
@@ -228,7 +230,7 @@ S3method(report,bootstrap.list)
 S3method(report,bootstrap)
 S3method(report,default)
 
-#  "stability1.bootstrap.list",    "stability1.ranked.list", 
+#  
 #  "stability1stacked.bootstrap.list",
-#    "stability2.bootstrap.list",
+#   
 

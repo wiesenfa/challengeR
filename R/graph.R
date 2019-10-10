@@ -102,8 +102,8 @@ my.bsgraph0b=
         t <- which(s == dists)
         graph <- addEdge(nodes[i], nodes[j], graph, 1) #edge.weight[t])
         n <- paste(nodes[i], nodes[j], sep = "~")
-        edgeAttrs$len[n] <- edge.len[t] # länge exponentiell
-        #        edgeAttrs$len[n] <- s # länge prop zu distance
+        edgeAttrs$len[n] <- edge.len[t] # laenge exponentiell
+        #        edgeAttrs$len[n] <- s # laenge prop zu distance
         edgeAttrs$color[n] <- "black"#edge.col[t]
         edgeAttrs$lwd[n] <- edge.lwd[t]
         edgeAttrs$lty[n] <- 1#edge.lty[t]

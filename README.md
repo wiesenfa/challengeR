@@ -1,10 +1,10 @@
-Analyzing assessment data of biomedical image analysis competitions and
-visualization of results
+Methods and open-source toolkit foranalyzing and visualizing challenge
+results
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-## Installation
+# Installation
 
 <!-- To get the current released version from CRAN: -->
 
@@ -16,6 +16,16 @@ visualization of results
 
 <!-- ``` -->
 
+Requires R version \(\geq 3.5.2\) (<https://www.r-project.org>).
+
+Further, a recent version of Pandoc (\>= 1.12.3) is required. RStudio
+(<https://rstudio.com>) automatically includes this so you do not need
+to download Pandoc if you plan to use rmarkdown from the RStudio IDE,
+otherwise you’ll need to install Pandoc for your platform
+(<https://pandoc.org/installing.html>). Finally, if you want to generate
+a pdf report you will need to have LaTeX installed (e.g. MiKTeX, MacTeX
+or TinyTeX).
+
 To get the current development version of the R package from
 Github:
 
@@ -23,14 +33,18 @@ Github:
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 
-BiocManager::install("Rgraphviz")
+BiocManager::install("Rgraphviz", dependencies = TRUE)
 
 devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
 ```
 
 # Usage
 
-## Setup
+Each of the following steps have to be run to generate the report: (1)
+Load package, (2) load data, (3) perform ranking, (4) perform
+bootstrapping and (5) generation of the report
+
+## 1\. Load package
 
 Load
 package
@@ -43,20 +57,40 @@ library(challengeR)
 
 <!-- This section (same as `vignette("vignettePlanning", package = "ESS")`)  visualizes how `plotECSS()` can be used to quantify the impact of a prior (including mixture priors and empirical Bayes power priors/commensurate priors) in terms of effective current sample sizes on a grid of true values of the data generating process. -->
 
-Load data set e.g. in csv format
+## 2\. Load data
+
+Data requires the following columns
+
+  - the metric value
+  - the algorithm name
+  - a test case identifier
+  - a task identifier in case of multi-task challenges.
+
+In case of missing metric values, a missing observation has to be
+provided (either as blank field or “NA”).
+
+If you have assessment data at hand stored in a csv file (if you want to
+use simulated data skip the following code line)
+use
 
 ``` r
-data_matrix=read.csv(file) # see ?read.csv for help
+data_matrix=read.csv(file.choose()) # see ?read.csv for help
 ```
 
-In the following use simulated data instead
+<!-- where "filename" has to be replaced by the filename (and file path). -->
+
+For illustration purposes, in the following simulated data is generated
+*instead* (skip the following code chunk if you have already loaded
+data)
 
 ``` r
+if (!requireNamespace("permute", quietly = TRUE)) install.packages("permute")
+
 n=50
 
 set.seed(4)
 strip=runif(n,.9,1)
-ideal=cbind(task="ideal",
+c_ideal=cbind(task="c_ideal",
             rbind(
               data.frame(alg_name="A1",value=runif(n,.9,1),case=1:n),
               data.frame(alg_name="A2",value=runif(n,.8,.89),case=1:n),
@@ -66,113 +100,173 @@ ideal=cbind(task="ideal",
             ))
 
 set.seed(1)
-fullyRandom=data.frame(task="fullyRandom",
+c_random=data.frame(task="c_random",
                        alg_name=factor(paste0("A",rep(1:5,each=n))),
                        value=plogis(rnorm(5*n,1.5,1)),case=rep(1:n,times=5)
                        )
 
 strip2=seq(.8,1,length.out=5)
 a=permute::allPerms(1:5)
-worstCase=data.frame(task="worstCase",
+c_worstcase=data.frame(task="c_worstcase",
                      alg_name=c(t(a)),
                      value=rep(strip2,nrow(a)),
                      case=rep(1:nrow(a),each=5)
                      )
-worstCase=rbind(worstCase,
-                data.frame(task="worstCase",alg_name=1:5,value=strip2,case=max(worstCase$case)+1)
+c_worstcase=rbind(c_worstcase,
+                data.frame(task="c_worstcase",alg_name=1:5,value=strip2,case=max(c_worstcase$case)+1)
           )
-worstCase$alg_name=factor(worstCase$alg_name,labels=paste0("A",1:5))
+c_worstcase$alg_name=factor(c_worstcase$alg_name,labels=paste0("A",1:5))
 
-data_matrix=rbind(ideal, fullyRandom, worstCase)
+data_matrix=rbind(c_ideal, c_random, c_worstcase)
 ```
 
-## Analysis and report for a single task
+## 3 Perform ranking
+
+### 3.1 Define challenge object
+
+Code differs slightly for single and multi task challenges.
+
+In case of a single task challenge use
 
 ``` r
-# Use only task "fullyRandom" in object data_matrix
-  dataSubset=subset(data_matrix, task=="fullyRandom")
+# Use only task "c_random" in object data_matrix
+  dataSubset=subset(data_matrix, task=="c_random")
 
-  challenge_single=as.challenge(dataSubset, 
-                                # Specify which column contains the algorithm, 
-                                # which column contains a test case identifier 
-                                # and which contains the metric value
-                                algorithm="alg_name", case="case", value="value", 
-                                # Specify if small metric values are better
-                                smallBetter = FALSE)
-
-# Perform ranking using aggregateThenRank(), rankThenAggregate() or testThenRank(), 
-# e.g. use "mean-then-rank"
-  object=challenge_single%>%aggregateThenRank(FUN = mean, # aggregation function, 
-                                                          # e.g. mean, median, min, max, 
-                                                          # or e.g. function(x) quantile(x, probs=0.05)
-                                              na.treat=0, # either "na.rm" to remove missing data, 
-                                                          # set missings to numeric value (e.g. 0) 
-                                                          # or specify a function, 
-                                                          # e.g. function(x) min(x)
-                                              ties.method = "min" # a character string specifying 
-                                                                  # how ties are treated, see ?base::rank
-                                              )  
-  object
-  # same as
-  #  object=challenge_single %>% aggregate(FUN = mean, na.treat=0) %>% rank(ties.method = "min")
-  # similarly for rankThenAggregate(),
-  #  object=challenge_single %>% rank(ties.method = "min") %>% 
-  #                      aggregate(FUN = mean) %>% rank(ties.method = "min")
-  
-# Perform bootstrapping
-  set.seed(1)
-  boot_object=object%>%bootstrap(nboot=1000)
-
-# generate report
-  report(boot_object, 
-         file = "filename.pdf", format = "PDF") # format can be "PDF", "HTML" or "Word"
+  challenge=as.challenge(dataSubset, 
+                        # Specify which column contains the algorithm, 
+                        # which column contains a test case identifier 
+                        # and which contains the metric value:
+                        algorithm="alg_name", case="case", value="value", 
+                        # Specify if small metric values are better
+                        smallBetter = FALSE)
 ```
 
-## Analysis and report for multiple tasks
+*Instead*, for a multi-task challenge
+use
 
 ``` r
 # Same as above but with 'by="task"' where variable "task" contains the task identifier
-  challenge_multi=as.challenge(data_matrix, 
-                               by="task", 
-                               algorithm="alg_name", case="case", value="value", 
-                               smallBetter = FALSE)
+  challenge=as.challenge(data_matrix, 
+                         by="task", 
+                         algorithm="alg_name", case="case", value="value", 
+                         smallBetter = FALSE)
+```
 
+### 3.2 Perform ranking
 
-# Perform ranking as above, e.g. use test-then-rank based on Wilcoxon signed rank test
-  object=challenge_multi%>%testThenRank(alpha=0.05, # significance level
-                                        p.adjust.method="none",  # method for adjustment for 
-                                                                 # multiple testing, see ?p.adjust
-                                        na.treat=0, # either "na.rm" to remove missing data, 
-                                                    # set missings to numeric value (e.g. 0) 
-                                                    # or specify a function, e.g. function(x) min(x)
-                                        ties.method = "min" # a character string specifying 
-                                                            # how ties are treated, see ?base::rank
-                             )
-  object
+Different ranking methods are available, choose one of them:
 
-# Perform bootstrapping using multiple CPUs
-  library(doParallel)
-  registerDoParallel(cores=8)  
-  set.seed(1)
-  boot_object=object%>%bootstrap(nboot=1000, parallel=TRUE, progress = "none")
-  stopImplicitCluster()
+  - for “aggregate-then-rank” use (here: take mean for
+aggregation)
 
+<!-- end list -->
 
-# Compute ranking consensus across tasks
-  # E.g. consensus ranking according to mean ranks across tasks. 
-  # See ?relation_consensus for different methods to derive consensus ranking
-  meanRanks=object%>%consensus(method = "euclidean") 
-  meanRanks # note that there are ties (i.e. some algorithms have identical mean rank)
+``` r
+ranking=challenge%>%aggregateThenRank(FUN = mean, # aggregation function, 
+                                                  # e.g. mean, median, min, max, 
+                                                  # or e.g. function(x) quantile(x, probs=0.05)
+                                      na.treat=0, # either "na.rm" to remove missing data, 
+                                                  # set missings to numeric value (e.g. 0) 
+                                                  # or specify a function, 
+                                                  # e.g. function(x) min(x)
+                                      ties.method = "min" # a character string specifying 
+                                                          # how ties are treated, see ?base::rank
+                                            )  
+```
 
-# generate report as above, but with additional specification of consensus ranking
-  report(boot_object, 
-         consensus=names(meanRanks),
-         file = "filename.pdf", 
-         format = "PDF")
+  - *alternatively*, for “rank-then-aggregate” with arguments as above
+    (here: take mean for aggregation):
+
+<!-- end list -->
+
+``` r
+ranking=challenge%>%rankThenAggregate(FUN = mean,
+                                      ties.method = "min"
+                                      )
+```
+
+  - *alternatively*, for test-then-rank based on Wilcoxon signed rank
+    test:
+
+<!-- end list -->
+
+``` r
+ranking=challenge%>%testThenRank(alpha=0.05, # significance level
+                                 p.adjust.method="none",  # method for adjustment for
+                                                          # multiple testing, see ?p.adjust
+                                 na.treat=0, # either "na.rm" to remove missing data,
+                                             # set missings to numeric value (e.g. 0)
+                                             # or specify a function, e.g. function(x) min(x)
+                                 ties.method = "min" # a character string specifying
+                                                     # how ties are treated, see ?base::rank
+                     )
+```
+
+## 4\. Perform bootstrapping
+
+Perform bootstrapping with 1000 bootstrap samples using one CPU
+
+``` r
+set.seed(1)
+ranking_bootstrapped=ranking%>%bootstrap(nboot=1000)
+```
+
+If you want to use multiple CPUs (here: 8 CPUs), use
+
+``` r
+library(doParallel)
+registerDoParallel(cores=8)  
+set.seed(1)
+ranking_bootstrapped=ranking%>%bootstrap(nboot=1000, parallel=TRUE, progress = "none")
+stopImplicitCluster()
+```
+
+## 5\. Generate the report
+
+Generate report in PDF, HTML or DOCX format. Code differs slightly for
+single and multi task challenges.
+
+### 5.1 For single task challenges
+
+``` r
+report(ranking_bootstrapped, 
+       title="singleTaskChallengeExample", # used for the title of the report
+       file = "filename.pdf", 
+       format = "PDF", # format can be "PDF", "HTML" or "Word"
+       latex_engine="pdflatex" #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+       ) 
+```
+
+### 5.1 For multi task challenges
+
+Same as for single task challenges, but additionally consensus ranking
+(rank aggregation across tasks) has to be given.
+
+Compute ranking consensus across tasks (here: consensus ranking
+according to mean ranks across
+tasks):
+
+``` r
+# See ?relation_consensus for different methods to derive consensus ranking
+meanRanks=ranking%>%consensus(method = "euclidean") 
+meanRanks # note that there may be ties (i.e. some algorithms have identical mean rank)
+```
+
+Generate report as above, but with additional specification of consensus
+ranking
+
+``` r
+report(ranking_bootstrapped, 
+       consensus=meanRanks,
+       title="multiTaskChallengeExample",
+       file = "filename.pdf", 
+       format = "PDF", # format can be "PDF", "HTML" or "Word"
+       latex_engine="pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+       )
 ```
 
 # Reference
 
-<!-- Wiesenfarth, M., Maier-Hein, L., Reinke, A., Kopp-Schneider, A.. Challenge Visualization  -->
-
-<!-- *Journal*. -->
+Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein,
+L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit
+foranalyzing and visualizing challenge results. ArXiv

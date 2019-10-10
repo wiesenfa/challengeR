@@ -50,8 +50,8 @@ print.ranked <-function(x,...)  print(x$mat, ...)
 podium <- function(x,...) UseMethod("podium")
 podium.default <- function(x, ...) stop("not implemented for this class")
 
-#density <- function(x,...) UseMethod("density")
-#density.default <- function(x, ...) density.default(x,...)
+density <- function(x,...) UseMethod("density")
+density.default <- function(x, ...) density.default(x,...)
 
 
 decision <- function(x,...) UseMethod("decision")

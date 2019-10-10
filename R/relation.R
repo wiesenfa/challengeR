@@ -18,9 +18,11 @@ relation_dissimilarity.ranked.list=function(x,method=kendall,...){  #method in k
 
 
 as.relation.ranked.list=function(x,...){
-  lapply(x$matlist,function(z){
+ res= lapply(x$matlist,function(z){
     r=z[,"rank"]
     names(r)=rownames(z)
     as.relation(r)
-  } )  
+  } )
+ class(res)="relation_ensemble"
+ res
 }

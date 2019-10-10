@@ -46,7 +46,7 @@ bootstrap.ranked=function(object,
 
 bootstrap.ranked.list=function(object,#algorithm, by,
                                nboot,
-         parallel=FALSE,progress="none",...){
+         parallel=FALSE,progress="text",...){
   algorithm=attr(object$data,"algorithm")
   by=attr(object$data,"case")
 
@@ -56,7 +56,7 @@ bootstrap.ranked.list=function(object,#algorithm, by,
     })
     tidy.data=object$data[tidy.data.id]
     tidy.matlist=object$matlist[tidy.data.id]
-    class(tidy.matlist)="ranked.list"
+ #   class(tidy.matlist)="ranked.list"
     
   res=#suppressWarnings(
     llply(1:nboot, function(it){

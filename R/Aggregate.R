@@ -9,6 +9,7 @@ Aggregate.data.frame <-function(object,x,algorithm, FUN=mean,
   call=match.call(expand.dots = T)  
   if (is.numeric(na.treat)) object[,x][is.na(object[,x])]=na.treat
   else if (is.function(na.treat)) object[,x][is.na(object[,x])]=na.treat(object[,x])
+  else if (na.treat=="na.rm") object=object[complete.cases(object),]
   
   if (is.character(FUN) && FUN=="significance"){
     if(missing(dataset_id)| missing(inverseOrder)| missing(alpha)) stop("If FUN='significance' arguments dataset_id, inverseOrder and alpha need to be given")
@@ -25,8 +26,9 @@ Aggregate.data.frame <-function(object,x,algorithm, FUN=mean,
       
     if (!is.function(FUN)) stop("FUN has to be a function (possibly as character) or 'significance'")
     #if (missing(x) & "rank" %in% colnames(object)) x="rank"
-    agg <- aggregate(object[,x], by=list(object[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z,na.rm=(na.treat=="na.rm"))))
-#    names(agg)=c(algorithm,paste0(x,"_",strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]))
+#      agg <- aggregate(object[,x], by=list(object[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z,na.rm=(na.treat=="na.rm"))))
+      agg <- aggregate(object[,x], by=list(object[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z)))
+      #    names(agg)=c(algorithm,paste0(x,"_",strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]))
     names(agg)=c(algorithm,paste0(x,"_",FUNname))
     rownames(agg)=agg[,1]
     agg=agg[,-1,drop=F]
@@ -74,9 +76,11 @@ Aggregate.list <-function(object,x,algorithm,FUN=mean,
     matlist=llply(object, function(piece){ #lapply(object, function(piece){
           if (is.numeric(na.treat)) piece[,x][is.na(piece[,x])]=na.treat
           else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x])
-
-          xmean <- aggregate(piece[,x], by=list(piece[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z,na.rm=(na.treat=="na.rm"))))
-#          names(xmean)=c(algorithm,paste0(x,"_",strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]))
+          else if (na.treat=="na.rm") piece=piece[complete.cases(piece),]
+          
+#          xmean <- aggregate(piece[,x], by=list(piece[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z,na.rm=(na.treat=="na.rm"))))
+          xmean <- aggregate(piece[,x], by=list(piece[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z)))
+          #          names(xmean)=c(algorithm,paste0(x,"_",strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]))
           names(xmean)=c(algorithm,paste0(x,"_",FUNname))
           rownames(xmean)=xmean[,1]
           xmean=xmean[,-1,drop=F]

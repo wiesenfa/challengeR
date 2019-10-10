@@ -1,4 +1,4 @@
-podium.challenge=function(x,ranking.fun, #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
+podium.challenge=function(x,ranking.fun, layout.heights=c(1,0.4), #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
                           ...){
   ranking=x%>%ranking.fun
   if (inherits(ranking,"ranked.list")){
@@ -6,13 +6,13 @@ podium.challenge=function(x,ranking.fun, #=function(x) aggregateThenRank(x,FUN =
     for (subt in names(x)){
       dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"))
       xx=as.warehouse.challenge(dd)
-      podium.AlgorithmPerformance(xx, ranking=ranking_list[[subt]],...)
+      podium.AlgorithmPerformance(xx, ranking=ranking_list[[subt]],layout.heights=layout.heights,...)
       title(subt,outer=T,line=-3)    }
     
   } else {
     ranking=t(ranking$mat[,"rank",drop=F])["rank",]
     x=as.warehouse.challenge(x)
-    podium.AlgorithmPerformance(x, ranking=ranking,...)
+    podium.AlgorithmPerformance(x, ranking=ranking,layout.heights=layout.heights,...)
     
   }
   
@@ -25,7 +25,7 @@ podium.AlgorithmPerformance=
             places.lty = 2, places.col = 1, legendfn = function(algs, 
                                                                 cols) {
               legend("topleft", algs, lwd = 1, col = cols, bg = "white")
-            }, 
+            }, layout.heights=c(1,0.4), 
             ...) {
     #   stopifnot(nlevels(x$datasets[, drop = TRUE]) == 1)
     #   stopifnot(nlevels(x$performances[, drop = TRUE]) == 1)
@@ -41,7 +41,7 @@ podium.AlgorithmPerformance=
                   lines.alpha = lines.alpha, lines.lwd = lines.lwd, lines.col = lines.col, 
                   dots.pch = dots.pch, dots.cex = dots.cex, places.lty = places.lty, 
                   places.col = places.col, legendfn = legendfn,
-                  inverseOrder=attributes(x)$challenge$inverseOrder,
+                  inverseOrder=attributes(x)$challenge$inverseOrder,layout.heights=layout.heights,
                   ...)
   }
 
@@ -51,7 +51,7 @@ podium.matrix=
             inverseOrder=FALSE,ranking, 
             col = 1:ncol(x), xlab = NULL, ylab = NULL, lines.show = FALSE, 
             lines.alpha = 0.2, lines.lwd = 1, lines.col = col, dots.pch = 19, 
-            dots.cex = 1, places.lty = 2, places.col = 1, legendfn = function(algs, 
+            dots.cex = 1, places.lty = 2, places.col = 1, layout.heights=c(1,0.4), legendfn = function(algs, 
                                                                               cols) {
               legend("topleft", algs, lwd = 1, col = cols, bg = "white")
             }, 
@@ -80,8 +80,7 @@ podium.matrix=
     })
     
     opar <- par(no.readonly = TRUE)
-    layout(matrix(c(1, 2), nrow = 2, byrow = TRUE), heights = c(1, 
-                                                                0.4))
+    layout(matrix(c(1, 2), nrow = 2, byrow = TRUE), heights =layout.heights)
     mar <- par("mar")
     par(mar = c(0, mar[2], mar[3], mar[4]))
     

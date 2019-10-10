@@ -47,7 +47,7 @@ aggregate.ranked <-function(x,
   mat=x$mat
   call=match.call(expand.dots = T)  
   what="rank"
-  xmean <- aggregate(mat[,what], by=list(mat[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z,na.rm=TRUE)))
+  xmean <- aggregate(mat[,what], by=list(mat[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z)))
   names(xmean)=c(algorithm,paste0(what,"_",strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]))
   rownames(xmean)=xmean[,1]
   xmean=xmean[,-1,drop=F]

@@ -32,7 +32,7 @@ if (inherits(x,"list"))  {
   ggplot(data = dat) +
     aes(x = rankingMethod, y = rank, color=algorithm, group=algorithm ) +
     geom_line(size=1)+
-    facet_wrap( ~ task)  + theme(
+    facet_wrap( ~ task)+xlab("ranking method")  + theme(
       # legend.position = "none",
       #panel.spacing = unit(0, "lines"),
       #strip.background = element_blank(),
@@ -64,7 +64,7 @@ if (inherits(x,"list"))  {
   
   ggplot(data = dat) +
     aes(x = rankingMethod, y = rank, color=algorithm, group=algorithm ) +
-    geom_line(size=1)+
+    geom_line(size=1)+xlab("ranking method")+
     theme(
       strip.placement = "outside",
       axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1) )

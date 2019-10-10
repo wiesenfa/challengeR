@@ -1,4 +1,4 @@
-report.bootstrap=function(object,format="PDF",file,open=TRUE,...){
+report.bootstrap=function(object,title="<Challenge name>",format="PDF",latex_engine="pdflatex",file,open=TRUE,...){
   #object=boot_object
   #format="Word"
   
@@ -11,7 +11,8 @@ report.bootstrap=function(object,format="PDF",file,open=TRUE,...){
   
   # Set up parameters to pass to Rmd document
   params <- list(
-    object=object
+    object=object,
+    name=title
   )
   
   # Knit the document, passing in the `params` list, and eval it in a
@@ -23,9 +24,9 @@ report.bootstrap=function(object,format="PDF",file,open=TRUE,...){
   # )
   out <- render(tempReport, switch(
     format,
-    PDF = pdf_document(), HTML = html_document(), Word = word_document()
+    PDF = pdf_document(number_sections=T,latex_engine=latex_engine), HTML = html_document(number_sections=T), Word = word_document()
   ),params = params,
-  envir = new.env(parent = globalenv())
+  envir = new.env(parent = globalenv()),...
   )
   
   if (!missing(file)) file.rename(out, file) else file=out
@@ -35,7 +36,7 @@ report.bootstrap=function(object,format="PDF",file,open=TRUE,...){
 
 
 
-report.bootstrap.list=function(object,consensus,format="PDF",file,open=TRUE,...){
+report.bootstrap.list=function(object,consensus,title="<Challenge name>",format="PDF",latex_engine="pdflatex",file,open=TRUE,...){
   #object=boot_object
   #format="Word"
   
@@ -49,7 +50,8 @@ report.bootstrap.list=function(object,consensus,format="PDF",file,open=TRUE,...)
   # Set up parameters to pass to Rmd document
   params <- list(
     object=object,
-    consensus=consensus
+    consensus=consensus,
+    name=title
   )
   
   # Knit the document, passing in the `params` list, and eval it in a
@@ -61,9 +63,9 @@ report.bootstrap.list=function(object,consensus,format="PDF",file,open=TRUE,...)
   # )
   out <- render(tempReport, switch(
     format,
-    PDF = pdf_document(), HTML = html_document(), Word = word_document()
+    PDF = pdf_document(number_sections=T,latex_engine=latex_engine), HTML = html_document(number_sections=T), Word = word_document(df_print="kable")
   ),params = params,
-  envir = new.env(parent = globalenv())
+  envir = new.env(parent = globalenv()),...
   )
   
   if (!missing(file)) file.rename(out, file) else file=out

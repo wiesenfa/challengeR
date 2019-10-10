@@ -5,8 +5,10 @@ kendall.bootstrap.list=function(x){
   } )
   names(ken)=names((x$bootsrappedRanks))
   
-  cat("Bootstrap samples without variability in rankings (all algorithms ranked 1) excluded.\n Frequency of such samples by task:\n",fill = T)
-  sapply(ken,function(x) sum(is.na(x)))
+  if (sum(is.na(x))>0){
+   cat("Bootstrap samples without variability in rankings (all algorithms ranked 1) excluded.\n Frequency of such samples by task:\n",fill = T)
+    sapply(ken,function(x) sum(is.na(x)))
+  }
   
   
   return(ken)
@@ -23,7 +25,7 @@ density.bootstrap.list=function(x,...){
     summarise(mean=mean(value,na.rm=T),median=median(value,na.rm=T),q25=quantile(value,probs = .25,na.rm=T),q75=quantile(value,probs = .75,na.rm=T))%>% 
     arrange(desc(median))
   
-  print(ss)
+  print(as.data.frame(ss))
   
   ggplot(ken)+
     geom_density(aes(value,fill=task),alpha=.3,color=NA)#+
@@ -34,7 +36,7 @@ density.bootstrap.list=function(x,...){
 violin.bootstrap=function(x,...){
   a=list(bootsrappedRanks=list(x$bootsrappedRanks),
          matlist=list(x$mat))
-  names(a$bootsrappedRanks)=names(a$matlist)="Task"
+  names(a$bootsrappedRanks)=names(a$matlist)=""
   violin.bootstrap.list(a,...)
   
 }
@@ -46,13 +48,14 @@ violin.bootstrap.list=function(x,...){
     summarise(mean=mean(value,na.rm=T),median=median(value,na.rm=T),q25=quantile(value,probs = .25,na.rm=T),q75=quantile(value,probs = .75,na.rm=T))%>% 
     arrange(desc(median))
   
-  print(ss)
+  print(as.data.frame(ss))
   
   ken%>%mutate(task=factor(task, levels=ss$task))%>%ggplot(aes(task,value,fill=task))+
     geom_violin(alpha=.3,color=NA)+
     geom_boxplot(width=0.1, fill="white")+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-          legend.position = "none")#+
+          legend.position = "none")+ylab("Kendall's tau")+
+    scale_y_continuous(limits=c(min(min(ken$value),0),max(max(ken$value),1)))#+
   #  ggtitle("Violin plot of pairwise Kendall's tau",subtitle= "betw. original and bootstap rankings")
 }
 

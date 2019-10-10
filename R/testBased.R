@@ -234,7 +234,7 @@ significance=function(object,x,algorithm,dataset_id,alpha, inverseOrder=FALSE,..
   # inverseOrder=attr(object,"inverseOrder") 
   # x=attr(object,"value")
   
-  xx=as.challenge(object,value=x,algorithm=algorithm,case=dataset_id,smallBetter = !inverseOrder)
+  xx=as.challenge(object,value=x,algorithm=algorithm,case=dataset_id,smallBetter = !inverseOrder,check=FALSE)
   a=decision.challenge(xx,...)
   prop_significance=  rowSums(a)/nrow(a)
   return(data.frame("prop_significance"=prop_significance,row.names = names(prop_significance)))

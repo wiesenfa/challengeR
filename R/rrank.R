@@ -8,13 +8,13 @@ rank.challenge=function(object,x,by,
   #        ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
   #        ))
   if (!missing(by)) {
-  call2=call("Rank",object=call$object, x=attr(object,"value"), #IS ALSO CASE NEEDEDß:
+  call2=call("Rank",object=call$object, x=attr(object,"value"), #IS ALSO CASE NEEDED?:
 #             by=c(attr(object,"annotator"),attr(object,"case")),
              by=c(attr(object,"annotator")),
          ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
            )
   res1=do.call("Rank",list(object=object,x=attr(object,"value"),
-                           by=c(attr(object,"annotator")),#IS ALSO CASE NEEDEDß:
+                           by=c(attr(object,"annotator")),#IS ALSO CASE NEEDED?:
 #                           by=c(attr(object,"annotator"),attr(object,"case")),
          ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
          ))
