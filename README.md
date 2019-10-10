@@ -1,4 +1,4 @@
-Methods and open-source toolkit foranalyzing and visualizing challenge
+Methods and open-source toolkit for analyzing and visualizing challenge
 results
 ================
 
@@ -268,5 +268,5 @@ report(ranking_bootstrapped,
 # Reference
 
 Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein,
-L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit
-foranalyzing and visualizing challenge results. ArXiv
+L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
+analyzing and visualizing challenge results. ArXiv
