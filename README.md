@@ -26,17 +26,25 @@ otherwise you’ll need to install Pandoc for your platform
 a pdf report you will need to have LaTeX installed (e.g. MiKTeX, MacTeX
 or TinyTeX).
 
-To get the current development version of the R package from
+To get the current development (experimental) version of the R package
+from
 Github:
 
 ``` r
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 
-BiocManager::install("Rgraphviz", dependencies = TRUE)
-
+devtools::install_bioc("Rgraphviz", dependencies = TRUE)
 devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
 ```
+
+# Terms of use
+
+Licenced under GPL-3. If you use this software for a publication, cite
+
+Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein,
+L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
+analyzing and visualizing challenge results. *arXiv preprint
+arXiv:1910.05121*
 
 # Usage
 
@@ -269,4 +277,5 @@ report(ranking_bootstrapped,
 
 Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein,
 L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
-analyzing and visualizing challenge results. ArXiv
+analyzing and visualizing challenge results. *arXiv preprint
+arXiv:1910.05121*
