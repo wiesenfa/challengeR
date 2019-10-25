@@ -32,8 +32,8 @@ Github:
 
 ``` r
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-
-devtools::install_bioc("Rgraphviz", dependencies = TRUE)
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+BiocManager::install("Rgraphviz", dependencies = TRUE)
 devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
 ```
 
