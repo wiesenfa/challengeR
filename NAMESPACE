@@ -53,7 +53,7 @@ export(
    # "setViewAlgorithmPerformance", "setViewDatasetBasisCharacterization",
   #  "setViewDatasetCharacterization", "setViewTestResult", 
   #"significance",
-    "significancePlot", "significancePlot2", 
+    "significancePlot", "significanceMap", 
   "spearmansFootrule",
     "spearmansWeightedFootrule", 
   "stability1.bootstrap.list",   

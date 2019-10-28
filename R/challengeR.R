@@ -32,4 +32,8 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
 }
 
 
-
+# fillMissings.challenge=function(object){
+#   aa=data.frame(alg=c(1,2,1),id=c(3,3,3),val=c(.1,.2,.3))
+#   tidyr::expand(object,object[[algorithm]],id)%>%dplyr::left_join(aa,by=c("alg","id"))
+#   
+# }

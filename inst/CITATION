@@ -1,7 +1,7 @@
-citEntry(
-  entry="Article",
-   title={Methods and open-source toolkit for analyzing and visualizing challenge results},
-  journal      ="arXiv preprint arXiv:1910.05121",
+bibentry(
+  bibtype="Article",
+   title={"Methods and open-source toolkit for analyzing and visualizing challenge results"},
+  journal={"arXiv preprint arXiv:1910.05121"},
    year="2019",
   author=
   personList(as.person("Manuel Wiesenfarth"), as.person("Annika Reinke")
@@ -10,10 +10,3 @@ citEntry(
 
 
 
-@misc{wiesenfarth2019methods,
-    author={Manuel Wiesenfarth and Annika Reinke and Bennett A. Landman and Manuel Jorge Cardoso and Lena Maier-Hein and Annette Kopp-Schneider},
-    year={2019},
-    eprint={1910.05121},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
-}

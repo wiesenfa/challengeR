@@ -5,6 +5,8 @@ rank.aggregated <-function(object,#x,
   if (missing(inverseOrder)){
     if (!is.null(attr(object$data,"inverseOrder"))) inverseOrder=attr(object$data,"inverseOrder")
     else stop("inverseOrder has to be provided either in as.challenge() or rank()")
+    
+    if (object$isSignificance) inverseOrder=TRUE  # smallBetter (inverseOrder) already taken care of by one-sided test nature of signficance
   }  
   mat=object$mat
   

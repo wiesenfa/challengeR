@@ -24,14 +24,16 @@ aggregate.challenge=function(x,FUN=mean,
     res=list(FUN = . %>% (call2),
              call=list(call2),
              data=x,
-             matlist=res1$matlist)
+             matlist=res1$matlist,
+             isSignificance=res1$isSignificance)
     
     class(res)=c("aggregated.list",class(res))
   } else {
     res=list(FUN = . %>% (call2),
              call=list(call2),
              data=x,
-             mat=res1$mat)
+             mat=res1$mat,
+             isSignificance=res1$isSignificance)
     
     class(res)=c("aggregated",class(res))
     

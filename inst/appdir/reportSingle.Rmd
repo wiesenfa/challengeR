@@ -81,7 +81,7 @@ knitr::kable(boot_object$mat[order(boot_object$mat$rank),])
 \bigskip
 
 ```{r boxplots}
-boxplot(challenge_single,ranking.fun=boot_object$FUN,size=.8)+xlab("algorithm")+ylab("metric value")
+boxplot(challenge_single,ranking.fun=boot_object$FUN,size=.8)+xlab("Algorithm")+ylab("Metric value")
 
 ```
 
@@ -120,7 +120,7 @@ op <-par(mar=par()$mar+c(-.5,0.5,-3.5,4.5))
  podium(challenge_single,
         ranking.fun=boot_object$FUN, 
         lines.show = T,lines.alpha = .4,
-        dots.cex=.9,ylab="metric value",layout.heights=c(1,.35),
+        dots.cex=.9,ylab="Metric value",layout.heights=c(1,.35),
           legendfn = function(algs, cols) {
             #title(single_subtask); 
             legend("topright", inset=c(-0.12,0), xpd=TRUE, algs, lwd = 1, col =  cols, bg = NA,cex=1.4,seg.len=1.1) 
@@ -185,7 +185,7 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 a=challenge_single%>%decision.challenge(alpha=0.05,p.adjust.method="holm")
 relensemble= as.relation(a)
 
-print(significancePlot2(rankedMat=boot_object$mat,
+print(significanceMap(rankedMat=boot_object$mat,
                  relation_object=relensemble
                  )
         )#+ggtitle(Task))#+scale_color_manual(name="decision",values=c("white","lightblue")))

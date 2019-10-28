@@ -1,4 +1,4 @@
-significancePlot2=function(rankedMat,relation_object,order=FALSE,...){
+significanceMap=function(rankedMat,relation_object,order=FALSE,...){
   rankedMat$algorithm=rownames(rankedMat)
   inc=relation_incidence(relation_object)
   

@@ -2,9 +2,8 @@
 
 Aggregate.data.frame <-function(object,x,algorithm, FUN=mean,
          na.treat="na.rm", #can be na.rm, numeric value or function
-         dataset_id, alpha=0.05, p.adjust.method="none",alternative="one.sided",test.fun=function(x,y) wilcox.test(x,y,
-                                                                                                                   alternative = alternative,exact=FALSE,
-                                                                                                                   paired = TRUE)$p.value,inverseOrder=TRUE, # only needed for significance 
+         dataset_id, alpha=0.05, p.adjust.method="none",alternative="one.sided",
+         test.fun=function(x,y) wilcox.test(x,y,alternative = alternative,exact=FALSE, paired = TRUE)$p.value,inverseOrder=TRUE, # only needed for significance 
           ...                      ){
   call=match.call(expand.dots = T)  
   if (is.numeric(na.treat)) object[,x][is.na(object[,x])]=na.treat
@@ -19,7 +18,7 @@ Aggregate.data.frame <-function(object,x,algorithm, FUN=mean,
     } else {
        agg=significance(object, x, algorithm, dataset_id, alpha, inverseOrder,p.adjust.method=p.adjust.method,alternative=alternative,...)
     }
-
+    isSignificance=TRUE
   } else {
       FUNname=as.character(call$FUN)
       if (is.character(FUN))  FUN=try(eval(parse(text=FUN)),silent = T)
@@ -32,11 +31,13 @@ Aggregate.data.frame <-function(object,x,algorithm, FUN=mean,
     names(agg)=c(algorithm,paste0(x,"_",FUNname))
     rownames(agg)=agg[,1]
     agg=agg[,-1,drop=F]
+    isSignificance=FALSE
   }
   res=list(FUN = . %>% (call),
            call=list(call),
            data=object,
-           mat=agg)
+           mat=agg,
+           isSignificance=   isSignificance)
   class(res)=c("aggregated",class(res))
   res
   
@@ -67,7 +68,8 @@ Aggregate.list <-function(object,x,algorithm,FUN=mean,
       xmean
     }, .parallel=parallel,.progress=progress
   )
-
+    isSignificance=TRUE
+    
   } else {
     if (is.character(FUN)) FUN=try(eval(parse(text=FUN)),silent = T)
     FUNname=as.character(call$FUN)
@@ -88,12 +90,15 @@ Aggregate.list <-function(object,x,algorithm,FUN=mean,
           xmean
         }, .parallel=parallel,.progress=progress
       )
+    isSignificance=FALSE
   }
     names(matlist)=names(object)
    res=list(FUN = . %>% (call),
             call=list(call),
       data=object,
-       matlist=matlist)
+       matlist=matlist, 
+      isSignificance=isSignificance
+      )
 
   class(res)=c("aggregated.list",class(res))
   res

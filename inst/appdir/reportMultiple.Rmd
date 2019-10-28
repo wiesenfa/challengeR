@@ -92,7 +92,7 @@ Algorithms are ordered according to chosen ranking scheme for each task.
 ```{r boxplots}
 #temp=boxplot(challenge_multiple,size=.8)
 temp=boxplot(boot_object$data,ranking.fun=boot_object$FUN,size=.8)
-temp=lapply(temp,function(x) utils::capture.output(x+xlab("algorithm")+ylab("metric value")))
+temp=lapply(temp,function(x) utils::capture.output(x+xlab("Algorithm")+ylab("Metric value")))
 
 ```
 
@@ -117,7 +117,7 @@ op <-par(mar=par()$mar+c(-.5,0.5,-.5,4.5))
  podium(boot_object$data,
         ranking.fun=boot_object$FUN, 
         lines.show = T,lines.alpha = .4,
-        dots.cex=.9,ylab="metric value",layout.heights=c(1,.35),
+        dots.cex=.9,ylab="Metric value",layout.heights=c(1,.35),
           legendfn = function(algs, cols) {
             #title(single_subtask); 
             legend("topright", inset=c(-0.12,0), xpd=TRUE, algs, lwd = 1, col =  cols, bg = NA,cex=1.4,seg.len=1.1) 
@@ -201,7 +201,7 @@ relensemble= do.call(relation_ensemble,args = aa)
 
 
 for (Task in names(boot_object$data)){
-  print(significancePlot2(rankedMat=object$matlist[[Task]],
+  print(significanceMap(rankedMat=object$matlist[[Task]],
                  relation_object=relensemble[[Task]]
                  )+ggtitle(Task))#+scale_color_manual(name="decision",values=c("white","lightblue")))
   
@@ -406,7 +406,7 @@ Hence, tasks that are similar with respect to their algorithm ranking appear clo
   uw=lapply(object$matlist,function(x) rownames(x)[which(x$rank==1)])
   uw=sapply(uw, function(x) ifelse(length(x)==1,yes = x,no="none"))
 
-cols=qualitative_hcl(n = 19, h = c(-221, 360), c = 80, l = 60 )
+cols=qualitative_hcl(n = length(ordering_consensus), h = c(-221, 360), c = 80, l = 60 )
 names(cols)=ordering_consensus
 
 
