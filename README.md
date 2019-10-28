@@ -4,6 +4,10 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+Note that this is an early experimental version (version 0.1.2) and
+there may still be (severe) bugs. There may be updates with possibly
+major changes.
+
 # Installation
 
 <!-- To get the current released version from CRAN: -->
@@ -37,6 +41,15 @@ BiocManager::install("Rgraphviz", dependencies = TRUE)
 devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
 ```
 
+If you are asked whether you want to update installed packages and you
+type “a” for all, you might need administrator rights to update R core
+packages. You can also try to type “n” for updating no packages. If you
+are asked “Do you want to install from sources the packages which need
+compilation? (Yes/no/cancel)”, you can safely type “no”.
+
+If you get *Warning messages* (in contrast to *Error* messages), these
+might not be problematic and you can try to proceed.
+
 # Terms of use
 
 Licenced under GPL-3. If you use this software for a publication, cite
@@ -67,23 +80,47 @@ library(challengeR)
 
 ## 2\. Load data
 
-Data requires the following columns
+### Data requirements
 
-  - the metric value
-  - the algorithm name
-  - a test case identifier
-  - a task identifier in case of multi-task challenges.
+Data requires the following *columns*
+
+  - a *task identifier* in case of multi-task challenges.
+  - a *test case identifier*
+  - the *algorithm name*
+  - the *metric value*
 
 In case of missing metric values, a missing observation has to be
 provided (either as blank field or “NA”).
 
+For example, in a challenge with 2 tasks, 2 test cases and 2 algorithms,
+where in task “T2”, test case “case2”, algorithm “A2” didn’t give a
+prediction (and thus NA or a blank field for missing value is inserted),
+the data set might look like this:
+
+| Task | TestCase | Algorithm | MetricValue |
+| :--- | :------- | :-------- | ----------: |
+| T1   | case1    | A1        |       0.620 |
+| T1   | case1    | A2        |       0.139 |
+| T1   | case2    | A1        |       0.949 |
+| T1   | case2    | A2        |       0.024 |
+| T2   | case1    | A1        |       0.988 |
+| T2   | case1    | A2        |       0.376 |
+| T2   | case2    | A1        |       0.294 |
+| T2   | case2    | A2        |          NA |
+
+### Load data
+
 If you have assessment data at hand stored in a csv file (if you want to
-use simulated data skip the following code line)
-use
+use simulated data skip the following code line) use
 
 ``` r
-data_matrix=read.csv(file.choose()) # see ?read.csv for help
+data_matrix=read.csv(file.choose()) # type ?read.csv for help
 ```
+
+This allows to choose a file interactively, otherwise replace
+*file.choose()* by the file path (in style “/path/to/dataset.csv”) in
+quotation
+marks.
 
 <!-- where "filename" has to be replaced by the filename (and file path). -->
 
@@ -239,11 +276,25 @@ single and multi task challenges.
 ``` r
 report(ranking_bootstrapped, 
        title="singleTaskChallengeExample", # used for the title of the report
-       file = "filename.pdf", 
+       file = "filename", 
        format = "PDF", # format can be "PDF", "HTML" or "Word"
-       latex_engine="pdflatex" #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+       latex_engine="pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+       clean=TRUE #optional. Using TRUE will clean intermediate files that are created during rendering.
        ) 
 ```
+
+Argument *file* allows for specifying the output file path as well,
+otherwise the working directory is used.
+
+If file is specified but does not have a file extension, an extension
+will be automatically added according to the output format given in
+*format*.
+
+Argument “file” can be omitted and the report is created in a temporary
+folder with file name “report”.
+
+Using argument *clean=FALSE* allows to retain intermediate files, such
+as separate files for each figure.
 
 ### 5.1 For multi task challenges
 
@@ -267,7 +318,7 @@ ranking
 report(ranking_bootstrapped, 
        consensus=meanRanks,
        title="multiTaskChallengeExample",
-       file = "filename.pdf", 
+       file = "filename", 
        format = "PDF", # format can be "PDF", "HTML" or "Word"
        latex_engine="pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
        )
