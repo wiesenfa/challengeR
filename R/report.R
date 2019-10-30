@@ -9,7 +9,8 @@ report.bootstrap=function(object,file,title="<Challenge name>",format="PDF",late
   else {
     a=strsplit(file,"/")[[1]]
     path=paste0(a[-length(a)],collapse="/")
-    tempReport=file.path(path,paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
+    if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
+    else tempReport=file.path(path,paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
   } 
   #  file.copy(paste0(normalizePath( find.package("BDP2"),winslash = "/"),"/exdata/report.Rmd"), tempReport, overwrite = TRUE)
   file.copy(file.path(system.file("appdir", package = "challengeR"), "reportSingle.Rmd"), tempReport, overwrite = TRUE)
@@ -35,7 +36,11 @@ report.bootstrap=function(object,file,title="<Challenge name>",format="PDF",late
   envir = new.env(parent = globalenv()),...
   )
   
-  if (!missing(file)) file.rename(out, file) else file=out
+  if (!missing(file)){
+    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,".",strsplit(out,".",fixed=T)[[1]][2])
+    file.rename(out, file) 
+  } else file=out
+  file.remove(tempReport)
   if (open) system(paste0('open "', file, '"'))
   
 }
@@ -53,7 +58,8 @@ report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",fo
   else {
     a=strsplit(file,"/")[[1]]
     path=paste0(a[-length(a)],collapse="/")
-    tempReport=file.path(path,paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
+    if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
+    else tempReport=file.path(path,paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
   } 
   #  file.copy(paste0(normalizePath( find.package("BDP2"),winslash = "/"),"/exdata/report.Rmd"), tempReport, overwrite = TRUE)
   file.copy(file.path(system.file("appdir", package = "challengeR"), "reportSingle.Rmd"), tempReport, overwrite = TRUE)
@@ -81,7 +87,11 @@ report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",fo
   envir = new.env(parent = globalenv()),...
   )
   
-  if (!missing(file)) file.rename(out, file) else file=out
+  if (!missing(file)){
+    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,".",strsplit(out,".",fixed=T)[[1]][2])
+    file.rename(out, file) 
+  } else file=out
+  file.remove(tempReport)
   if (open) system(paste0('open "', file, '"'))
   
 }
