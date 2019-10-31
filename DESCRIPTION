@@ -1,7 +1,7 @@
 Package: challengeR
 Type: Package
 Title: Analyzing assessment data of biomedical image analysis competitions and visualization of results
-Version: 0.1.2
+Version: 0.1.3
 Date: 2019-10-10
 Author: Manuel Wiesenfarth, Annette Kopp-Schneider
 Maintainer: Manuel Wiesenfarth <m.wiesenfarth@dkfz.de>

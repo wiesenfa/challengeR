@@ -4,9 +4,10 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Note that this is an early experimental version (version 0.1.2) and
+Note that this is an early experimental version (version 0.1.3) and
 there may still be (severe) bugs. There may be updates with possibly
-major changes.
+major changes. *Please make sure that you use the most current
+version\!*
 
 # Installation
 
@@ -99,13 +100,13 @@ the data set might look like this:
 
 | Task | TestCase | Algorithm | MetricValue |
 | :--- | :------- | :-------- | ----------: |
-| T1   | case1    | A1        |       0.620 |
-| T1   | case1    | A2        |       0.139 |
-| T1   | case2    | A1        |       0.949 |
-| T1   | case2    | A2        |       0.024 |
-| T2   | case1    | A1        |       0.988 |
-| T2   | case1    | A2        |       0.376 |
-| T2   | case2    | A1        |       0.294 |
+| T1   | case1    | A1        |       0.066 |
+| T1   | case1    | A2        |       0.656 |
+| T1   | case2    | A1        |       0.542 |
+| T1   | case2    | A2        |       0.742 |
+| T2   | case1    | A1        |       0.573 |
+| T2   | case1    | A2        |       0.711 |
+| T2   | case2    | A1        |       0.517 |
 | T2   | case2    | A2        |          NA |
 
 ### Load data
@@ -284,17 +285,14 @@ report(ranking_bootstrapped,
 ```
 
 Argument *file* allows for specifying the output file path as well,
-otherwise the working directory is used.
+otherwise the working directory is used. If file is specified but does
+not have a file extension, an extension will be automatically added
+according to the output format given in *format*. Using argument
+*clean=FALSE* allows to retain intermediate files, such as separate
+files for each figure.
 
-If file is specified but does not have a file extension, an extension
-will be automatically added according to the output format given in
-*format*.
-
-Argument “file” can be omitted and the report is created in a temporary
+If argument “file” is omitted, the report is created in a temporary
 folder with file name “report”.
-
-Using argument *clean=FALSE* allows to retain intermediate files, such
-as separate files for each figure.
 
 ### 5.1 For multi task challenges
 

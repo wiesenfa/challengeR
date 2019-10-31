@@ -4,7 +4,9 @@ podium.challenge=function(x,ranking.fun, layout.heights=c(1,0.4), #=function(x) 
   if (inherits(ranking,"ranked.list")){
     ranking_list=lapply(ranking$matlist, function(a) t(a[,"rank",drop=F])["rank",])
     for (subt in names(x)){
-      dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"))
+      dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
+                      annotator = attr(x,"annotator"),
+                      smallBetter = !attr(x,"inverseOrder"))
       xx=as.warehouse.challenge(dd)
       podium.AlgorithmPerformance(xx, ranking=ranking_list[[subt]],layout.heights=layout.heights,...)
       title(subt,outer=T,line=-3)    }
