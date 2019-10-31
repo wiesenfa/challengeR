@@ -100,13 +100,13 @@ the data set might look like this:
 
 | Task | TestCase | Algorithm | MetricValue |
 | :--- | :------- | :-------- | ----------: |
-| T1   | case1    | A1        |       0.066 |
-| T1   | case1    | A2        |       0.656 |
-| T1   | case2    | A1        |       0.542 |
-| T1   | case2    | A2        |       0.742 |
-| T2   | case1    | A1        |       0.573 |
-| T2   | case1    | A2        |       0.711 |
-| T2   | case2    | A1        |       0.517 |
+| T1   | case1    | A1        |       0.617 |
+| T1   | case1    | A2        |       0.823 |
+| T1   | case2    | A1        |       0.601 |
+| T1   | case2    | A2        |       0.049 |
+| T2   | case1    | A1        |       0.557 |
+| T2   | case1    | A2        |       0.696 |
+| T2   | case2    | A1        |       0.383 |
 | T2   | case2    | A2        |          NA |
 
 ### Load data
@@ -127,7 +127,8 @@ marks.
 
 For illustration purposes, in the following simulated data is generated
 *instead* (skip the following code chunk if you have already loaded
-data)
+data). The data is also stored as “data\_matrix.csv” in the
+repository.
 
 ``` r
 if (!requireNamespace("permute", quietly = TRUE)) install.packages("permute")
