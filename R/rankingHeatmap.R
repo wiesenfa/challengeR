@@ -12,7 +12,9 @@ rankingHeatmap.challenge=function (x, ranking.fun=function(x)  aggregateThenRank
         breaks=seq(0,ncases+1,length.out=ncases+1)
       } #else breaks=NA
       
-      dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"))
+      dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
+                      annotator = attr(x,"annotator"),
+                      smallBetter = !attr(x,"inverseOrder"))
       xx=as.warehouse.challenge(dd)
       m <- do.call(cbind, split(xx$value, xx$algorithms))
       
