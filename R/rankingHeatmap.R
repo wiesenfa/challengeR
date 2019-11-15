@@ -23,7 +23,7 @@ rankingHeatmap.challenge=function (x, ranking.fun=function(x)  aggregateThenRank
       ranks <- t(apply((-1)^(inverseOrder)*m, 1, rank, ties.method = "random"))
       nranks <- apply(ranks, 2, function(y) table(factor(y, levels = 1:nalgs)))
       
-      myplot <-pheatmap((nranks[, names(ranking_list[[subt]])[rankingorder]]),cluster_rows = F,cluster_cols = F,ylab="rank",color =col,breaks=breaks,silent=T,main=subt,...)
+      myplot <-pheatmap((nranks[, names(ranking_list[[subt]])[rankingorder]]),cluster_rows = F,cluster_cols = F,ylab="Rank",color =col,breaks=breaks,silent=T,main=subt,...)
       grid.newpage()
       pushViewport(vp)
       grid.draw(myplot$gtable)
@@ -50,7 +50,7 @@ rankingHeatmap.challenge=function (x, ranking.fun=function(x)  aggregateThenRank
     ranks <- t(apply((-1)^(inverseOrder)*m, 1, rank, ties.method = "random"))
     nranks <- apply(ranks, 2, function(y) table(factor(y, levels = 1:nalgs)))
     
-    myplot <-pheatmap((nranks[, names(ranking)[rankingorder]]),cluster_rows = F,cluster_cols = F,ylab="rank",color =col,breaks=breaks,silent=T,...)
+    myplot <-pheatmap((nranks[, names(ranking)[rankingorder]]),cluster_rows = F,cluster_cols = F,ylab="Rank",color =col,breaks=breaks,silent=T,...)
   #  grid.newpage()
     pushViewport(vp)
     grid.draw(myplot$gtable)

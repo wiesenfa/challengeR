@@ -1,4 +1,4 @@
-significanceMap=function(rankedMat,relation_object,order=FALSE,...){
+significanceMap=function(rankedMat,relation_object,order=FALSE,size.rank=.2*theme_get()$text$size,...){
   rankedMat$algorithm=rownames(rankedMat)
   inc=relation_incidence(relation_object)
   
@@ -38,13 +38,13 @@ incidence.mat$decision=as.factor(incidence.mat$decision)
 fixy=0
 th_get=theme_get()
 p=ggplot(incidence.mat)+
-  geom_raster(aes(algorithm,notsigPair,fill=decision),...)+
+  geom_raster(aes(algorithm,notsigPair,fill=decision),...)+geom_raster(aes(algorithm,algorithm),fill="white")+
 geom_abline(slope=1) +    
   coord_cartesian(clip = 'off')+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
         plot.margin=unit(c(1,1,1,1), "lines"),
         legend.position="none"
-  )+ylab("algorithm")
+  )+ylab("Algorithm")
 
 
 
@@ -60,7 +60,7 @@ if (is.null(lt)) lt=th_get$line$linetype
     geom_abline(slope=1)+
     geom_text(aes(x=algorithm,y=fixy,label=rank),nudge_y=.5, # Set the position of the text to always be at '14.25'
               vjust = 0,
-              size=.25*th_get$text$size,#rel(0.8),
+              size=size.rank,#rel(0.8),
               fontface="plain",family="sans"
     )
 
@@ -68,13 +68,13 @@ if (is.null(lt)) lt=th_get$line$linetype
 if (order) p=  p+
     #                geom_text(aes(x=algorithm,y=nrow(scores),label=score),nudge_y=0.5, # Set the position of the text to always be at '14.25'
     geom_text(aes(x=algorithm,y=fixy,label=score),nudge_y=0, # Set the position of the text to always be at '14.25'
-              vjust = 0, size=.2*th_get$text$size,#rel(0.5),
+              vjust = 0, size=size.rank,#rel(0.5),
               fontface="plain",family="sans") + 
     # annotate("text",x=0,y=nrow(scores)+1,  vjust = 0, size=3,fontface="plain",family="sans",label="original")+
     # annotate("text",x=0,y=nrow(scores)+.5,  vjust = 0, size=3,fontface="plain",family="sans",label="new")
-    annotate("text",x=0,y=fixy+.5,  vjust = 0, size=.2*th_get$text$size, #rel(0.8),
+    annotate("text",x=0,y=fixy+.5,  vjust = 0, size=size.rank, #rel(0.8),
              fontface="plain",family="sans",label="original")+
-    annotate("text",x=0,y=fixy,  vjust = 0, size=.2*th_get$text$size,#rel(0.8),
+    annotate("text",x=0,y=fixy,  vjust = 0, size=size.rank,#rel(0.8),
              fontface="plain",family="sans",label="new")
   
 return(p)
@@ -146,7 +146,7 @@ th_get=theme_get()
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           plot.margin=unit(c(1,1,1,1), "lines"),
           legend.position="none"
-          )+ylab("algorithm")
+          )+ylab("Algorithm")
   if (order) p=  p+
 #                geom_text(aes(x=algorithm,y=nrow(scores),label=score),nudge_y=0.5, # Set the position of the text to always be at '14.25'
                 geom_text(aes(x=algorithm,y=fixy,label=score),nudge_y=0, # Set the position of the text to always be at '14.25'

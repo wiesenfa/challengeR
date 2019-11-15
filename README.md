@@ -4,10 +4,14 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Note that this is an early experimental version (version 0.1.3) and
-there may still be (severe) bugs. There may be updates with possibly
-major changes. *Please make sure that you use the most current
-version\!*
+Note that this is an early experimental version (version 0.1.5) and
+there may still be bugs.
+
+**Layouting in case of many algorithms or tasks is not yet optimized.
+Please be patient, we are steadily working on improving the package.**
+
+There may be updates with possibly major changes. *Please make sure that
+you use the most current version\!*
 
 # Installation
 
@@ -100,13 +104,13 @@ the data set might look like this:
 
 | Task | TestCase | Algorithm | MetricValue |
 | :--- | :------- | :-------- | ----------: |
-| T1   | case1    | A1        |       0.617 |
-| T1   | case1    | A2        |       0.823 |
-| T1   | case2    | A1        |       0.601 |
-| T1   | case2    | A2        |       0.049 |
-| T2   | case1    | A1        |       0.557 |
-| T2   | case1    | A2        |       0.696 |
-| T2   | case2    | A1        |       0.383 |
+| T1   | case1    | A1        |       0.039 |
+| T1   | case1    | A2        |       0.825 |
+| T1   | case2    | A1        |       0.811 |
+| T1   | case2    | A2        |       0.809 |
+| T2   | case1    | A1        |       0.939 |
+| T2   | case1    | A2        |       0.674 |
+| T2   | case2    | A1        |       0.173 |
 | T2   | case2    | A2        |          NA |
 
 ### Load data

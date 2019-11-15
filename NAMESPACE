@@ -33,7 +33,7 @@ export(
   "merge.list", 
   "methodsplot","methodsplot.challenge",
     "my.bsgraph0", "my.bsranking", "my.bsranking.ranked.list",    "my.bsranking2", 
-  "podium",  "podium.challenge", "podium.default", 
+  "podium",  "podium.challenge","podium.ranked","podium.ranked.list", "podium.default", 
   #"podium.AlgorithmPerformance",
   #"podium.matrix",
     "print.aggregated", "print.aggregated.list", "print.comparedRanks",    "print.ranked", "print.ranked.list", 
@@ -159,6 +159,8 @@ S3method(melt,ranked)
 S3method(melt,aggregated.list)
 
 S3method(boxplot,challenge)
+S3method(boxplot,ranked)
+S3method(boxplot,ranked.list)
 
 S3method(ggBoxplot,default)
 S3method(ggBoxplot,list)
@@ -182,6 +184,8 @@ S3method(subset,comparedRanks.list)
 
 S3method(podium,default)
 S3method(podium,challenge)
+S3method(podium,ranked)
+S3method(podium,ranked.list)
 S3method(podium,matrix)
 S3method(podium,AlgorithmPerformance)
 

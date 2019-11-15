@@ -51,6 +51,12 @@ object=challenge_multiple%>%ranking.fun
 
 ```
 
+*****
+
+**Layouting in case of many algorithms or tasks is not yet optimized. Please be patient, we are steadily working on improving the package.**
+
+*****
+
 This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and test cases. Generated plots are:
 
 * Visualization of assessment data: Dot- and boxplots, podium plots and ranking heatmaps

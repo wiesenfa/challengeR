@@ -1,7 +1,7 @@
 kendall.bootstrap.list=function(x){
-  ken=lapply(1:length(x$bootsrappedRanks),function(task){
-    id=match(rownames( x$bootsrappedRanks[[task]]),rownames(x$matlist[[task]]) )
-    sapply(x$bootsrappedRanks[[task]], function(bootSample) suppressWarnings(kendall(bootSample,x$matlist[[task]]$rank[id])))
+  ken=lapply(1:length(x$bootsrappedRanks),function(Task){
+    id=match(rownames( x$bootsrappedRanks[[Task]]),rownames(x$matlist[[Task]]) )
+    sapply(x$bootsrappedRanks[[Task]], function(bootSample) suppressWarnings(kendall(bootSample,x$matlist[[Task]]$rank[id])))
   } )
   names(ken)=names((x$bootsrappedRanks))
   
@@ -18,17 +18,17 @@ kendall.bootstrap.list=function(x){
 
 density.bootstrap.list=function(x,...){
   ken=melt(kendall.bootstrap.list(x))
-  colnames(ken)[2]="task"
+  colnames(ken)[2]="Task"
   
   cat("\n\nSummary Kendall's tau\n")
-  ss=ken%>%group_by(task)%>%
+  ss=ken%>%group_by(Task)%>%
     summarise(mean=mean(value,na.rm=T),median=median(value,na.rm=T),q25=quantile(value,probs = .25,na.rm=T),q75=quantile(value,probs = .75,na.rm=T))%>% 
     arrange(desc(median))
   
   print(as.data.frame(ss))
   
   ggplot(ken)+
-    geom_density(aes(value,fill=task),alpha=.3,color=NA)#+
+    geom_density(aes(value,fill=Task),alpha=.3,color=NA)#+
   #  ggtitle("Densities of pairwise Kendall's tau",subtitle= "betw. original and bootstap rankings")
   
 }
@@ -42,16 +42,16 @@ violin.bootstrap=function(x,...){
 }
 violin.bootstrap.list=function(x,...){
   ken=melt(kendall.bootstrap.list(x))
-  colnames(ken)[2]="task"
+  colnames(ken)[2]="Task"
   cat("\n\nSummary Kendall's tau\n")
-  ss=ken%>%group_by(task)%>%
+  ss=ken%>%group_by(Task)%>%
     summarise(mean=mean(value,na.rm=T),median=median(value,na.rm=T),q25=quantile(value,probs = .25,na.rm=T),q75=quantile(value,probs = .75,na.rm=T))%>% 
     arrange(desc(median))
   
   print(as.data.frame(ss))
   
-  ken%>%mutate(task=factor(task, levels=ss$task))%>%ggplot(aes(task,value,fill=task))+
-    geom_violin(alpha=.3,color=NA)+
+  ken%>%mutate(Task=factor(Task, levels=ss$Task))%>%ggplot(aes(Task,value))+
+    geom_violin(alpha=.3,color=NA,fill="blue")+
     geom_boxplot(width=0.1, fill="white")+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           legend.position = "none")+ylab("Kendall's tau")+

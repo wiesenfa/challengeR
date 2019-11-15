@@ -49,7 +49,7 @@ stability1.bootstrap.list=function(x,ordering,probs=c(.025,.975),max_size=3,shap
 if (!missing(ordering)) rankDist=rankDist%>%mutate(algorithm=factor(algorithm, levels=ordering))
  
   ggplot(rankDist)+
-    geom_count(aes(task ,rank,color=task,size = stat(prop*100), group = task ))+
+    geom_count(aes(task ,rank,color=algorithm,size = stat(prop*100), group = task ))+
      scale_size_area(max_size = max_size)+#scale_size_area(max_size = 6)
   # stat_summary(aes(algorithm,rank,color=algorithm),size=.4,
   #              fun.data=function(x) data.frame(ymin=min(x),y=x,ymax=max(x)))+ 

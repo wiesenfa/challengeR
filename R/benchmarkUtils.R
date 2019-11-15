@@ -121,8 +121,8 @@ default_colors=
     l <- 65
     c <- 100
     
-    start <- 1
-    direction <- -1
+    start <-0# 1
+    direction <- 1
     
     rotate <- function(x) (x + start) %% 360 * direction
     

@@ -20,10 +20,33 @@ podium.challenge=function(x,ranking.fun, layout.heights=c(1,0.4), #=function(x) 
   
 }
 
+podium.ranked=function(x, layout.heights=c(1,0.4), #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
+                       ...){
+  ranking=x#%>%ranking.fun
+  ranking=t(ranking$mat[,"rank",drop=F])["rank",]
+  x=as.warehouse.challenge(x$data)
+  podium.AlgorithmPerformance(x, ranking=ranking,layout.heights=layout.heights,...)
+}
+
+podium.ranked.list=function(x, layout.heights=c(1,0.4), #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
+                            ...){
+  ranking=x#%>%ranking.fun
+  x=x$data
+  ranking_list=lapply(ranking$matlist, function(a) t(a[,"rank",drop=F])["rank",])
+  for (subt in names(x)){
+    dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
+                    annotator = attr(x,"annotator"),
+                    smallBetter = !attr(x,"inverseOrder"))
+    xx=as.warehouse.challenge(dd)
+    podium.AlgorithmPerformance(xx, ranking=ranking_list[[subt]],layout.heights=layout.heights,...)
+    title(subt,outer=T,line=-3)    }
+  
+}
+
 
 podium.AlgorithmPerformance=
   function (x,ranking, xlab = NULL, ylab = NULL, lines.show = FALSE, lines.alpha = 0.2, 
-            lines.lwd = 1, lines.col = col, dots.pch = 19, dots.cex = 1, 
+            lines.lwd = 1, col,lines.col = col, dots.pch = 19, dots.cex = 1, 
             places.lty = 2, places.col = 1, legendfn = function(algs, 
                                                                 cols) {
               legend("topleft", algs, lwd = 1, col = cols, bg = "white")
@@ -32,11 +55,9 @@ podium.AlgorithmPerformance=
     #   stopifnot(nlevels(x$datasets[, drop = TRUE]) == 1)
     #   stopifnot(nlevels(x$performances[, drop = TRUE]) == 1)
     m <- do.call(cbind, split(x$value, x$algorithms))
-    if (is.null(xlab)) 
-      xlab <- "Podium"
-    if (is.null(ylab)) 
-      ylab <- "performance" #levels(x$performances[, drop = TRUE])
-    col <- attr(x, "algorithm_colors")
+    if (is.null(xlab)) xlab <- "Podium"
+    if (is.null(ylab)) ylab <- "Performance" #levels(x$performances[, drop = TRUE])
+    if (missing(col)) col <- attr(x, "algorithm_colors")
     # beplot0.matrix
     
     podium.matrix(m, ranking=ranking,col = col, xlab = xlab, ylab = ylab, lines.show = lines.show, 
