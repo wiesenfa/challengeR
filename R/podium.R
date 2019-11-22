@@ -9,7 +9,8 @@ podium.challenge=function(x,ranking.fun, layout.heights=c(1,0.4), #=function(x) 
                       smallBetter = !attr(x,"inverseOrder"))
       xx=as.warehouse.challenge(dd)
       podium.AlgorithmPerformance(xx, ranking=ranking_list[[subt]],layout.heights=layout.heights,...)
-      title(subt,outer=T,line=-3)    }
+      title(subt,outer=T,line=-3)    
+      }
     
   } else {
     ranking=t(ranking$mat[,"rank",drop=F])["rank",]
@@ -124,19 +125,19 @@ podium.matrix=
         o <- order(r)
         performances <- (x[i, ])[o]
         places <- (dotplaces[names(r)] + ((r - 1) * nalgs))[o]
-        fn(places, performances, col = col[o], ...)
+        fn(places, performances, col = col[names(r)[o]], ...)
       }
     }
     if (lines.show) 
       drawthe(linesegments, linecols, lwd = lines.lwd)
     drawthe(points, dotcols, pch = dots.pch, cex = dots.cex)
     
-    legendfn(names(barranks)[barorder], dotcols[barorder])
+    legendfn(names(barranks)[barorder], dotcols[names(barranks)][barorder])
     
     par(mar = c(mar[1], mar[2], 0, mar[4]))
     barplot(t(nranks[, barorder]), beside = TRUE, width = 1, 
             axes = F, space = c(0, 0), border = NA, ylim = c(0, nrow(x)), 
-            names.arg = paste(1:nalgs, ".", sep = ""), col = col[barorder], 
+            names.arg = paste(1:nalgs, ".", sep = ""), col = col[names(barranks)][barorder], 
             xlab = xlab)
     axis(1, at = c(0, dotplotborders), labels = NA, lwd = par("lwd"))
     box()

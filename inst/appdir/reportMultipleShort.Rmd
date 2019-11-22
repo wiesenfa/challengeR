@@ -41,15 +41,15 @@ theme_set(theme_light())
 
 
 ```{r }
-boot_object = params$object
+object = params$object
 ordering_consensus=names(params$consensus)
+
 ```
 
 ```{r }
-challenge_multiple=boot_object$data
+challenge_multiple=object$data
 
-ranking.fun=boot_object$FUN
-object=challenge_multiple%>%ranking.fun
+ranking.fun=object$FUN
 
 cols_numbered=cols=default_colors(length(ordering_consensus))
 names(cols)=ordering_consensus
@@ -167,55 +167,13 @@ par(op)
 
 ```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
 #
-rankingHeatmap(boot_object$data,ranking.fun=boot_object$FUN,fontsize=25, vp =grid::viewport(width=1, height=1))
+rankingHeatmap(object$data,ranking.fun=object$FUN,fontsize=25, vp =grid::viewport(width=1, height=1))
 #
 ```
 
 
 
 # Visualization of ranking stability
-
-
-
-## *Blob plot* for visualizing ranking stability 
-based on bootstrap sampling}\label{blobByTask}
-
-Algorithms are color-coded, and the area of each blob at position $\left( A_i, \text{rank } j \right)$ is proportional to the relative frequency $A_i$ achieved rank $j$ across $b=$ `r ncol(boot_object$bootsrappedRanks[[1]])` bootstrap samples. The median rank for each algorithm is indicated by a black cross. 95\% bootstrap intervals across bootstrap samples are indicated by black lines. 
-
-
-\bigskip
-
-```{r blobplot_bootstrap,fig.width=9, fig.height=9}
-pl=list()
-for (subt in names(boot_object$bootsrappedRanks)){
-  a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
-         matlist=list(boot_object$matlist[[subt]]))
-  names(a$bootsrappedRanks)=names(a$matlist)=subt
-  class(a)="bootstrap.list"
-  r=boot_object$matlist[[subt]]
-
-  pl[[subt]]=stabilityByTask(a,max_size = 8,ordering=rownames(r[order(r$rank),]),size.ranks=.25*theme_get()$text$size,size=8,shape=4)+scale_color_manual(values=cols)
-
-}
-
-# if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-#   ggpubr::ggarrange(plotlist = pl)
-# } else {
-  for (i in 1:length(pl)) print(pl[[i]])
-#}
-
-```
-
-
-## *Violin plot* for visualizing ranking stability based on bootstrapping \label{violin}
-
-The ranking list based on the full assessment data is pairwisely compared with the ranking lists based on the individual bootstrap samples (here $b=$ `r ncol(boot_object$bootsrappedRanks[[1]])` samples). For each pair of rankings, Kendall's $\tau$ correlation is computed. Kendall’s $\tau$ is a scaled index determining the correlation between the lists. It is computed by evaluating the number of pairwise concordances and discordances between ranking lists and produces values between $-1$ (for inverted order) and $1$ (for identical order). A violin plot, which simultaneously depicts a boxplot and a density plot, is generated from the results.
-
-\bigskip
-
-```{r violin}
-violin(boot_object)
-```
 
 
 
@@ -238,7 +196,7 @@ names(aa)=names(challenge_multiple)
 relensemble= do.call(relation_ensemble,args = aa)
 
 
-for (Task in names(boot_object$data)){
+for (Task in names(object$data)){
   print(significanceMap(rankedMat=object$matlist[[Task]],
                  relation_object=relensemble[[Task]]
                  )+ggtitle(Task)+ theme(aspect.ratio=1))#+scale_color_manual(name="decision",values=c("white","lightblue")))
@@ -264,7 +222,7 @@ for (Task in names(boot_object$data)){
 ```{r lineplot,fig.width=7,fig.height = 5}
 
 
-if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
+if (length(object$matlist)<=6 &nrow((object$matlist[[1]]))<=10 ){
 
 methodsplot(challenge_multiple,ordering = ordering_consensus)+scale_color_manual(values=cols)
 } else {
@@ -305,7 +263,8 @@ Algorithms are ordered according to consensus ranking.
 <!-- achieved in any task. If all tasks would provide the same -->
 <!-- stable ranking, narrow intervals around the diagonal would -->
 <!-- be expected. -->
-blob plot similar to the one shown in Fig.~\ref{blobByTask} substituting rankings based on bootstrap samples with the rankings corresponding to multiple tasks. This way, the distribution of ranks across tasks can be intuitively visualized.
+
+<!-- blob plot similar to the one shown in Fig.~\ref{blobByTask} substituting rankings based on bootstrap samples with the rankings corresponding to multiple tasks. This way, the distribution of ranks across tasks can be intuitively visualized. -->
 
 
 \bigskip
@@ -315,100 +274,10 @@ stability.ranked.list(object,ordering=ordering_consensus,max_size=9,size=8,shape
 ```
 
 
-### Ranking stability: Ranking variability via bootstrap approach
-
-Blob plot of bootstrap results over the different tasks separated
-by algorithm allows another perspective on the assessment data. This gives deeper insights into the characteristics
-of tasks and the ranking uncertainty of the algorithms in each
-task. 
-<!-- 1000 bootstrap Rankings were performed for each task. -->
-<!-- Each algorithm is considered separately and for each subtask (x-axis) all observed ranks across bootstrap samples (y-axis) are displayed. Additionally, medians and IQR is shown in black. -->
-
-<!-- We see which algorithm is consistently among best, which is consistently among worst, which vary extremely... -->
-
-
-\bigskip
-
-```{r blobplot_bootstrap_xTask,fig.width=7,fig.height = 5}
-if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-  stabilityByAlgorithm.bootstrap.list(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = F)+scale_color_manual(values=cols)
-} else {
-  pl=stabilityByAlgorithm.bootstrap.list(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = T)
-  for (i in 1:length(pl)) print(pl[[i]]+scale_color_manual(values=cols)+guides(size = guide_legend(title="%"),color="none"))
-}
-
-```
-
-<!-- Stacked frequencies of observed ranks across bootstrap samples are displayed with colouring according to subtask. Vertical lines provide original (non-bootstrap) rankings for each subtask. -->
-
-An alternative representation is provided by a stacked
-frequency plot of the observed ranks, separated by algorithm. Observed ranks across bootstrap samples are
-displayed with colouring according to task. For algorithms that
-achieve the same rank in different tasks for the full assessment
-data set, vertical lines are on top of each other. Vertical lines
-allow to compare the achieved rank of each algorithm over
-different tasks.
-
-\bigskip
-
-
-```{r stackedFrequencies_bootstrap_xTask,fig.width=7,fig.height = 5}
-stabilityByAlgorithmStacked.bootstrap.list(boot_object,ordering=ordering_consensus)
-```
-
-
 
 
 ## Characterization of tasks
 
-
-### Visualizing bootstrap results
-To investigate which
-tasks separate algorithms well (i.e., lead to a stable ranking),
-two visualization methods are recommended.
-
-Bootstrap results can be shown in a blob plot showing one plot for each
-task. In this view, the spread of the blobs for each algorithm
-can be compared across tasks. Deviations from the diagonal indicate deviations
-from the consensus ranking (over tasks). Specifically, if rank
-distribution of an algorithm is consistently below the diagonal,
-the algorithm performed better in this task than on average
-across tasks, while if the rank distribution of an algorithm
-is consistently above the diagonal, the algorithm performed
-worse in this task than on average across tasks. At the bottom
-of each panel, ranks for each algorithm in the tasks is provided.
-
-
-<!-- Shows which subtask leads to stable ranking and in which subtask ranking is more uncertain. -->
-
-
-Same as in Section \ref{blobByTask} but now ordered according to consensus.
-
-\bigskip
-
-```{r blobplot_bootstrap_xAlgorithm,fig.width=9, fig.height=9}
-if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-
-stabilityByTask.bootstrap.list(boot_object, ordering=ordering_consensus,max_size = 9,size=4,shape=4)
-} else {
-
-
-  pl=list()
-  for (subt in names(boot_object$bootsrappedRanks)){
-    a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
-           matlist=list(boot_object$matlist[[subt]]))
-    names(a$bootsrappedRanks)=names(a$matlist)=subt
-    class(a)="bootstrap.list"
-    r=boot_object$matlist[[subt]]
-  
-    pl[[subt]]=stabilityByTask(a,max_size = 9,ordering=ordering_consensus,size.ranks=.25*theme_get()$text$size,size=4,shape=4)+scale_color_manual(values=cols)
-  
-  }
-
-  for (i in 1:length(pl)) print(pl[[i]])
-
-}
-```
 
 
 ### Cluster Analysis

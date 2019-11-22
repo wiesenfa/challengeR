@@ -1,4 +1,4 @@
-significanceMap=function(rankedMat,relation_object,order=FALSE,size.rank=.2*theme_get()$text$size,...){
+significanceMap=function(rankedMat,relation_object,order=FALSE,size.rank=.3*theme_get()$text$size,...){
   rankedMat$algorithm=rownames(rankedMat)
   inc=relation_incidence(relation_object)
   
@@ -44,7 +44,7 @@ geom_abline(slope=1) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
         plot.margin=unit(c(1,1,1,1), "lines"),
         legend.position="none"
-  )+ylab("Algorithm")
+  )+ylab("Algorithm")+xlab("Algorithm")+scale_fill_manual(values=cividis(2,begin=0,end=1,alpha=.7))
 
 
 
