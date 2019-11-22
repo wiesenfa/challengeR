@@ -37,15 +37,14 @@ theme_set(theme_light(base_size=11))
 ```
 
 ```{r }
-boot_object = params$object
+object = params$object
 ```
 
 
 ```{r }
-challenge_single=boot_object$data
-ordering=  names(sort(t(boot_object$mat[,"rank",drop=F])["rank",]))
-ranking.fun=boot_object$FUN
-object=challenge_single%>%ranking.fun
+challenge_single=object$data
+ordering=  names(sort(t(object$mat[,"rank",drop=F])["rank",]))
+ranking.fun=object$FUN
 
 cols_numbered=cols=default_colors(length(ordering))
 names(cols)=ordering
@@ -82,7 +81,7 @@ Algorithms are ordered according to chosen ranking scheme.
 Ranking list:
 
 ```{r}
-knitr::kable(boot_object$mat[order(boot_object$mat$rank),])
+knitr::kable(object$mat[order(object$mat$rank),])
 
 ```
 
@@ -164,7 +163,7 @@ par(op)
 
 ```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
 #
-rankingHeatmap(boot_object$data,ranking.fun=boot_object$FUN,fontsize=25, vp =grid::viewport(width=1, height=.95))
+rankingHeatmap(object$data,ranking.fun=object$FUN,fontsize=25, vp =grid::viewport(width=1, height=.95))
 #
 ```
 
@@ -175,27 +174,6 @@ rankingHeatmap(boot_object$data,ranking.fun=boot_object$FUN,fontsize=25, vp =gri
 
 
 <!-- Results based on `r ncol(boot_object$bootsrappedRanks)` bootstrap samples. -->
-
-## *Blob plot* for visualizing ranking stability based on bootstrap sampling
-
-Algorithms are color-coded, and the area of each blob at position $\left( A_i, \text{rank } j \right)$ is proportional to the relative frequency $A_i$ achieved rank $j$ across $b=$ `r ncol(boot_object$bootsrappedRanks)` bootstrap samples. The median rank for each algorithm is indicated by a black cross. 95\% bootstrap intervals across bootstrap samples are indicated by black lines. 
-
-\bigskip
-
-```{r blobplot,fig.width=7,fig.height = 7}
-stability(boot_object,max_size = 8,ordering=ordering,size.ranks=.25*theme_get()$text$size,size=8,shape=4 )+scale_color_manual(values=cols)
-```
-
-
-## Violin plot for visualizing ranking stability based on bootstrapping
-
-The ranking list based on the full assessment data is pairwisely compared with the ranking lists based on the individual bootstrap samples (here $b=$ `r ncol(boot_object$bootsrappedRanks)` samples). For each pair of rankings, Kendall's $\tau$ correlation is computed. Kendall’s $\tau$ is a scaled index determining the correlation between the lists. It is computed by evaluating the number of pairwise concordances and discordances between ranking lists and produces values between $-1$ (for inverted order) and $1$ (for identical order). A violin plot, which simultaneously depicts a boxplot and a density plot, is generated from the results.
-\bigskip
-
-```{r violin}
-violin(boot_object)+xlab("")
-```
-
 
 
 
@@ -210,9 +188,9 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 a=challenge_single%>%decision.challenge(alpha=0.05,p.adjust.method="holm")
 relensemble= as.relation(a)
 
-print(significanceMap(rankedMat=boot_object$mat,
+print(significanceMap(rankedMat=object$mat,
                  relation_object=relensemble
-                 )+ theme(aspect.ratio=1)
+                 )+ theme(aspect.ratio=1))
         )#+ggtitle(Task))#+scale_color_manual(name="decision",values=c("white","lightblue")))
 
 ```

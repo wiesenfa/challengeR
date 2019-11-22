@@ -19,7 +19,8 @@ if (inherits(x,"list"))  {
     lab=lev
   } else {
     lev=ordering
-    lab=paste(1:length(ordering),ordering)
+ #   lab=paste(1:length(ordering),ordering)
+    lab=lev
   }
   
   dat=dat%>% dplyr::rename(rank=value)%>%mutate(rank=factor(rank))%>%
@@ -32,7 +33,7 @@ if (inherits(x,"list"))  {
   ggplot(data = dat) +
     aes(x = rankingMethod, y = rank, color=algorithm, group=algorithm ) +
     geom_line(size=1)+
-    facet_wrap( ~ task)+xlab("Ranking method")  + theme(
+    facet_wrap( ~ task)+xlab("Ranking method")  +ylab("Rank")+ theme(
       # legend.position = "none",
       #panel.spacing = unit(0, "lines"),
       #strip.background = element_blank(),
@@ -53,8 +54,9 @@ if (inherits(x,"list"))  {
     lab=lev
   } else {
     lev=ordering
-    lab=paste(1:length(ordering),ordering)
-  }
+  #  lab=paste(1:length(ordering),ordering)
+lab=lev
+      }
   
   dat=dat%>% mutate(rank=factor(rank))%>%
     mutate(algorithm=factor(algorithm, levels=lev,labels = lab))
@@ -64,7 +66,7 @@ if (inherits(x,"list"))  {
   
   ggplot(data = dat) +
     aes(x = rankingMethod, y = rank, color=algorithm, group=algorithm ) +
-    geom_line(size=1)+xlab("Ranking method")+
+    geom_line(size=1)+xlab("Ranking method")+ylab("Rank")+
     theme(
       strip.placement = "outside",
       axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1) )

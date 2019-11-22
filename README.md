@@ -4,14 +4,13 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Note that this is an early experimental version (version 0.1.5) and
+Note that this is an early experimental version (version 0.2.0) and
 there may still be bugs.
 
-**Layouting in case of many algorithms or tasks is not yet optimized.
-Please be patient, we are steadily working on improving the package.**
+This is ongoing work, there may be updates with possibly major changes.
+*Please make sure that you use the most current version\!*
 
-There may be updates with possibly major changes. *Please make sure that
-you use the most current version\!*
+Change log at the end of this document
 
 # Installation
 
@@ -104,13 +103,13 @@ the data set might look like this:
 
 | Task | TestCase | Algorithm | MetricValue |
 | :--- | :------- | :-------- | ----------: |
-| T1   | case1    | A1        |       0.039 |
-| T1   | case1    | A2        |       0.825 |
-| T1   | case2    | A1        |       0.811 |
-| T1   | case2    | A2        |       0.809 |
-| T2   | case1    | A1        |       0.939 |
-| T2   | case1    | A2        |       0.674 |
-| T2   | case2    | A1        |       0.173 |
+| T1   | case1    | A1        |       0.167 |
+| T1   | case1    | A2        |       0.913 |
+| T1   | case2    | A1        |       0.890 |
+| T1   | case2    | A2        |       0.224 |
+| T2   | case1    | A1        |       0.989 |
+| T2   | case1    | A2        |       0.352 |
+| T2   | case2    | A1        |       0.691 |
 | T2   | case2    | A2        |          NA |
 
 ### Load data
@@ -280,13 +279,13 @@ single and multi task challenges.
 ### 5.1 For single task challenges
 
 ``` r
-report(ranking_bootstrapped, 
-       title="singleTaskChallengeExample", # used for the title of the report
-       file = "filename", 
-       format = "PDF", # format can be "PDF", "HTML" or "Word"
-       latex_engine="pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
-       clean=TRUE #optional. Using TRUE will clean intermediate files that are created during rendering.
-       ) 
+ranking_bootstrapped %>% 
+  report(title="singleTaskChallengeExample", # used for the title of the report
+         file = "filename", 
+         format = "PDF", # format can be "PDF", "HTML" or "Word"
+         latex_engine="pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+         clean=TRUE #optional. Using TRUE will clean intermediate files that are created during rendering.
+        ) 
 ```
 
 Argument *file* allows for specifying the output file path as well,
@@ -318,14 +317,26 @@ Generate report as above, but with additional specification of consensus
 ranking
 
 ``` r
-report(ranking_bootstrapped, 
-       consensus=meanRanks,
-       title="multiTaskChallengeExample",
-       file = "filename", 
-       format = "PDF", # format can be "PDF", "HTML" or "Word"
-       latex_engine="pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
-       )
+ranking_bootstrapped %>% 
+  report(consensus=meanRanks,
+         title="multiTaskChallengeExample",
+         file = "filename", 
+         format = "PDF", # format can be "PDF", "HTML" or "Word"
+         latex_engine="pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+        )
 ```
+
+# Changes
+
+### Version 0.2.0
+
+  - Improved layout in case of many algorithms and tasks (while probably
+    still not perfect)
+  - Consistent coloring of algorithms across figures
+  - report() function can be applied to ranked object before
+    bootstrapping (and thus excluding figures based on bootstrapping),
+    i.e. in the example `ranking %>% report(...)`
+  - bug fixes
 
 # Reference
 

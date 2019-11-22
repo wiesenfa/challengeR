@@ -66,8 +66,6 @@ methodsplot.default <- function(x, ...) stop("not implemented for this class")
 violin <- function(x,...) UseMethod("violin")
 violin.default <- function(x, ...) stop("not implemented for this class")
 
-stability2 <- function(x,...) UseMethod("stability2")
-stability2.default <- function(x, ...) stop("not implemented for this class")
 
 relation_dissimilarity <- function(x,...) UseMethod("relation_dissimilarity")
 relation_dissimilarity.default <- function(x, ...) relations::relation_dissimilarity(x,  ...) 
@@ -75,8 +73,12 @@ relation_dissimilarity.default <- function(x, ...) relations::relation_dissimila
 rankingHeatmap <- function(x,...) UseMethod("rankingHeatmap")
 rankingHeatmap.default <- function(x, ...) stop("not implemented for this class")
 
-stability1 <- function(x,...) UseMethod("stability1")
-stability1.default <- function(x, ...) stop("not implemented for this class")
+stability <- function(x,...) UseMethod("stability")
+stability.default <- function(x, ...) stop("not implemented for this class")
+stabilityByAlgorithm <- function(x,...) UseMethod("stabilityByAlgorithm")
+stabilityByAlgorithm.default <- function(x, ...) stop("not implemented for this class")
+stabilityByTask <- function(x,...) UseMethod("stabilityByTask")
+stabilityByTask.default <- function(x, ...) stop("not implemented for this class")
 
 report <- function(object,...) UseMethod("report")
 report.default <- function(object, ...) stop("not implemented for this class")
