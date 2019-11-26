@@ -190,7 +190,7 @@ relensemble= as.relation(a)
 
 print(significanceMap(rankedMat=object$mat,
                  relation_object=relensemble
-                 )+ theme(aspect.ratio=1))
+                 )+ theme(aspect.ratio=1)
         )#+ggtitle(Task))#+scale_color_manual(name="decision",values=c("white","lightblue")))
 
 ```
