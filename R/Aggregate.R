@@ -34,6 +34,7 @@ Aggregate.data.frame <-function(object,x,algorithm, FUN=mean,
     isSignificance=FALSE
   }
   res=list(FUN = . %>% (call),
+           FUN.list=list(FUN),
            call=list(call),
            data=object,
            mat=agg,
@@ -94,6 +95,7 @@ Aggregate.list <-function(object,x,algorithm,FUN=mean,
   }
     names(matlist)=names(object)
    res=list(FUN = . %>% (call),
+            FUN.list=list(FUN),
             call=list(call),
       data=object,
        matlist=matlist, 

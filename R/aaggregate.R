@@ -9,9 +9,9 @@ aggregate.challenge=function(x,FUN=mean,
   res1=do.call("Aggregate",list(object=x,x=attr(x,"value"),algorithm=attr(x,"algorithm"),FUN=call$FUN,
                                 na.treat=na.treat,
                                 parallel=parallel,progress=progress,
-                                dataset_id=attr(x,"case"), 
+                                dataset_id=attr(x,"case"),
                                 alpha=alpha, p.adjust.method=p.adjust.method,
-                                inverseOrder=attr(x,"inverseOrder") # only needed for significance 
+                                inverseOrder=attr(x,"inverseOrder") # only needed for significance
   ))
   
   call2=call("Aggregate",object=call$x, x=attr(x,"value"),algorithm=attr(x,"algorithm"),FUN=call$FUN,
@@ -20,9 +20,18 @@ aggregate.challenge=function(x,FUN=mean,
              dataset_id=attr(x,"case"), 
              alpha=alpha, p.adjust.method=p.adjust.method, inverseOrder=attr(x,"inverseOrder") # only needed for significance 
   )
+
+  # call3=call("Aggregate",object=call$x, x=attr(x,"value"),algorithm=attr(x,"algorithm"),FUN=FUN,
+  #            na.treat=na.treat,
+  #            parallel=parallel,progress=progress,
+  #            dataset_id=attr(x,"case"),
+  #            alpha=alpha, p.adjust.method=p.adjust.method, inverseOrder=attr(x,"inverseOrder") # only needed for significance
+  # )
+  
   if (inherits(x,"list")){    
     res=list(FUN = . %>% (call2),
              call=list(call2),
+             FUN.list=list(FUN),
              data=x,
              matlist=res1$matlist,
              isSignificance=res1$isSignificance)
@@ -31,6 +40,7 @@ aggregate.challenge=function(x,FUN=mean,
   } else {
     res=list(FUN = . %>% (call2),
              call=list(call2),
+             FUN.list=list(FUN),
              data=x,
              mat=res1$mat,
              isSignificance=res1$isSignificance)
@@ -45,16 +55,18 @@ aggregate.challenge=function(x,FUN=mean,
 
 aggregate.ranked <-function(x,
                             FUN=mean, ...                      ){
+  call=match.call(expand.dots = F)  
+  call=call("aggregate.ranked",x=call$x,FUN=FUN)#,call$...)
   algorithm=attr(x$data,"algorithm")
   mat=x$mat
-  call=match.call(expand.dots = T)  
   what="rank"
   xmean <- aggregate(mat[,what], by=list(mat[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z)))
   names(xmean)=c(algorithm,paste0(what,"_",strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]))
   rownames(xmean)=xmean[,1]
   xmean=xmean[,-1,drop=F]
   res=list(FUN = . %>% (x$FUN) %>%  (call),
-           call=list(x$call,call),
+           FUN.list=c(x$FUN.list,FUN),
+           call=c(x$call,call),
            data=x$data,
            mat=xmean)
   class(res)=c("aggregatedRanks",class(res))
@@ -65,16 +77,18 @@ aggregate.ranked <-function(x,
 
 aggregate.ranked.list <-function(x,#algorithm,
                                  FUN=mean,         ...            ){
-  call=match.call(expand.dots = T)  
+  call=match.call(expand.dots = F)  
+  call=call("aggregate.ranked.list",x=call$x,FUN=FUN)#,call$...)
   
   #if (missing(algorithm)) 
     algorithm=attr(x$data,"algorithm")
   resmatlist=Aggregate.list(x$matlist,x="rank",algorithm=algorithm,FUN=FUN,...)$matlist
   resmatlist=lapply(resmatlist,function(z) as.data.frame(z))
   res=list(matlist=resmatlist,
-           call=list(x$call,call),
+           call=c(x$call,call),
            data=x$data,
-           FUN =  . %>% (x$FUN) %>%  (call)
+           FUN =  . %>% (x$FUN) %>%  (call),
+           FUN.list=c(x$FUN.list,FUN)
   )
   class(res)=c("aggregatedRanks.list",class(res))
   res
