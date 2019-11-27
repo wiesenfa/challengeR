@@ -44,7 +44,7 @@ export(
   #"rankNA2",
     "rankThenAggregate",
   #"rankdist.bootstrap.list",
-    "rankingHeatmap.challenge", "relation_dissimilarity.ranked.list",
+    "rankingHeatmap.challenge","rankingHeatmap.ranked","rankingHeatmap.ranked.list", "relation_dissimilarity.ranked.list",
     "report.bootstrap", "report.bootstrap.list", 
   "second", 
   "select.if",
@@ -76,6 +76,7 @@ importFrom("rlang",":=")
 importFrom("reshape2","melt", "acast")
 importFrom("utils", "capture.output", "methods")
 importFrom("plyr", "llply")
+importFrom("knitr", "kable")
 importFrom("purrr", "%>%")
 importFrom("rmarkdown", "render","word_document","pdf_document","html_document")
 importFrom("viridisLite", "viridis","cividis")
@@ -218,6 +219,8 @@ S3method(violin,default)
 
 
 S3method(rankingHeatmap,challenge)
+S3method(rankingHeatmap,ranked)
+S3method(rankingHeatmap,ranked.list)
 S3method(rankingHeatmap,default)
 
 S3method(relation_dissimilarity,ranked.list)
@@ -231,6 +234,8 @@ S3method(stability,ranked.list)
 
 S3method(stabilityByAlgorithm,bootstrap.list)
 S3method(stabilityByAlgorithm,default)
+
+S3method(stabilityByAlgorithmStacked,bootstrap.list)
 
 S3method(consensus,ranked.list)
 S3method(consensus,default)

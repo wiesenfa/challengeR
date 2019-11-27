@@ -59,30 +59,40 @@ names(cols_numbered)= paste(1:length(cols),names(cols))
 
 <!-- ***** -->
 
-
-This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and test cases. Generated plots are:
-
-* Visualization of assessment data: Dot- and boxplots, podium plots and ranking heatmaps
-* Visualization of ranking robustness:  Blob plots, Violin plots, significance maps and line plots
-
-
-Analysis based on `r nrow(challenge_single)/length(unique(challenge_single[[attr(challenge_single,"algorithm")]]))` test cases which included `r sum(is.na(challenge_single[[attr(challenge_single,"value")]]))` missing values.
-
-Algorithms are ordered according to chosen ranking scheme.
-
 <!-- This text is outcommented -->
 <!-- R code chunks start with "```{r }" and end with "```" -->
 <!-- Please do not change anything inside of code chunks, otherwise any latex code is allowed -->
 
 <!-- inline code with `r 0` -->
 
+This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and test cases. Generated plots are:
 
+* Visualization of assessment data: Dot- and boxplot, podium plot and ranking heatmap
+* Visualization of ranking robustness: Line plot
+* Visualization of ranking stability: Significance map
+
+
+Analysis based on `r nrow(challenge_single)/length(unique(challenge_single[[attr(challenge_single,"algorithm")]]))` test cases which included `r sum(is.na(challenge_single[[attr(challenge_single,"value")]]))` missing values.
+
+Algorithms are ordered according to the following chosen ranking scheme:
+
+```{r,results='asis'}
+a=(  lapply(object$FUN.list,function(x) {
+ #    if (!is.character(x)) return(paste0("Aggregate using function ",paste(capture.output(x),collapse=" ")))
+     if (!is.character(x)) return(paste0("aggregate using function ",paste(gsub("UseMethod","",deparse(functionBody(x))),collapse=" ")))
+ #    if (!is.character(x)) return(paste0("Aggregate using function ",paste(gsub("UseMethod","",deparse(functionBody(x))),collapse=" ")))
+     else if (x=="rank") return(x)
+     else return(paste0("aggregate using function ",x))
+   }))
+#cat("1.",paste(a,collapse="\n2. "))
+cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
+```
 
 Ranking list:
 
 ```{r}
-knitr::kable(object$mat[order(object$mat$rank),])
-
+#knitr::kable(object$mat[order(object$mat$rank),])
+print(object)
 ```
 
 
@@ -106,7 +116,7 @@ boxplot(object,size=.8)+xlab("Algorithm")+ylab("Metric value")
 
 
 ## Podium plot
-*Podium plots* (see also Eugster et al, 2008) for visualizing raw assessment data. Upper part (spaghetti plot): Participating algorithms are color-coded, and each colored dot in the plot represents a metric value achieved with the respective algorithm. The actual metric value is encoded by the y-axis. Each podium (here: $p$=`r length(ordering)`) represents one possible rank, ordered from best (1) to last (here: `r length(ordering)`). The assignment of metric values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding test case. Note that the plot part above each podium place is further subdivided into $p$ "columns", where each column represents one participating algorithm (here: $p=$ `r length(ordering)`).  Dots corresponding to identical test cases are connected by a line, leading to the shown spaghetti structure. Lower part (podium plots): Bar charts represent the relative frequency for each algorithm to achieve the rank encoded by the podium place. 
+*Podium plots* (see also Eugster et al, 2008) for visualizing raw assessment data. Upper part (spaghetti plot): Participating algorithms are color-coded, and each colored dot in the plot represents a metric value achieved with the respective algorithm. The actual metric value is encoded by the y-axis. Each podium (here: $p$=`r length(ordering)`) represents one possible rank, ordered from best (1) to last (here: `r length(ordering)`). The assignment of metric values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding test case. Note that the plot part above each podium place is further subdivided into $p$ "columns", where each column represents one participating algorithm (here: $p=$ `r length(ordering)`).  Dots corresponding to identical test cases are connected by a line, leading to the shown spaghetti structure. Lower part: Bar charts represent the relative frequency for each algorithm to achieve the rank encoded by the podium place. 
 \bigskip
 
 
@@ -141,7 +151,8 @@ if (oh>0) par(oma=c(oh,0,0,0))
 #print(par()$pin)
 
   set.seed(38)
- podium(object, col=cols,
+ podium(object, 
+        col=cols,
         lines.show = T,lines.alpha = .4,
         dots.cex=.9,ylab="Metric value",layout.heights=c(1,.35),
           legendfn = function(algs, cols) {
@@ -163,7 +174,7 @@ par(op)
 
 ```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
 #
-rankingHeatmap(object$data,ranking.fun=object$FUN,fontsize=25, vp =grid::viewport(width=1, height=.95))
+rankingHeatmap(object,fontsize=25, vp =grid::viewport(width=1, height=.95))
 #
 ```
 
@@ -173,7 +184,6 @@ rankingHeatmap(object$data,ranking.fun=object$FUN,fontsize=25, vp =grid::viewpor
 
 
 
-<!-- Results based on `r ncol(boot_object$bootsrappedRanks)` bootstrap samples. -->
 
 
 

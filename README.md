@@ -4,7 +4,7 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Note that this is an early experimental version (version 0.2.0) and
+Note that this is an early experimental version (version 0.2.1) and
 there may still be bugs.
 
 This is ongoing work, there may be updates with possibly major changes.
@@ -103,13 +103,13 @@ the data set might look like this:
 
 | Task | TestCase | Algorithm | MetricValue |
 | :--- | :------- | :-------- | ----------: |
-| T1   | case1    | A1        |       0.167 |
-| T1   | case1    | A2        |       0.913 |
-| T1   | case2    | A1        |       0.890 |
-| T1   | case2    | A2        |       0.224 |
-| T2   | case1    | A1        |       0.989 |
-| T2   | case1    | A2        |       0.352 |
-| T2   | case2    | A1        |       0.691 |
+| T1   | case1    | A1        |       0.188 |
+| T1   | case1    | A2        |       0.990 |
+| T1   | case2    | A1        |       0.233 |
+| T1   | case2    | A2        |       0.204 |
+| T2   | case1    | A1        |       0.986 |
+| T2   | case1    | A2        |       0.129 |
+| T2   | case2    | A1        |       0.917 |
 | T2   | case2    | A2        |          NA |
 
 ### Load data
@@ -328,12 +328,19 @@ ranking_bootstrapped %>%
 
 # Changes
 
+### Version 0.2.1
+
+  - Introduction in reports now mentions e.g. ranking method, number of
+    test cases,…
+  - Function `subset()` allows selection of tasks after bootstrapping,
+    e.g. `subset(ranking_bootstrapped,1:3)`
+
 ### Version 0.2.0
 
   - Improved layout in case of many algorithms and tasks (while probably
     still not perfect)
   - Consistent coloring of algorithms across figures
-  - report() function can be applied to ranked object before
+  - `report()` function can be applied to ranked object before
     bootstrapping (and thus excluding figures based on bootstrapping),
     i.e. in the example `ranking %>% report(...)`
   - bug fixes

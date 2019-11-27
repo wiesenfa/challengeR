@@ -34,6 +34,7 @@ rank.challenge=function(object,x,by,
   if (inherits(object,"list")){    
     res=list(FUN = . %>% (call2),
                 call=list(call2),
+             FUN.list=list("rank"),
           data=object,
            matlist=res1$matlist)
     
@@ -41,6 +42,7 @@ rank.challenge=function(object,x,by,
   } else {
     res=list(FUN = . %>% (call2),
                 call=list(call2),
+             FUN.list=list("rank"),
           data=object,
            mat=res1$mat)
     

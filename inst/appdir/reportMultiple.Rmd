@@ -67,10 +67,24 @@ names(cols_numbered)= paste(1:length(cols),names(cols))
 This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and test cases. Generated plots are:
 
 * Visualization of assessment data: Dot- and boxplots, podium plots and ranking heatmaps
-* Visualization of ranking robustness:  Blob plots, Violin plots, significance maps and line plots
+* Visualization of ranking robustness: Line plots
+* Visualization of ranking stability: Blob plots, violin plots and significance maps
 * Visualization of cross-task insights
 
 
+Ranking of algorithms within tasks according to the following chosen ranking scheme:
+
+```{r,results='asis'}
+a=(  lapply(object$FUN.list,function(x) {
+ #    if (!is.character(x)) return(paste0("Aggregate using function ",paste(capture.output(x),collapse=" ")))
+     if (!is.character(x)) return(paste0("aggregate using function ",paste(gsub("UseMethod","",deparse(functionBody(x))),collapse=" ")))
+ #    if (!is.character(x)) return(paste0("Aggregate using function ",paste(gsub("UseMethod","",deparse(functionBody(x))),collapse=" ")))
+     else if (x=="rank") return(x)
+     else return(paste0("aggregate using function ",x))
+   }))
+#cat("1.",paste(a,collapse="\n2. "))
+cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
+```
 
 
 Ranking list for each task:
@@ -78,6 +92,9 @@ Ranking list for each task:
 #object
 for (t in 1:length(object$matlist)){
  cat("\n",names(object$matlist)[t],": ")
+  n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
+  cat("\nAnalysis based on ", n.cases," test cases which included", sum(is.na(challenge_multiple[[t]][[attr(challenge_multiple,"value")]]))," missing values.")
+  if (n.cases<log2(5000)) warning("Associated figures based on bootstrapping should be treated with caution due to small number of test cases!")
   x=object$matlist[[t]]
   print(knitr::kable(x[order(x$rank),]))
 }
@@ -87,7 +104,7 @@ for (t in 1:length(object$matlist)){
 
 \bigskip
 
-Consensus ranking:
+Consensus ranking according to chosen method `r attr(params$consensus,"method")`:
 ```{r}
 knitr::kable(data.frame(value=round(params$consensus,3), rank=rank(params$consensus, ties.method="min")))
 ```
@@ -112,7 +129,7 @@ temp=lapply(temp,function(x) utils::capture.output(x+xlab("Algorithm")+ylab("Met
 
 
 ## Podium plots
-*Podium plots* (see also Eugster et al, 2008) for visualizing raw assessment data. Upper part (spaghetti plot): Participating algorithms are color-coded, and each colored dot in the plot represents a metric value achieved with the respective algorithm. The actual metric value is encoded by the y-axis. Each podium (here: $p$=`r length(ordering_consensus)`) represents one possible rank, ordered from best (1) to last (here: `r length(ordering_consensus)`). The assignment of metric values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding test case. Note that the plot part above each podium place is further subdivided into $p$ "columns", where each column represents one participating algorithm (here: $p=$ `r length(ordering_consensus)`).  Dots corresponding to identical test cases are connected by a line, leading to the shown spaghetti structure. Lower part (podium plots): Bar charts represent the relative frequency for each algorithm to achieve the rank encoded by the podium place. 
+*Podium plots* (see also Eugster et al, 2008) for visualizing raw assessment data. Upper part (spaghetti plot): Participating algorithms are color-coded, and each colored dot in the plot represents a metric value achieved with the respective algorithm. The actual metric value is encoded by the y-axis. Each podium (here: $p$=`r length(ordering_consensus)`) represents one possible rank, ordered from best (1) to last (here: `r length(ordering_consensus)`). The assignment of metric values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding test case. Note that the plot part above each podium place is further subdivided into $p$ "columns", where each column represents one participating algorithm (here: $p=$ `r length(ordering_consensus)`).  Dots corresponding to identical test cases are connected by a line, leading to the shown spaghetti structure. Lower part: Bar charts represent the relative frequency for each algorithm to achieve the rank encoded by the podium place. 
 
 ```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
 plot.new()
@@ -311,7 +328,8 @@ blob plot similar to the one shown in Fig.~\ref{blobByTask} substituting ranking
 \bigskip
 
 ```{r blobplot_raw}
-stability.ranked.list(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)#+scale_color_manual(values=cols)
+#stability.ranked.list
+stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)#+scale_color_manual(values=cols)
 ```
 
 
@@ -330,10 +348,11 @@ task.
 \bigskip
 
 ```{r blobplot_bootstrap_xTask,fig.width=7,fig.height = 5}
+#stabilityByAlgorithm.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-  stabilityByAlgorithm.bootstrap.list(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = F)+scale_color_manual(values=cols)
+  stabilityByAlgorithm(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = F)+scale_color_manual(values=cols)
 } else {
-  pl=stabilityByAlgorithm.bootstrap.list(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = T)
+  pl=stabilityByAlgorithm(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = T)
   for (i in 1:length(pl)) print(pl[[i]]+scale_color_manual(values=cols)+guides(size = guide_legend(title="%"),color="none"))
 }
 
@@ -353,7 +372,8 @@ different tasks.
 
 
 ```{r stackedFrequencies_bootstrap_xTask,fig.width=7,fig.height = 5}
-stabilityByAlgorithmStacked.bootstrap.list(boot_object,ordering=ordering_consensus)
+#stabilityByAlgorithmStacked.bootstrap.list
+stabilityByAlgorithmStacked(boot_object,ordering=ordering_consensus)
 ```
 
 
@@ -387,12 +407,10 @@ Same as in Section \ref{blobByTask} but now ordered according to consensus.
 \bigskip
 
 ```{r blobplot_bootstrap_xAlgorithm,fig.width=9, fig.height=9}
+#stabilityByTask.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-
-stabilityByTask.bootstrap.list(boot_object, ordering=ordering_consensus,max_size = 9,size=4,shape=4)
+  stabilityByTask(boot_object, ordering=ordering_consensus,max_size = 9,size=4,shape=4)
 } else {
-
-
   pl=list()
   for (subt in names(boot_object$bootsrappedRanks)){
     a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
@@ -402,11 +420,8 @@ stabilityByTask.bootstrap.list(boot_object, ordering=ordering_consensus,max_size
     r=boot_object$matlist[[subt]]
   
     pl[[subt]]=stabilityByTask(a,max_size = 9,ordering=ordering_consensus,size.ranks=.25*theme_get()$text$size,size=4,shape=4)+scale_color_manual(values=cols)
-  
   }
-
   for (i in 1:length(pl)) print(pl[[i]])
-
 }
 ```
 
