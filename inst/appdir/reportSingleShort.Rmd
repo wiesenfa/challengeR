@@ -1,6 +1,7 @@
 ---
 params:
   object: NA
+  colors: NA
   name: NULL
 title: "Benchmarking report for `r params$name` "
 author: created by challengeR `r packageVersion('challengeR')` (Wiesenfarth, Reinke, Cardoso, Maier-Hein & Kopp-Schneider, 2019)
@@ -38,6 +39,7 @@ theme_set(theme_light(base_size=11))
 
 ```{r }
 object = params$object
+color.fun=params$colors
 ```
 
 
@@ -46,7 +48,7 @@ challenge_single=object$data
 ordering=  names(sort(t(object$mat[,"rank",drop=F])["rank",]))
 ranking.fun=object$FUN
 
-cols_numbered=cols=default_colors(length(ordering))
+cols_numbered=cols=color.fun(length(ordering))
 names(cols)=ordering
 names(cols_numbered)= paste(1:length(cols),names(cols))
 
@@ -223,7 +225,7 @@ print(significanceMap(rankedMat=object$mat,
 \bigskip
 
 ```{r lineplot,fig.width=7,fig.height = 5}
-methodsplot(challenge_single, ordering =ordering )
+methodsplot(challenge_single, ordering =ordering )+scale_color_manual(values=cols)
 ```
 
 

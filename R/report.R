@@ -1,4 +1,4 @@
-report.bootstrap=function(object,file,title="<Challenge name>",format="PDF",latex_engine="pdflatex",open=TRUE,...){
+report.bootstrap=function(object,file,title="<Challenge name>",colors=default_colors,format="PDF",latex_engine="pdflatex",open=TRUE,...){
   #object=boot_object
   #format="Word"
   
@@ -18,7 +18,8 @@ report.bootstrap=function(object,file,title="<Challenge name>",format="PDF",late
   # Set up parameters to pass to Rmd document
   params <- list(
     object=object,
-    name=title
+    name=title,
+    colors=colors
   )
   
   
@@ -47,7 +48,7 @@ report.bootstrap=function(object,file,title="<Challenge name>",format="PDF",late
 
 
 
-report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",format="PDF",latex_engine="pdflatex",open=TRUE,...){
+report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",colors=default_colors,format="PDF",latex_engine="pdflatex",open=TRUE,...){
   #object=boot_object
   #format="Word"
   
@@ -70,7 +71,8 @@ report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",fo
   params <- list(
     object=object,
     consensus=consensus,
-    name=title
+    name=title,
+    colors=colors
   )
   
   # Knit the document, passing in the `params` list, and eval it in a
@@ -101,7 +103,7 @@ report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",fo
 ########################
 
 
-report.ranked=function(object,file,title="<Challenge name>",format="PDF",latex_engine="pdflatex",open=TRUE,...){
+report.ranked=function(object,file,title="<Challenge name>",colors=default_colors,format="PDF",latex_engine="pdflatex",open=TRUE,...){
   #object=boot_object
   #format="Word"
   
@@ -121,7 +123,8 @@ report.ranked=function(object,file,title="<Challenge name>",format="PDF",latex_e
   # Set up parameters to pass to Rmd document
   params <- list(
     object=object,
-    name=title
+    name=title,
+    colors=colors
   )
   
   
@@ -150,7 +153,7 @@ report.ranked=function(object,file,title="<Challenge name>",format="PDF",latex_e
 
 
 
-report.ranked.list=function(object,consensus,file,title="<Challenge name>",format="PDF",latex_engine="pdflatex",open=TRUE,...){
+report.ranked.list=function(object,consensus,file,title="<Challenge name>",colors=default_colors,format="PDF",latex_engine="pdflatex",open=TRUE,...){
   #object=boot_object
   #format="Word"
   
@@ -173,7 +176,8 @@ report.ranked.list=function(object,consensus,file,title="<Challenge name>",forma
   params <- list(
     object=object,
     consensus=consensus,
-    name=title
+    name=title,
+    colors=colors
   )
   
   # Knit the document, passing in the `params` list, and eval it in a

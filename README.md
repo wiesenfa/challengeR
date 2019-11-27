@@ -103,13 +103,13 @@ the data set might look like this:
 
 | Task | TestCase | Algorithm | MetricValue |
 | :--- | :------- | :-------- | ----------: |
-| T1   | case1    | A1        |       0.188 |
-| T1   | case1    | A2        |       0.990 |
-| T1   | case2    | A1        |       0.233 |
-| T1   | case2    | A2        |       0.204 |
-| T2   | case1    | A1        |       0.986 |
-| T2   | case1    | A2        |       0.129 |
-| T2   | case2    | A1        |       0.917 |
+| T1   | case1    | A1        |       0.306 |
+| T1   | case1    | A2        |       0.279 |
+| T1   | case2    | A1        |       0.824 |
+| T1   | case2    | A2        |       0.973 |
+| T2   | case1    | A1        |       0.506 |
+| T2   | case1    | A2        |       0.589 |
+| T2   | case2    | A1        |       0.454 |
 | T2   | case2    | A2        |          NA |
 
 ### Load data
@@ -334,6 +334,13 @@ ranking_bootstrapped %>%
     test cases,…
   - Function `subset()` allows selection of tasks after bootstrapping,
     e.g. `subset(ranking_bootstrapped,1:3)`
+  - `report()` functions gain argument `colors` (default:
+    `default_colors`). Change e.g. to `colors=viridis::inferno` which
+    “is designed in such a way that it will analytically be perfectly
+    perceptually-uniform, both in regular form and also when converted
+    to black-and-white. It is also designed to be perceived by readers
+    with the most common form of color blindness.” See package `viridis`
+    for further similar functions.
 
 ### Version 0.2.0
 
