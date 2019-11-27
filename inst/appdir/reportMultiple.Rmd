@@ -1,6 +1,7 @@
 ---
 params:
   object: NA
+  colors: NA
   name: NULL
   consensus: NA
 title: "Benchmarking report for `r params$name` "
@@ -43,6 +44,7 @@ theme_set(theme_light())
 ```{r }
 boot_object = params$object
 ordering_consensus=names(params$consensus)
+color.fun=params$colors
 ```
 
 ```{r }
@@ -51,7 +53,7 @@ challenge_multiple=boot_object$data
 ranking.fun=boot_object$FUN
 object=challenge_multiple%>%ranking.fun
 
-cols_numbered=cols=default_colors(length(ordering_consensus))
+cols_numbered=cols=color.fun(length(ordering_consensus))
 names(cols)=ordering_consensus
 names(cols_numbered)= paste(1:length(cols),names(cols))
 
@@ -329,7 +331,7 @@ blob plot similar to the one shown in Fig.~\ref{blobByTask} substituting ranking
 
 ```{r blobplot_raw}
 #stability.ranked.list
-stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)#+scale_color_manual(values=cols)
+stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+scale_color_manual(values=cols)
 ```
 
 
@@ -409,7 +411,7 @@ Same as in Section \ref{blobByTask} but now ordered according to consensus.
 ```{r blobplot_bootstrap_xAlgorithm,fig.width=9, fig.height=9}
 #stabilityByTask.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-  stabilityByTask(boot_object, ordering=ordering_consensus,max_size = 9,size=4,shape=4)
+  stabilityByTask(boot_object, ordering=ordering_consensus,max_size = 9,size=4,shape=4)+scale_color_manual(values=cols)
 } else {
   pl=list()
   for (subt in names(boot_object$bootsrappedRanks)){
