@@ -47,8 +47,8 @@ print.aggregated <-function(x,...)  kable(x$mat,...)
 print.ranked <-function(x,...)  kable(x$mat[order(x$mat$rank),],...)
 
 
-podium <- function(x,...) UseMethod("podium")
-podium.default <- function(x, ...) stop("not implemented for this class")
+podium <- function(object,...) UseMethod("podium")
+podium.default <- function(object, ...) stop("not implemented for this class")
 
 density <- function(x,...) UseMethod("density")
 density.default <- function(x, ...) density.default(x,...)
@@ -72,6 +72,9 @@ relation_dissimilarity.default <- function(x, ...) relations::relation_dissimila
 
 rankingHeatmap <- function(x,...) UseMethod("rankingHeatmap")
 rankingHeatmap.default <- function(x, ...) stop("not implemented for this class")
+
+significanceMap <- function(x,...) UseMethod("significanceMap")
+significanceMap.default <- function(x, ...) stop("not implemented for this class")
 
 stability <- function(x,...) UseMethod("stability")
 stability.default <- function(x, ...) stop("not implemented for this class")

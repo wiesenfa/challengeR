@@ -1,12 +1,12 @@
-podium.challenge=function(x,ranking.fun, layout.heights=c(1,0.4), #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
+podium.challenge=function(object,ranking.fun, layout.heights=c(1,0.4), #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
                           ...){
-  ranking=x%>%ranking.fun
+  ranking=object%>%ranking.fun
   if (inherits(ranking,"ranked.list")){
     ranking_list=lapply(ranking$matlist, function(a) t(a[,"rank",drop=F])["rank",])
-    for (subt in names(x)){
-      dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
-                      annotator = attr(x,"annotator"),
-                      smallBetter = !attr(x,"inverseOrder"))
+    for (subt in names(object)){
+      dd=as.challenge(object[[subt]],value=attr(object,"value"), algorithm=attr(object,"algorithm") ,case=attr(object,"case"),
+                      annotator = attr(object,"annotator"),
+                      smallBetter = !attr(object,"inverseOrder"))
       xx=as.warehouse.challenge(dd)
       podium.AlgorithmPerformance(xx, ranking=ranking_list[[subt]],layout.heights=layout.heights,...)
       title(subt,outer=T,line=-3)    
@@ -14,25 +14,24 @@ podium.challenge=function(x,ranking.fun, layout.heights=c(1,0.4), #=function(x) 
     
   } else {
     ranking=t(ranking$mat[,"rank",drop=F])["rank",]
-    x=as.warehouse.challenge(x)
+    x=as.warehouse.challenge(object)
     podium.AlgorithmPerformance(x, ranking=ranking,layout.heights=layout.heights,...)
     
   }
   
 }
 
-podium.ranked=function(x, layout.heights=c(1,0.4), #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
+podium.ranked=function(object, layout.heights=c(1,0.4), #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
                        ...){
-  ranking=x#%>%ranking.fun
-  ranking=t(ranking$mat[,"rank",drop=F])["rank",]
-  x=as.warehouse.challenge(x$data)
+   ranking=t(object$mat[,"rank",drop=F])["rank",]
+  x=as.warehouse.challenge(object$data)
   podium.AlgorithmPerformance(x, ranking=ranking,layout.heights=layout.heights,...)
 }
 
-podium.ranked.list=function(x, layout.heights=c(1,0.4), #=function(x) aggregateThenRank(x,FUN = median,ties.method = "average"),
+podium.ranked.list=function(object, layout.heights=c(1,0.4), #=function(object) aggregateThenRank(object,FUN = median,ties.method = "average"),
                             ...){
-  ranking=x#%>%ranking.fun
-  x=x$data
+  ranking=object#%>%ranking.fun
+  x=object$data
   ranking_list=lapply(ranking$matlist, function(a) t(a[,"rank",drop=F])["rank",])
   for (subt in names(x)){
     dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
