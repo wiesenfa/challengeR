@@ -1,18 +1,18 @@
-subset.comparedRanks.list=function(x,subset,...){
-  res=x[subset]
+subset.comparedRanks.list=function(x,tasks,...){
+  res=x[tasks]
   class(res)="comparedRanks.list"
   res
 }
 
-subset.list=function(x,subset,...){
-  x[subset]
+subset.list=function(x,tasks,...){
+  x[tasks]
 }
 
-subset.bootstrap.list=function(x,subset,...){
-  res=list(bootsrappedRanks=x$bootsrappedRanks[subset],
-           bootsrappedAggregate=x$bootsrappedAggregate[subset],
-           matlist=x$matlist[subset],
-           data=x$data[subset],
+subset.bootstrap.list=function(x,tasks,...){
+  res=list(bootsrappedRanks=x$bootsrappedRanks[tasks],
+           bootsrappedAggregate=x$bootsrappedAggregate[tasks],
+           matlist=x$matlist[tasks],
+           data=x$data[tasks],
            FUN=x$FUN
   )
   
@@ -24,24 +24,25 @@ subset.bootstrap.list=function(x,subset,...){
   
 }
 
-subset.ranked.list=function(x,subset,...){
-  res=list(matlist=x$matlist[subset],
-           data=x$data[subset],
+subset.ranked.list=function(x,tasks,...){
+  res=list(matlist=x$matlist[tasks],
+           data=x$data[tasks],
            call=x$call,
-           FUN=x$FUN
+           FUN=x$FUN,
+           FUN.list=x$FUN.list
   )
   
   attrib=attributes(x$data)
   attrib$names=attr(res$data,"names")
   attributes(res$data)=attrib
-  class(res)="ranked.list"
+  class(res)=c("ranked.list","list")
   res
   
 }
 
-subset.aggregated.list=subset.ranked.list=function(x,subset,...){
+subset.aggregated.list=function(x,tasks,...){
   call=match.call(expand.dots = T)  
-  matlist=x$matlist[subset]
+  matlist=x$matlist[tasks]
   res=list(matlist=matlist,
            call=list(x$call,call),
            data=x$data,
@@ -52,3 +53,29 @@ subset.aggregated.list=subset.ranked.list=function(x,subset,...){
   res
  
 }
+
+
+which.top=function(object,top){
+  mat=object$mat[object$mat$rank<=top,]
+  rownames(mat)#[order(mat$rank)]
+}
+
+subset.ranked=function(object,top,...){
+  objectTop=object
+  objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
+  objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]
+  objectTop$fulldata=object$data
+  objectTop
+}
+
+
+subset.bootstrap=function(object,top,...){
+  objectTop=object
+  objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
+  objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]
+  objectTop$fulldata=object$data
+  objectTop$bootsrappedRanks=objectTop$bootsrappedRanks[rownames(objectTop$mat),]
+  objectTop$bootsrappedAggregate=objectTop$bootsrappedAggregate[rownames(objectTop$mat),]
+  objectTop
+}
+

@@ -4,13 +4,12 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Note that this is an early experimental version (version 0.2.1) and
-there may still be bugs.
+Note that this is an early experimental version (version 0.2.3).
 
 This is ongoing work, there may be updates with possibly major changes.
 *Please make sure that you use the most current version\!*
 
-Change log at the end of this document
+Change log at the end of this document.
 
 # Installation
 
@@ -103,13 +102,13 @@ the data set might look like this:
 
 | Task | TestCase | Algorithm | MetricValue |
 | :--- | :------- | :-------- | ----------: |
-| T1   | case1    | A1        |       0.306 |
-| T1   | case1    | A2        |       0.279 |
-| T1   | case2    | A1        |       0.824 |
-| T1   | case2    | A2        |       0.973 |
-| T2   | case1    | A1        |       0.506 |
-| T2   | case1    | A2        |       0.589 |
-| T2   | case2    | A1        |       0.454 |
+| T1   | case1    | A1        |       0.266 |
+| T1   | case1    | A2        |       0.202 |
+| T1   | case2    | A1        |       0.573 |
+| T1   | case2    | A2        |       0.945 |
+| T2   | case1    | A1        |       0.372 |
+| T2   | case1    | A2        |       0.898 |
+| T2   | case2    | A1        |       0.908 |
 | T2   | case2    | A2        |          NA |
 
 ### Load data
@@ -328,6 +327,27 @@ ranking_bootstrapped %>%
 
 # Changes
 
+#### Version 0.2.3
+
+  - Bug fixes
+  - Reports for subsets (top list) of algorithms: Use e.g.
+    `subset(ranking_bootstrapped, top=3) %>% report(...)` (or
+    `subset(ranking, top=3) %>% report(...)` for report without
+    bootstrap results) to only show the top 3 algorithms according to
+    the chosen ranking methods, where `ranking_bootstrapped` and
+    `ranking` objects as defined in the example. Line plot for ranking
+    robustness can be used to check whether algorithms performing well
+    in other ranking methods are excluded. Bootstrapping still takes
+    entire uncertainty into account. Podium plot neglect and ranking
+    heatmap neglect excluded algorithms. Only available for single task
+    challenges (for mutli task challenges not sensible because each task
+    would contain a different sets of algorithms).
+  - Reports for subsets of tasks: Use e.g. `subset(ranking_bootstrapped,
+    tasks=c("task1", "task2","task3)) %>% report(...)` to restrict
+    report to tasks “task1”, “task2”,"task3. You may want to recompute
+    the consensus ranking before using `meanRanks=subset(ranking,
+    tasks=c("task1", "task2","task3))%>%consensus(method = "euclidean")`
+
 ### Version 0.2.1
 
   - Introduction in reports now mentions e.g. ranking method, number of
@@ -335,12 +355,12 @@ ranking_bootstrapped %>%
   - Function `subset()` allows selection of tasks after bootstrapping,
     e.g. `subset(ranking_bootstrapped,1:3)`
   - `report()` functions gain argument `colors` (default:
-    `default_colors`). Change e.g. to `colors=viridis::inferno` which
-    “is designed in such a way that it will analytically be perfectly
-    perceptually-uniform, both in regular form and also when converted
-    to black-and-white. It is also designed to be perceived by readers
-    with the most common form of color blindness.” See package `viridis`
-    for further similar functions.
+    `default_colors`). Change e.g. to `colors=viridisLite::inferno`
+    which “is designed in such a way that it will analytically be
+    perfectly perceptually-uniform, both in regular form and also when
+    converted to black-and-white. It is also designed to be perceived by
+    readers with the most common form of color blindness.” See package
+    `viridis` for further similar functions.
 
 ### Version 0.2.0
 
