@@ -42,6 +42,15 @@ ordering, ...){
   } else {
     
     a=lapply(methods,function(fun) fun(x))  
+    if (is.null(x$fulldata)) a=lapply(methods,function(fun) fun(x$data)) else {
+      a=lapply(methods,function(fun) fun(x$fulldata))
+      a=lapply(a, function(aa) {
+        res=aa
+        res$mat=aa$mat[rownames(a$testBased$mat)%in%rownames(x$mat),]
+        res
+      })
+      
+    } 
     dat=melt(a)
     colnames(dat)[ncol(dat)]=c("rankingMethod")  
     
