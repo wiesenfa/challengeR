@@ -86,6 +86,8 @@ a=(  lapply(object$FUN.list,function(x) {
    }))
 #cat("1.",paste(a,collapse="\n2. "))
 cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
+
+if (is.character(object$FUN.list[[1]]) & object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
 ```
 
 
@@ -207,19 +209,23 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 
 ```{r significancemap,fig.width=6, fig.height=6,out.width='200%'}
 #```{r single_stability_significance_table1b,fig.width=4, fig.height=4,out.width='50%'}
-a=challenge_multiple%>%decision.challenge(p.adjust.method="holm")
-aa=lapply(a,as.relation.challenge.incidence)
-names(aa)=names(challenge_multiple)
+# a=challenge_multiple%>%decision.challenge(p.adjust.method="holm")
+# aa=lapply(a,as.relation.challenge.incidence)
+# names(aa)=names(challenge_multiple)
+# 
+# relensemble= do.call(relation_ensemble,args = aa)
+# 
+# 
+# for (Task in names(object$data)){
+#   print(significanceMap(rankedMat=object$matlist[[Task]],
+#                  relation_object=relensemble[[Task]]
+#                  )+ggtitle(Task)+ theme(aspect.ratio=1))#+scale_color_manual(name="decision",values=c("white","lightblue")))
+#   
+# }
 
-relensemble= do.call(relation_ensemble,args = aa)
 
-
-for (Task in names(object$data)){
-  print(significanceMap(rankedMat=object$matlist[[Task]],
-                 relation_object=relensemble[[Task]]
-                 )+ggtitle(Task)+ theme(aspect.ratio=1))#+scale_color_manual(name="decision",values=c("white","lightblue")))
-  
-}
+temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="holm")
+        )
 
 ```
 
