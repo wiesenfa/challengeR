@@ -58,9 +58,6 @@ names(cols_numbered)= paste(1:length(cols),names(cols))
 ```
 
 
-<!-- ***** -->
-
-<!-- **Layouting in case of many algorithms or tasks is not yet optimized. Please be patient, we are steadily working on improving the package.** -->
 
 <!-- ***** -->
 
@@ -101,7 +98,7 @@ a=(  lapply(object$FUN.list,function(x) {
 cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
 
 
-if (is.character(object$FUN.list[[1]]) & object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
+if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal to the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
 ```
 
 
