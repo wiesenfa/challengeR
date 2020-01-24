@@ -31,7 +31,7 @@ export(
   "lineplot.challenge", 
   "melt.aggregated.list",    "melt.ranked", "melt.ranked.list", 
   "merge.list", 
-  "methodsplot","methodsplot.challenge",
+  "methodsplot","methodsplot.challenge","methodsplot.ranked",
     "my.bsgraph0", "my.bsranking", "my.bsranking.ranked.list",    "my.bsranking2", 
   "podium",  "podium.challenge","podium.ranked","podium.ranked.list", "podium.default", 
   #"podium.AlgorithmPerformance",
@@ -62,6 +62,7 @@ export(
     "stabilityByTask","stabilityByTask.bootstrap.list",
   "stability.bootstrap",
   "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list",
+  "subset.ranked","subset.bootstrap","which.top",
   "test",    "test.challenge", "test.default", 
   "testThenRank",
    "violin", "violin.bootstrap.list","violin.bootstrap",
@@ -184,6 +185,9 @@ S3method(subset,bootstrap.list)
 S3method(subset,aggregated.list)
 S3method(subset,ranked.list)
 S3method(subset,comparedRanks.list)
+S3method(subset,ranked)
+S3method(subset,bootstrap)
+
 
 S3method(podium,default)
 S3method(podium,challenge)
@@ -211,7 +215,15 @@ S3method(lineplot,challenge)
 S3method(lineplot,default)
 
 S3method(methodsplot,challenge)
+S3method(methodsplot,ranked)
 S3method(methodsplot,default)
+
+S3method(significanceMap,data.frame)
+S3method(significanceMap,ranked)
+S3method(significanceMap,ranked.list)
+S3method(significanceMap,default)
+
+
 
 S3method(violin,bootstrap.list)
 S3method(violin,bootstrap)
