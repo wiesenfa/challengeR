@@ -86,6 +86,9 @@ a=(  lapply(object$FUN.list,function(x) {
    }))
 #cat("1.",paste(a,collapse="\n2. "))
 cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
+
+if (is.character(object$FUN.list[[1]]) & object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
+
 ```
 
 
@@ -250,19 +253,24 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 
 ```{r significancemap,fig.width=6, fig.height=6,out.width='200%'}
 #```{r single_stability_significance_table1b,fig.width=4, fig.height=4,out.width='50%'}
-a=challenge_multiple%>%decision.challenge(p.adjust.method="holm")
-aa=lapply(a,as.relation.challenge.incidence)
-names(aa)=names(challenge_multiple)
+# a=challenge_multiple%>%decision.challenge(p.adjust.method="holm")
+# aa=lapply(a,as.relation.challenge.incidence)
+# names(aa)=names(challenge_multiple)
+# 
+# relensemble= do.call(relation_ensemble,args = aa)
+# 
+# for (Task in names(boot_object$data)){
+#   print(significanceMap(rankedMat=object$matlist[[Task]],
+#                  relation_object=relensemble[[Task]]
+#                  )+ggtitle(Task)+ theme(aspect.ratio=1))#+scale_color_manual(name="decision",values=c("white","lightblue")))
+#   
+# }
 
-relensemble= do.call(relation_ensemble,args = aa)
+
+temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="holm")
+        )
 
 
-for (Task in names(boot_object$data)){
-  print(significanceMap(rankedMat=object$matlist[[Task]],
-                 relation_object=relensemble[[Task]]
-                 )+ggtitle(Task)+ theme(aspect.ratio=1))#+scale_color_manual(name="decision",values=c("white","lightblue")))
-  
-}
 
 ```
 
@@ -349,7 +357,7 @@ task.
 
 \bigskip
 
-```{r blobplot_bootstrap_xTask,fig.width=7,fig.height = 5}
+```{r blobplot_bootstrap_byAlgorithm,fig.width=7,fig.height = 5}
 #stabilityByAlgorithm.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
   stabilityByAlgorithm(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = F)+scale_color_manual(values=cols)
@@ -373,7 +381,7 @@ different tasks.
 \bigskip
 
 
-```{r stackedFrequencies_bootstrap_xTask,fig.width=7,fig.height = 5}
+```{r stackedFrequencies_bootstrap_byAlgorithm,fig.width=7,fig.height = 5}
 #stabilityByAlgorithmStacked.bootstrap.list
 stabilityByAlgorithmStacked(boot_object,ordering=ordering_consensus)
 ```
@@ -408,7 +416,7 @@ Same as in Section \ref{blobByTask} but now ordered according to consensus.
 
 \bigskip
 
-```{r blobplot_bootstrap_xAlgorithm,fig.width=9, fig.height=9}
+```{r blobplot_bootstrap_byTask,fig.width=9, fig.height=9}
 #stabilityByTask.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
   stabilityByTask(boot_object, ordering=ordering_consensus,max_size = 9,size=4,shape=4)+scale_color_manual(values=cols)

@@ -88,6 +88,8 @@ a=(  lapply(object$FUN.list,function(x) {
    }))
 #cat("1.",paste(a,collapse="\n2. "))
 cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
+
+if (is.character(object$FUN.list[[1]]) & object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
 ```
 
 Ranking list:
@@ -197,12 +199,15 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 \bigskip
 
 ```{r significancemap,fig.width=7, fig.height=6}
-a=challenge_single%>%decision.challenge(alpha=0.05,p.adjust.method="holm")
-relensemble= as.relation(a)
+# a=challenge_single%>%decision.challenge(alpha=0.05,p.adjust.method="holm")
+# relensemble= as.relation(a)
+# 
+# print(significanceMap(rankedMat=boot_object$mat,
+#                  relation_object=relensemble
+#                  )+ theme(aspect.ratio=1)
+#         )
 
-print(significanceMap(rankedMat=object$mat,
-                 relation_object=relensemble
-                 )+ theme(aspect.ratio=1)
+print(significanceMap(object,alpha=0.05,p.adjust.method="holm")
         )#+ggtitle(Task))#+scale_color_manual(name="decision",values=c("white","lightblue")))
 
 ```
@@ -225,7 +230,8 @@ print(significanceMap(rankedMat=object$mat,
 \bigskip
 
 ```{r lineplot,fig.width=7,fig.height = 5}
-methodsplot(challenge_single, ordering =ordering )+scale_color_manual(values=cols)
+#methodsplot(challenge_single, ordering =ordering )+scale_color_manual(values=cols)
+methodsplot(object )+scale_color_manual(values=cols)
 ```
 
 
