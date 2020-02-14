@@ -4,7 +4,7 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Note that this is an early experimental version (version 0.2.3.1).
+Note that this is an early experimental version (version 0.2.4).
 
 This is ongoing work, there may be updates with possibly major changes.
 *Please make sure that you use the most current version\!*
@@ -326,6 +326,10 @@ ranking_bootstrapped %>%
 ```
 
 # Changes
+
+#### Version 0.2.4
+
+  - Automatic insertion of missings
 
 #### Version 0.2.3
 

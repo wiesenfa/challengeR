@@ -72,18 +72,19 @@ export(
   )
  
  
-importFrom("dplyr", "bind_rows","group_by","summarise","select_if","filter","mutate","right_join","ungroup","arrange","desc")
-importFrom("rlang",":=")
+importFrom("dplyr", "bind_rows","group_by","summarise","select_if","filter","mutate","right_join","anti_join","ungroup","arrange","desc")
+importFrom("rlang",":=","sym",".data","!!")
 importFrom("reshape2","melt", "acast")
 importFrom("utils", "capture.output", "methods")
 importFrom("plyr", "llply")
 importFrom("knitr", "kable")
+importFrom("tidyr", "complete","expand")
 importFrom("purrr", "%>%")
 importFrom("rmarkdown", "render","word_document","pdf_document","html_document")
 importFrom("viridisLite", "viridis","cividis")
 importFrom("ggplot2", "aes","aes_string","geom_abline", "geom_bar", "geom_boxplot", "geom_count", "geom_density", "geom_jitter",
     "geom_line", "geom_point", "geom_raster", "geom_step", "geom_text", "geom_violin","annotate","guide_legend",
-    "geom_vline", "ggplot", "ggtitle","vars","xlab","ylab","scale_size_area","theme_get","rel","geom_hline","ggplot_build",
+    "geom_vline", "ggplot", "ggtitle","vars","xlab","ylab","scale_size_area","theme_get","rel","geom_hline","ggplot_build","scale_fill_manual",
     "scale_y_continuous","coord_cartesian", "element_text", "facet_wrap", "position_jitter", "stat", "stat_summary", "theme", "unit","guides")
 importFrom("grDevices", "col2rgb", "gray", "rgb")
 importFrom("graphics", "abline", "axis", "barplot", "box", "layout",
