@@ -73,7 +73,7 @@ export(
  
  
 importFrom("dplyr", "bind_rows","group_by","summarise","select_if","filter","mutate","right_join","anti_join","ungroup","arrange","desc")
-importFrom("rlang",":=","sym",".data","!!")
+importFrom("rlang",":=",".data","!!")
 importFrom("reshape2","melt", "acast")
 importFrom("utils", "capture.output", "methods")
 importFrom("plyr", "llply")
