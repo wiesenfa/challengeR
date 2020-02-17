@@ -41,7 +41,7 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
   if (check){
 #    if (is.data.frame(object)){
       if (is.null(by)){
-        missingData=object %>% expand(!!sym(algorithm),!!sym(case))%>% anti_join(object,by=c(algorithm,case))
+        missingData=object %>% expand(!!as.symbol(algorithm),!!as.symbol(case))%>% anti_join(object,by=c(algorithm,case))
         if (nrow(missingData)>0) {
           message("Peroformance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
           print(as.data.frame(missingData))
@@ -54,11 +54,11 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
       }
 
     } else {
-      missingData=object %>% expand(!!sym(task), !!sym(algorithm),!!sym(case))%>% anti_join(object,by=c(task, algorithm,case))
+      missingData=object %>% expand(!!as.symbol(by), !!as.symbol(algorithm),!!as.symbol(case))%>% anti_join(object,by=c(by, algorithm,case))
       if (nrow(missingData)>0) {
         message("Peroformance of not all algorithms is observed for all cases in all tasks. Inserted as missings in following cases:")
         print(as.data.frame(missingData))
-        object=as.data.frame(object %>% complete(!!sym(task), !!sym(algorithm),!!sym(case)))
+        object=as.data.frame(object %>% complete(!!as.symbol(by), !!as.symbol(algorithm),!!as.symbol(case)))
         object=by(object,by=by)
       } else {
         object=by(object,by=by)
