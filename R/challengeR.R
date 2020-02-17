@@ -54,20 +54,20 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
       }
 
     } else {
-      missingData=object %>% expand(!!as.symbol(by), !!as.symbol(algorithm),!!as.symbol(case))%>% anti_join(object,by=c(by, algorithm,case))
-      if (nrow(missingData)>0) {
-        message("Peroformance of not all algorithms is observed for all cases in all tasks. Inserted as missings in following cases:")
-        print(as.data.frame(missingData))
-        object=as.data.frame(object %>% complete(!!as.symbol(by), !!as.symbol(algorithm),!!as.symbol(case)))
-        object=by(object,by=by)
-      } else {
         object=by(object,by=by)
         object=lapply(object,droplevels)
-        lapply(names(object), function(task){
-        all1=apply(table(object[[task]][[algorithm]],object[[task]][[case]]), 2,function(x) all(x==1))
-        if (!all(all1)) stop ("Case(s) (", paste(names(which(all1!=1)),collapse=", "), ") appear(s) more than once for the same algorithm in task ", task)
-      })
-      }
+        for (task in names(object)){
+          missingData=object[[task]] %>% expand(!!as.symbol(algorithm),!!as.symbol(case))%>% anti_join(object[[task]],by=c( algorithm,case))
+          if (nrow(missingData)>0) {
+            message("Peroformance of not all algorithms is observed for all cases in all tasks. Inserted as missings in following cases:")
+            print(as.data.frame(missingData))
+            object[[task]]=as.data.frame(object[[task]] %>% complete(!!as.symbol(algorithm),!!as.symbol(case)))
+           } else {
+            all1=apply(table(object[[task]][[algorithm]],object[[task]][[case]]), 2,function(x) all(x==1))
+            if (!all(all1)) stop ("Case(s) (", paste(names(which(all1!=1)),collapse=", "), ") appear(s) more than once for the same algorithm in task ", task)
+         }
+         }
+     
       
       
     }
