@@ -4,10 +4,11 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-Note that this is an early experimental version (version 0.2.4).
+<!-- Note that this is an early experimental version (version 0.2.4.1).  -->
 
-This is ongoing work, there may be updates with possibly major changes.
-*Please make sure that you use the most current version\!*
+Note that this is ongoing work (version 0.2.4.1), there may be updates
+with possibly major changes. *Please make sure that you use the most
+current version\!*
 
 Change log at the end of this document.
 
@@ -33,8 +34,7 @@ otherwise you’ll need to install Pandoc for your platform
 a pdf report you will need to have LaTeX installed (e.g. MiKTeX, MacTeX
 or TinyTeX).
 
-To get the current development (experimental) version of the R package
-from
+To get the current development version of the R package from
 Github:
 
 ``` r
