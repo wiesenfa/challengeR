@@ -43,8 +43,8 @@ winner.default <- function(x, ...) stop("not implemented for this class")
 #print.aggregated(x,...) print(as.data.frame(x),...)
 print.ranked.list <-function(x,...)  print(x$matlist, ...)
 print.aggregated.list <-function(x,...)  print(x$matlist, ...)
-print.aggregated <-function(x,...)  kable(x$mat,...)
-print.ranked <-function(x,...)  kable(x$mat[order(x$mat$rank),],...)
+print.aggregated <-function(x,...)  print(x$mat,...)
+print.ranked <-function(x,...)  print(x$mat[order(x$mat$rank),],...)
 
 
 podium <- function(object,...) UseMethod("podium")
