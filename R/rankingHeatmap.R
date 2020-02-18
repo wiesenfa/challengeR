@@ -9,7 +9,7 @@ rankingHeatmap.challenge=function (x, ranking.fun=function(x)  aggregateThenRank
       ncases=length(unique(x[[subt]][[attr(x,"case")]]))
       if (missing(col)){
         col=viridisLite::viridis(ncases+1,direction=-1)
-        breaks=seq(0,ncases+1,length.out=ncases+1)
+        breaks=seq(-.5,ncases+.5,length.out=ncases+2)
       } #else breaks=NA
       
       dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
@@ -39,7 +39,7 @@ rankingHeatmap.challenge=function (x, ranking.fun=function(x)  aggregateThenRank
     ncases=length(unique(x[[attr(x,"case")]]))
     if (missing(col)){
       col=viridisLite::viridis(ncases+1,direction=-1)
-      breaks=seq(0,ncases+1,length.out=ncases+1)
+      breaks=seq(-.5,ncases+.5,length.out=ncases+2)
     } #else breaks=NA
     
     x=as.warehouse.challenge(x)
