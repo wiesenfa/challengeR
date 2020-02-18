@@ -18,6 +18,7 @@ bootstrap.ranked=function(object,
     #bootData=bind_rows(split(data,data[[by]])[bootIndex]))
     attr(bootData,"inverseOrder")=attr(object$data,"inverseOrder")
     attr(bootData,"algorithm")=attr(object$data,"algorithm")
+    attr(bootData,"case")=attr(object$data,"case")
     object$FUN(bootData)$mat
   }
   res=#suppressWarnings(
@@ -37,7 +38,7 @@ bootstrap.ranked=function(object,
     aggmat=aggmat[,-1]
   }
   
-  res=list(bootsrappedRanks=rankmat,bootsrappedAggregate=aggmat, data=data,mat=object$mat,FUN=object$FUN)
+  res=list(bootsrappedRanks=rankmat,bootsrappedAggregate=aggmat, data=data,mat=object$mat,FUN=object$FUN,FUN.list=object$FUN.list)
   class(res)="bootstrap"
   res
 }
@@ -74,7 +75,8 @@ bootstrap.ranked.list=function(object,#algorithm, by,
     })
 attr(bootDatalist,"inverseOrder")=attr(object$data,"inverseOrder")
 attr(bootDatalist,"algorithm")=attr(object$data,"algorithm")
-    object$FUN(bootDatalist)$mat
+attr(bootDatalist,"case")=attr(object$data,"case")
+object$FUN(bootDatalist)$mat
   }, .parallel=parallel,.progress=progress)
   #)
     
@@ -107,7 +109,7 @@ attr(bootDatalist,"algorithm")=attr(object$data,"algorithm")
   }
 
 
-  final=list(bootsrappedRanks=rankmatlist,bootsrappedAggregate=aggmatlist, data=object$data,matlist=tidy.matlist,FUN=object$FUN)
+  final=list(bootsrappedRanks=rankmatlist,bootsrappedAggregate=aggmatlist, data=object$data,matlist=tidy.matlist,FUN=object$FUN,FUN.list=object$FUN.list)
 #  c(res,list(winnerFrequencies=winnerFrequencies(res)))
   class(final)=c("bootstrap.list")
   final

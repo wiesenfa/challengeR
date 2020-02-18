@@ -4,7 +4,7 @@ Rank.data.frame <-function(object,x,by,
   if (missing(by)){
     res=bind_rows(lapply(split(object,object[[attr(object,"case")]]), function(object.case) 
                               cbind(object.case,
-                                    rank=rankNA2(object.case[[attr(object,"value")]],ties.method = ties.method,inverseOrder = inverseOrder))
+                                    rank=rankNA2(object.case[[x]],ties.method = ties.method,inverseOrder = inverseOrder))
                          )
                   )
    } else {
@@ -13,7 +13,7 @@ Rank.data.frame <-function(object,x,by,
     res=bind_rows(lapply(byAnnotator,function(annotator){
        bind_rows(lapply(split(annotator,annotator[[attr(object,"case")]]), function(annotator.case) 
                                 cbind(annotator.case,
-                                      rank=rankNA2(annotator.case[[attr(object,"value")]],ties.method = ties.method,inverseOrder = inverseOrder))
+                                      rank=rankNA2(annotator.case[[x]],ties.method = ties.method,inverseOrder = inverseOrder))
                         )
                  )
     }
@@ -42,7 +42,7 @@ Rank.list <-
     matlist=lapply(object, function(task){
       if (by.missing){
          res=bind_rows(lapply(split(task,task[[attr(object,"case")]]),function(task.case) 
-          cbind(task.case,rank=rankNA2(task.case[[attr(object,"value")]],ties.method = ties.method,inverseOrder = inverseOrder))))
+          cbind(task.case,rank=rankNA2(task.case[[x]],ties.method = ties.method,inverseOrder = inverseOrder))))
         class(res)[2]="ranked"
         res
       } else {
@@ -51,7 +51,7 @@ Rank.list <-
         #else xx=split(object,as.list(object[,by]))
         temp=bind_rows(lapply(byAnnotator,function(annotator){
            bind_rows(lapply(split(annotator,annotator[[attr(object,"case")]]),function(annotator.case) 
-            cbind(annotator.case,rank=rankNA2(annotator.case[[attr(object,"value")]],ties.method = ties.method,inverseOrder = inverseOrder))))
+            cbind(annotator.case,rank=rankNA2(annotator.case[[x]],ties.method = ties.method,inverseOrder = inverseOrder))))
           
         }
         ))
