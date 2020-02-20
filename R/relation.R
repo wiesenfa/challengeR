@@ -3,7 +3,7 @@ relation_dissimilarity.ranked.list=function(x,method=kendall,...){  #method in k
   n.tt=length(tt)
   tau=matrix(NA,n.tt,n.tt)
   colnames(tau)=rownames(tau)=tt
-  aa=melt(x)%>%filter(variable=="rank")
+  aa=melt(x,measure.vars="rank")
   for (i in 1:n.tt){
     for (j in 1:n.tt){
       temp=aa%>%filter(L1==as.character(tt[i]))%>% 

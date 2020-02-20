@@ -9,9 +9,8 @@ ordering, ...){
   
   if (inherits(x,"list"))  {
     a=lapply(methods,function(fun) fun(x))  
-    dat=melt(a)
-    dat=dat%>%dplyr::filter(variable=="rank")
-    colnames(dat)[4:5]=c("task","rankingMethod")  
+    dat=melt(a,measure.vars="rank")
+     colnames(dat)[4:5]=c("task","rankingMethod")  
     
     if (missing(ordering)){
       lev=sort(unique(dat$algorithm))
@@ -120,8 +119,7 @@ methodsplot.ranked=function(x, methods=list(
 #similar plot to methods plot, instead of across ranking methods across tasks
 lineplot.challenge=function(x, ordering,...){
   if (inherits(x,"list"))  {
-    dat=melt(x)
-    dat=dat%>%dplyr::filter(variable=="rank")
+    dat=melt(x,measure.vars="rank")
     colnames(dat)[4]=c("task")  
     
     if (missing(ordering)){

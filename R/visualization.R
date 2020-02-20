@@ -1,15 +1,18 @@
 stability.ranked.list=function(x,ordering,probs=c(.025,.975),max_size=6,freq=FALSE,shape=4,...){ # MOEGLICHEKEIT ZUM SORTIEREN FEHLT
-  dd=melt(x)  %>%filter(variable=="rank")%>%dplyr::select(-variable)%>%dplyr::rename(task="L1",rank="value")
+  dd=melt(x,measure.vars="rank",value.name="rank")%>%dplyr::rename(task="L1")
   
-  if (!missing(ordering)) dd=dd%>%mutate(algorithm=factor(algorithm, levels=ordering))
-  else dd=dd%>%mutate(algorithm=factor(algorithm))
-  if (!freq)   p=ggplot(dd)+
-      geom_count(aes(algorithm ,rank,color=algorithm ,size = stat(prop*100)))
-  else   p=ggplot(dd)+
-      geom_count(aes(algorithm ,rank,color=algorithm ))
+  if (!missing(ordering)) {
+    dd=dd%>%mutate(algorithm=factor(algorithm, levels=ordering))
+  } else dd=dd%>%mutate(algorithm=factor(algorithm))
+  if (!freq) {
+    p = ggplot(dd)+
+          geom_count(aes(algorithm ,rank,color=algorithm ,size = stat(prop*100)))
+  } else {
+    p=ggplot(dd)+
+        geom_count(aes(algorithm ,rank,color=algorithm ))
+  }  
   
   p+scale_size_area(max_size = max_size)+#scale_size_area(max_size = 6)
-    #    stat_summary(aes(algorithm ,rank,color=algorithm ),fun.data=function(x) data.frame(ymin=min(x),y=x,ymax=max(x)))+
     stat_summary(aes(algorithm ,rank ),geom="point",shape=shape,
                  fun.data=function(x) data.frame(y=median(x)),...)+
     stat_summary(aes(algorithm ,rank ),geom="linerange",
@@ -25,8 +28,7 @@ stability.ranked.list=function(x,ordering,probs=c(.025,.975),max_size=6,freq=FAL
 
 
 rankdist.bootstrap.list=function(x,...){
-  rankDist=melt(lapply(x$bootsrappedRanks,t))  
-  rankDist=rankDist%>% dplyr::rename(algorithm="Var2",rank="value",task="L1")
+  rankDist=melt(lapply(x$bootsrappedRanks,t),value.name="rank") %>% dplyr::rename(algorithm="Var2",task="L1")
   rankDist
 }
 
@@ -105,8 +107,7 @@ stabilityByAlgorithmStacked.bootstrap.list=function(x,ordering,freq=FALSE,...){
   rankDist=rankDist%>%data.frame%>%mutate(rank=as.factor(rank))     #filter(task %in% unique(data_matrix1$task[data_matrix1$phase==1]))
 
 
-  results= x%>% melt.ranked.list %>%filter(variable=="rank")%>%dplyr::select(-variable)%>%
-    dplyr::rename(rank=value)# %>% right_join(tasks)%>% right_join(phase)
+  results= melt.ranked.list(x,measure.vars="rank",value.name="rank") %>%dplyr::select(-variable)
   colnames(results)[3]="task"
    if (!missing(ordering)) results=results%>%mutate(algorithm=factor(algorithm, levels=ordering))
 
@@ -132,6 +133,7 @@ else
 
 
 stability.bootstrap=function(x,ordering,probs=c(.025,.975),max_size=3,size.ranks=.3*theme_get()$text$size,shape=4,...){
+  if (missing(ordering)) ordering=  names(sort(t(x$mat[,"rank",drop=F])["rank",]))
   a=list(bootsrappedRanks=list(x$bootsrappedRanks),
          matlist=list(x$mat))
   names(a$bootsrappedRanks)=names(a$matlist)=""
@@ -144,9 +146,8 @@ stability.bootstrap=function(x,ordering,probs=c(.025,.975),max_size=3,size.ranks
 
 stabilityByTask.bootstrap.list=function(x,ordering,probs=c(.025,.975),max_size=3,size.ranks=.3*theme_get()$text$size,shape=4,...){
   rankDist=rankdist.bootstrap.list(x)
-  ranks=melt.ranked.list(x, value.name = "full.rank")
+  ranks=melt.ranked.list(x,measure.vars="rank", value.name = "full.rank")
   colnames(ranks)[4]="task"
-  ranks=ranks[ranks$variable=="rank",]
   if (!missing(ordering)) {
     ranks$algorithm=factor(ranks$algorithm, levels=ordering)
     rankDist=rankDist%>%mutate(algorithm=factor(algorithm, levels=ordering))
