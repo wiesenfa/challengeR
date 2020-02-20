@@ -1,21 +1,13 @@
-rank.challenge=function(object,x,by,
+rank.challenge=function(object,x,
          ties.method="min",...){
   call=as.list(match.call())
-  # if (inherits(object,"list")) res=do.call("Rank.list",list(object=object,x=attr(object,"value"),by=c(attr(object,"annotator"),attr(object,"case")),FUN=call$FUN,
-  #        ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
-  #        ))
-  # else res=do.call("Rank.data.frame",list(object=object,x=attr(object,"value"),by=c(attr(object,"annotator"),attr(object,"case")),FUN=call$FUN,
-  #        ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
-  #        ))
-  if (!missing(by)) {
-  call2=call("Rank",object=call$object, x=attr(object,"value"), #IS ALSO CASE NEEDED?:
-#             by=c(attr(object,"annotator"),attr(object,"case")),
-             by=c(attr(object,"annotator")),
+  if (!is.null(attr(object,"annotator"))) {
+  call2=call("Rank",object=call$object, x=attr(object,"value"), 
+             annotator=c(attr(object,"annotator")),
          ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
            )
   res1=do.call("Rank",list(object=object,x=attr(object,"value"),
-                           by=c(attr(object,"annotator")),#IS ALSO CASE NEEDED?:
-#                           by=c(attr(object,"annotator"),attr(object,"case")),
+                           annotator=c(attr(object,"annotator")),
          ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
          ))
     
@@ -29,8 +21,6 @@ rank.challenge=function(object,x,by,
     
   }
   
-
-    
   if (inherits(object,"list")){    
     res=list(FUN = . %>% (call2),
                 call=list(call2),

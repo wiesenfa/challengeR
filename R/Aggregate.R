@@ -52,11 +52,11 @@ Aggregate.list <-function(object,x,algorithm,FUN=mean,
   call=match.call(expand.dots = T)  
   if (is.character(FUN) && FUN=="significance"){
     if(missing(dataset_id)| missing(inverseOrder)| missing(alpha)) stop("If FUN='significance' arguments dataset_id, inverseOrder and alpha need to be given")
-    matlist=llply(1:length(object), function(id){ #lapply(object, function(y){
+    matlist=llply(1:length(object), function(id){ 
       piece=object[[id]]
       if (length(unique(piece[[algorithm]]))<=1){
         warning("only one ", algorithm, " available in element ", names(object)[id])
-         return(data.frame("prop_significance"=rep(NA,length(unique(piece[[algorithm]]))),row.names = unique(piece[[algorithm]])))  
+        return(data.frame("prop_significance"=rep(NA,length(unique(piece[[algorithm]]))),row.names = unique(piece[[algorithm]])))  
       } 
       if (is.numeric(na.treat)) piece[,x][is.na(piece[,x])]=na.treat
       else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x][is.na(piece[,x])])
@@ -87,15 +87,15 @@ Aggregate.list <-function(object,x,algorithm,FUN=mean,
       )
     isSignificance=FALSE
   }
-    names(matlist)=names(object)
-   res=list(FUN = . %>% (call),
-            FUN.list=list(FUN),
-            call=list(call),
-      data=object,
-       matlist=matlist, 
-      isSignificance=isSignificance
-      )
-
+  names(matlist)=names(object)
+  res=list(FUN = . %>% (call),
+          FUN.list=list(FUN),
+          call=list(call),
+          data=object,
+          matlist=matlist, 
+          isSignificance=isSignificance
+    )
+  
   class(res)=c("aggregated.list",class(res))
   res
 }

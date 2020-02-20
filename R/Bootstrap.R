@@ -19,6 +19,7 @@ bootstrap.ranked=function(object,
     attr(bootData,"inverseOrder")=attr(object$data,"inverseOrder")
     attr(bootData,"algorithm")=attr(object$data,"algorithm")
     attr(bootData,"case")=attr(object$data,"case")
+    attr(bootData,"check")=FALSE
     object$FUN(bootData)$mat
   }
   res=#suppressWarnings(
@@ -76,6 +77,7 @@ bootstrap.ranked.list=function(object,#algorithm, by,
 attr(bootDatalist,"inverseOrder")=attr(object$data,"inverseOrder")
 attr(bootDatalist,"algorithm")=attr(object$data,"algorithm")
 attr(bootDatalist,"case")=attr(object$data,"case")
+attr(bootDatalist,"check")=FALSE
 object$FUN(bootDatalist)$mat
   }, .parallel=parallel,.progress=progress)
   #)
