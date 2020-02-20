@@ -21,13 +21,6 @@ aggregate.challenge=function(x,FUN=mean,
              alpha=alpha, p.adjust.method=p.adjust.method, inverseOrder=attr(x,"inverseOrder") # only needed for significance 
   )
 
-  # call3=call("Aggregate",object=call$x, x=attr(x,"value"),algorithm=attr(x,"algorithm"),FUN=FUN,
-  #            na.treat=na.treat,
-  #            parallel=parallel,progress=progress,
-  #            dataset_id=attr(x,"case"),
-  #            alpha=alpha, p.adjust.method=p.adjust.method, inverseOrder=attr(x,"inverseOrder") # only needed for significance
-  # )
-  
   if (inherits(x,"list")){    
     res=list(FUN = . %>% (call2),
              call=list(call2),
@@ -61,7 +54,10 @@ aggregate.ranked <-function(x,
   mat=x$mat
   what="rank"
   xmean <- aggregate(mat[,what], by=list(mat[,algorithm]), FUN=function(z) do.call(FUN,args=list(x=z)))
-  names(xmean)=c(algorithm,paste0(what,"_",strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]))
+  names(xmean)=c(algorithm,paste0(what,"_",
+                                  strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]
+                                  )
+                 )
   rownames(xmean)=xmean[,1]
   xmean=xmean[,-1,drop=F]
   res=list(FUN = . %>% (x$FUN) %>%  (call),
@@ -75,10 +71,10 @@ aggregate.ranked <-function(x,
 
 
 
-aggregate.ranked.list <-function(x,#algorithm,
+aggregate.ranked.list <-function(x,
                                  FUN=mean,         ...            ){
   call=match.call(expand.dots = F)  
-  call=call("aggregate.ranked.list",x=call$x,FUN=FUN)#,call$...)
+  call=call("aggregate.ranked.list",x=call$x,FUN=FUN)
   
   #if (missing(algorithm)) 
     algorithm=attr(x$data,"algorithm")

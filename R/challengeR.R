@@ -43,9 +43,9 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
       if (is.null(by)){
         missingData=object %>% expand(!!as.symbol(algorithm),!!as.symbol(case))%>% anti_join(object,by=c(algorithm,case))
         if (nrow(missingData)>0) {
-          message("Peroformance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
+          message("Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
           print(as.data.frame(missingData))
-          object=as.data.frame(object %>% complete(!!sym(algorithm),!!sym(case)))
+          object=as.data.frame(object %>% complete(!!as.symbol(algorithm),!!as.symbol(case)))
       } else {
         object=droplevels(object)
         all1=apply(table(object[[algorithm]],object[[case]]), 2,function(x) all(x==1))
@@ -59,7 +59,7 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
         for (task in names(object)){
           missingData=object[[task]] %>% expand(!!as.symbol(algorithm),!!as.symbol(case))%>% anti_join(object[[task]],by=c( algorithm,case))
           if (nrow(missingData)>0) {
-            message("Peroformance of not all algorithms is observed for all cases in all tasks. Inserted as missings in following cases:")
+            message("Performance of not all algorithms is observed for all cases in task ",task,". Inserted as missings in following cases:")
             print(as.data.frame(missingData))
             object[[task]]=as.data.frame(object[[task]] %>% complete(!!as.symbol(algorithm),!!as.symbol(case)))
            } else {
@@ -67,9 +67,7 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
             if (!all(all1)) stop ("Case(s) (", paste(names(which(all1!=1)),collapse=", "), ") appear(s) more than once for the same algorithm in task ", task)
          }
          }
-     
-      
-      
+  
     }
     
   }
@@ -85,22 +83,3 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
 }
 
 
-# object=
-#   data_matrix_sim[c(1,1:50),]
-# task="task"
-# algorithm="alg_name"
-# case="case"
-# 
-# 
-# #check
-# nrow(object %>% expand(!!sym(task), !!sym(algorithm),!!sym(case))%>% anti_join(object))
-# 
-# #fill
-# as.data.frame(object %>% complete(!!sym(task), !!sym(algorithm),!!sym(case)))
-
-
-# fillMissings.challenge=function(object){
-#   aa=data.frame(alg=c(1,2,1),id=c(3,3,3),val=c(.1,.2,.3))
-#   tidyr::expand(object,object[[algorithm]],id)%>%dplyr::left_join(aa,by=c("alg","id"))
-# 
-# }
