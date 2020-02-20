@@ -4,9 +4,9 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- Note that this is an early experimental version (version 0.2.4.1).  -->
+<!-- Note that this is an early experimental version (version 0.2.5).  -->
 
-Note that this is ongoing work (version 0.2.4.1), there may be updates
+Note that this is ongoing work (version 0.2.5), there may be updates
 with possibly major changes. *Please make sure that you use the most
 current version\!*
 
@@ -327,6 +327,10 @@ ranking_bootstrapped %>%
 
 # Changes
 
+#### Version 0.2.5
+
+  - Bug fixes
+
 #### Version 0.2.4
 
   - Automatic insertion of missings
@@ -382,3 +386,9 @@ Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein,
 L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
 analyzing and visualizing challenge results. *arXiv preprint
 arXiv:1910.05121*
+
+<div style="text-align: right">
+
+![](HIP_Logo.pdf)
+
+</div>
