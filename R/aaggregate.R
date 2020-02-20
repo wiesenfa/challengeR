@@ -2,10 +2,19 @@ test.challenge=function(x,...) aggregate.challenge(x=x,FUN="significance",...)
 
 
 aggregate.challenge=function(x,FUN=mean,
-                             na.treat=0, #either "na.rm", numeric value or function
+                             na.treat, #either "na.rm", numeric value or function
                              alpha=0.05,p.adjust.method="none",# only needed for significance 
                              parallel=FALSE,progress="none",...){
   call=as.list(match.call())
+  
+  if (missing(na.treat)){ #na.treat only optional if no missing values in data set
+    if (!inherits(x,"list")){
+      if (!any(is.na(x[,attr(x, "value")]))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
+    } else {
+      if (!any(sapply(x, function(task) any(is.na(task[,attr(x, "value")]))))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
+    }
+    
+  }
   res1=do.call("Aggregate",list(object=x,x=attr(x,"value"),algorithm=attr(x,"algorithm"),FUN=call$FUN,
                                 na.treat=na.treat,
                                 parallel=parallel,progress=progress,
@@ -76,8 +85,7 @@ aggregate.ranked.list <-function(x,
   call=match.call(expand.dots = F)  
   call=call("aggregate.ranked.list",x=call$x,FUN=FUN)
   
-  #if (missing(algorithm)) 
-    algorithm=attr(x$data,"algorithm")
+  algorithm=attr(x$data,"algorithm")
   resmatlist=Aggregate.list(x$matlist,x="rank",algorithm=algorithm,FUN=FUN,...)$matlist
   resmatlist=lapply(resmatlist,function(z) as.data.frame(z))
   res=list(matlist=resmatlist,

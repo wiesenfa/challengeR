@@ -1,45 +1,21 @@
-# as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
-#                       by=NULL, annotator=NULL, smallBetter=FALSE,check=TRUE){
-#   #if (!is.null(subset)) object=object%>% subset(subset=subset) else object=object
-#   object=object[,c(value,algorithm,case,by,annotator)]
-#   
-#   if (!is.null(by)) object=by(object,by=by)
-#   
-#   # sanity checks
-#   if (check){
-#     if (is.data.frame(object)){
-#       object=droplevels(object)
-#       all1=apply(table(object[[algorithm]],object[[case]]), 2,function(x) all(x==1))
-#       if (!all(all1)) stop ("case(s) (", paste(names(which(all1!=1)),collapse=", "), ") is/are not available for all algorithms or appear(s) more than once for the same algorithm")
-#     } else {
-#       object=lapply(object,droplevels)
-#       lapply(names(object), function(task){
-#         all1=apply(table(object[[task]][[algorithm]],object[[task]][[case]]), 2,function(x) all(x==1))
-#         if (!all(all1)) stop ("case(s) (", paste(names(which(all1!=1)),collapse=", "), ") is/are not available for all algorithms or appear(s) more than once for the same algorithm in task ", task)
-#         # add check that all algoirthms contained in all tasks
-#       })
-#     }
-#    
-#   }
-#     
-#   attr(object,"algorithm")=algorithm
-#   attr(object,"value")=value
-#   attr(object,"case")=case
-#   attr(object,"annotator")=annotator
-#   attr(object,"by")=by 
-#   attr(object,"inverseOrder")=!smallBetter
-#   class(object)=c("challenge",class(object))
-#   object
-# }
-as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
-                      by=NULL, annotator=NULL, smallBetter=FALSE,check=TRUE){
-  #if (!is.null(subset)) object=object%>% subset(subset=subset) else object=object
+as.challenge=function(object, value, algorithm ,
+                      case=NULL,
+                      by=NULL, 
+                      annotator=NULL, 
+                      smallBetter=FALSE,
+                      na.treat, # optional
+                      check=TRUE){
+
   object=object[,c(value,algorithm,case,by,annotator)]
-  
+ 
+  # if (missing(na.treat)){
+  #   if (!smallBetter){
+  #     message("Setting na.treat=0, i.e. setting any missing metric value to zero.")
+  #     na.treat=0
+  # }
   
   # sanity checks
   if (check){
-#    if (is.data.frame(object)){
       if (is.null(by)){
         missingData=object %>% expand(!!as.symbol(algorithm),!!as.symbol(case))%>% anti_join(object,by=c(algorithm,case))
         if (nrow(missingData)>0) {
@@ -52,7 +28,13 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
         if (!all(all1)) stop ("Case(s) (", paste(names(which(all1!=1)),collapse=", "), ") appear(s) more than once for the same algorithm")
         
       }
-
+        
+      if (!missing(na.treat)){
+        if (is.numeric(na.treat)) object[,value][is.na(object[,value])]=na.treat
+        else if (is.function(na.treat)) object[,value][is.na(object[,value])]=na.treat(object[,value][is.na(object[,value])])
+        else if (na.treat=="na.rm") object=object[!is.na(object[,value]),]
+      }
+        
     } else {
         object=by(object,by=by)
         object=lapply(object,droplevels)
@@ -65,8 +47,15 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
            } else {
             all1=apply(table(object[[task]][[algorithm]],object[[task]][[case]]), 2,function(x) all(x==1))
             if (!all(all1)) stop ("Case(s) (", paste(names(which(all1!=1)),collapse=", "), ") appear(s) more than once for the same algorithm in task ", task)
-         }
-         }
+           }
+        
+          if (!missing(na.treat)){
+            if (is.numeric(na.treat)) object[[task]][,value][is.na(object[[task]][,value])]=na.treat
+            else if (is.function(na.treat)) object[[task]][,value][is.na(object[[task]][,value])]=na.treat(object[[task]][,value][is.na(object[[task]][,value])])
+            else if (na.treat=="na.rm") object[[task]]=object[[task]][!is.na(object[[task]][,value]),]
+          }
+          
+        }
   
     }
     
@@ -78,6 +67,7 @@ as.challenge=function(object, value, algorithm ,case=NULL,#subset=NULL,
   attr(object,"annotator")=annotator
   attr(object,"by")=by 
   attr(object,"inverseOrder")=!smallBetter
+  attr(object,"check")=check
   class(object)=c("challenge",class(object))
   object
 }

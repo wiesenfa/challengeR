@@ -315,9 +315,8 @@ A dendrogram is a visualization approach based on hierarchical clustering. It de
 #d=relation_dissimilarity.ranked.list(object,method=kendall)
 
 # use ranking list
-  relensemble=as.relation(object)
-  class(relensemble)="relation_ensemble"
-
+  relensemble=as.relation.ranked.list(object)
+ 
 # # use relations
 #   a=challenge_multi%>%decision.challenge(p.adjust.method="none")
 #   aa=lapply(a,as.relation.challenge.incidence)

@@ -1,8 +1,3 @@
-# AggregateThenRank=function(object,x,algorithm,FUN,ties.method = "average",inverseOrder=FALSE){
-#   object %>% 
-#     Aggregate(x=x,algorithm=algorithm,FUN=FUN) %>% 
-#     Rank(ties.method = ties.method,inverseOrder=inverseOrder)
-# }
 aggregateThenRank=function(object,FUN,ties.method = "min",...){
   object %>% 
     aggregate(FUN=FUN,...) %>% 
@@ -15,20 +10,10 @@ testThenRank=function(object,FUN,ties.method = "min",...){
     rank(ties.method = ties.method)
 }
 
-# bei Aggregate könnte x und algorithm in formel "metric~alogrithm"
-# RankThenAggregate=function(object,x,algorithm,by,FUN,ties.method = "average",inverseOrder=FALSE){
-#   object %>% 
-#         Rank(x=x,by=by,ties.method = ties.method,inverseOrder=inverseOrder)%>% 
-#           Aggregate(algorithm=algorithm,FUN=FUN) %>% 
-#           Rank(ties.method = ties.method,inverseOrder=FALSE) #small rank is always best, i.e. inverseOrder always FALSE
-# }
-rankThenAggregate=function(object,#x,algorithm,by,
-                           FUN,ties.method = "min"#,inverseOrder=FALSE
+rankThenAggregate=function(object,
+                           FUN,
+                           ties.method = "min"
                            ){
-  # object %>% 
-  #       Rank(x=x,by=by,ties.method = ties.method,inverseOrder=inverseOrder)%>% 
-  #         Aggregate(algorithm=algorithm,FUN=FUN) %>% 
-  #         Rank(ties.method = ties.method,inverseOrder=FALSE) #small rank is always best, i.e. inverseOrder always FALSE
   object %>% 
         rank(ties.method = ties.method)%>% 
           aggregate(FUN=FUN) %>% 
@@ -36,7 +21,3 @@ rankThenAggregate=function(object,#x,algorithm,by,
 }
 
 
-  # a12=  Data%>% subset(metric=="DICE") %>% subset(task_id_n==1) %>% 
-  #         Rank(x="metric_value",by=c("annotator_id", "dataset_id"),ties.method = "average",inverseOrder=T)%>% 
-  #         Aggregate(by="algorithm_id",FUN=mean) %>% 
-  #         Rank(ties.method = "average",inverseOrder=F)
