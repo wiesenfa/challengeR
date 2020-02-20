@@ -387,8 +387,5 @@ L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
 analyzing and visualizing challenge results. *arXiv preprint
 arXiv:1910.05121*
 
-<div style="text-align: right">
-
-![](HIP_Logo.pdf)
-
-</div>
+![alt text](HIP_Logo.pdf)
+<!-- <div style="text-align: right"> ![alt text](HIP_Logo.pdf){width=150px} </div> -->
