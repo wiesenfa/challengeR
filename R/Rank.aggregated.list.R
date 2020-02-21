@@ -1,4 +1,4 @@
-rank.aggregated.list <-function(object,#x,
+rank.aggregated.list <-function(object,
          ties.method="min",inverseOrder,...){
   
   call=match.call(expand.dots = F)

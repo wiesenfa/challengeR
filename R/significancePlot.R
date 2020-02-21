@@ -2,7 +2,7 @@ significanceMap.ranked=function(object,alpha=0.05,p.adjust.method="holm",order=F
   
   relensemble= object$data%>%decision.challenge(alpha=alpha,p.adjust.method=p.adjust.method) %>% as.relation
   
-  significanceMap(rankedMat=object$mat,
+  significanceMap(object=object$mat,
                   relation_object=relensemble,order=order,size.rank=size.rank,...
   )
   
@@ -17,7 +17,7 @@ significanceMap.ranked.list=function(object,alpha=0.05,p.adjust.method="holm",or
   
   res=list()
   for (Task in names(object$data)){
-    res[[Task]]=significanceMap.data.frame(rankedMat=object$matlist[[Task]],
+    res[[Task]]=significanceMap.data.frame(object=object$matlist[[Task]],
                           relation_object=relensemble[[Task]],order=order,size.rank=size.rank,...
     )+ggtitle(Task)
     
@@ -29,23 +29,23 @@ significanceMap.ranked.list=function(object,alpha=0.05,p.adjust.method="holm",or
 
 #a=significanceMap(object,alpha=0.05,p.adjust.method="holm")
 
-significanceMap.data.frame=function(rankedMat,relation_object,order=FALSE,size.rank=.3*theme_get()$text$size,...){
-  rankedMat$algorithm=rownames(rankedMat)
+significanceMap.data.frame=function(object,relation_object,order=FALSE,size.rank=.3*theme_get()$text$size,...){
+  object$algorithm=rownames(object)
   inc=relation_incidence(relation_object)
   
-  #  rankedMat[order(rankedMat$rank),]
+  #  object[order(object$rank),]
   if (order){
     scores=apply(inc,1,function(x) sum(x==0)-1)#+1-nrow(inc))
     # ordering=  names(sort(scores,decreasing = F))
     # scores=data.frame(algorithm=names(scores),score=scores,stringsAsFactors =F)
     scores2=apply(inc,2,function(x) sum(x==1))[names(scores)]#+1-nrow(inc))
     scores=data.frame(algorithm=names(scores),score=scores,score2=scores2,stringsAsFactors =F)
-    scores=right_join(scores,rankedMat,by="algorithm")
+    scores=right_join(scores,object,by="algorithm")
     
     ordering= (scores[order(scores$score,scores$score2,
                             scores$rank),"algorithm"])
     scores=scores[,1:3]
-  } else ordering=  names(sort(t(rankedMat[,"rank",drop=F])["rank",]))
+  } else ordering=  names(sort(t(object[,"rank",drop=F])["rank",]))
   
   
   
@@ -57,7 +57,7 @@ colnames(incidence.mat)=c("algorithm","notsigPair",     "decision")
 incidence.mat$algorithm=as.character(incidence.mat$algorithm)
 incidence.mat$notsigPair=as.character(incidence.mat$notsigPair)
 #incidence.mat=incidence.mat[incidence.mat$decision==as.numeric(depictSignificant) ,]
-incidence.mat=right_join(incidence.mat,rankedMat,by="algorithm")
+incidence.mat=right_join(incidence.mat,object,by="algorithm")
 # 
 if (order) incidence.mat=right_join(incidence.mat,scores,by="algorithm")
 
@@ -65,7 +65,7 @@ incidence.mat=incidence.mat%>%mutate(algorithm=factor(algorithm, levels=ordering
                                      notsigPair=factor(notsigPair, levels=ordering))
 
 incidence.mat$decision=as.factor(incidence.mat$decision)
-#fixy=nrow(rankedMat)+.5  
+#fixy=nrow(object)+.5  
 fixy=0
 th_get=theme_get()
 p=ggplot(incidence.mat)+
@@ -113,23 +113,23 @@ return(p)
 
 }
 
-significancePlot=function(rankedMat,relation_object,order=FALSE,depictSignificant=FALSE,...){
-  rankedMat$algorithm=rownames(rankedMat)
+significancePlot=function(object,relation_object,order=FALSE,depictSignificant=FALSE,...){
+  object$algorithm=rownames(object)
   inc=relation_incidence(relation_object)
   
-#  rankedMat[order(rankedMat$rank),]
+#  object[order(object$rank),]
   if (order){
     scores=apply(inc,1,function(x) sum(x==0)-1)#+1-nrow(inc))
     # ordering=  names(sort(scores,decreasing = F))
     # scores=data.frame(algorithm=names(scores),score=scores,stringsAsFactors =F)
     scores2=apply(inc,2,function(x) sum(x==1))[names(scores)]#+1-nrow(inc))
     scores=data.frame(algorithm=names(scores),score=scores,score2=scores2,stringsAsFactors =F)
-    scores=right_join(scores,rankedMat,by="algorithm")
+    scores=right_join(scores,object,by="algorithm")
 
     ordering= (scores[order(scores$score,scores$score2,
                             scores$rank),"algorithm"])
      scores=scores[,1:3]
-  } else ordering=  names(sort(t(rankedMat[,"rank",drop=F])["rank",]))
+  } else ordering=  names(sort(t(object[,"rank",drop=F])["rank",]))
   
   
   
@@ -141,12 +141,12 @@ significancePlot=function(rankedMat,relation_object,order=FALSE,depictSignifican
   incidence.mat$algorithm=as.character(incidence.mat$algorithm)
   incidence.mat$notsigPair=as.character(incidence.mat$notsigPair)
   incidence.mat=incidence.mat[incidence.mat$decision==as.numeric(depictSignificant) ,]
-  incidence.mat=right_join(incidence.mat,rankedMat,by="algorithm")
+  incidence.mat=right_join(incidence.mat,object,by="algorithm")
   
   # incidence.list=lapply(1:nrow(inc),function(x) colnames(inc)[which(inc[x,]==as.numeric(depictSignificant))])
   # names(incidence.list)=ordering
   # incidence.list=lapply(incidence.list,function(x){
-  #   # r=data.frame(rank=rankedMat[x,"rank"])
+  #   # r=data.frame(rank=object[x,"rank"])
   #   # r$notsigPair=x
   #   # r
   #   data.frame(notsigPair=x)
@@ -155,7 +155,7 @@ significancePlot=function(rankedMat,relation_object,order=FALSE,depictSignifican
   # incidence.mat=melt(incidence.list,id="notsigPair")#%>%select(-variable)
   # colnames(incidence.mat)[2]="algorithm"
   # #  colnames(incidence.mat)[3]="algorithm"
-  # incidence.mat=right_join(incidence.mat,rankedMat,by="algorithm")
+  # incidence.mat=right_join(incidence.mat,object,by="algorithm")
   # 
   if (order) incidence.mat=right_join(incidence.mat,scores,by="algorithm")
   
@@ -163,7 +163,7 @@ significancePlot=function(rankedMat,relation_object,order=FALSE,depictSignifican
                                        notsigPair=factor(notsigPair, levels=ordering))
   
   
-#fixy=nrow(rankedMat)+.5  
+#fixy=nrow(object)+.5  
 fixy=0
 th_get=theme_get()
 

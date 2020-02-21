@@ -9,6 +9,7 @@ subset.list=function(x,tasks,...){
 }
 
 subset.bootstrap.list=function(x,tasks,...){
+  if (!is.null(as.list(match.call(expand.dots = T))$top)) stop("Subset of algorithms only sensible for single task challenges.")
   res=list(bootsrappedRanks=x$bootsrappedRanks[tasks],
            bootsrappedAggregate=x$bootsrappedAggregate[tasks],
            matlist=x$matlist[tasks],
@@ -25,6 +26,7 @@ subset.bootstrap.list=function(x,tasks,...){
 }
 
 subset.ranked.list=function(x,tasks,...){
+  if (!is.null(as.list(match.call(expand.dots = T))$top)) stop("Subset of algorithms only sensible for single task challenges.")
   res=list(matlist=x$matlist[tasks],
            data=x$data[tasks],
            call=x$call,
@@ -42,6 +44,7 @@ subset.ranked.list=function(x,tasks,...){
 
 subset.aggregated.list=function(x,tasks,...){
   call=match.call(expand.dots = T)  
+  if (!is.null(as.list(call$top))) stop("Subset of algorithms only sensible for single task challenges.")
   matlist=x$matlist[tasks]
   res=list(matlist=matlist,
            call=list(x$call,call),
@@ -60,20 +63,20 @@ which.top=function(object,top){
   rownames(mat)#[order(mat$rank)]
 }
 
-subset.ranked=function(object,top,...){
-  objectTop=object
+subset.ranked=function(x,top,...){
+  objectTop=x
   objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
   objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]
-  objectTop$fulldata=object$data
+  objectTop$fulldata=x$data
   objectTop
 }
 
 
-subset.bootstrap=function(object,top,...){
-  objectTop=object
+subset.bootstrap=function(x,top,...){
+  objectTop=x
   objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
   objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]
-  objectTop$fulldata=object$data
+  objectTop$fulldata=x$data
   objectTop$bootsrappedRanks=objectTop$bootsrappedRanks[rownames(objectTop$mat),]
   objectTop$bootsrappedAggregate=objectTop$bootsrappedAggregate[rownames(objectTop$mat),]
   objectTop

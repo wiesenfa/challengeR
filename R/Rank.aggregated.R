@@ -1,5 +1,5 @@
 
-rank.aggregated <-function(object,#x,
+rank.aggregated <-function(object,
          ties.method="min",inverseOrder,...){
   call=match.call(expand.dots = F)
   if (missing(inverseOrder)){
@@ -8,7 +8,7 @@ rank.aggregated <-function(object,#x,
     
     if (object$isSignificance) inverseOrder=TRUE  # smallBetter (inverseOrder) already taken care of by one-sided test nature of signficance
     }  
-  call=call("rank.aggregated",object=call$object,ties.method=ties.method,inverseOrder=inverseOrder)#,call$...)
+  call=call("rank.aggregated",object=call$object,ties.method=ties.method,inverseOrder=inverseOrder)
   mat=object$mat
   
   if (nrow(mat)>0) r=rankNA2(mat[,ncol(mat)],ties.method=ties.method,inverseOrder=inverseOrder)
@@ -26,10 +26,10 @@ rank.aggregated <-function(object,#x,
 
 
 
-rank.aggregatedRanks <-function(object,#x,
+rank.aggregatedRanks <-function(object,
          ties.method="min",...){
   call=match.call(expand.dots = F)  
-  call=call("rank.aggregatedRanks",object=call$object,ties.method=ties.method)#,call$...)
+  call=call("rank.aggregatedRanks",object=call$object,ties.method=ties.method)
   mat=object$mat
   
   if (nrow(mat)>0) r=rankNA2(mat[,ncol(mat)],ties.method=ties.method,inverseOrder=FALSE)

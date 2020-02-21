@@ -73,8 +73,8 @@ relation_dissimilarity.default <- function(x, ...) relations::relation_dissimila
 rankingHeatmap <- function(x,...) UseMethod("rankingHeatmap")
 rankingHeatmap.default <- function(x, ...) stop("not implemented for this class")
 
-significanceMap <- function(x,...) UseMethod("significanceMap")
-significanceMap.default <- function(x, ...) stop("not implemented for this class")
+significanceMap <- function(object,...) UseMethod("significanceMap")
+significanceMap.default <- function(object, ...) stop("not implemented for this class")
 
 stability <- function(x,...) UseMethod("stability")
 stability.default <- function(x, ...) stop("not implemented for this class")
