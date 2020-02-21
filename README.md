@@ -4,9 +4,9 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- Note that this is an early experimental version (version 0.2.5).  -->
+<!-- Note that this is an early experimental version (version 0.3.0).  -->
 
-Note that this is ongoing work (version 0.2.5), there may be updates
+Note that this is ongoing work (version 0.3.0), there may be updates
 with possibly major changes. *Please make sure that you use the most
 current version\!*
 
@@ -326,6 +326,10 @@ ranking_bootstrapped %>%
 ```
 
 # Changes
+
+#### Version 0.3.0
+
+  - Major bug fix release
 
 #### Version 0.2.5
 

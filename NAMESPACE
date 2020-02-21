@@ -24,7 +24,9 @@ export(
   "consensus",    "consensus.default",    "consensus.ranked.list", 
   "Decision", "decision.challenge",
   "default_colors",
-    "density", "density.bootstrap.list", "density.default",
+  #  "density", 
+  "density.bootstrap.list", 
+  #"density.default",
     "extract.workflow", 
   "ggBoxplot", "ggBoxplot.data.frame",    "ggBoxplot.default", "ggBoxplot.list", 
   "kendall",    "kendall.bootstrap.list", 
@@ -89,7 +91,7 @@ importFrom("ggplot2", "aes","aes_string","geom_abline", "geom_bar", "geom_boxplo
 importFrom("grDevices", "col2rgb", "gray", "rgb")
 importFrom("graphics", "abline", "axis", "barplot", "box", "layout",
                "legend", "par", "plot", "points", "segments","boxplot", "stripchart", "title")
-importFrom("stats", "as.dist", "as.formula", "median", "p.adjust",
+importFrom("stats", "as.dist", "as.formula", "median", "p.adjust", "density",
                "quantile", "aggregate", "cor", "wilcox.test", "terms.formula","density.default", "complete.cases")
 importFrom("methods", "new")
 importFrom("proto", "proto")
@@ -249,6 +251,7 @@ S3method(stabilityByAlgorithm,bootstrap.list)
 S3method(stabilityByAlgorithm,default)
 
 S3method(stabilityByAlgorithmStacked,bootstrap.list)
+S3method(stabilityByAlgorithmStacked,default)
 
 S3method(consensus,ranked.list)
 S3method(consensus,default)

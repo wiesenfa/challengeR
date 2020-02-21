@@ -23,12 +23,12 @@ decision.challenge=function(x,                             na.treat=0, #entweder
         warning("only one ", algorithm, " available in element ", names(object)[id])
         #return(data.frame())  
         #    return(data.frame("prop_significance"=rep(NA,length(unique(piece[[algorithm]]))),row.names = unique(piece[[algorithm]])))  
-        return(matrix(NA,1,1))
+#        return(matrix(NA,1,1))
       } 
       if (is.numeric(na.treat)) piece[,x][is.na(piece[,x])]=na.treat
-      else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x])
+      else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x][is.na(piece[,x])])
+      else if (na.treat=="na.rm") piece=piece[!is.na(piece[,x]),]
       mat=Decision(piece, x, algorithm, dataset_id, alpha, inverseOrder,p.adjust.method=p.adjust.method,alternative=alternative,test.fun=test.fun)
-      #mat=sapply(mat,function(x){x[is.na(x)]=0;x} )
       mat=as.data.frame(mat)
       mat[is.na(mat)]=0
       mat=as.matrix(mat)
@@ -46,7 +46,6 @@ decision.challenge=function(x,                             na.treat=0, #entweder
     } else {
       mat=Decision(object, x, algorithm, dataset_id, alpha, inverseOrder,p.adjust.method=p.adjust.method,alternative=alternative,test.fun=test.fun)
     }
-    #    mat=sapply(mat,function(x){x[is.na(x),drop=F]=0;x} )
     mat=as.data.frame(mat)
     mat[is.na(mat)]=0
     mat=as.matrix(mat)
@@ -64,14 +63,12 @@ Decision=function(object,x,by,dataset_id,alpha, inverseOrder=FALSE,p.adjust.meth
 ){
   algorithms=unique(object[[by]])
   if (length(unique(object[[dataset_id]]))==1){
-    warning("Only one data set in task")
-    return(matrix(NA,1,1))
-    #    return(matrix(NA,dimnames=list(algorithms,algorithms)))
-  } else {
+    warning("Only one test case in task")
+  } #else {
     combinations=expand.grid(algorithms,algorithms)[,2:1]
     combinations=combinations[apply(combinations,1,function(z) anyDuplicated(z)==0),] # remove i==j
     
-    pvalues=sapply(1:nrow(combinations), function(it){ #1:nrow(combinations)
+    pvalues=sapply(1:nrow(combinations), function(it){ 
       dat1=object[object[[by]]==combinations[it,1],]
       dat2=object[object[[by]]==combinations[it,2],]
       id=intersect(dat2[,dataset_id],dat1[,dataset_id])
@@ -86,7 +83,7 @@ Decision=function(object,x,by,dataset_id,alpha, inverseOrder=FALSE,p.adjust.meth
     decisions=as.numeric(p.adjust(pvalues,method=p.adjust.method)<= alpha)
     res=cbind(combinations,decisions)
     reshape2::acast(res,Var2~Var1,value.var="decisions")
-  }
+#  }
 }
 
 
@@ -150,84 +147,6 @@ function(x) {
 # 
 
 
-
-
-# significanceRanking=function(data,alpha,InverseOrder=TRUE){
-#   data$algorithm_id_n=factor(data$algorithm_id)
-#   levels(data$algorithm_id_n)=c(1:length(unique(data$algorithm_id)))
-#   data$algorithm_id_n=as.numeric(paste(data$algorithm_id_n))
-#   count=rep(NA,length(unique(data$algorithm_id_n)))
-# 
-#   for (my.ii in 1:length(unique(data$algorithm_id_n))){
-#     count[my.ii]=0
-#     for (my.jj in 1:length(unique(data$algorithm_id_n))){
-#       if (!identical(my.ii,my.jj)){
-#         dataii=subset(data,algorithm_id_n==my.ii)
-#         datajj=subset(data,algorithm_id_n==my.jj)
-#         datamerged=merge(dataii,datajj,by="dataset_id")
-#         xx=try(wilcox.test(datamerged$metric_value.x,datamerged$metric_value.y,
-#                            alternative = ifelse(InverseOrder,yes="greater",no="less"),exact=FALSE,
-#                            paired = TRUE))
-#         count[my.ii]=ifelse(xx$p.value <= alpha,count[my.ii]+1,count[my.ii])
-#       }
-#     }
-#   }
-# 
-#   count=count/(length(unique(data$algorithm_id_n))-1)
-#   
-#   res=data.frame(unique(data$algorithm_id),count)
-#   names(res)=c("algorithm_id","prop_significance")
-#   res$rank_significance = rankNA(-res$prop_significance)
-#   return(res)
-# }
-# 
-
-
-
-# significance=function(object,x,by,dataset_id,alpha, inverseOrder=FALSE){
-#     algorithms=unique(object[[by]])
-#   if (length(unique(object[[dataset_id]]))==1){
-#     warning("Only one data set in task")
-#     return(data.frame("prop_significance"=rep(NA,length(algorithms)),row.names = algorithms))
-#  #     return(data.frame("prop_significance"=numeric()))
-#   } else {
-#     # unique.combinations=t(combn(u,2))
-#     combinations=expand.grid(algorithms,algorithms)[,2:1]
-#     combinations=combinations[apply(combinations,1,function(z) anyDuplicated(z)==0),] # remove i==j
-#   
-#     pvalues=sapply(1:nrow(combinations), function(it){ #1:nrow(combinations)
-#    #   dat1=object[object[[by]]==combinations[it,1],]
-#    #   dat2=object[object[[by]]==combinations[it,2],]
-#    #   datamerged=merge(dat1,dat2,by=dataset_id)
-#    # try(as.numeric(wilcox.test(datamerged[[paste0(x,".x")]],datamerged[[paste0(x,".y")]],
-#    #                    alternative = ifelse(inverseOrder,yes="greater",no="less"),exact=FALSE,
-#    #                    paired = TRUE)$p.value<= alpha)
-#    # )
-#       #faster:
-#       dat1=object[object[[by]]==combinations[it,1],]
-#       dat2=object[object[[by]]==combinations[it,2],]
-#       id=intersect(dat2[,dataset_id],dat1[,dataset_id])
-#       dat1=dat1[match(id,dat1[,dataset_id]),x]
-#       dat2=dat2[match(id,dat2[,dataset_id]),x]
-#       #try(
-#         as.numeric(wilcox.test(dat1,dat2,
-#                          alternative = ifelse(inverseOrder,yes="greater",no="less"),exact=FALSE,
-#                          paired = TRUE)$p.value<= alpha)
-#        #)
-#     })
-#     algo.ids=lapply(algorithms,function(algo) which(combinations[,1]==algo))
-#     names(algo.ids)=algorithms
-#     prop_significance=sapply(algo.ids, function(z) sum(pvalues[z]))/(length(algorithms)-1)
-#     return(data.frame("prop_significance"=prop_significance,row.names = names(prop_significance)))
-#   }
-# }
-
-# significance=function(object,...){
-#   a=decision.challenge(object,...)
-#   prop_significance=  rowSums(a)/nrow(a)
-#   return(data.frame("prop_significance"=prop_significance,row.names = names(prop_significance)))
-# }
-
 significance=function(object,x,algorithm,dataset_id,alpha, inverseOrder=FALSE,...){
   # algorithm=attr(object,"algorithm")
   # dataset_id=attr(object,"case")
@@ -236,27 +155,7 @@ significance=function(object,x,algorithm,dataset_id,alpha, inverseOrder=FALSE,..
   
   xx=as.challenge(object,value=x,algorithm=algorithm,case=dataset_id,smallBetter = !inverseOrder,check=FALSE)
   a=decision.challenge(xx,...)
-  prop_significance=  rowSums(a)/nrow(a)
+  prop_significance=  rowSums(a)/(ncol(a)-1)
   return(data.frame("prop_significance"=prop_significance,row.names = names(prop_significance)))
 }
-
-
-#dropNA=function(x) x[!is.na(x)]
-# x=DataDSC%>% subset(task_id_n==1)
-# x="metric_value"
-# by="algorithm_id"
-# dataset_id="dataset_id"
-# inverseOrder=TRUE
-# alpha=.05
-
-
-
-# uu=expand.grid(u,u)[,2:1]
-# uu=uu[apply(uu,1,function(z) anyDuplicated(z)==0),]
-# 
-# zz=rev(uu[1,])
-# k=(apply(uu,1,function(z) all(z==zz)))
-# rev(uu[1,])
-# dim(uu)
-# dim(combn(u,2))*2
 
