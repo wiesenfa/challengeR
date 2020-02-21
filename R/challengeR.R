@@ -36,7 +36,7 @@ as.challenge=function(object, value, algorithm ,
       }
         
     } else {
-        object=by(object,by=by)
+        object=splitby(object,by=by)
         object=lapply(object,droplevels)
         for (task in names(object)){
           missingData=object[[task]] %>% expand(!!as.symbol(algorithm),!!as.symbol(case))%>% anti_join(object[[task]],by=c( algorithm,case))
