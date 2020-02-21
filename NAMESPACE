@@ -18,7 +18,7 @@ export(
   #  "as.warehouse.array4dim", "as.warehouse.challenge", 
   "bootstrap",    "bootstrap.default", "bootstrap.ranked", "bootstrap.ranked.list",
     "boxplot.challenge", 
-  "by", 
+  "splitby", 
   "check_strict_preference", 
   "compareRanks",    "compareRanks.default", "compareRanks.ranked",    "compareRanks.ranked.list", 
   "consensus",    "consensus.default",    "consensus.ranked.list", 
