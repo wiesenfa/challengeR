@@ -374,7 +374,7 @@ Hence, tasks that are similar with respect to their algorithm ranking appear clo
 
 nn=length(unique(c(d))) # ==max(rm) number of different distance levels
 a=my.bsgraph0b(d, ndists.show = nn,
-         edge.col = terrain_hcl(nn, c=c(65,0), l=c(45,90), power=c(1/2,1.5)),
+         edge.col = grDevices::grey.colors(nn), #terrain_hcl(nn, c=c(65,0), l=c(45,90), power=c(1/2,1.5)),
          edge.lwd =1,#4*rev(1.2^seq_len(length(unique(d)))/(1.2^length((unique(d))))),# seq(1, .001, length.out=nn),
          node.fill = cols[uw])
 
@@ -403,7 +403,7 @@ addy=6+w
 
 ```{r network, fig.width=addy, fig.height=6,out.width='100%'}
 if (length(relensemble)>2) {
-  plot(ag,mai=c(0,0,0,w))
+  Rgraphviz::plot(ag,mai=c(0,0,0,w))
   legend(par('usr')[2], par('usr')[4], xpd=NA,  names(leg.col), lwd = 1, col = leg.col, bg =NA,cex=.8)# bg="white")#,cex=1.5)
 }
 #plot(ag,mai=c(0,0,0,1))
