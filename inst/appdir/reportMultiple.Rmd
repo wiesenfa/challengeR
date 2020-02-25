@@ -489,56 +489,36 @@ if (length(relensemble)>2) plot(hclust(d,method="average")) #,main="Symmetric di
 In network-type graphs (see Eugster et al, 2008), every task is represented by a node and nodes are connected by edges whose length is determined by a chosen distance measure. Here, distances between nodes are chosen to increase exponentially in Spearman's footrule distance with growth rate 0.05 to accentuate large distances.
 Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are colored-coded by the winning algorithm. In case there are more than one first-ranked algorithms in a task, the corresponding node remains uncolored.
 \bigskip
+
 ```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
-
-#coloring
-# # use relations
-  # rm <-my.bsranking(relensemble) #for coloring
-  # uw <- apply(rm, 2,
-  #             function(x) {
-  #               w <- which(x == 1)
-  #               ifelse(length(w) == 1,
-  #                      names(w), "none")
-  #             })
-
-# use ranking list
-  uw=lapply(object$matlist,function(x) rownames(x)[which(x$rank==1)])
-  uw=sapply(uw, function(x) ifelse(length(x)==1,yes = x,no="none"))
-
-
-nn=length(unique(c(d))) # ==max(rm) number of different distance levels
-a=my.bsgraph0b(d, ndists.show = nn,
-         edge.col = grDevices::grey.colors(nn), #terrain_hcl(nn, c=c(65,0), l=c(45,90), power=c(1/2,1.5)),
-         edge.lwd =1,#4*rev(1.2^seq_len(length(unique(d)))/(1.2^length((unique(d))))),# seq(1, .001, length.out=nn),
-         node.fill = cols[uw])
-
-
-graph=a$graph
-nodeAttrs=a$nodeAttrs
-edgeAttrs=a$edgeAttrs
-layoutType = "neato"
-attrs <- Rgraphviz::getDefaultAttrs(layoutType = layoutType)
-attrs$node$fixedsize <- T
-attrs$node$fontsize <- max(sapply(names(object$matlist),nchar))-1
-attrs$node$width <- max(sapply(names(object$matlist),nchar))
-attrs$node$shape="ellipse"
-attrs$node$height <- max(sapply(names(object$matlist),nchar))/2
-ag <- Rgraphviz::agopen(graph, "", layoutType = layoutType, attrs = attrs, nodeAttrs = nodeAttrs, edgeAttrs = edgeAttrs)
-
-
-#######
-plot.new()
-leg.col=cols[uw][unique(names(cols[uw]))]
-l=legend("topright",  names(leg.col), lwd = 1, col = leg.col, bg =NA,plot=F)# bg="white")#,cex=1.5)
-w <- grconvertX(l$rect$w, to='inches')
-addy=6+w
+if (length(relensemble)>2) {
+  netw=network(object,
+               method = "symdiff", 
+               edge.col=grDevices::grey.colors,
+               edge.lwd=1,
+               rate=1.05,
+               cols=cols
+               )
+  
+  plot.new()
+  leg=legend("topright",  names(netw$leg.col), lwd = 1, col = netw$leg.col, bg =NA,plot=F,cex=.8)
+  w <- grconvertX(leg$rect$w, to='inches')
+  addy=6+w
+} else addy=1
 
 ```
 
 ```{r network, fig.width=addy, fig.height=6,out.width='100%'}
 if (length(relensemble)>2) {
-  Rgraphviz::plot(ag,mai=c(0,0,0,w))
-  legend(par('usr')[2], par('usr')[4], xpd=NA,  names(leg.col), lwd = 1, col = leg.col, bg =NA,cex=.8)# bg="white")#,cex=1.5)
+  plot(netw,
+       layoutType = "neato",
+       fixedsize=TRUE,
+       # fontsize,
+       # width,
+       # height,
+       shape="ellipse",
+       cex=.8
+       )
 }
 
 ```
