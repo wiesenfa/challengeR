@@ -189,9 +189,7 @@ par(op)
 \bigskip
 
 ```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
-#
-rankingHeatmap(object,fontsize=25, vp =grid::viewport(width=1, height=.95))
-#
+rankingHeatmap(object)
 ```
 
 

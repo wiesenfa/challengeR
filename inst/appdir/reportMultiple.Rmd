@@ -183,9 +183,7 @@ par(op)
 \bigskip
 
 ```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
-#
-rankingHeatmap(boot_object$data,ranking.fun=boot_object$FUN,fontsize=25, vp =grid::viewport(width=1, height=1))
-#
+rankingHeatmap(object)
 ```
 
 
@@ -296,7 +294,7 @@ methodsplot(challenge_multiple,ordering = ordering_consensus)+scale_color_manual
   for (subt in names(challenge_multiple)){
      dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
                       annotator = attr(x,"annotator"), by=attr(x,"by"),
-                      smallBetter = !attr(x,"inverseOrder"))
+                      smallBetter = !attr(x,"largeBetter"))
  
     print(methodsplot(dd,ordering = ordering_consensus)+scale_color_manual(values=cols))
   }
@@ -530,7 +528,7 @@ ag <- Rgraphviz::agopen(graph, "", layoutType = layoutType, attrs = attrs, nodeA
 
 #######
 plot.new()
- leg.col=cols[uw][unique(names(cols[uw]))]
+leg.col=cols[uw][unique(names(cols[uw]))]
 l=legend("topright",  names(leg.col), lwd = 1, col = leg.col, bg =NA,plot=F)# bg="white")#,cex=1.5)
 w <- grconvertX(l$rect$w, to='inches')
 addy=6+w
@@ -542,9 +540,6 @@ if (length(relensemble)>2) {
   Rgraphviz::plot(ag,mai=c(0,0,0,w))
   legend(par('usr')[2], par('usr')[4], xpd=NA,  names(leg.col), lwd = 1, col = leg.col, bg =NA,cex=.8)# bg="white")#,cex=1.5)
 }
-#plot(ag,mai=c(0,0,0,1))
-#leg.col=cols[uw][unique(names(cols[uw]))]
-#legend("topright", names(leg.col), lwd = 1, col = leg.col, bg =NA, inset=c(-0.15,0.2), xpd=TRUE)# bg="white")#,cex=1.5)
 
 ```
 
