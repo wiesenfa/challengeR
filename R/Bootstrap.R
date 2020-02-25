@@ -1,3 +1,7 @@
+bootstrap <- function(object,...) UseMethod("bootstrap")
+bootstrap.default <- function(object, ...) stop("not implemented for this class")
+
+
 bootstrap.ranked=function(object,
                           nboot, parallel=FALSE,progress="text",...){
   data=object$data

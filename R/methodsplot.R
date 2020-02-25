@@ -134,9 +134,6 @@ lineplot.challenge=function(x, ordering,...){
       mutate(task=factor(task))%>%
       mutate(algorithm=factor(algorithm, levels=lev,labels = lab))
     
-    
-    
-    
     ggplot(data = dat) +
       aes(x = task, y = rank, color=algorithm, group=algorithm ) +
       geom_line(size=1)+

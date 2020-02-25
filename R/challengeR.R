@@ -1,3 +1,19 @@
+#' Title
+#'
+#' @param object 
+#' @param value 
+#' @param algorithm 
+#' @param case 
+#' @param by 
+#' @param annotator 
+#' @param smallBetter 
+#' @param na.treat 
+#' @param check 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 as.challenge=function(object, value, algorithm ,
                       case=NULL,
                       by=NULL, 
@@ -66,7 +82,7 @@ as.challenge=function(object, value, algorithm ,
   attr(object,"case")=case
   attr(object,"annotator")=annotator
   attr(object,"by")=by 
-  attr(object,"inverseOrder")=!smallBetter
+  attr(object,"largeBetter")=!smallBetter
   attr(object,"check")=check
   class(object)=c("challenge",class(object))
   object

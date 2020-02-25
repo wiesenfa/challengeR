@@ -5,15 +5,15 @@ decision.challenge=function(x,                             na.treat=0, #entweder
                                                                paired = TRUE)$p.value,
                             parallel=FALSE,progress="none",...){
   
-  if (alternative!="two.sided") alternative=ifelse(attr(x,"inverseOrder") ,yes="greater",no="less")
+  if (alternative!="two.sided") alternative=ifelse(attr(x,"largeBetter") ,yes="greater",no="less")
   call=match.call(expand.dots = T)  
   
   object=x
   algorithm=attr(object,"algorithm")
   dataset_id=attr(object,"case")
-  inverseOrder=attr(object,"inverseOrder") 
+  largeBetter=attr(object,"largeBetter") 
   x=attr(object,"value")
-  if(missing(dataset_id)| missing(inverseOrder)) stop("arguments case and alpha need to be given in as.challenge()")
+  if(missing(dataset_id)| missing(largeBetter)) stop("arguments case and alpha need to be given in as.challenge()")
   
   
   if (inherits(object,"list")){
@@ -28,7 +28,7 @@ decision.challenge=function(x,                             na.treat=0, #entweder
       if (is.numeric(na.treat)) piece[,x][is.na(piece[,x])]=na.treat
       else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x][is.na(piece[,x])])
       else if (na.treat=="na.rm") piece=piece[!is.na(piece[,x]),]
-      mat=Decision(piece, x, algorithm, dataset_id, alpha, inverseOrder,p.adjust.method=p.adjust.method,alternative=alternative,test.fun=test.fun)
+      mat=Decision(piece, x, algorithm, dataset_id, alpha, largeBetter,p.adjust.method=p.adjust.method,alternative=alternative,test.fun=test.fun)
       mat=as.data.frame(mat)
       mat[is.na(mat)]=0
       mat=as.matrix(mat)
@@ -44,7 +44,7 @@ decision.challenge=function(x,                             na.treat=0, #entweder
       warning("only one ", algorithm, " available")
       matlist=(matrix(NA,1,1))
     } else {
-      mat=Decision(object, x, algorithm, dataset_id, alpha, inverseOrder,p.adjust.method=p.adjust.method,alternative=alternative,test.fun=test.fun)
+      mat=Decision(object, x, algorithm, dataset_id, alpha, largeBetter,p.adjust.method=p.adjust.method,alternative=alternative,test.fun=test.fun)
     }
     mat=as.data.frame(mat)
     mat[is.na(mat)]=0
@@ -56,7 +56,7 @@ decision.challenge=function(x,                             na.treat=0, #entweder
 }
 
 
-Decision=function(object,x,by,dataset_id,alpha, inverseOrder=FALSE,p.adjust.method="none",alternative="one.sided",
+Decision=function(object,x,by,dataset_id,alpha, largeBetter=FALSE,p.adjust.method="none",alternative="one.sided",
                   test.fun=function(x,y) wilcox.test(x,y,
                                                      alternative = alternative,exact=FALSE,
                                                      paired = TRUE)$p.value
@@ -74,9 +74,6 @@ Decision=function(object,x,by,dataset_id,alpha, inverseOrder=FALSE,p.adjust.meth
       id=intersect(dat2[,dataset_id],dat1[,dataset_id])
       dat1=dat1[match(id,dat1[,dataset_id]),x]
       dat2=dat2[match(id,dat2[,dataset_id]),x]
-      # wilcox.test(dat1,dat2,
-      #             alternative = alternative,exact=FALSE,
-      #             paired = TRUE)$p.value
       test.fun(dat1,dat2)
       
     })
@@ -147,13 +144,13 @@ function(x) {
 # 
 
 
-significance=function(object,x,algorithm,dataset_id,alpha, inverseOrder=FALSE,...){
+significance=function(object,x,algorithm,dataset_id,alpha, largeBetter=FALSE,...){
   # algorithm=attr(object,"algorithm")
   # dataset_id=attr(object,"case")
-  # inverseOrder=attr(object,"inverseOrder") 
+  # largeBetter=attr(object,"largeBetter") 
   # x=attr(object,"value")
   
-  xx=as.challenge(object,value=x,algorithm=algorithm,case=dataset_id,smallBetter = !inverseOrder,check=FALSE)
+  xx=as.challenge(object,value=x,algorithm=algorithm,case=dataset_id,smallBetter = !largeBetter,check=FALSE)
   a=decision.challenge(xx,...)
   prop_significance=  rowSums(a)/(ncol(a)-1)
   return(data.frame("prop_significance"=prop_significance,row.names = names(prop_significance)))

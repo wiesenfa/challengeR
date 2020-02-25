@@ -4,19 +4,19 @@ rank.challenge=function(object,x,
   if (!is.null(attr(object,"annotator"))) {
   call2=call("Rank",object=call$object, x=attr(object,"value"), 
              annotator=c(attr(object,"annotator")),
-         ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
+         ties.method=ties.method,largeBetter=attr(object,"largeBetter") 
            )
   res1=do.call("Rank",list(object=object,x=attr(object,"value"),
                            annotator=c(attr(object,"annotator")),
-         ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
+         ties.method=ties.method,largeBetter=attr(object,"largeBetter") 
          ))
     
   } else {
   call2=call("Rank",object=call$object, x=attr(object,"value"), 
-         ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
+         ties.method=ties.method,largeBetter=attr(object,"largeBetter") 
            )
   res1=do.call("Rank",list(object=object,x=attr(object,"value"),
-         ties.method=ties.method,inverseOrder=attr(object,"inverseOrder") 
+         ties.method=ties.method,largeBetter=attr(object,"largeBetter") 
          ))
     
   }
