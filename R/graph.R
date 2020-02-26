@@ -88,7 +88,7 @@ network.dist=
       nodeAttrs$fillcolor[nodes] <- node.fill
     
     out= list(graph=graph,nodeAttrs = nodeAttrs, edgeAttrs = edgeAttrs,
-              tasknames=names(object$matlist),
+              tasknames=nodes,
               leg.col=node.fill[unique(names(node.fill))]
     )
     class(out)="network"
