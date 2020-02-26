@@ -73,32 +73,36 @@ Ranking of algorithms within tasks according to the following chosen ranking sch
 
 ```{r,results='asis'}
 a=(  lapply(object$FUN.list,function(x) {
- #    if (!is.character(x)) return(paste0("Aggregate using function ",paste(capture.output(x),collapse=" ")))
-     if (!is.character(x)) return(paste0("aggregate using function ",paste(gsub("UseMethod","",deparse(functionBody(x))),collapse=" ")))
- #    if (!is.character(x)) return(paste0("Aggregate using function ",paste(gsub("UseMethod","",deparse(functionBody(x))),collapse=" ")))
-     else if (x=="rank") return(x)
-     else return(paste0("aggregate using function ",x))
-   }))
-#cat("1.",paste(a,collapse="\n2. "))
+                 if (!is.character(x)) return(paste0("aggregate using function ",
+                                                     paste(gsub("UseMethod","",
+                                                                deparse(functionBody(x))),
+                                                           collapse=" ")
+                                                     ))
+                 else if (x=="rank") return(x)
+                 else return(paste0("aggregate using function ",x))
+  }))
 cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
 
-if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is to equal the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
-
+if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal to the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
 ```
 
 
 Ranking list for each task:
 ```{r,results='asis'}
-#object
 for (t in 1:length(object$matlist)){
- cat("\n",names(object$matlist)[t],": ")
+  cat("\n",names(object$matlist)[t],": ")
   n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
-  cat("\nAnalysis based on ", n.cases," test cases which included", sum(is.na(challenge_multiple[[t]][[attr(challenge_multiple,"value")]]))," missing values.")
+  cat("\nAnalysis based on ", 
+      n.cases,
+      " test cases which included", 
+      sum(is.na(challenge_multiple[[t]][[attr(challenge_multiple,"value")]])),
+      " missing values.")
+  
   if (n.cases<log2(5000)) warning("Associated figures based on bootstrapping should be treated with caution due to small number of test cases!")
+  
   x=object$matlist[[t]]
   print(knitr::kable(x[order(x$rank),]))
 }
-#lapply(object$matlist, function(x) knitr::kable(x[order(x$rank),]))
 
 ```
 
@@ -106,7 +110,9 @@ for (t in 1:length(object$matlist)){
 
 Consensus ranking according to chosen method `r attr(params$consensus,"method")`:
 ```{r}
-knitr::kable(data.frame(value=round(params$consensus,3), rank=rank(params$consensus, ties.method="min")))
+knitr::kable(data.frame(value=round(params$consensus,3), 
+                        rank=rank(params$consensus, 
+                                  ties.method="min")))
 ```
 
 
@@ -120,7 +126,6 @@ Algorithms are ordered according to chosen ranking scheme for each task.
 \bigskip
 
 ```{r boxplots}
-#temp=boxplot(challenge_multiple,size=.8)
 temp=boxplot(object,size=.8)
 temp=lapply(temp,function(x) utils::capture.output(x+xlab("Algorithm")+ylab("Metric value")))
 
@@ -133,45 +138,49 @@ temp=lapply(temp,function(x) utils::capture.output(x+xlab("Algorithm")+ylab("Met
 
 ```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
 plot.new()
-algs=ordering_consensus#rownames(boot_object$matlist[[1]])
-l=legend("topright", paste0(1:length(algs),": ",algs), lwd = 1, cex=1.4,seg.len=1.1,title="Rank: Alg.",plot=F) 
+algs=ordering_consensus
+l=legend("topright", 
+         paste0(1:length(algs),": ",algs), 
+         lwd = 1, cex=1.4,seg.len=1.1,
+         title="Rank: Alg.",
+         plot=F) 
+
 w <- grconvertX(l$rect$w, to='ndc') - grconvertX(0, to='ndc')
 h<- grconvertY(l$rect$h, to='ndc') - grconvertY(0, to='ndc')
-addy=max(grconvertY(l$rect$h,"user","inches"),6)#+5
+addy=max(grconvertY(l$rect$h,"user","inches"),6)
 ```
 
 
 ```{r podium,eval=T,fig.width=12, fig.height=addy}
-# gg_color_hue <- function(n) {
-#   hues = seq(15, 375, length = n + 1)
-#   hcl(h = hues, l = 65, c = 100)[1:n]
-# }
-# 
-# cols = gg_color_hue(n)
-
-
 #c(bottom, left, top, right
-#par(mar=c(5, 4, 4, 2) + 0.1,cex.axis=1.5,cex.lab=1.5,cex.main=1.7)
-#op <-par(mar=par()$mar+c(-.5,0.5,-.5,4.5))
+op<-par(pin=c(par()$pin[1],6),
+        omd=c(0, 1-w, 0, 1),
+        mar=c(par('mar')[1:3], 0)+c(-.5,0.5,-.5,0),
+        cex.axis=1.5,
+        cex.lab=1.5,
+        cex.main=1.7)#,mar=c(5, 4, 4, 2) + 0.1)
 
-op<-par(pin=c(par()$pin[1],6),omd=c(0, 1-w, 0, 1),mar=c(par('mar')[1:3], 0)+c(-.5,0.5,-.5,0),cex.axis=1.5,cex.lab=1.5,cex.main=1.7)#,mar=c(5, 4, 4, 2) + 0.1)
 oh=grconvertY(l$rect$h,"user","lines")-grconvertY(6,"inches","lines")
 if (oh>0) par(oma=c(oh,0,0,0))
 
 
-  set.seed(38)
- podium(object,
-  # boot_object$data,
- #       ranking.fun=boot_object$FUN, 
-   col=cols,
-        lines.show = T,lines.alpha = .4,
-        dots.cex=.9,ylab="Metric value",layout.heights=c(1,.35),
-          legendfn = function(algs, cols) {
-            #title(single_subtask); 
-  #          legend("topright", inset=c(-0.12,0), xpd=TRUE, algs, lwd = 1, col =  cols, bg = NA,cex=1.4,seg.len=1.1) 
-          legend(par('usr')[2], par('usr')[4], xpd=NA, paste0(1:length(algs),": ",algs), lwd = 1, col =  cols, bg = NA,cex=1.4,seg.len=1.1,title="Rank: Alg.") 
+set.seed(38)
+podium(object,
+       col=cols,
+       lines.show = T, lines.alpha = .4,
+       dots.cex=.9,
+       ylab="Metric value",
+       layout.heights=c(1,.35),
+       legendfn = function(algs, cols) {
+                 legend(par('usr')[2], par('usr')[4], 
+                 xpd=NA, 
+                 paste0(1:length(algs),": ",algs), 
+                 lwd = 1, col =  cols, 
+                 bg = NA,
+                 cex=1.4, seg.len=1.1,
+                 title="Rank: Alg.") 
         }
-          )
+      )
 par(op)
   
 ```
@@ -209,7 +218,12 @@ for (subt in names(boot_object$bootsrappedRanks)){
   class(a)="bootstrap.list"
   r=boot_object$matlist[[subt]]
 
-  pl[[subt]]=stabilityByTask(a,max_size = 8,ordering=rownames(r[order(r$rank),]),size.ranks=.25*theme_get()$text$size,size=8,shape=4)+scale_color_manual(values=cols)
+  pl[[subt]]=stabilityByTask(a,
+                             max_size =8,
+                             ordering=rownames(r[order(r$rank),]),
+                             size.ranks=.25*theme_get()$text$size,
+                             size=8,
+                             shape=4) + scale_color_manual(values=cols)
 
 }
 
@@ -245,26 +259,8 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 \bigskip
 
 ```{r significancemap,fig.width=6, fig.height=6,out.width='200%'}
-#```{r single_stability_significance_table1b,fig.width=4, fig.height=4,out.width='50%'}
-# a=challenge_multiple%>%decision.challenge(p.adjust.method="holm")
-# aa=lapply(a,as.relation.challenge.incidence)
-# names(aa)=names(challenge_multiple)
-# 
-# relensemble= do.call(relation_ensemble,args = aa)
-# 
-# for (Task in names(boot_object$data)){
-#   print(significanceMap(rankedMat=object$matlist[[Task]],
-#                  relation_object=relensemble[[Task]]
-#                  )+ggtitle(Task)+ theme(aspect.ratio=1))#+scale_color_manual(name="decision",values=c("white","lightblue")))
-#   
-# }
-
-
 temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="holm")
         )
-
-
-
 ```
 
 <!-- \subsubsection{Hasse diagram} -->
@@ -282,24 +278,21 @@ temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="ho
 \bigskip
 
 ```{r lineplot,fig.width=7,fig.height = 5}
-
-
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-
-methodsplot(challenge_multiple,ordering = ordering_consensus)+scale_color_manual(values=cols)
+  methodsplot(challenge_multiple,ordering = ordering_consensus)+scale_color_manual(values=cols)
 } else {
-
-
   x=challenge_multiple
   for (subt in names(challenge_multiple)){
-     dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
-                      annotator = attr(x,"annotator"), by=attr(x,"by"),
-                      smallBetter = !attr(x,"largeBetter"))
+     dd=as.challenge(x[[subt]],
+                     value=attr(x,"value"), 
+                     algorithm=attr(x,"algorithm") ,
+                     case=attr(x,"case"),
+                     annotator = attr(x,"annotator"), 
+                     by=attr(x,"by"),
+                     smallBetter = !attr(x,"largeBetter"))
  
     print(methodsplot(dd,ordering = ordering_consensus)+scale_color_manual(values=cols))
   }
-
-
 }
 ```
 
@@ -353,10 +346,23 @@ task.
 ```{r blobplot_bootstrap_byAlgorithm,fig.width=7,fig.height = 5}
 #stabilityByAlgorithm.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-  stabilityByAlgorithm(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = F)+scale_color_manual(values=cols)
+  stabilityByAlgorithm(boot_object,
+                       ordering=ordering_consensus,
+                       max_size = 9,
+                       size=4,
+                       shape=4,
+                       single = F) + scale_color_manual(values=cols)
 } else {
-  pl=stabilityByAlgorithm(boot_object,ordering=ordering_consensus,max_size = 9,size=4,shape=4,single = T)
-  for (i in 1:length(pl)) print(pl[[i]]+scale_color_manual(values=cols)+guides(size = guide_legend(title="%"),color="none"))
+  pl=stabilityByAlgorithm(boot_object,
+                          ordering=ordering_consensus,
+                          max_size = 9,
+                          size=4,
+                          shape=4,
+                          single = T)
+  for (i in 1:length(pl)) print(pl[[i]] + 
+                                  scale_color_manual(values=cols) +
+                                  guides(size = guide_legend(title="%"),color="none")
+                                )
 }
 
 ```
@@ -412,7 +418,11 @@ Same as in Section \ref{blobByTask} but now ordered according to consensus.
 ```{r blobplot_bootstrap_byTask,fig.width=9, fig.height=9}
 #stabilityByTask.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-  stabilityByTask(boot_object, ordering=ordering_consensus,max_size = 9,size=4,shape=4)+scale_color_manual(values=cols)
+  stabilityByTask(boot_object,
+                  ordering=ordering_consensus,
+                  max_size = 9,
+                  size=4,
+                  shape=4) + scale_color_manual(values=cols)
 } else {
   pl=list()
   for (subt in names(boot_object$bootsrappedRanks)){
@@ -421,8 +431,13 @@ if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
     names(a$bootsrappedRanks)=names(a$matlist)=subt
     class(a)="bootstrap.list"
     r=boot_object$matlist[[subt]]
-  
-    pl[[subt]]=stabilityByTask(a,max_size = 9,ordering=ordering_consensus,size.ranks=.25*theme_get()$text$size,size=4,shape=4)+scale_color_manual(values=cols)
+    
+    pl[[subt]]=stabilityByTask(a,
+                               max_size = 9,
+                               ordering=ordering_consensus,
+                               size.ranks=.25*theme_get()$text$size,
+                               size=4,
+                               shape=4) + scale_color_manual(values=cols)
   }
   for (i in 1:length(pl)) print(pl[[i]])
 }
