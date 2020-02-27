@@ -80,6 +80,17 @@ n.cases=nrow(challenge_single)/length(unique(challenge_single[[attr(challenge_si
 
 Analysis based on `r n.cases` test cases which included `r sum(is.na(challenge_single[[attr(challenge_single,"value")]]))` missing values.
 
+```{r,results='asis'}
+if (!is.null(boot_object$fulldata)) {
+  cat("Only top ",
+      length(levels(boot_object$data[[attr(boot_object$data,"algorithm")]])), 
+      " out of ", 
+      length(levels(boot_object$fulldata[[attr(boot_object$data,"algorithm")]])), 
+      " algorithms visualized.\n")
+}
+```
+
+
 ```{r}
 if (n.cases<log2(5000)) warning("Bootstrapping in case of few test cases should be treated with caution!")
 ```

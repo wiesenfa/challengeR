@@ -73,6 +73,18 @@ This document presents a systematic report on a benchmark study. Input data comp
 
 Analysis based on `r nrow(challenge_single)/length(unique(challenge_single[[attr(challenge_single,"algorithm")]]))` test cases which included `r sum(is.na(challenge_single[[attr(challenge_single,"value")]]))` missing values.
 
+```{r,results='asis'}
+if (!is.null(object$fulldata)) {
+  cat("Only top ",
+      length(levels(object$data[[attr(object$data,"algorithm")]])), 
+      " out of ", 
+      length(levels(object$fulldata[[attr(object$data,"algorithm")]])), 
+      " algorithms visualized.\n")
+}
+```
+
+
+
 Algorithms are ordered according to the following chosen ranking scheme:
 
 ```{r,results='asis'}

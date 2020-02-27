@@ -191,7 +191,7 @@ par(op)
 \bigskip
 
 ```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
-rankingHeatmap(object)
+temp=utils::capture.output(rankingHeatmap(object))
 ```
 
 
@@ -231,22 +231,26 @@ temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="ho
 \bigskip
 
 ```{r lineplot,fig.width=7,fig.height = 5}
-
-
 if (length(object$matlist)<=6 &nrow((object$matlist[[1]]))<=10 ){
-  methodsplot(challenge_multiple,ordering = ordering_consensus)+scale_color_manual(values=cols)
+  methodsplot(challenge_multiple,
+              ordering = ordering_consensus,
+              na.treat=object$call[[1]][[1]]$na.treat) + scale_color_manual(values=cols)
 } else {
   x=challenge_multiple
   for (subt in names(challenge_multiple)){
      dd=as.challenge(x[[subt]],
-                     by=attr(x,"by"),
                      value=attr(x,"value"), 
                      algorithm=attr(x,"algorithm") ,
                      case=attr(x,"case"),
                      annotator = attr(x,"annotator"), 
-                     smallBetter = !attr(x,"largeBetter"))
+                     by=attr(x,"by"),
+                     smallBetter = !attr(x,"largeBetter"),
+                     na.treat=object$call[[1]][[1]]$na.treat
+                     )
  
-    print(methodsplot(dd,ordering = ordering_consensus)+scale_color_manual(values=cols))
+    print(methodsplot(dd,
+                      ordering = ordering_consensus) + scale_color_manual(values=cols)
+          )
   }
 }
 ```
