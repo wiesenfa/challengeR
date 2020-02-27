@@ -1,7 +1,13 @@
 report <- function(object,...) UseMethod("report")
 report.default <- function(object, ...) stop("not implemented for this class")
 
-report.bootstrap=function(object,file,title="<Challenge name>",colors=default_colors,format="PDF",latex_engine="pdflatex",open=TRUE,...){
+report.bootstrap=function(object,
+                          file,
+                          title="<Challenge name>",
+                          colors=default_colors,
+                          format="PDF",
+                          latex_engine="pdflatex",
+                          open=TRUE,...){
 
   # Copy the report file to a temporary directory before processing it, in
   # case we don't have write permissions to the current working dir (which
@@ -11,9 +17,13 @@ report.bootstrap=function(object,file,title="<Challenge name>",colors=default_co
     a=strsplit(file,"/")[[1]]
     path=paste0(a[-length(a)],collapse="/")
     if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
-    else tempReport=file.path(path,paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
+    else tempReport=file.path(path,
+                              paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
   } 
-  file.copy(file.path(system.file("appdir", package = "challengeR"), "reportSingle.Rmd"), tempReport, overwrite = TRUE)
+  file.copy(file.path(system.file("appdir", package = "challengeR"), 
+                      "reportSingle.Rmd"), 
+            tempReport, 
+            overwrite = TRUE)
   
   # Set up parameters to pass to Rmd document
   params <- list(
@@ -26,25 +36,42 @@ report.bootstrap=function(object,file,title="<Challenge name>",colors=default_co
   # Knit the document, passing in the `params` list, and eval it in a
   # child of the global environment (this isolates the code in the document
   # from the code in this app).
-   out <- render(tempReport, switch(
-    format,
-    PDF = pdf_document(number_sections=T,latex_engine=latex_engine), HTML = html_document(number_sections=T), Word = word_document()
-  ),params = params,
-  envir = new.env(parent = globalenv()),...
+   out <- render(tempReport, 
+                 switch(    
+                   format,
+                   PDF = pdf_document(number_sections=T,
+                                      latex_engine=latex_engine), 
+                   HTML = html_document(number_sections=T), 
+                   Word = word_document()
+                   ),
+                 params = params,
+                 envir = new.env(parent = globalenv()),
+                 ...
   )
   
   if (!missing(file)){
-    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,".",strsplit(out,".",fixed=T)[[1]][2])
+    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,
+                                                               ".",
+                                                               strsplit(out,".",fixed=T)[[1]][2])
     file.rename(out, file) 
   } else file=out
+   
   file.remove(tempReport)
+  
   if (open) system(paste0('open "', file, '"'))
   
 }
 
 
 
-report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",colors=default_colors,format="PDF",latex_engine="pdflatex",open=TRUE,...){
+report.bootstrap.list=function(object,
+                               consensus,
+                               file,
+                               title="<Challenge name>",
+                               colors=default_colors,
+                               format="PDF",
+                               latex_engine="pdflatex",
+                               open=TRUE,...){
 
   # Copy the report file to a temporary directory before processing it, in
   # case we don't have write permissions to the current working dir (which
@@ -53,10 +80,17 @@ report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",co
   else {
     a=strsplit(file,"/")[[1]]
     path=paste0(a[-length(a)],collapse="/")
-    if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
-    else tempReport=file.path(path,paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
+    if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],
+                                                       ".",
+                                                       fixed=T)[[1]][1],".Rmd"))
+    else tempReport=file.path(path,paste0(strsplit(a[length(a)],
+                                                   ".",
+                                                   fixed=T)[[1]][1],".Rmd"))
   } 
-  file.copy(file.path(system.file("appdir", package = "challengeR"), "reportMultiple.Rmd"), tempReport, overwrite = TRUE)
+  file.copy(file.path(system.file("appdir", package = "challengeR"), 
+                      "reportMultiple.Rmd"), 
+            tempReport, 
+            overwrite = TRUE)
   
   # Set up parameters to pass to Rmd document
   params <- list(
@@ -73,18 +107,28 @@ report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",co
   #   params = params,
   #   envir = new.env(parent = globalenv())
   # )
-  out <- render(tempReport, switch(
-    format,
-    PDF = pdf_document(number_sections=T,latex_engine=latex_engine), HTML = html_document(number_sections=T), Word = word_document(df_print="kable")
-  ),params = params,
-  envir = new.env(parent = globalenv()),...
+  out <- render(tempReport, 
+                switch(    
+                  format,
+                  PDF = pdf_document(number_sections=T,
+                                     latex_engine=latex_engine), 
+                  HTML = html_document(number_sections=T), 
+                  Word = word_document(df_print="kable")
+                  ),
+                params = params,
+                envir = new.env(parent = globalenv()),
+                ...
   )
   
   if (!missing(file)){
-    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,".",strsplit(out,".",fixed=T)[[1]][2])
+    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,
+                                                               ".",
+                                                               strsplit(out,".",fixed=T)[[1]][2])
     file.rename(out, file) 
   } else file=out
+  
   file.remove(tempReport)
+  
   if (open) system(paste0('open "', file, '"'))
   
 }
@@ -94,7 +138,13 @@ report.bootstrap.list=function(object,consensus,file,title="<Challenge name>",co
 ########################
 
 
-report.ranked=function(object,file,title="<Challenge name>",colors=default_colors,format="PDF",latex_engine="pdflatex",open=TRUE,...){
+report.ranked=function(object,
+                       file,
+                       title="<Challenge name>",
+                       colors=default_colors,
+                       format="PDF",
+                       latex_engine="pdflatex",
+                       open=TRUE,...){
 
   # Copy the report file to a temporary directory before processing it, in
   # case we don't have write permissions to the current working dir (which
@@ -103,10 +153,18 @@ report.ranked=function(object,file,title="<Challenge name>",colors=default_color
   else {
     a=strsplit(file,"/")[[1]]
     path=paste0(a[-length(a)],collapse="/")
-    if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
-    else tempReport=file.path(path,paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
+    if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],
+                                                       ".",
+                                                       fixed=T)[[1]][1],".Rmd"))
+    else tempReport=file.path(path,
+                              paste0(strsplit(a[length(a)],
+                                              ".",
+                                              fixed=T)[[1]][1],".Rmd"))
   } 
-  file.copy(file.path(system.file("appdir", package = "challengeR"), "reportSingleShort.Rmd"), tempReport, overwrite = TRUE)
+  file.copy(file.path(system.file("appdir", package = "challengeR"), 
+                      "reportSingleShort.Rmd"),
+            tempReport, 
+            overwrite = TRUE)
   
   # Set up parameters to pass to Rmd document
   params <- list(
@@ -119,37 +177,66 @@ report.ranked=function(object,file,title="<Challenge name>",colors=default_color
   # Knit the document, passing in the `params` list, and eval it in a
   # child of the global environment (this isolates the code in the document
   # from the code in this app).
-  out <- render(tempReport, switch(
-    format,
-    PDF = pdf_document(number_sections=T,latex_engine=latex_engine), HTML = html_document(number_sections=T), Word = word_document()
-  ),params = params,
-  envir = new.env(parent = globalenv()),...
+  out <- render(tempReport, 
+                switch(
+                  format,
+                  PDF = pdf_document(number_sections=T,
+                                     latex_engine=latex_engine),
+                  HTML = html_document(number_sections=T),
+                  Word = word_document()
+                  ),
+                params = params,
+                envir = new.env(parent = globalenv()),...
   )
   
   if (!missing(file)){
-    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,".",strsplit(out,".",fixed=T)[[1]][2])
+    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,
+                                                               ".",
+                                                               strsplit(out,".",fixed=T)[[1]][2])
     file.rename(out, file) 
   } else file=out
+  
   file.remove(tempReport)
+  
   if (open) system(paste0('open "', file, '"'))
   
 }
 
 
 
-report.ranked.list=function(object,consensus,file,title="<Challenge name>",colors=default_colors,format="PDF",latex_engine="pdflatex",open=TRUE,...){
+report.ranked.list=function(object,
+                            consensus,
+                            file,
+                            title="<Challenge name>",
+                            colors=default_colors,
+                            format="PDF",
+                            latex_engine="pdflatex",
+                            open=TRUE,
+                            ...){
 
   # Copy the report file to a temporary directory before processing it, in
   # case we don't have write permissions to the current working dir (which
   # can happen when deployed).
-  if (missing(file)) tempReport <- file.path(tempdir(), "report.Rmd")
+  if (missing(file)) tempReport <- file.path(tempdir(), 
+                                             "report.Rmd")
   else {
     a=strsplit(file,"/")[[1]]
-    path=paste0(a[-length(a)],collapse="/")
-    if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
-    else tempReport=file.path(path,paste0(strsplit(a[length(a)],".",fixed=T)[[1]][1],".Rmd"))
+    path=paste0(a[-length(a)],
+                collapse="/")
+    if (path=="") tempReport=file.path(paste0(strsplit(a[length(a)],
+                                                       ".",
+                                                       fixed=T)[[1]][1],
+                                              ".Rmd"))
+    else tempReport=file.path(path,
+                              paste0(strsplit(a[length(a)],
+                                              ".",
+                                              fixed=T)[[1]][1],
+                                     ".Rmd"))
   } 
-  file.copy(file.path(system.file("appdir", package = "challengeR"), "reportMultipleShort.Rmd"), tempReport, overwrite = TRUE)
+  file.copy(file.path(system.file("appdir", package = "challengeR"), 
+                      "reportMultipleShort.Rmd"), 
+            tempReport, 
+            overwrite = TRUE)
   
   # Set up parameters to pass to Rmd document
   params <- list(
@@ -162,18 +249,28 @@ report.ranked.list=function(object,consensus,file,title="<Challenge name>",color
   # Knit the document, passing in the `params` list, and eval it in a
   # child of the global environment (this isolates the code in the document
   # from the code in this app).
-  out <- render(tempReport, switch(
-    format,
-    PDF = pdf_document(number_sections=T,latex_engine=latex_engine), HTML = html_document(number_sections=T), Word = word_document(df_print="kable")
-  ),params = params,
-  envir = new.env(parent = globalenv()),...
-  )
+  out <- render(tempReport, 
+                switch(
+                  format,
+                  PDF = pdf_document(number_sections=T,
+                                     latex_engine=latex_engine), 
+                  HTML = html_document(number_sections=T), 
+                  Word = word_document(df_print="kable")
+                  ),
+                params = params,
+                envir = new.env(parent = globalenv()),
+                ...
+                )
   
   if (!missing(file)){
-    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,".",strsplit(out,".",fixed=T)[[1]][2])
+    if (is.na(strsplit(file,".",fixed=T)[[1]][2])) file=paste0(file,
+                                                               ".",
+                                                               strsplit(out,".",fixed=T)[[1]][2])
     file.rename(out, file) 
   } else file=out
+  
   file.remove(tempReport)
+  
   if (open) system(paste0('open "', file, '"'))
   
 }

@@ -1,14 +1,17 @@
-subset.comparedRanks.list=function(x,tasks,...){
+subset.comparedRanks.list=function(x,
+                                   tasks,...){
   res=x[tasks]
   class(res)="comparedRanks.list"
   res
 }
 
-subset.list=function(x,tasks,...){
+subset.list=function(x,
+                     tasks,...){
   x[tasks]
 }
 
-subset.bootstrap.list=function(x,tasks,...){
+subset.bootstrap.list=function(x,
+                               tasks,...){
   if (!is.null(as.list(match.call(expand.dots = T))$top)) stop("Subset of algorithms only sensible for single task challenges.")
   res=list(bootsrappedRanks=x$bootsrappedRanks[tasks],
            bootsrappedAggregate=x$bootsrappedAggregate[tasks],
@@ -25,7 +28,8 @@ subset.bootstrap.list=function(x,tasks,...){
   
 }
 
-subset.ranked.list=function(x,tasks,...){
+subset.ranked.list=function(x,
+                            tasks,...){
   if (!is.null(as.list(match.call(expand.dots = T))$top)) stop("Subset of algorithms only sensible for single task challenges.")
   res=list(matlist=x$matlist[tasks],
            data=x$data[tasks],
@@ -42,28 +46,31 @@ subset.ranked.list=function(x,tasks,...){
   
 }
 
-subset.aggregated.list=function(x,tasks,...){
+subset.aggregated.list=function(x,
+                                tasks,...){
   call=match.call(expand.dots = T)  
   if (!is.null(as.list(call$top))) stop("Subset of algorithms only sensible for single task challenges.")
   matlist=x$matlist[tasks]
   res=list(matlist=matlist,
            call=list(x$call,call),
            data=x$data,
-       FUN =  . %>% (x$FUN) %>%  (call)
-      )
-
+           FUN =  . %>% (x$FUN) %>%  (call)
+  )
+  
   class(res)=class(x)
   res
  
 }
 
 
-which.top=function(object,top){
+which.top=function(object,
+                   top){
   mat=object$mat[object$mat$rank<=top,]
   rownames(mat)#[order(mat$rank)]
 }
 
-subset.ranked=function(x,top,...){
+subset.ranked=function(x,
+                       top,...){
   objectTop=x
   objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
   objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]
@@ -74,7 +81,8 @@ subset.ranked=function(x,top,...){
 }
 
 
-subset.bootstrap=function(x,top,...){
+subset.bootstrap=function(x,
+                          top,...){
   objectTop=x
   objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
   objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]

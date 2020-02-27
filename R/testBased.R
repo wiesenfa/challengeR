@@ -3,12 +3,14 @@ decision.default <- function(x, ...) stop("not implemented for this class")
 
 decision.challenge=function(x,                             
                             na.treat=NULL, #entweder na.rm, numeric value oder function
-                            alpha=0.05, p.adjust.method="none",
+                            alpha=0.05, 
+                            p.adjust.method="none",
                             alternative="one.sided",
                             test.fun=function(x,y) wilcox.test(x,y,
                                                                alternative = alternative,exact=FALSE,
                                                                paired = TRUE)$p.value,
-                            parallel=FALSE,progress="none",...){
+                            parallel=FALSE,
+                            progress="none",...){
   
   if (is.null(na.treat)){ #na.treat only optional if no missing values in data set
     if (!inherits(x,"list")){
@@ -36,26 +38,28 @@ decision.challenge=function(x,
   
   
   if (inherits(object,"list")){
-    matlist=llply(1:length(object), function(id){ 
-      piece=object[[id]]
-      if (length(unique(piece[[algorithm]]))<=1){
-        warning("only one ", algorithm, " available in element ", names(object)[id])
-      } 
-      if (is.numeric(na.treat)) piece[,value][is.na(piece[,value])]=na.treat
-      else if (is.function(na.treat)) piece[,value][is.na(piece[,value])]=na.treat(piece[,value][is.na(piece[,value])])
-      else if (na.treat=="na.rm") piece=piece[!is.na(piece[,value]),]
-      mat=Decision(piece, value, algorithm, case, alpha, largeBetter,
-                   p.adjust.method=p.adjust.method,
-                   alternative=alternative,
-                   test.fun=test.fun)
-      mat=as.data.frame(mat)
-      mat[is.na(mat)]=0
-      mat=as.matrix(mat)
-      class(mat)=c(class(mat),"challenge.incidence")
-      mat
-      
-    }, 
-    .parallel=parallel,.progress=progress )
+    matlist=llply(1:length(object), 
+                  function(id){ 
+                    piece=object[[id]]
+                    if (length(unique(piece[[algorithm]]))<=1){
+                      warning("only one ", algorithm, " available in element ", names(object)[id])
+                    } 
+                    if (is.numeric(na.treat)) piece[,value][is.na(piece[,value])]=na.treat
+                    else if (is.function(na.treat)) piece[,value][is.na(piece[,value])]=na.treat(piece[,value][is.na(piece[,value])])
+                    else if (na.treat=="na.rm") piece=piece[!is.na(piece[,value]),]
+                    mat=Decision(piece, value, algorithm, case, alpha, largeBetter,
+                                 p.adjust.method=p.adjust.method,
+                                 alternative=alternative,
+                                 test.fun=test.fun)
+                    mat=as.data.frame(mat)
+                    mat[is.na(mat)]=0
+                    mat=as.matrix(mat)
+                    class(mat)=c(class(mat),"challenge.incidence")
+                    mat
+                    
+                  }, 
+                  .parallel=parallel,
+                  .progress=progress )
     names(matlist)=names(object)
     return(matlist)
   } else {
@@ -63,7 +67,12 @@ decision.challenge=function(x,
       warning("only one ", algorithm, " available")
       matlist=(matrix(NA,1,1))
     } else {
-      mat=Decision(object, value, algorithm, case, alpha, largeBetter,
+      mat=Decision(object, 
+                   value, 
+                   algorithm, 
+                   case, 
+                   alpha, 
+                   largeBetter,
                    p.adjust.method=p.adjust.method,
                    alternative=alternative,
                    test.fun=test.fun)
@@ -78,7 +87,11 @@ decision.challenge=function(x,
 }
 
 
-Decision=function(object,value,by,case,alpha, 
+Decision=function(object,
+                  value,
+                  by,
+                  case,
+                  alpha, 
                   largeBetter=FALSE,
                   p.adjust.method="none",
                   alternative="one.sided",
@@ -101,9 +114,12 @@ Decision=function(object,value,by,case,alpha,
       test.fun(dat1,dat2)
       
     })
-    decisions=as.numeric(p.adjust(pvalues,method=p.adjust.method)<= alpha)
+    decisions=as.numeric(p.adjust(pvalues,
+                                  method=p.adjust.method)<= alpha)
     res=cbind(combinations,decisions)
-    reshape2::acast(res,Var2~Var1,value.var="decisions")
+    reshape2::acast(res,
+                    Var2~Var1,
+                    value.var="decisions")
   #  }
 }
 
@@ -117,7 +133,8 @@ Decision=function(object,value,by,case,alpha,
 
 
 
-as.relation.challenge.incidence=function(x, verbose = FALSE, ...) {
+as.relation.challenge.incidence=function(x, 
+                                         verbose = FALSE, ...) {
   r <- relation(incidence = x, ...)
   
   
@@ -168,15 +185,26 @@ function(x) {
 # 
 
 
-significance=function(object,value,algorithm,case,alpha, largeBetter=FALSE,...){
+significance=function(object,
+                      value,
+                      algorithm,
+                      case,
+                      alpha, 
+                      largeBetter=FALSE,...){
   # algorithm=attr(object,"algorithm")
   # case=attr(object,"case")
   # largeBetter=attr(object,"largeBetter") 
   # value=attr(object,"value")
   
-  xx=as.challenge(object,value=value,algorithm=algorithm,case=case,smallBetter = !largeBetter,check=FALSE)
+  xx=as.challenge(object,
+                  value=value,
+                  algorithm=algorithm,
+                  case=case,
+                  smallBetter = !largeBetter,
+                  check=FALSE)
   a=decision.challenge(xx,...)
   prop_significance=  rowSums(a)/(ncol(a)-1)
-  return(data.frame("prop_significance"=prop_significance,row.names = names(prop_significance)))
+  return(data.frame("prop_significance"=prop_significance,
+                    row.names = names(prop_significance)))
 }
 

@@ -97,8 +97,11 @@ aggregate.ranked <-function(x,
   xmean <- aggregate(mat[,what], 
                      by=list(mat[,algorithm]), 
                      FUN=function(z) do.call(FUN,args=list(x=z)))
-  names(xmean)=c(algorithm,paste0(what,"_",
-                                  strsplit(capture.output(suppressWarnings(print(methods(FUN),byclass=T)))[1]," ")[[1]][2]
+  names(xmean)=c(algorithm,paste0(what,
+                                  "_",
+                                  strsplit(capture.output(suppressWarnings(print(methods(FUN),
+                                                                                 byclass=T)))[1],
+                                           " ")[[1]][2]
                                   )
                  )
   rownames(xmean)=xmean[,1]
@@ -181,8 +184,12 @@ aggregate.bootstrap<-function(x,what="metric",FUN=mean,
   
   if (!is.function(FUN)) stop("FUN has to be a function (possibly as character)")
   
-  if (what=="ranks") xmean <- as.data.frame(apply(x$bootsrappedRank,1,FUN=FUN))
-  else xmean <- as.data.frame(apply(x$bootsrappedAggregate,1,FUN=FUN)) 
+  if (what=="ranks") xmean <- as.data.frame(apply(x$bootsrappedRank,
+                                                  1,
+                                                  FUN=FUN))
+  else xmean <- as.data.frame(apply(x$bootsrappedAggregate,
+                                    1,
+                                    FUN=FUN)) 
   names(xmean)=paste0(what,"_",FUNname)
   res=list(FUN = . %>% (call),
            call=list(call),

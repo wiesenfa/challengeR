@@ -3,17 +3,26 @@ podium.default <- function(object, ...) stop("not implemented for this class")
 
 
 podium.ranked=function(object, 
-                        xlab = NULL, ylab = NULL, 
-                        lines.show = TRUE, lines.alpha = 0.2, 
-                        lines.lwd = 1, 
-                        col, lines.col = col, 
-                        dots.pch = 19, dots.cex = 1, 
-                        places.lty = 2, places.col = 1, 
-                        legendfn = function(algs, cols) {
-                          legend("topleft", algs, lwd = 1, col = cols, bg = "white")
-                        }, 
-                        layout.heights=c(1,0.4), 
-                        ...){
+                       xlab = NULL,
+                       ylab = NULL,
+                       lines.show = TRUE,
+                       lines.alpha = 0.2,
+                       lines.lwd = 1,
+                       col,
+                       lines.col = col,
+                       dots.pch = 19,
+                       dots.cex = 1,
+                       places.lty = 2,
+                       places.col = 1,
+                       legendfn = function(algs, cols) {
+                         legend("topleft",
+                                algs,
+                                lwd = 1,
+                                col = cols,
+                                bg = "white")
+                       },
+                       layout.heights = c(1, 0.4),
+                       ...) {
   ordering=t(object$mat[,"rank",drop=F])["rank",]
   if (is.null(xlab)) xlab <- "Podium"
   if (is.null(ylab)) ylab <- "Performance"
@@ -31,27 +40,37 @@ podium.ranked=function(object,
                     na.treat=object$call[[1]][[1]]$na.treat)
   
   podium( dd, 
-               ordering=ordering,
-               xlab = xlab, ylab = ylab, 
-               lines.show = lines.show, lines.alpha = lines.alpha, 
-               lines.lwd = lines.lwd, 
-               col=col, lines.col = lines.col, 
-               dots.pch = dots.pch, dots.cex = dots.cex, 
-               places.lty = places.lty, places.col = places.col, 
-               legendfn = legendfn, 
-               layout.heights=layout.heights, 
-               ...)  
+          ordering=ordering,
+          xlab = xlab, 
+          ylab = ylab, 
+          lines.show = lines.show, 
+          lines.alpha = lines.alpha, 
+          lines.lwd = lines.lwd, 
+          col=col, 
+          lines.col = lines.col, 
+          dots.pch = dots.pch, 
+          dots.cex = dots.cex, 
+          places.lty = places.lty, 
+          places.col = places.col, 
+          legendfn = legendfn, 
+          layout.heights=layout.heights, 
+          ...)  
 }  
   
   
 
 podium.ranked.list=function(object, 
-                            xlab = NULL, ylab = NULL, 
-                            lines.show = TRUE, lines.alpha = 0.2, 
+                            xlab = NULL, 
+                            ylab = NULL, 
+                            lines.show = TRUE, 
+                            lines.alpha = 0.2, 
                             lines.lwd = 1, 
-                            col, lines.col = col, 
-                            dots.pch = 19, dots.cex = 1, 
-                            places.lty = 2, places.col = 1, 
+                            col, 
+                            lines.col = col, 
+                            dots.pch = 19, 
+                            dots.cex = 1, 
+                            places.lty = 2, 
+                            places.col = 1, 
                             legendfn = function(algs, cols) {
                               legend("topleft", algs, lwd = 1, col = cols, bg = "white")
                             }, 
@@ -75,16 +94,20 @@ podium.ranked.list=function(object,
       
       
       podium( dd, 
-                   ordering=ordering,
-                   xlab = xlab, ylab = ylab, 
-                   lines.show = lines.show, lines.alpha = lines.alpha, 
-                   lines.lwd = lines.lwd, 
-                   col=col, lines.col = lines.col, 
-                   dots.pch = dots.pch, dots.cex = dots.cex, 
-                   places.lty = places.lty, places.col = places.col, 
-                   legendfn = legendfn, 
-                   layout.heights=layout.heights, 
-                   ...)  
+              ordering=ordering,
+              xlab = xlab, ylab = ylab, 
+              lines.show = lines.show, 
+              lines.alpha = lines.alpha, 
+              lines.lwd = lines.lwd, 
+              col=col, 
+              lines.col = lines.col, 
+              dots.pch = dots.pch, 
+              dots.cex = dots.cex, 
+              places.lty = places.lty, 
+              places.col = places.col, 
+              legendfn = legendfn, 
+              layout.heights=layout.heights, 
+              ...)  
       title(subt,outer=T,line=-3)    
     }
   

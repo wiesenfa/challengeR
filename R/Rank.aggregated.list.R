@@ -1,5 +1,7 @@
 rank.aggregated.list <-function(object,
-         ties.method="min",largeBetter,...){
+                                ties.method="min",
+                                largeBetter,
+                                ...){
   
   call=match.call(expand.dots = F)
   if (missing(largeBetter)){
@@ -8,37 +10,50 @@ rank.aggregated.list <-function(object,
 
     if (object$isSignificance) largeBetter=TRUE  # smallBetter (largeBetter) already taken care of by one-sided test nature of signficance
   }  
-  call=call("rank.aggregated.list",object=call$object,ties.method=ties.method,largeBetter=largeBetter)#,call$...)
+  
+  call=call("rank.aggregated.list",
+            object=call$object,
+            ties.method=ties.method,
+            largeBetter=largeBetter)
+  
   matlist=object$matlist
 
-  matlist=lapply(matlist, function(y){
-        if (nrow(y)>0) r=rankNA2(y[,ncol(y)],ties.method=ties.method,largeBetter=largeBetter)
-        else r=NULL
-        res=cbind(y,rank=r)
-        res
-  })
+  matlist=lapply(matlist, 
+                 function(y){
+                   if (nrow(y)>0) r=rankNA2(y[,ncol(y)],
+                                            ties.method=ties.method,
+                                            largeBetter=largeBetter)
+                   else r=NULL
+                   res=cbind(y,rank=r)
+                   res
+                   })
   
   res=list(matlist=matlist,
            data=object$data,
-            call=list(object$call,call),
-      FUN =  . %>% (object$FUN) %>%  (call),
-      FUN.list=c(object$FUN.list,"rank")
+           call=list(object$call,call),
+           FUN =  . %>% (object$FUN) %>%  (call),
+           FUN.list=c(object$FUN.list,
+                      "rank")
       )
   class(res)=c("ranked.list",class(res))
-  res
 
   res
 }
 
 rank.aggregatedRanks.list <-function(object,
-         ties.method="min",...){
+                                     ties.method="min",
+                                     ...){
   
   call=match.call(expand.dots = F)  
-  call=call("rank.aggregatedRanks.list",object=call$object,ties.method=ties.method)#,call$...)
+  call=call("rank.aggregatedRanks.list",
+            object=call$object,
+            ties.method=ties.method)
   matlist=object$matlist
 
   matlist=lapply(matlist, function(y){
-        if (nrow(y)>0) r=rankNA2(y[,ncol(y)],ties.method=ties.method,largeBetter=FALSE)
+        if (nrow(y)>0) r=rankNA2(y[,ncol(y)],
+                                 ties.method=ties.method,
+                                 largeBetter=FALSE)
         else r=NULL
         res=cbind(y,rank=r)
         res
@@ -46,10 +61,11 @@ rank.aggregatedRanks.list <-function(object,
   
   res=list(matlist=matlist,
            data=object$data,
-            call=list(object$call,call),
-      FUN =  . %>% (object$FUN) %>%  (call),
-      FUN.list=c(object$FUN.list,"rank")
-      )
+           call=list(object$call,call),
+           FUN =  . %>% (object$FUN) %>%  (call),
+           FUN.list=c(object$FUN.list,
+                      "rank")
+           )
   class(res)=c("ranked.list",class(res))
   res
 

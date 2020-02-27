@@ -1,17 +1,24 @@
 relation_dissimilarity <- function(x,...) UseMethod("relation_dissimilarity")
 relation_dissimilarity.default <- function(x, ...) relations::relation_dissimilarity(x,  ...) 
 
-relation_dissimilarity.ranked.list=function(x,method=kendall,...){  #method in kendall, spearmansFootrule, spearmansWeightedFootrule or any other function with two arguments
+relation_dissimilarity.ranked.list=function(x,
+                                            method=kendall,
+                                            ...){  #method in kendall, spearmansFootrule, spearmansWeightedFootrule or any other function with two arguments
   tt=names(x$matlist)
   n.tt=length(tt)
   tau=matrix(NA,n.tt,n.tt)
   colnames(tau)=rownames(tau)=tt
-  aa=melt(x,measure.vars="rank")
+  aa=melt(x,
+          measure.vars="rank")
   for (i in 1:n.tt){
     for (j in 1:n.tt){
-      temp=aa%>%filter(L1==as.character(tt[i]))%>% 
-        right_join(aa%>%filter(L1==as.character(tt[j])),by="algorithm")
-      tau[i,j]=method(temp$value.x,temp$value.y) 
+      temp=aa%>%
+        filter(L1==as.character(tt[i]))%>% 
+        right_join(aa%>%
+                     filter(L1==as.character(tt[j])),
+                   by="algorithm")
+      tau[i,j]=method(temp$value.x,
+                      temp$value.y) 
     }
   }
   
