@@ -52,10 +52,7 @@ methodsplot.challenge=function(x,
       } 
     }
   }
-  
-  
-  
-  
+
   if (inherits(x,"list"))  {
     a=lapply(methods,function(fun) fun(x))  
     dat=melt(a,measure.vars="rank")
@@ -218,7 +215,8 @@ methodsplot.ranked=function(x,
 lineplot <- function(x,...) UseMethod("lineplot")
 lineplot.default <- function(x, ...) stop("not implemented for this class")
 
-lineplot.challenge=function(x, ordering,...){
+lineplot.challenge=function(x, 
+                            ordering,...){
   if (inherits(x,"list"))  {
     dat=melt(x,measure.vars="rank")
     colnames(dat)[4]=c("task")  

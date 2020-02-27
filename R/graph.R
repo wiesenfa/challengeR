@@ -46,7 +46,9 @@ network.ranked.list=function(x,
 network.dist=
   function (x, rate=1.05, #ndists.show = length(sort(unique(x))), 
             edge.col = gray(0.7), 
-            edge.lwd = 1, node.fill = NULL, ...) {
+            edge.lwd = 1, 
+            node.fill = NULL, 
+            ...) {
     nn=length(unique(c(x))) # ==max(rm) number of different distance levels
     if (is.function(edge.col)) edge.col=edge.col(nn)
     data <- as.matrix(x)
@@ -58,7 +60,7 @@ network.dist=
     ndshow <- length(dshow)
     edge.col <- rep(edge.col, ndshow)
     edge.lwd <- rep(edge.lwd, ndshow)
-    edge.len <- ceiling((rate)^dists)# verwende distance exponentiell
+    edge.len <- ceiling((rate)^dists)# exponential distance
     #   edge.len <- ceiling((1.2)^(seq_len(ndists) - 1)) #verwende ordnung
     #   edge.len <- ceiling((1.05)^(dists-min(dists)+1))# verwende distance mit min==1
     edge.weight <- rev(dists) #rev(seq_len(ndists))
@@ -87,7 +89,9 @@ network.dist=
     if (!is.null(node.fill)) 
       nodeAttrs$fillcolor[nodes] <- node.fill
     
-    out= list(graph=graph,nodeAttrs = nodeAttrs, edgeAttrs = edgeAttrs,
+    out= list(graph=graph,
+              nodeAttrs = nodeAttrs, 
+              edgeAttrs = edgeAttrs,
               tasknames=nodes,
               leg.col=node.fill[unique(names(node.fill))]
     )
@@ -125,7 +129,12 @@ plot.network=function(x,
     attrs$node$height <- max(sapply(x$tasknames,nchar))/2
   } else attrs$node$height=height
   
-  ag <- Rgraphviz::agopen(graph, "", layoutType = layoutType, attrs = attrs, nodeAttrs = nodeAttrs, edgeAttrs = edgeAttrs)
+  ag <- Rgraphviz::agopen(graph, 
+                          "", 
+                          layoutType = layoutType, 
+                          attrs = attrs, 
+                          nodeAttrs = nodeAttrs, 
+                          edgeAttrs = edgeAttrs)
   
     plot.new()
     l=legend("topright",  

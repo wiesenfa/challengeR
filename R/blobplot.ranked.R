@@ -1,7 +1,12 @@
 blobplot <- function(x,...) UseMethod("blobplot")
 blobplot.default <- function(x, ...) stop("not implemented for this class")
 
-blobplot.ranked=function(x,ties.method="min",probs=c(.025,.975),max_size=6,shape=4,...){ 
+blobplot.ranked=function(x,
+                         ties.method="min",
+                         probs=c(.025,.975),
+                         max_size=6,
+                         shape=4,
+                         ...){ 
   ordering=rownames(x$mat)[order(x$mat$rank)]
   xx=x$data  
   ranking=xx%>%rank( ties.method = ties.method )

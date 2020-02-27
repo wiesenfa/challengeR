@@ -60,12 +60,20 @@ significanceMap.data.frame=function(object,
   inc=relation_incidence(relation_object)
   
   if (order){
-    scores=apply(inc,1,function(x) sum(x==0)-1)
-    scores2=apply(inc,2,function(x) sum(x==1))[names(scores)]#+1-nrow(inc))
-    scores=data.frame(algorithm=names(scores),score=scores,score2=scores2,stringsAsFactors =F)
-    scores=right_join(scores,object,by="algorithm")
+    scores=apply(inc,1,
+                 function(x) sum(x==0)-1)
+    scores2=apply(inc,2,
+                  function(x) sum(x==1))[names(scores)]#+1-nrow(inc))
+    scores=data.frame(algorithm=names(scores),
+                      score=scores,
+                      score2=scores2,
+                      stringsAsFactors =F)
+    scores=right_join(scores,
+                      object,
+                      by="algorithm")
     
-    ordering= (scores[order(scores$score,scores$score2,
+    ordering= (scores[order(scores$score,
+                            scores$score2,
                             scores$rank),"algorithm"])
     scores=scores[,1:3]
   } else ordering=  names(sort(t(object[,"rank",drop=F])["rank",]))
@@ -76,17 +84,26 @@ significanceMap.data.frame=function(object,
   colnames(incidence.mat)=c("algorithm","notsigPair",     "decision")
   incidence.mat$algorithm=as.character(incidence.mat$algorithm)
   incidence.mat$notsigPair=as.character(incidence.mat$notsigPair)
-  incidence.mat=right_join(incidence.mat,object,by="algorithm")
-  if (order) incidence.mat=right_join(incidence.mat,scores,by="algorithm")
+  incidence.mat=right_join(incidence.mat,
+                           object,
+                           by="algorithm")
+  if (order) incidence.mat=right_join(incidence.mat,
+                                      scores,
+                                      by="algorithm")
   
-  incidence.mat=incidence.mat%>%mutate(algorithm=factor(.data$algorithm, levels=ordering),
-                                       notsigPair=factor(.data$notsigPair, levels=ordering))
+  incidence.mat=incidence.mat%>%mutate(algorithm=factor(.data$algorithm, 
+                                                        levels=ordering),
+                                       notsigPair=factor(.data$notsigPair, 
+                                                         levels=ordering))
   
   incidence.mat$decision=as.factor(incidence.mat$decision)
 
   p=ggplot(incidence.mat) +
-    geom_raster(aes(algorithm,notsigPair,fill=decision),...)+
-    geom_raster(aes(algorithm,algorithm),fill="white")+
+    geom_raster(aes(algorithm,
+                    notsigPair,
+                    fill=decision),...)+
+    geom_raster(aes(algorithm,algorithm),
+                fill="white")+
     geom_abline(slope=1) +    
     coord_cartesian(clip = 'off')+
     theme(aspect.ratio=1,
@@ -108,10 +125,17 @@ significanceMap.data.frame=function(object,
   #p=p+theme(panel.background = element_rect(fill = NA),panel.ontop=TRUE) #-> grid will be on top of diagonal
   #fix:
     f=ggplot_build(p)
-    p= p + geom_vline(xintercept=f$layout$panel_params[[1]]$x.major_source, linetype=lt,color=th_get$panel.grid$colour, size=rel(th_get$panel.grid.major$size))+
-      geom_hline(yintercept=f$layout$panel_params[[1]]$y.major_source, linetype=lt,color=th_get$panel.grid$colour, size=rel(th_get$panel.grid.major$size))+
+    p= p + geom_vline(xintercept=f$layout$panel_params[[1]]$x.major_source, 
+                      linetype=lt,
+                      color=th_get$panel.grid$colour, 
+                      size=rel(th_get$panel.grid.major$size))+
+      geom_hline(yintercept=f$layout$panel_params[[1]]$y.major_source, 
+                 linetype=lt,
+                 color=th_get$panel.grid$colour, 
+                 size=rel(th_get$panel.grid.major$size))+
       geom_abline(slope=1)+
-      geom_text(aes(x=algorithm,y=fixy,label=rank),nudge_y=.5, 
+      geom_text(aes(x=algorithm,y=fixy,label=rank),
+                nudge_y=.5, 
                 vjust = 0,
                 size=size.rank,
                 fontface="plain",family="sans"
@@ -119,12 +143,20 @@ significanceMap.data.frame=function(object,
 
   
   if (order) p=  p+
-      geom_text(aes(x=algorithm,y=fixy,label=score),nudge_y=0, # Set the position of the text to always be at '14.25'
+      geom_text(aes(x=algorithm,y=fixy,label=score),
+                nudge_y=0, 
                 vjust = 0, size=size.rank,
                 fontface="plain",family="sans") + 
-      annotate("text",x=0,y=fixy+.5,  vjust = 0, size=size.rank, 
-               fontface="plain",family="sans",label="original")+
-      annotate("text",x=0,y=fixy,  vjust = 0, size=size.rank,
+      annotate("text",
+               x=0,y=fixy+.5,  
+               vjust = 0, 
+               size=size.rank, 
+               fontface="plain",
+               family="sans",
+               label="original")+
+      annotate("text",x=0,y=fixy,  
+               vjust = 0, 
+               size=size.rank,
                fontface="plain",family="sans",label="new")
   
   return(p)
