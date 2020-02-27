@@ -1,3 +1,7 @@
+bootstrap <- function(object,...) UseMethod("bootstrap")
+bootstrap.default <- function(object, ...) stop("not implemented for this class")
+
+
 bootstrap.ranked=function(object,
                           nboot, parallel=FALSE,progress="text",...){
   data=object$data
@@ -112,39 +116,22 @@ object$FUN(bootDatalist)$mat
 
 
   final=list(bootsrappedRanks=rankmatlist,bootsrappedAggregate=aggmatlist, data=object$data,matlist=tidy.matlist,FUN=object$FUN,FUN.list=object$FUN.list)
-#  c(res,list(winnerFrequencies=winnerFrequencies(res)))
   class(final)=c("bootstrap.list")
   final
 }
 
 
-# rankFrequencies.bootstrap=function(object, who){
-#   if (is.data.frame(who)) who=rownames(who)
-#   
-#   if (!inherits(object,"list")){
-#     if (length(who)==1){
-#       res=table(t(object$bootsrappedRanks[rownames(object$bootsrappedRanks)==who,]))
-#       cat("\n",who,"\n")
-#       print(res)
-#     } else {
-#       res=lapply(who, function(w){
-#         rr=table(t(object$bootsrappedRanks[rownames(object$bootsrappedRanks)==w,]))
-#         cat(w,"\n")
-#         print(rr)
-#         cat("\n")
-#         rr
-#       })
-#     }
-#   } else {
-#     
-#   }
-#   res=c(res=res,object)
-# 
-#     
-#   }
-#    # class(res)="bootstrapResults"
-#   invisible(res)
-# }
+
+
+
+
+####################################################################################################
+# deprecate following functions?
+
+
+
+rankFrequencies <- function(object,...) UseMethod("rankFrequencies")
+rankFrequencies.default <- function(object, ...) stop("not implemented for this class")
 
 rankFrequencies.bootstrap=function(object, who,...){
   if (is.data.frame(who)) who=rownames(who)
@@ -162,7 +149,6 @@ rankFrequencies.bootstrap=function(object, who,...){
     })
   }
   res=c(list(rankFrequencies=res),object)
-  # class(res)="bootstrapResults"
   invisible(res)
 }
 
@@ -185,12 +171,14 @@ rankFrequencies.bootstrap.list=function(object, who,...){
     res
   })
   res=c(list(rankFrequencies=res),object)
-  # class(res)="bootstrapResults"
   invisible(res)
 }
 
 
 
+
+winnerFrequencies <- function(object,...) UseMethod("winnerFrequencies")
+winnerFrequencies.default <- function(object, ...) stop("not implemented for this class")
 
 # Achtung: bester rank muss ==1 sein und nicht z.B. 1.5
 winnerFrequencies.bootstrap=function(object,...){

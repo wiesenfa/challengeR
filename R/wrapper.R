@@ -17,7 +17,7 @@ rankThenAggregate=function(object,
   object %>% 
         rank(ties.method = ties.method)%>% 
           aggregate(FUN=FUN) %>% 
-          rank(ties.method = ties.method) #small rank is always best, i.e. inverseOrder always FALSE
+          rank(ties.method = ties.method) #small rank is always best, i.e. largeBetter always FALSE
 }
 
 

@@ -5,6 +5,9 @@ spearmansFootrule=function(a,b)  sum(abs(a-b))
 # SpearmansWeightedFootrule=function(a,b)  sum(abs(match(a, b) - a)/pmin(a,b))
 
 
+compareRanks <- function(x,...) UseMethod("compareRanks")
+compareRanks.default <- function(x, ...) stop("not implemented for this class")
+
 compareRanks.ranked <-
 function(x,y,FUN=kendall,...){
     mat=merge(x$mat,y$mat,by="row.names",suffixes = c(".1",".2"),...)

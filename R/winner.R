@@ -1,3 +1,6 @@
+winner <- function(x,...) UseMethod("winner")
+winner.default <- function(x, ...) stop("not implemented for this class")
+
 winner.ranked <-winner.bootstrap <-function(x,...){
   x=x$mat
  #   res=x[x$rank==1,]

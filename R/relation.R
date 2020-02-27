@@ -1,3 +1,6 @@
+relation_dissimilarity <- function(x,...) UseMethod("relation_dissimilarity")
+relation_dissimilarity.default <- function(x, ...) relations::relation_dissimilarity(x,  ...) 
+
 relation_dissimilarity.ranked.list=function(x,method=kendall,...){  #method in kendall, spearmansFootrule, spearmansWeightedFootrule or any other function with two arguments
   tt=names(x$matlist)
   n.tt=length(tt)

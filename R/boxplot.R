@@ -1,97 +1,54 @@
 
 
-boxplot.ranked=function(x,color="blue",jitter.width=0.25,...){
+boxplot.ranked=function(x,
+                        color="blue",
+                        jitter.width=0.25,...){
   algo=attr(x$data,"algorithm")
   value=attr(x$data,"value")
   ranking=x
   x=x$data
   
-  x[[algo]]=factor(x[[algo]],levels=rownames(ranking$mat[order(ranking$mat$rank),]))
-  ggplot(aes_string(algo,value),data=x)+geom_jitter(position=position_jitter(width=jitter.width, height=0),color=color,...)+geom_boxplot(outlier.shape = NA,fill=NA)+ theme(axis.text.x=element_text(angle = -90, hjust = 0))#+scale_y_continuous(limits=c(0,1))
+  x[[algo]]=factor(x[[algo]],
+                   levels=rownames(ranking$mat[order(ranking$mat$rank),]))
+  ggplot(aes_string(algo,value),data=x)+
+    geom_jitter(position=position_jitter(width=jitter.width, height=0),color=color,...)+
+    geom_boxplot(outlier.shape = NA,fill=NA)+ 
+    theme(axis.text.x=element_text(angle = -90, hjust = 0))
   
 }
 
 
-boxplot.ranked.list=function(x,color="blue",jitter.width=0.25,...){
+boxplot.ranked.list=function(x,
+                             color="blue",
+                             jitter.width=0.25,...){
   algo=attr(x$data,"algorithm")
   value=attr(x$data,"value")
   ranking=x
   x=x$data
   
   for (i in names(x)) {
-    x[[i]][[algo]]=factor(x[[i]][[algo]], levels=rownames(ranking$matlist[[i]][order(ranking$matlist[[i]]$rank),]))
+    x[[i]][[algo]]=factor(x[[i]][[algo]], 
+                          levels=rownames(ranking$matlist[[i]][order(ranking$matlist[[i]]$rank),]))
   }
   
   a=lapply(1:length(x),function(id){
-    ggplot(aes_string(algo,value),data=x[[id]])+geom_jitter(position=position_jitter(width=jitter.width, height=0),color=color,...)+geom_boxplot(outlier.shape = NA,fill=NA)+ggtitle(names(x)[id]) + theme(axis.text.x=element_text(angle = -90, hjust = 0))#+scale_y_continuous(limits=c(0,1))
-    #  algos=unique(x[[id]][[attr(terms.formula(metric_value~algorithm_id),"term.labels")]])
-    # if (length(algos)==1) title(xlab=algos)
-    
+    ggplot(aes_string(algo,value),data=x[[id]])+
+      geom_jitter(position=position_jitter(width=jitter.width, height=0),
+                  color=color,...)+
+      geom_boxplot(outlier.shape = NA,fill=NA)+
+      ggtitle(names(x)[id]) + 
+      theme(axis.text.x=element_text(angle = -90, hjust = 0))
+ 
   })
   a
 }
 
 
 
-# deprecate?
-  boxplot.challenge=function(x,ranking.fun,color="blue",jitter.width=0.2,...){
-    algo=attr(x,"algorithm")
-    value=attr(x,"value")
-    if (!is.null(ranking.fun))    ranking=x%>%ranking.fun
-    
-    if (inherits(x,"data.frame")){
-      if (!is.null(ranking.fun)) x[[algo]]=factor(x[[algo]],levels=rownames(ranking$mat[order(ranking$mat$rank),]))
-      a<-ggBoxplot.data.frame(x,algo,value,color=color,jitter.width=jitter.width,...)
-    }  else {
-      if (!is.null(ranking.fun)){
-        for (i in names(x)) {
-          x[[i]][[algo]]=factor(x[[i]][[algo]], levels=rownames(ranking$matlist[[i]][order(ranking$matlist[[i]]$rank),]))
-        }
-      }
-      a<-ggBoxplot.list(x,algo,value,color=color,jitter.width=jitter.width,...)
-      
-    }
-    a
-  }
-  
-  ggBoxplot.data.frame=function(x,xx,yy,color="blue",jitter.width=0.2,...){ #formula=metric_value~algorithm_id
-    a=ggplot(aes_string(xx,yy),data=x)+geom_jitter(position=position_jitter(width=jitter.width, height=0),color=color,...)+geom_boxplot(outlier.shape = NA,fill=NA)+ theme(axis.text.x=element_text(angle = -90, hjust = 0))#+scale_y_continuous(limits=c(0,1))
-    a
-    
-  }
-  
-  ggBoxplot.list=function(x,xx,yy,color="blue",jitter.width=0.2,...){ #formula=metric_value~algorithm_id
-    
-    # dat=melt(x,id.vars=c(algo,attr(x,"by")))
-    # a=ggplot(aes_string(algo,value),data=dat)+geom_boxplot(outlier.shape = NA)+geom_jitter(position=position_jitter(width=0.2, height=0),color="blue",size=.3)+ theme(axis.text.x=element_text(angle = -90, hjust = 0))+facet_wrap((attr(x,"by")))
-    
-    a=lapply(1:length(x),function(id){
-      ggplot(aes_string(xx,yy),data=x[[id]])+geom_jitter(position=position_jitter(width=jitter.width, height=0),color=color,...)+geom_boxplot(outlier.shape = NA,fill=NA)+ggtitle(names(x)[id]) + theme(axis.text.x=element_text(angle = -90, hjust = 0))#+scale_y_continuous(limits=c(0,1))
-      #  algos=unique(x[[id]][[attr(terms.formula(metric_value~algorithm_id),"term.labels")]])
-      # if (length(algos)==1) title(xlab=algos)
-      
-    })
-    a
-  }
-    
-  
-  Boxplot.list=function(x,formula,...){ #formula=metric_value~algorithm_id
-    a=lapply(1:length(x),function(id){
-      (boxplot(formula,data=x[[id]],ylim=c(0,1),las=2, 
-               outline=FALSE,main=names(x)[id],
-                ...))
-      (stripchart(formula, data = x[[id]], 
-                  vertical = TRUE, method = "jitter", 
-                  pch = 21, col = "blue", add=TRUE,...) )
-      algos=unique(x[[id]][[attr(terms.formula(metric_value~algorithm_id),"term.labels")]])
-      if (length(algos)==1) title(xlab=algos)
-      
-    })
-    
-  }
+
   
 
-Boxplot.comparedRanks.list=function(x,...){
+boxplot.comparedRanks.list=function(x,...){
   tau=sapply(x,function(z) z$tau)
   boxplot(tau,ylim=c(0,1.0),las=2, outline=FALSE, 
           ylab="Kendall's tau",...)
@@ -102,7 +59,7 @@ Boxplot.comparedRanks.list=function(x,...){
 }
 
 
-Boxplot.bootstrap.list=function(x,...){
+boxplot.bootstrap.list=function(x,...){
   winner.noboot=winner.ranked.list(x) 
   x2=winnerFrequencies(x)
   n.bootstraps= ncol(x$bootsrappedRanks[[1]])
@@ -124,7 +81,7 @@ Boxplot.bootstrap.list=function(x,...){
 
 
 # winnerFrequencies(bb)
- # winner.datax=winner(datax,InverseOrder=TRUE) #no bootstrap
+ # winner.datax=winner(datax, largeBetter=TRUE) #no bootstrap
  #  x2=numberRank1(datax,originalranking.datax,datax_boot)
  #  boot_W_1=x2[which(x2$algorithm_id==winner.datax),3]
  #  boot_NW_1=sum(x2[-which(x2$algorithm_id==winner.datax),3]>9)

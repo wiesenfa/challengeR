@@ -73,18 +73,34 @@ This document presents a systematic report on a benchmark study. Input data comp
 
 Analysis based on `r nrow(challenge_single)/length(unique(challenge_single[[attr(challenge_single,"algorithm")]]))` test cases which included `r sum(is.na(challenge_single[[attr(challenge_single,"value")]]))` missing values.
 
+```{r,results='asis'}
+if (!is.null(object$fulldata)) {
+  cat("Only top ",
+      length(levels(object$data[[attr(object$data,"algorithm")]])), 
+      " out of ", 
+      length(levels(object$fulldata[[attr(object$data,"algorithm")]])), 
+      " algorithms visualized.\n")
+}
+```
+
+
+
 Algorithms are ordered according to the following chosen ranking scheme:
 
 ```{r,results='asis'}
 a=(  lapply(object$FUN.list,function(x) {
- #    if (!is.character(x)) return(paste0("Aggregate using function ",paste(capture.output(x),collapse=" ")))
-     if (!is.character(x)) return(paste0("aggregate using function ",paste(gsub("UseMethod","",deparse(functionBody(x))),collapse=" ")))
- #    if (!is.character(x)) return(paste0("Aggregate using function ",paste(gsub("UseMethod","",deparse(functionBody(x))),collapse=" ")))
-     else if (x=="rank") return(x)
-     else return(paste0("aggregate using function ",x))
-   }))
-#cat("1.",paste(a,collapse="\n2. "))
+               if (!is.character(x)) return(paste0("aggregate using function ",
+                                                   paste(gsub("UseMethod",
+                                                              "",
+                                                              deparse(functionBody(x))),
+                                                         collapse=" "))
+                                            )
+               else if (x=="rank") return(x)
+               else return(paste0("aggregate using function ",x))
+       })
+     )
 cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
+
 
 if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal to the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
 ```
@@ -92,7 +108,6 @@ if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") 
 Ranking list:
 
 ```{r}
-#knitr::kable(object$mat[order(object$mat$rank),])
 print(object)
 ```
 
@@ -123,48 +138,48 @@ boxplot(object,size=.8)+xlab("Algorithm")+ylab("Metric value")
 
 ```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
 plot.new()
-algs=levels(challenge_single[[attr(challenge_single,"algorithm")]])#rownames(boot_object$matlist[[1]])
-l=legend("topright", paste0(1:length(algs),": ",algs), lwd = 1, cex=1.4,seg.len=1.1,title="Rank: Alg.",plot=F) 
+algs=levels(challenge_single[[attr(challenge_single,"algorithm")]])
+
+l=legend("topright", 
+         paste0(1:length(algs),": ",algs), 
+         lwd = 1, cex=1.4,seg.len=1.1,
+         title="Rank: Alg.",
+         plot=F) 
 w <- grconvertX(l$rect$w, to='ndc') - grconvertX(0, to='ndc')
 h<- grconvertY(l$rect$h, to='ndc') - grconvertY(0, to='ndc')
-addy=max(grconvertY(l$rect$h,"user","inches"),6)#+5
+addy=max(grconvertY(l$rect$h,"user","inches"),6)
 ```
 
 
 ```{r podium,eval=T,fig.width=12, fig.height=addy}
-# gg_color_hue <- function(n) {
-#   hues = seq(15, 375, length = n + 1)
-#   hcl(h = hues, l = 65, c = 100)[1:n]
-# }
-# 
-# cols = gg_color_hue(n)
-
-# par(mar=c(5, 4, 4, 2) + 0.1,cex.axis=1.5,cex.lab=1.5,cex.main=1.7)
-# op <-par(mar=par()$mar+c(-.5,0.5,-3.5,4.5))
-
-#print(par()$pin)
-op<-par(pin=c(par()$pin[1],6),omd=c(0, 1-w, 0, 1),mar=c(par('mar')[1:3], 0)+c(-.5,0.5,-3.3,0),cex.axis=1.5,cex.lab=1.5,cex.main=1.7)#,mar=c(5, 4, 4, 2) + 0.1)
+op<-par(pin=c(par()$pin[1],6),
+        omd=c(0, 1-w, 0, 1),
+        mar=c(par('mar')[1:3], 0)+c(-.5,0.5,-3.3,0),
+        cex.axis=1.5,
+        cex.lab=1.5,
+        cex.main=1.7)
 oh=grconvertY(l$rect$h,"user","lines")-grconvertY(6,"inches","lines")
-#print(oh)
-#c(bottom, left, top, right)
-#oh=grconvertY(5,"inches","lines")
 if (oh>0) par(oma=c(oh,0,0,0))
-#print(par()$pin)
 
-  set.seed(38)
- podium(object, 
-        col=cols,
-        lines.show = T,lines.alpha = .4,
-        dots.cex=.9,ylab="Metric value",layout.heights=c(1,.35),
-          legendfn = function(algs, cols) {
-            #title(single_subtask); 
- #           legend("topright", inset=c(-0.12,0), xpd=TRUE, algs, lwd = 1, col =  cols, bg = NA,cex=1.4,seg.len=1.1) 
-         legend(par('usr')[2], par('usr')[4], xpd=NA, paste0(1:length(algs),": ",algs), lwd = 1, col =  cols, bg = NA,cex=1.4,seg.len=1.1,title="Rank: Alg.") 
-            }
-          )
+set.seed(38)
+podium(object, 
+       col=cols,
+       lines.show = T,lines.alpha = .4,
+       dots.cex=.9,ylab="Metric value",layout.heights=c(1,.35),
+       legendfn = function(algs, cols) {
+         legend(par('usr')[2], 
+                par('usr')[4], 
+                xpd=NA, 
+                paste0(1:length(algs),": ",algs), 
+                lwd = 1, 
+                col =  cols,
+                bg = NA,
+                cex=1.4,
+                seg.len=1.1,
+                title="Rank: Alg.") 
+        }
+        )
 par(op)
- 
-  
 ```
 
 
@@ -174,9 +189,7 @@ par(op)
 \bigskip
 
 ```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
-#
-rankingHeatmap(object,fontsize=25, vp =grid::viewport(width=1, height=.95))
-#
+rankingHeatmap(object)
 ```
 
 
@@ -196,17 +209,8 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 \bigskip
 
 ```{r significancemap,fig.width=7, fig.height=6}
-# a=challenge_single%>%decision.challenge(alpha=0.05,p.adjust.method="holm")
-# relensemble= as.relation(a)
-# 
-# print(significanceMap(rankedMat=boot_object$mat,
-#                  relation_object=relensemble
-#                  )+ theme(aspect.ratio=1)
-#         )
-
 print(significanceMap(object,alpha=0.05,p.adjust.method="holm")
-        )#+ggtitle(Task))#+scale_color_manual(name="decision",values=c("white","lightblue")))
-
+        )
 ```
 
 
@@ -227,7 +231,6 @@ print(significanceMap(object,alpha=0.05,p.adjust.method="holm")
 \bigskip
 
 ```{r lineplot,fig.width=7,fig.height = 5}
-#methodsplot(challenge_single, ordering =ordering )+scale_color_manual(values=cols)
 methodsplot(object )+scale_color_manual(values=cols)
 ```
 

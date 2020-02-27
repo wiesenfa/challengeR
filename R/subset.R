@@ -67,6 +67,8 @@ subset.ranked=function(x,top,...){
   objectTop=x
   objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
   objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]
+  objectTop$data[[attr(objectTop$data,"algorithm")]]=droplevels(objectTop$data[[attr(objectTop$data,"algorithm")]])
+  
   objectTop$fulldata=x$data
   objectTop
 }
@@ -76,6 +78,7 @@ subset.bootstrap=function(x,top,...){
   objectTop=x
   objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
   objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]
+  objectTop$data[[attr(objectTop$data,"algorithm")]]=droplevels(objectTop$data[[attr(objectTop$data,"algorithm")]])
   objectTop$fulldata=x$data
   objectTop$bootsrappedRanks=objectTop$bootsrappedRanks[rownames(objectTop$mat),]
   objectTop$bootsrappedAggregate=objectTop$bootsrappedAggregate[rownames(objectTop$mat),]

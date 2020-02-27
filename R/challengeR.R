@@ -1,9 +1,25 @@
+#' Title
+#'
+#' @param object 
+#' @param value 
+#' @param algorithm 
+#' @param case 
+#' @param by 
+#' @param annotator 
+#' @param smallBetter 
+#' @param na.treat 
+#' @param check 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 as.challenge=function(object, value, algorithm ,
                       case=NULL,
                       by=NULL, 
                       annotator=NULL, 
                       smallBetter=FALSE,
-                      na.treat, # optional
+                      na.treat=NULL, # optional
                       check=TRUE){
 
   object=object[,c(value,algorithm,case,by,annotator)]
@@ -29,7 +45,7 @@ as.challenge=function(object, value, algorithm ,
         
       }
         
-      if (!missing(na.treat)){
+      if (!is.null(na.treat)){
         if (is.numeric(na.treat)) object[,value][is.na(object[,value])]=na.treat
         else if (is.function(na.treat)) object[,value][is.na(object[,value])]=na.treat(object[,value][is.na(object[,value])])
         else if (na.treat=="na.rm") object=object[!is.na(object[,value]),]
@@ -49,7 +65,7 @@ as.challenge=function(object, value, algorithm ,
             if (!all(all1)) stop ("Case(s) (", paste(names(which(all1!=1)),collapse=", "), ") appear(s) more than once for the same algorithm in task ", task)
            }
         
-          if (!missing(na.treat)){
+          if (!is.null(na.treat)){
             if (is.numeric(na.treat)) object[[task]][,value][is.na(object[[task]][,value])]=na.treat
             else if (is.function(na.treat)) object[[task]][,value][is.na(object[[task]][,value])]=na.treat(object[[task]][,value][is.na(object[[task]][,value])])
             else if (na.treat=="na.rm") object[[task]]=object[[task]][!is.na(object[[task]][,value]),]
@@ -66,7 +82,7 @@ as.challenge=function(object, value, algorithm ,
   attr(object,"case")=case
   attr(object,"annotator")=annotator
   attr(object,"by")=by 
-  attr(object,"inverseOrder")=!smallBetter
+  attr(object,"largeBetter")=!smallBetter
   attr(object,"check")=check
   class(object)=c("challenge",class(object))
   object

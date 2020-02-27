@@ -1,121 +1,86 @@
-rankingHeatmap.challenge=function (x, ranking.fun=function(x)  aggregateThenRank(x,FUN,ties.method = "min"),col, breaks,vp = viewport(),...) {
-  ranking=x%>%ranking.fun
-  if (inherits(ranking,"ranked.list")){
-    ranking_list=lapply(ranking$matlist, function(a) t(a[,"rank",drop=F])["rank",])
-    for (subt in names(x)){
-      rankingorder <- order(ranking_list[[subt]])
-      inverseOrder=attributes(x)$inverseOrder
-      
-      ncases=length(unique(x[[subt]][[attr(x,"case")]]))
-      if (missing(col)){
-        col=viridisLite::viridis(ncases+1,direction=-1)
-        breaks=seq(-.5,ncases+.5,length.out=ncases+2)
-      } #else breaks=NA
-      
-      dd=as.challenge(x[[subt]],value=attr(x,"value"), algorithm=attr(x,"algorithm") ,case=attr(x,"case"),
-                      annotator = attr(x,"annotator"),
-                      smallBetter = !attr(x,"inverseOrder"))
-      xx=as.warehouse.challenge(dd)
-      m <- do.call(cbind, split(xx$value, xx$algorithms))
-      
-      nalgs <- ncol(m)
-      algs <- colnames(m)
-      ranks <- t(apply((-1)^(inverseOrder)*m, 1, rank, ties.method = "random"))
-      nranks <- apply(ranks, 2, function(y) table(factor(y, levels = 1:nalgs)))
-      
-      myplot <-pheatmap((nranks[, names(ranking_list[[subt]])[rankingorder]]),cluster_rows = F,cluster_cols = F,ylab="Rank",color =col,breaks=breaks,silent=T,main=subt,...)
-      grid.newpage()
-      pushViewport(vp)
-      grid.draw(myplot$gtable)
-      
-    }
-      
-  } else {
-    
-    ranking=t(ranking$mat[,"rank",drop=F])["rank",]
-    rankingorder <- order(ranking)
-    inverseOrder=attributes(x)$inverseOrder
-    
-    ncases=length(unique(x[[attr(x,"case")]]))
-    if (missing(col)){
-      col=viridisLite::viridis(ncases+1,direction=-1)
-      breaks=seq(-.5,ncases+.5,length.out=ncases+2)
-    } #else breaks=NA
-    
-    x=as.warehouse.challenge(x)
-    m <- do.call(cbind, split(x$value, x$algorithms))
-    
-    nalgs <- ncol(m)
-    algs <- colnames(m)
-    ranks <- t(apply((-1)^(inverseOrder)*m, 1, rank, ties.method = "random"))
-    nranks <- apply(ranks, 2, function(y) table(factor(y, levels = 1:nalgs)))
-    
-    myplot <-pheatmap((nranks[, names(ranking)[rankingorder]]),cluster_rows = F,cluster_cols = F,ylab="Rank",color =col,breaks=breaks,silent=T,...)
-  #  grid.newpage()
-    pushViewport(vp)
-    grid.draw(myplot$gtable)
-  }
-}
+rankingHeatmap <- function(x,...) UseMethod("rankingHeatmap")
+rankingHeatmap.default <- function(x, ...) stop("not implemented for this class")
 
-
-
-
-rankingHeatmap.ranked.list=function (x, col, breaks,vp = viewport(),...) {
-  xx=x$data
-  ranking_list=lapply(x$matlist, function(a) t(a[,"rank",drop=F])["rank",])
-  for (subt in names(x$matlist)){
-    rankingorder <- order(ranking_list[[subt]])
-    inverseOrder=attributes(xx)$inverseOrder
-    
-    ncases=length(unique(xx[[subt]][[attr(xx,"case")]]))
-    if (missing(col)){
-      col=viridisLite::viridis(ncases+1,direction=-1)
-      breaks=seq(0,ncases+1,length.out=ncases+1)
-    } #else breaks=NA
-    
-    dd=as.challenge(xx[[subt]],value=attr(xx,"value"), algorithm=attr(xx,"algorithm") ,case=attr(xx,"case"),
-                    annotator = attr(xx,"annotator"),
-                    smallBetter = !attr(xx,"inverseOrder"))
-    xw=as.warehouse.challenge(dd)
-    m <- do.call(cbind, split(xw$value, xw$algorithms))
-    
-    nalgs <- ncol(m)
-    algs <- colnames(m)
-    ranks <- t(apply((-1)^(inverseOrder)*m, 1, rank, ties.method = "random"))
-    nranks <- apply(ranks, 2, function(y) table(factor(y, levels = 1:nalgs)))
-    
-    myplot <-pheatmap((nranks[, names(ranking_list[[subt]])[rankingorder]]),cluster_rows = F,cluster_cols = F,ylab="Rank",color =col,breaks=breaks,silent=T,main=subt,...)
-    grid.newpage()
-    pushViewport(vp)
-    grid.draw(myplot$gtable)
-  }
-}
- 
-    
-rankingHeatmap.ranked=function (x, col, breaks,vp = viewport(),...) {
-    xx=x$data  
-    ranking=t(x$mat[,"rank",drop=F])["rank",]
-    rankingorder <- order(ranking)
-    inverseOrder=attributes(xx)$inverseOrder
-    
-    ncases=length(unique(xx[[attr(xx,"case")]]))
-    if (missing(col)){
-      col=viridisLite::viridis(ncases+1,direction=-1)
-      breaks=seq(0,ncases+1,length.out=ncases+1)
-    } #else breaks=NA
-    
-    xw=as.warehouse.challenge(xx)
-    m <- do.call(cbind, split(xw$value, xw$algorithms))
-    
-    nalgs <- ncol(m)
-    algs <- colnames(m)
-    ranks <- t(apply((-1)^(inverseOrder)*m, 1, rank, ties.method = "random"))
-    nranks <- apply(ranks, 2, function(y) table(factor(y, levels = 1:nalgs)))
-    
-    myplot <-pheatmap((nranks[, names(ranking)[rankingorder]]),cluster_rows = F,cluster_cols = F,ylab="Rank",color =col,breaks=breaks,silent=T,...)
-    #  grid.newpage()
-    pushViewport(vp)
-    grid.draw(myplot$gtable)
+rankingHeatmap.ranked=function (x,ties.method="min",...) {
+  ordering=rownames(x$mat)[order(x$mat$rank)]
+  #dd=x$data  
+  # dd will be same as x$data, except that na.treat is handled if aggregateThenRank
+  dd=as.challenge(x$data,
+                  value=attr(x$data,"value"), 
+                  algorithm=attr(x$data,"algorithm") ,
+                  case=attr(x$data,"case"),
+                  annotator = attr(x$data,"annotator"),
+                  smallBetter = !attr(x$data,"largeBetter"),
+                  na.treat=x$call[[1]][[1]]$na.treat)
   
+  ranking=dd%>%rank( ties.method = ties.method )
+  
+  dat=as.data.frame(table(ranking$mat[[attr(dd,"algorithm")]],
+                          ranking$mat$rank,
+                          dnn=c("algorithm","rank")),
+                    responseName = "Count")
+  
+  dat$algorithm=factor(dat$algorithm, levels=ordering)
+ # dat$Count=as.factor(dat$Count)
+  ncases=length(unique(dd[[attr(dd,"case")]]))
+#  dat$Count[dat$Count==0]=NA
+  ggplot(dat)+
+    geom_raster(aes(algorithm,rank, fill= Count))+
+    geom_hline(yintercept = seq(1.5,max(ranking$mat$rank)-.5,by=1),
+               color=grey(.8),size=.3)+
+    geom_vline(xintercept = seq(1.5,length(unique(dat$algorithm))-.5,by=1),
+               color=grey(.8),size=.3)+
+    scale_fill_viridis_c(direction = -1,
+                         limits=c(0,ncases),
+                         # limits=c(1,ncases),
+                         # breaks=function(a) round(seq(a[1],a[2],length.out=5)),
+                         # na.value = "white"
+                         )+
+    theme(axis.text.x = element_text(angle = 90))+
+    xlab("Algorithm")+ylab("Rank")
+}
+
+
+rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
+  
+  xx=x$data
+  
+  a=lapply(names(x$matlist),function(subt){
+    ordering=rownames(x$matlist[[subt]])[order(x$matlist[[subt]]$rank)]
+    
+    dd=as.challenge(xx[[subt]],value=attr(xx,"value"), 
+                    algorithm=attr(xx,"algorithm") ,
+                    case=attr(xx,"case"),
+                    annotator = attr(xx,"annotator"),
+                    smallBetter = !attr(xx,"largeBetter"),
+                    na.treat=x$call[[1]][[1]]$na.treat)
+    
+    ranking=dd%>%rank( ties.method = ties.method )
+    
+    dat=as.data.frame(table(ranking$mat[[attr(xx,"algorithm")]],
+                            ranking$mat$rank,
+                            dnn=c("algorithm","rank")),
+                      responseName = "Count")
+    dat$algorithm=factor(dat$algorithm, levels=ordering)
+    # dat$Count[dat$Count==0]=NA
+    ncases=length(unique(dd[[attr(dd,"case")]]))
+    ggplot(dat)+
+      geom_raster(aes(algorithm,rank, fill= Count))+
+      geom_hline(yintercept = seq(1.5,max(ranking$mat$rank)-.5,by=1),
+                 color=grey(.8),size=.3)+
+      geom_vline(xintercept = seq(1.5,length(unique(dat$algorithm))-.5,by=1),
+                 color=grey(.8),size=.3)+
+      scale_fill_viridis_c(direction = -1,
+                           limits=c(0,ncases),
+                           # limits=c(1,ncases),
+                           # breaks=function(a) round(seq(a[1],a[2],length.out=5)),
+                           # na.value = "white"
+                           )+
+      theme(axis.text.x = element_text(angle = 90))+
+      xlab("Algorithm")+
+      ylab("Rank")
+      #scale_y_discrete(name="Rank",breaks=rev(ranking$matlist[[subt]]$rank))
+  })
+  a
 }
 

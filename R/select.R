@@ -1,3 +1,6 @@
+select.if <- function(object,...) UseMethod("select.if")
+select.if.default <- function(object, ...) stop("not implemented for this class")
+
 select.if.comparedRanks.list=function(object,FUN,...){
   #if (!missing(FUN)) 
     res=object[sapply(object, function(x) do.call(FUN,args=list(x=x$mat)))]

@@ -4,9 +4,9 @@ results
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- Note that this is an early experimental version (version 0.3.0).  -->
+<!-- Note that this is an early experimental version (version 0.3.1).  -->
 
-Note that this is ongoing work (version 0.3.0), there may be updates
+Note that this is ongoing work (version 0.3.1), there may be updates
 with possibly major changes. *Please make sure that you use the most
 current version\!*
 
@@ -360,7 +360,7 @@ ranking_bootstrapped %>%
     the consensus ranking before using `meanRanks=subset(ranking,
     tasks=c("task1", "task2","task3))%>%consensus(method = "euclidean")`
 
-### Version 0.2.1
+#### Version 0.2.1
 
   - Introduction in reports now mentions e.g. ranking method, number of
     test cases,…
@@ -374,7 +374,7 @@ ranking_bootstrapped %>%
     readers with the most common form of color blindness.” See package
     `viridis` for further similar functions.
 
-### Version 0.2.0
+#### Version 0.2.0
 
   - Improved layout in case of many algorithms and tasks (while probably
     still not perfect)
