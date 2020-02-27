@@ -66,7 +66,7 @@ importFrom("ggplot2", "aes","aes_string","geom_abline", "geom_bar", "geom_boxplo
     "scale_y_continuous","coord_cartesian", "element_text", "facet_wrap", "position_jitter", "stat", "stat_summary", "theme", "unit","guides","scale_fill_viridis_c")
 importFrom("grDevices", "col2rgb", "gray", "rgb", "grey")
 importFrom("graphics", "abline", "axis", "barplot", "box", "layout",
-               "legend", "par", "plot", "points", "segments","boxplot", "stripchart", "title")
+               "legend", "par", "plot", "points", "segments","boxplot", "stripchart", "title", "grconvertX", "plot.new")
 importFrom("stats", "as.dist", "as.formula", "median", "p.adjust", "density",
                "quantile", "aggregate", "cor", "wilcox.test", "terms.formula", "complete.cases")
 importFrom("methods", "new")
