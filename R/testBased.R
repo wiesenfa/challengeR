@@ -1,34 +1,53 @@
-decision.challenge=function(x,                             na.treat=0, #entweder na.rm, numeric value oder function
-                            alpha=0.05,p.adjust.method="none",alternative="one.sided",# only needed for significance 
+decision <- function(x,...) UseMethod("decision")
+decision.default <- function(x, ...) stop("not implemented for this class")
+
+decision.challenge=function(x,                             
+                            na.treat=NULL, #entweder na.rm, numeric value oder function
+                            alpha=0.05, p.adjust.method="none",
+                            alternative="one.sided",
                             test.fun=function(x,y) wilcox.test(x,y,
                                                                alternative = alternative,exact=FALSE,
                                                                paired = TRUE)$p.value,
                             parallel=FALSE,progress="none",...){
   
-  if (alternative!="two.sided") alternative=ifelse(attr(x,"largeBetter") ,yes="greater",no="less")
+  if (is.null(na.treat)){ #na.treat only optional if no missing values in data set
+    if (!inherits(x,"list")){
+      if (!any(is.na(x[,attr(x, "value")]))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
+      else stop("Please specify na.treat in as.challenge()")
+    } else {
+      if (!any(sapply(x, 
+                      function(task) any(is.na(task[,attr(x, "value")]))))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
+      else stop("Please specify na.treat in as.challenge()")
+    }
+  }
+  
+  
+  if (alternative!="two.sided") alternative=ifelse(attr(x,"largeBetter"),
+                                                   yes="greater",
+                                                   no="less")
   call=match.call(expand.dots = T)  
   
   object=x
   algorithm=attr(object,"algorithm")
-  dataset_id=attr(object,"case")
+  case=attr(object,"case")
+  value=attr(object,"value")
   largeBetter=attr(object,"largeBetter") 
-  x=attr(object,"value")
-  if(missing(dataset_id)| missing(largeBetter)) stop("arguments case and alpha need to be given in as.challenge()")
+  if(missing(case)| missing(largeBetter)) stop("arguments case and alpha need to be given in as.challenge()")
   
   
   if (inherits(object,"list")){
-    matlist=llply(1:length(object), function(id){ #lapply(object, function(y){
+    matlist=llply(1:length(object), function(id){ 
       piece=object[[id]]
       if (length(unique(piece[[algorithm]]))<=1){
         warning("only one ", algorithm, " available in element ", names(object)[id])
-        #return(data.frame())  
-        #    return(data.frame("prop_significance"=rep(NA,length(unique(piece[[algorithm]]))),row.names = unique(piece[[algorithm]])))  
-#        return(matrix(NA,1,1))
       } 
-      if (is.numeric(na.treat)) piece[,x][is.na(piece[,x])]=na.treat
-      else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x][is.na(piece[,x])])
-      else if (na.treat=="na.rm") piece=piece[!is.na(piece[,x]),]
-      mat=Decision(piece, x, algorithm, dataset_id, alpha, largeBetter,p.adjust.method=p.adjust.method,alternative=alternative,test.fun=test.fun)
+      if (is.numeric(na.treat)) piece[,value][is.na(piece[,value])]=na.treat
+      else if (is.function(na.treat)) piece[,value][is.na(piece[,value])]=na.treat(piece[,value][is.na(piece[,value])])
+      else if (na.treat=="na.rm") piece=piece[!is.na(piece[,value]),]
+      mat=Decision(piece, value, algorithm, case, alpha, largeBetter,
+                   p.adjust.method=p.adjust.method,
+                   alternative=alternative,
+                   test.fun=test.fun)
       mat=as.data.frame(mat)
       mat[is.na(mat)]=0
       mat=as.matrix(mat)
@@ -37,14 +56,17 @@ decision.challenge=function(x,                             na.treat=0, #entweder
       
     }, 
     .parallel=parallel,.progress=progress )
-    names(matlist)=names(x)
+    names(matlist)=names(object)
     return(matlist)
   } else {
     if (length(unique(object[[algorithm]]))<=1){
       warning("only one ", algorithm, " available")
       matlist=(matrix(NA,1,1))
     } else {
-      mat=Decision(object, x, algorithm, dataset_id, alpha, largeBetter,p.adjust.method=p.adjust.method,alternative=alternative,test.fun=test.fun)
+      mat=Decision(object, value, algorithm, case, alpha, largeBetter,
+                   p.adjust.method=p.adjust.method,
+                   alternative=alternative,
+                   test.fun=test.fun)
     }
     mat=as.data.frame(mat)
     mat[is.na(mat)]=0
@@ -56,13 +78,15 @@ decision.challenge=function(x,                             na.treat=0, #entweder
 }
 
 
-Decision=function(object,x,by,dataset_id,alpha, largeBetter=FALSE,p.adjust.method="none",alternative="one.sided",
+Decision=function(object,value,by,case,alpha, 
+                  largeBetter=FALSE,
+                  p.adjust.method="none",
+                  alternative="one.sided",
                   test.fun=function(x,y) wilcox.test(x,y,
                                                      alternative = alternative,exact=FALSE,
-                                                     paired = TRUE)$p.value
-){
+                                                     paired = TRUE)$p.value){
   algorithms=unique(object[[by]])
-  if (length(unique(object[[dataset_id]]))==1){
+  if (length(unique(object[[case]]))==1){
     warning("Only one test case in task")
   } #else {
     combinations=expand.grid(algorithms,algorithms)[,2:1]
@@ -71,16 +95,16 @@ Decision=function(object,x,by,dataset_id,alpha, largeBetter=FALSE,p.adjust.metho
     pvalues=sapply(1:nrow(combinations), function(it){ 
       dat1=object[object[[by]]==combinations[it,1],]
       dat2=object[object[[by]]==combinations[it,2],]
-      id=intersect(dat2[,dataset_id],dat1[,dataset_id])
-      dat1=dat1[match(id,dat1[,dataset_id]),x]
-      dat2=dat2[match(id,dat2[,dataset_id]),x]
+      id=intersect(dat2[,case],dat1[,case])
+      dat1=dat1[match(id,dat1[,case]),value]
+      dat2=dat2[match(id,dat2[,case]),value]
       test.fun(dat1,dat2)
       
     })
     decisions=as.numeric(p.adjust(pvalues,method=p.adjust.method)<= alpha)
     res=cbind(combinations,decisions)
     reshape2::acast(res,Var2~Var1,value.var="decisions")
-#  }
+  #  }
 }
 
 
@@ -134,8 +158,8 @@ function(x) {
 # library(plyr)
 # 
 # a=challenge_multi%>%decision.challenge()
-# relation(incidence=a$BRATS_L1)
-# as.relation.challenge.incidence(a$BRATS_L1)
+# relation(incidence=a[[1]])
+# as.relation.challenge.incidence(a[[1]])
 # aa=lapply(a,function(x) relation(incidence = x))
 # 
 #   relensemble= do.call(relation_ensemble,args = aa)
@@ -144,13 +168,13 @@ function(x) {
 # 
 
 
-significance=function(object,x,algorithm,dataset_id,alpha, largeBetter=FALSE,...){
+significance=function(object,value,algorithm,case,alpha, largeBetter=FALSE,...){
   # algorithm=attr(object,"algorithm")
-  # dataset_id=attr(object,"case")
+  # case=attr(object,"case")
   # largeBetter=attr(object,"largeBetter") 
-  # x=attr(object,"value")
+  # value=attr(object,"value")
   
-  xx=as.challenge(object,value=x,algorithm=algorithm,case=dataset_id,smallBetter = !largeBetter,check=FALSE)
+  xx=as.challenge(object,value=value,algorithm=algorithm,case=case,smallBetter = !largeBetter,check=FALSE)
   a=decision.challenge(xx,...)
   prop_significance=  rowSums(a)/(ncol(a)-1)
   return(data.frame("prop_significance"=prop_significance,row.names = names(prop_significance)))

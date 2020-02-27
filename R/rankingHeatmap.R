@@ -3,13 +3,23 @@ rankingHeatmap.default <- function(x, ...) stop("not implemented for this class"
 
 rankingHeatmap.ranked=function (x,ties.method="min",...) {
   ordering=rownames(x$mat)[order(x$mat$rank)]
-  dd=x$data  
+  #dd=x$data  
+  # dd will be same as x$data, except that na.treat is handled if aggregateThenRank
+  dd=as.challenge(x$data,
+                  value=attr(x$data,"value"), 
+                  algorithm=attr(x$data,"algorithm") ,
+                  case=attr(x$data,"case"),
+                  annotator = attr(x$data,"annotator"),
+                  smallBetter = !attr(x$data,"largeBetter"),
+                  na.treat=x$call[[1]][[1]]$na.treat)
+  
   ranking=dd%>%rank( ties.method = ties.method )
   
   dat=as.data.frame(table(ranking$mat[[attr(dd,"algorithm")]],
                           ranking$mat$rank,
                           dnn=c("algorithm","rank")),
                     responseName = "Count")
+  
   dat$algorithm=factor(dat$algorithm, levels=ordering)
  # dat$Count=as.factor(dat$Count)
   ncases=length(unique(dd[[attr(dd,"case")]]))
@@ -32,7 +42,9 @@ rankingHeatmap.ranked=function (x,ties.method="min",...) {
 
 
 rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
+  
   xx=x$data
+  
   a=lapply(names(x$matlist),function(subt){
     ordering=rownames(x$matlist[[subt]])[order(x$matlist[[subt]]$rank)]
     
@@ -40,8 +52,11 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
                     algorithm=attr(xx,"algorithm") ,
                     case=attr(xx,"case"),
                     annotator = attr(xx,"annotator"),
-                    smallBetter = !attr(xx,"largeBetter"))
+                    smallBetter = !attr(xx,"largeBetter"),
+                    na.treat=x$call[[1]][[1]]$na.treat)
+    
     ranking=dd%>%rank( ties.method = ties.method )
+    
     dat=as.data.frame(table(ranking$mat[[attr(xx,"algorithm")]],
                             ranking$mat$rank,
                             dnn=c("algorithm","rank")),

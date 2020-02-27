@@ -1,3 +1,6 @@
+rank <- function(object,...) UseMethod("rank")
+rank.default <- function(object, ...) base::rank(object,...)  #stats::aggregate
+
 rank.challenge=function(object,x,
          ties.method="min",...){
   call=as.list(match.call())

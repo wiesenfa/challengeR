@@ -7,7 +7,7 @@ Aggregate.data.frame <-function(object,
                                 algorithm, 
                                 FUN=mean,
          na.treat="na.rm", #can be na.rm, numeric value or function
-         dataset_id, alpha=0.05, p.adjust.method="none",alternative="one.sided",
+         case, alpha=0.05, p.adjust.method="none",alternative="one.sided",
          test.fun=function(x,y) wilcox.test(x,y,alternative = alternative,exact=FALSE, paired = TRUE)$p.value,largeBetter=TRUE, # only needed for significance 
           ...                      ){
   call=match.call(expand.dots = T)  
@@ -16,12 +16,12 @@ Aggregate.data.frame <-function(object,
   else if (na.treat=="na.rm") object=object[!is.na(object[,x]),]
   
   if (is.character(FUN) && FUN=="significance"){
-    if(missing(dataset_id)| missing(largeBetter)| missing(alpha)) stop("If FUN='significance' arguments dataset_id, largeBetter and alpha need to be given")
+    if(missing(case)| missing(largeBetter)| missing(alpha)) stop("If FUN='significance' arguments case, largeBetter and alpha need to be given")
     if (length(unique(object[[algorithm]]))<=1){
         warning("only one ", algorithm, " available")
         agg=data.frame()
     } else {
-       agg=significance(object, x, algorithm, dataset_id, alpha, largeBetter,p.adjust.method=p.adjust.method,alternative=alternative,...)
+       agg=significance(object, x, algorithm, case, alpha, largeBetter,p.adjust.method=p.adjust.method,alternative=alternative,...)
     }
     isSignificance=TRUE
   } else {
@@ -50,13 +50,13 @@ Aggregate.data.frame <-function(object,
 Aggregate.list <-function(object,x,algorithm,FUN=mean,
          na.treat="na.rm",
          parallel=FALSE,progress="none",
-         dataset_id, alpha=0.05, p.adjust.method="none",alternative="one.sided",test.fun=function(x,y) wilcox.test(x,y,
+         case, alpha=0.05, p.adjust.method="none",alternative="one.sided",test.fun=function(x,y) wilcox.test(x,y,
                                                                                                                    alternative = alternative,exact=FALSE,
                                                                                                                    paired = TRUE)$p.value,largeBetter=TRUE, # only needed for significance 
          ...            ){
   call=match.call(expand.dots = T)  
   if (is.character(FUN) && FUN=="significance"){
-    if(missing(dataset_id)| missing(largeBetter)| missing(alpha)) stop("If FUN='significance' arguments dataset_id, largeBetter and alpha need to be given")
+    if(missing(case)| missing(largeBetter)| missing(alpha)) stop("If FUN='significance' arguments case, largeBetter and alpha need to be given")
     matlist=llply(1:length(object), function(id){ 
       piece=object[[id]]
       if (length(unique(piece[[algorithm]]))<=1){
@@ -67,7 +67,7 @@ Aggregate.list <-function(object,x,algorithm,FUN=mean,
       if (is.numeric(na.treat)) piece[,x][is.na(piece[,x])]=na.treat
       else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x][is.na(piece[,x])])
       else if (na.treat=="na.rm") piece=piece[!is.na(piece[,x]),]
-      xmean <- significance(piece, x, algorithm, dataset_id, alpha, p.adjust.method=p.adjust.method,largeBetter,alternative=alternative,...)
+      xmean <- significance(piece, x, algorithm, case, alpha, p.adjust.method=p.adjust.method,largeBetter,alternative=alternative,...)
       class(xmean)=c("aggregated",class(xmean))
       xmean
     }, .parallel=parallel,.progress=progress

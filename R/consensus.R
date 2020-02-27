@@ -1,3 +1,6 @@
+consensus <- function(object,...) UseMethod("consensus")
+consensus.default <- function(object, ...) stop("not implemented for this class")
+
 consensus.ranked.list=function(object,method,...){
   relensemble= relation_ensemble(list = as.relation(object)) 
   cons=relation_consensus(relensemble, method = method,...) # consensus ranking according to mean ranks across tasks. 

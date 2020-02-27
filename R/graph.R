@@ -1,7 +1,7 @@
 network <- function(x,...) UseMethod("network")
 network.default <- function(x, ...) stop("not implemented for this class")
 
-network.ranked.list=function(object,
+network.ranked.list=function(x,
                              method = "symdiff", 
                              edge.col,
                              edge.lwd,
@@ -11,7 +11,7 @@ network.ranked.list=function(object,
                              
 ){
   # use ranking list
-  relensemble=as.relation.ranked.list(object)
+  relensemble=as.relation.ranked.list(x)
   
   # # use relations
   #   a=challenge_multi%>%decision.challenge(p.adjust.method="none")
@@ -30,8 +30,8 @@ network.ranked.list=function(object,
   #                      names(w), "none")
   #             })
   # use ranking list
-  uw=lapply(object$matlist,function(x) rownames(x)[which(x$rank==1)])
-  uw=sapply(uw, function(x) ifelse(length(x)==1,yes = x,no="none"))
+  uw=lapply(x$matlist,function(task.i) rownames(task.i)[which(task.i$rank==1)])
+  uw=sapply(uw, function(task.i) ifelse(length(task.i)==1,yes = task.i,no="none"))
   
   network.dist(d, 
                  edge.col = edge.col,# grDevices::grey.colors(nn), #terrain_hcl(nn, c=c(65,0), l=c(45,90), power=c(1/2,1.5)),
@@ -128,12 +128,22 @@ plot.network=function(x,
   ag <- Rgraphviz::agopen(graph, "", layoutType = layoutType, attrs = attrs, nodeAttrs = nodeAttrs, edgeAttrs = edgeAttrs)
   
     plot.new()
-    #leg.col=cols[uw][unique(names(cols[uw]))]
-    l=legend("topright",  names(leg.col), lwd = 1, cex=cex, bg =NA,plot=F)# bg="white")#,cex=1.5)
+    l=legend("topright",  
+             names(leg.col), 
+             lwd = 1, 
+             cex=cex, 
+             bg =NA,
+             plot=F)# bg="white")
     w <- grconvertX(l$rect$w, to='inches')
     
     Rgraphviz::plot(ag,mai=c(0,0,0,w),...)
-    legend(par('usr')[2], par('usr')[4], xpd=NA,  names(leg.col), lwd = 1, col = leg.col, bg =NA,cex=cex)# bg="white")#,cex=1.5)
+    legend(par('usr')[2], par('usr')[4], 
+           xpd=NA,  
+           names(leg.col), 
+           lwd = 1, 
+           col = leg.col, 
+           bg =NA,
+           cex=cex)# bg="white")
  
 }
 

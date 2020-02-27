@@ -1,3 +1,5 @@
+test <- function(x,...) UseMethod("test")
+test.default <- function(x, ...) stop("not implemented for this class")
 test.challenge=function(x,...) aggregate.challenge(x=x,
                                                    FUN="significance",...)
 
@@ -32,8 +34,8 @@ aggregate.challenge=function(x,
       if (!any(sapply(x, 
                       function(task) any(is.na(task[,attr(x, "value")]))))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
     }
-    
   }
+  
   res1=do.call("Aggregate",list(object=x,
                                 x=attr(x,"value"),
                                 algorithm=attr(x,"algorithm"),
@@ -41,7 +43,7 @@ aggregate.challenge=function(x,
                                 na.treat=na.treat,
                                 parallel=parallel,
                                 progress=progress,
-                                dataset_id=attr(x,"case"),
+                                case=attr(x,"case"),
                                 alpha=alpha, p.adjust.method=p.adjust.method,
                                 largeBetter=attr(x,"largeBetter") # only needed for significance
   ))
@@ -53,7 +55,7 @@ aggregate.challenge=function(x,
              FUN=call$FUN,
              na.treat=na.treat,
              parallel=parallel,progress=progress,
-             dataset_id=attr(x,"case"), 
+             case=attr(x,"case"), 
              alpha=alpha, p.adjust.method=p.adjust.method, 
              largeBetter=attr(x,"largeBetter") # only needed for significance 
   )

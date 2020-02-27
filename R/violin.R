@@ -23,7 +23,7 @@ violin.bootstrap.list=function(x,...){
   
   print(as.data.frame(ss))
   
-  ken%>%mutate(Task=factor(Task, levels=ss$Task))%>%
+  ken%>%mutate(Task=factor(.data$Task, levels=ss$Task))%>%
     ggplot(aes(Task,value))+
     geom_violin(alpha=.3,color=NA,fill="blue")+
     geom_boxplot(width=0.1, fill="white")+

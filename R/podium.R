@@ -19,7 +19,16 @@ podium.ranked=function(object,
   if (is.null(ylab)) ylab <- "Performance"
   if (missing(col)) col=default_colors(length(ordering),
                                        algorithms = names(ordering))
-  dd=object$data  
+  #dd=object$data  
+  # dd will be same as object$data, except that na.treat is handled if aggregateThenRank
+    x=object$data
+    dd=as.challenge(x,
+                    value=attr(x,"value"), 
+                    algorithm=attr(x,"algorithm") ,
+                    case=attr(x,"case"),
+                    annotator = attr(x,"annotator"),
+                    smallBetter = !attr(x,"largeBetter"),
+                    na.treat=object$call[[1]][[1]]$na.treat)
   
   podium( dd, 
                ordering=ordering,
@@ -55,12 +64,15 @@ podium.ranked.list=function(object,
       ordering=t(object$matlist[[subt]][,"rank",drop=F])["rank",]
       if (missing(col)) col=default_colors(length(ordering),
                                            algorithms = names(ordering))
-      dd=as.challenge(x[[subt]],
+      
+       dd=as.challenge(x[[subt]],
                       value=attr(x,"value"), 
                       algorithm=attr(x,"algorithm") ,
                       case=attr(x,"case"),
                       annotator = attr(x,"annotator"),
-                      smallBetter = !attr(x,"largeBetter"))
+                      smallBetter = !attr(x,"largeBetter"),
+                      na.treat=object$call[[1]][[1]]$na.treat)
+      
       
       podium( dd, 
                    ordering=ordering,
