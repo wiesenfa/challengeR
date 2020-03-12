@@ -2,10 +2,6 @@ Methods and open-source toolkit for analyzing and visualizing challenge
 results
 ================
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-<!-- Note that this is an early experimental version (version 0.3.1).  -->
-
 Note that this is ongoing work (version 0.3.1), there may be updates
 with possibly major changes. *Please make sure that you use the most
 current version\!*
@@ -13,16 +9,6 @@ current version\!*
 Change log at the end of this document.
 
 # Installation
-
-<!-- To get the current released version from CRAN: -->
-
-<!-- ```{r} -->
-
-<!-- ## install challengeR from CRAN -->
-
-<!-- install.packages("challengeR") -->
-
-<!-- ``` -->
 
 Requires R version \>= 3.5.2 (<https://www.r-project.org>).
 
@@ -70,16 +56,11 @@ bootstrapping and (5) generation of the report
 
 ## 1\. Load package
 
-Load
-package
+Load package
 
 ``` r
 library(challengeR)
 ```
-
-<!-- # Visualization of the impact of priors in terms of effective sample size -->
-
-<!-- This section (same as `vignette("vignettePlanning", package = "ESS")`)  visualizes how `plotECSS()` can be used to quantify the impact of a prior (including mixture priors and empirical Bayes power priors/commensurate priors) in terms of effective current sample sizes on a grid of true values of the data generating process. -->
 
 ## 2\. Load data
 
@@ -122,10 +103,7 @@ data_matrix=read.csv(file.choose()) # type ?read.csv for help
 
 This allows to choose a file interactively, otherwise replace
 *file.choose()* by the file path (in style “/path/to/dataset.csv”) in
-quotation
-marks.
-
-<!-- where "filename" has to be replaced by the filename (and file path). -->
+quotation marks.
 
 For illustration purposes, in the following simulated data is generated
 *instead* (skip the following code chunk if you have already loaded
