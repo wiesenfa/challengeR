@@ -9,5 +9,4 @@ Description: Analyzing assessment data of biomedical image analysis competitions
 License: GPL-3
 Depends: R (>= 3.5.2), purrr, ggplot2
 Imports: knitr, plyr, rlang, rmarkdown, viridisLite, methods,graph, tidyr, reshape2, dplyr, relations
-Suggests: foreach, doParallel, ggpubr,Rgraphviz
-
+Suggests: foreach, doParallel, ggpubr, Rgraphviz, testthat (>= 2.1.0)
