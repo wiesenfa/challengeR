@@ -24,7 +24,7 @@ test_that("missing algorithm performances are not added as NA with sanity check 
 
   actualChallenge <- as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE, check=FALSE)
 
-   expectedAlgNames <- c("A1", "A2")
+  expectedAlgNames <- c("A1", "A2")
   expectedValues <- c(0.8, 0.6)
   expectedCases <- c("C1", "C2")
 
@@ -103,4 +103,40 @@ test_that("missing algorithm performances are added as NA with sanity check enab
   expect_equal(as.vector(actualChallenge$T2$alg_name), expectedAlgNamesT2)
   expect_equal(as.vector(actualChallenge$T2$value), expectedValuesT2)
   expect_equal(as.vector(actualChallenge$T2$case), expectedCasesT2)
+})
+
+test_that("case cannot appear more than once per algorithm with sanity check enabled for single-task challenge", {
+  data=rbind(
+    data.frame(alg_name="A1", value=0.8, case="C1"),
+    data.frame(alg_name="A1", value=0.8, case="C1")
+  )
+
+  expect_error(as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Case(s) (C1) appear(s) more than once for the same algorithm", fixed=TRUE)
+})
+
+test_that("cases cannot appear more than once per algorithm with sanity check enabled for single-task challenge", {
+  data=rbind(
+    data.frame(alg_name="A1", value=0.8, case="C1"),
+    data.frame(alg_name="A1", value=0.8, case="C1"),
+    data.frame(alg_name="A2", value=0.7, case="C1"),
+    data.frame(alg_name="A1", value=0.5, case="C2"),
+    data.frame(alg_name="A2", value=0.6, case="C2"),
+    data.frame(alg_name="A2", value=0.6, case="C2")
+  )
+
+  expect_error(as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Case(s) (C1, C2) appear(s) more than once for the same algorithm", fixed=TRUE)
+})
+
+test_that("cases cannot appear more than once per algorithm when missing data was added with sanity check enabled for single-task challenge", {
+  data=rbind(
+    data.frame(alg_name="A1", value=0.8, case="C1"),
+    data.frame(alg_name="A1", value=0.8, case="C1"),
+    data.frame(alg_name="A2", value=0.6, case="C2"),
+    data.frame(alg_name="A2", value=0.6, case="C2")
+  )
+
+  expect_error(as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Case(s) (C1, C2) appear(s) more than once for the same algorithm", fixed=TRUE)
 })
