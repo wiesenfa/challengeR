@@ -140,3 +140,51 @@ test_that("cases cannot appear more than once per algorithm when missing data wa
   expect_error(as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
                "Case(s) (C1, C2) appear(s) more than once for the same algorithm", fixed=TRUE)
 })
+
+test_that("case cannot appear more than once per algorithm with sanity check enabled for multi-task challenge (1 task in data set)", {
+  data=cbind(task="T1",
+             rbind(
+               data.frame(alg_name="A1", value=0.8, case="C1"),
+               data.frame(alg_name="A1", value=0.8, case="C1")
+             ))
+
+  expect_error(as.challenge(data, by="task", algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Case(s) (C1) appear(s) more than once for the same algorithm in task T1", fixed=TRUE)
+})
+
+test_that("cases cannot appear more than once per algorithm with sanity check enabled for multi-task challenge (1 task in data set)", {
+  data=cbind(task="T1",
+             rbind(
+               data.frame(alg_name="A1", value=0.8, case="C1"),
+               data.frame(alg_name="A1", value=0.8, case="C1"),
+               data.frame(alg_name="A2", value=0.7, case="C1"),
+               data.frame(alg_name="A1", value=0.5, case="C2"),
+               data.frame(alg_name="A2", value=0.6, case="C2"),
+               data.frame(alg_name="A2", value=0.6, case="C2")
+             ))
+
+  expect_error(as.challenge(data, by="task", algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task T1", fixed=TRUE)
+})
+
+test_that("cases cannot appear more than once per algorithm with sanity check enabled for multi-task challenge (2 tasks in data set)", {
+  dataTask1=cbind(task="T1",
+                  rbind(
+                    data.frame(alg_name="A1", value=0.8, case="C1") # let T1 pass
+                  ))
+
+  dataTask2=cbind(task="T2",
+                  rbind(
+                    data.frame(alg_name="A1", value=0.8, case="C1"),
+                    data.frame(alg_name="A1", value=0.8, case="C1"),
+                    data.frame(alg_name="A2", value=0.7, case="C1"),
+                    data.frame(alg_name="A1", value=0.5, case="C2"),
+                    data.frame(alg_name="A2", value=0.6, case="C2"),
+                    data.frame(alg_name="A2", value=0.6, case="C2")
+                  ))
+
+  data=rbind(dataTask1, dataTask2)
+
+  expect_error(as.challenge(data, by="task", algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task T2", fixed=TRUE)
+})
