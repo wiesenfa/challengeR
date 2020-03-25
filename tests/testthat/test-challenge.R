@@ -221,3 +221,38 @@ test_that("multi-task data set containing one task is interpreted as single-task
                "Case(s) (C1) appear(s) more than once for the same algorithm", fixed=TRUE)
 })
 
+test_that("user is notified of duplicate cases when multi-task data set is interpreted as single-task data set (2 tasks in data set)", {
+  dataTask1=cbind(task="T1",
+                  rbind(
+                    data.frame(alg_name="A1", value=0.8, case="C1")
+                  ))
+
+  dataTask2=cbind(task="T2",
+                  rbind(
+                    data.frame(alg_name="A1", value=0.8, case="C1")
+                  ))
+
+  data=rbind(dataTask1, dataTask2)
+
+  # do not specify parameter "by" to interpret multi-task data set as single-task data set
+  expect_error(as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Case(s) (C1) appear(s) more than once for the same algorithm", fixed=TRUE)
+})
+
+test_that("user is notified of missing algorithm performance when multi-task data set is interpreted as single-task data set (2 tasks in data set)", {
+  dataTask1=cbind(task="T1",
+                  rbind(
+                    data.frame(alg_name="A1", value=0.8, case="C1")
+                  ))
+
+  dataTask2=cbind(task="T2",
+                  rbind(
+                    data.frame(alg_name="A2", value=0.6, case="C2")
+                  ))
+
+  data=rbind(dataTask1, dataTask2)
+
+  # do not specify parameter "by" to interpret multi-task data set as single-task data set
+  expect_message(as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:", fixed=TRUE)
+})
