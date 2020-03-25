@@ -188,3 +188,36 @@ test_that("cases cannot appear more than once per algorithm with sanity check en
   expect_error(as.challenge(data, by="task", algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
                "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task T2", fixed=TRUE)
 })
+
+test_that("multi-task data set containing one task is interpreted as single-task data set, missing algorithm performances are added", {
+  data=cbind(task="T1",
+             rbind(
+               data.frame(alg_name="A1", value=0.8, case="C1"),
+               data.frame(alg_name="A2", value=0.6, case="C2")
+             ))
+
+  # do not specify parameter "by" to interpret multi-task data set as single-task data set
+  expect_message(actualChallenge <- as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+                 "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
+
+  expectedAlgNames <- c("A1", "A1", "A2", "A2")
+  expectedValues <- c(0.8, NA, NA, 0.6)
+  expectedCases <- c("C1", "C2", "C1", "C2")
+
+  expect_equal(as.vector(actualChallenge$alg_name), expectedAlgNames)
+  expect_equal(as.vector(actualChallenge$value), expectedValues)
+  expect_equal(as.vector(actualChallenge$case), expectedCases)
+})
+
+test_that("multi-task data set containing one task is interpreted as single-task data set, case cannot appear more than once per algorithm", {
+  data=cbind(task="T1",
+             rbind(
+               data.frame(alg_name="A1", value=0.8, case="C1"),
+               data.frame(alg_name="A1", value=0.8, case="C1")
+             ))
+
+  # do not specify parameter "by" to interpret multi-task data set as single-task data set
+  expect_error(as.challenge(data, algorithm="alg_name", case="case", value="value", smallBetter=FALSE),
+               "Case(s) (C1) appear(s) more than once for the same algorithm", fixed=TRUE)
+})
+
