@@ -1,3 +1,104 @@
+test_that("attributes are set for single-task challenge", {
+  data=rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A1", value=0.4, case="C2"),
+    data.frame(algo="A2", value=0.6, case="C1"),
+    data.frame(algo="A2", value=0.7, case="C2")
+  )
+
+  actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE)
+
+  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
+  expectedValues <- c(0.8, 0.4, 0.6, 0.7)
+  expectedCases <- c("C1", "C2", "C1", "C2")
+
+  expect_equal(attr(actualChallenge, "annotator"), NULL)
+  expect_equal(attr(actualChallenge, "by"), NULL)
+  expect_equal(attr(actualChallenge, "largeBetter"), TRUE)
+  expect_equal(attr(actualChallenge, "check"), TRUE)
+  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
+  expect_equal(as.vector(actualChallenge$value), expectedValues)
+  expect_equal(as.vector(actualChallenge$case), expectedCases)
+})
+
+test_that("attributes are set for multi-task challenge with sanity check enabled", {
+  dataTask1=cbind(task="T1",
+                  rbind(
+                    data.frame(algo="A1", value=0.8, case="C1"),
+                    data.frame(algo="A2", value=0.6, case="C1")
+                  ))
+  dataTask2=cbind(task="T2",
+                  rbind(
+                    data.frame(algo="A1", value=0.2, case="C1"),
+                    data.frame(algo="A2", value=0.3, case="C1")
+                  ))
+
+  data=rbind(dataTask1, dataTask2)
+
+  actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=TRUE, check=TRUE)
+
+  expectedAlgorithmsTask1 <- c("A1", "A2")
+  expectedValuesTask1 <- c(0.8, 0.6)
+  expectedCasesTask1 <- c("C1", "C1")
+  expectedTasksTask1 <- c("T1", "T1")
+
+  expectedAlgorithmsTask2 <- c("A1", "A2")
+  expectedValuesTask2 <- c(0.2, 0.3)
+  expectedCasesTask2 <- c("C1", "C1")
+  expectedTasksTask2 <- c("T2", "T2")
+
+  expect_equal(attr(actualChallenge, "annotator"), NULL)
+  expect_equal(attr(actualChallenge, "by"), "task")
+  expect_equal(attr(actualChallenge, "largeBetter"), FALSE)
+  expect_equal(attr(actualChallenge, "check"), TRUE)
+
+  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
+  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
+  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
+  expect_equal(as.vector(actualChallenge$T1$task), expectedTasksTask1)
+
+  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
+  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
+  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+  expect_equal(as.vector(actualChallenge$T2$task), expectedTasksTask2)
+
+  # expect that there's no attribute "task"
+  expect_equal(attr(actualChallenge, "task"), NULL)
+  expect_equal(attr(actualChallenge$T1, "task"), NULL)
+  expect_equal(attr(actualChallenge$T2, "task"), NULL)
+})
+
+test_that("attributes are set for multi-task challenge with sanity check disabled", {
+  dataTask1=cbind(task="T1",
+                  rbind(
+                    data.frame(algo="A1", value=0.8, case="C1"),
+                    data.frame(algo="A2", value=0.6, case="C1")
+                  ))
+  dataTask2=cbind(task="T2",
+                  rbind(
+                    data.frame(algo="A1", value=0.2, case="C1"),
+                    data.frame(algo="A2", value=0.3, case="C1")
+                  ))
+
+  data=rbind(dataTask1, dataTask2)
+
+  actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=TRUE, check=FALSE)
+
+  expectedAlgorithms <- c("A1", "A2", "A1", "A2")
+  expectedValues <- c(0.8, 0.6, 0.2, 0.3)
+  expectedCases <- c("C1", "C1", "C1", "C1")
+  expectedTasks <- c("T1", "T1", "T2", "T2")
+
+  expect_equal(attr(actualChallenge, "annotator"), NULL)
+  expect_equal(attr(actualChallenge, "by"), "task")
+  expect_equal(attr(actualChallenge, "largeBetter"), FALSE)
+  expect_equal(attr(actualChallenge, "check"), FALSE)
+  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
+  expect_equal(as.vector(actualChallenge$value), expectedValues)
+  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$task), expectedTasks)
+})
+
 test_that("missing algorithm performances are added as NA with sanity check enabled for single-task challenge", {
   data=rbind(
          data.frame(algo="A1", value=0.8, case="C1"),
