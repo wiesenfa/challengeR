@@ -190,20 +190,20 @@ test_that("missing algorithm performances are added as NA with sanity check enab
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
 
   expectedAlgorithmsTask1 <- c("A1", "A1", "A2", "A2")
-  expectedValuesT1 <- c(0.8, NA, NA, 0.6)
-  expectedCasesT1 <- c("C1", "C2", "C1", "C2")
+  expectedValuesTask1 <- c(0.8, NA, NA, 0.6)
+  expectedCasesTask1 <- c("C1", "C2", "C1", "C2")
 
   expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesT1)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesT1)
+  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
+  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
 
   expectedAlgorithmsTask2 <- c("A1", "A1", "A2", "A2")
-  expectedValuesT2 <- c(0.2, 0.3, 0.4, NA)
-  expectedCasesT2 <- c("C1", "C2", "C1", "C2")
+  expectedValuesTask2 <- c(0.2, 0.3, 0.4, NA)
+  expectedCasesTask2 <- c("C1", "C2", "C1", "C2")
 
   expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
-  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesT2)
-  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesT2)
+  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
+  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
 })
 
 test_that("case cannot appear more than once per algorithm with sanity check enabled for single-task challenge", {
