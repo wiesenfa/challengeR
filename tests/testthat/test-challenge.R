@@ -357,3 +357,62 @@ test_that("user is notified of missing algorithm performance when multi-task dat
   expect_message(as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
                "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:", fixed=TRUE)
 })
+
+test_that("NA is replaced by numeric value for single-task challenge", {
+  data=rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A1", value=NA, case="C2"),
+    data.frame(algo="A2", value=0.6, case="C1"),
+    data.frame(algo="A2", value=NA, case="C2")
+  )
+
+  actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0)
+
+  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
+  expectedValues <- c(0.8, 0.0, 0.6, 0.0)
+  expectedCases <- c("C1", "C2", "C1", "C2")
+
+  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
+  expect_equal(as.vector(actualChallenge$value), expectedValues)
+  expect_equal(as.vector(actualChallenge$case), expectedCases)
+})
+
+test_that("NA is replaced by function value for single-task challenge", {
+  data=rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A1", value=NA, case="C2"),
+    data.frame(algo="A2", value=0.6, case="C1"),
+    data.frame(algo="A2", value=NA, case="C2")
+  )
+
+  replacementFunction <- function(x) { 2 }
+
+  actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=replacementFunction)
+
+  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
+  expectedValues <- c(0.8, 2.0, 0.6, 2.0)
+  expectedCases <- c("C1", "C2", "C1", "C2")
+
+  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
+  expect_equal(as.vector(actualChallenge$value), expectedValues)
+  expect_equal(as.vector(actualChallenge$case), expectedCases)
+})
+
+test_that("NA is removed for single-task challenge", {
+  data=rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A1", value=NA, case="C2"),
+    data.frame(algo="A2", value=0.6, case="C1"),
+    data.frame(algo="A2", value=NA, case="C2")
+  )
+
+  actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm")
+
+  expectedAlgorithms <- c("A1", "A2")
+  expectedValues <- c(0.8, 0.6)
+  expectedCases <- c("C1", "C1")
+
+  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
+  expect_equal(as.vector(actualChallenge$value), expectedValues)
+  expect_equal(as.vector(actualChallenge$case), expectedCases)
+})
