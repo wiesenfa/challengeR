@@ -8,17 +8,13 @@ test_that("attributes are set for single-task challenge", {
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE)
 
-  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
-  expectedValues <- c(0.8, 0.4, 0.6, 0.7)
-  expectedCases <- c("C1", "C2", "C1", "C2")
-
   expect_equal(attr(actualChallenge, "annotator"), NULL)
   expect_equal(attr(actualChallenge, "by"), NULL)
   expect_equal(attr(actualChallenge, "largeBetter"), TRUE)
   expect_equal(attr(actualChallenge, "check"), TRUE)
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 0.4, 0.6, 0.7))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("attributes are set for multi-task challenge with sanity check enabled", {
@@ -37,30 +33,20 @@ test_that("attributes are set for multi-task challenge with sanity check enabled
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=TRUE, check=TRUE)
 
-  expectedAlgorithmsTask1 <- c("A1", "A2")
-  expectedValuesTask1 <- c(0.8, 0.6)
-  expectedCasesTask1 <- c("C1", "C1")
-  expectedTasksTask1 <- c("T1", "T1")
-
-  expectedAlgorithmsTask2 <- c("A1", "A2")
-  expectedValuesTask2 <- c(0.2, 0.3)
-  expectedCasesTask2 <- c("C1", "C1")
-  expectedTasksTask2 <- c("T2", "T2")
-
   expect_equal(attr(actualChallenge, "annotator"), NULL)
   expect_equal(attr(actualChallenge, "by"), "task")
   expect_equal(attr(actualChallenge, "largeBetter"), FALSE)
   expect_equal(attr(actualChallenge, "check"), TRUE)
 
-  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
-  expect_equal(as.vector(actualChallenge$T1$task), expectedTasksTask1)
+  expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A2"))
+  expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.6))
+  expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C1"))
+  expect_equal(as.vector(actualChallenge$T1$task), c("T1", "T1"))
 
-  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
-  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
-  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
-  expect_equal(as.vector(actualChallenge$T2$task), expectedTasksTask2)
+  expect_equal(as.vector(actualChallenge$T2$algo), c("A1", "A2"))
+  expect_equal(as.vector(actualChallenge$T2$value), c(0.2, 0.3))
+  expect_equal(as.vector(actualChallenge$T2$case), c("C1", "C1"))
+  expect_equal(as.vector(actualChallenge$T2$task), c("T2", "T2"))
 
   # expect that there's no attribute "task"
   expect_equal(attr(actualChallenge, "task"), NULL)
@@ -84,19 +70,14 @@ test_that("attributes are set for multi-task challenge with sanity check disable
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=TRUE, check=FALSE)
 
-  expectedAlgorithms <- c("A1", "A2", "A1", "A2")
-  expectedValues <- c(0.8, 0.6, 0.2, 0.3)
-  expectedCases <- c("C1", "C1", "C1", "C1")
-  expectedTasks <- c("T1", "T1", "T2", "T2")
-
   expect_equal(attr(actualChallenge, "annotator"), NULL)
   expect_equal(attr(actualChallenge, "by"), "task")
   expect_equal(attr(actualChallenge, "largeBetter"), FALSE)
   expect_equal(attr(actualChallenge, "check"), FALSE)
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
-  expect_equal(as.vector(actualChallenge$task), expectedTasks)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A2", "A1", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 0.6, 0.2, 0.3))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C1", "C1", "C1"))
+  expect_equal(as.vector(actualChallenge$task), c("T1", "T1", "T2", "T2"))
 })
 
 test_that("missing algorithm performances are added as NA with sanity check enabled for single-task challenge", {
@@ -108,13 +89,9 @@ test_that("missing algorithm performances are added as NA with sanity check enab
   expect_message(actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
                  "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
 
-  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
-  expectedValues <- c(0.8, NA, NA, 0.6)
-  expectedCases <- c("C1", "C2", "C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, NA, NA, 0.6))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("missing algorithm performances are not added as NA with sanity check disabled for single-task challenge", {
@@ -125,13 +102,9 @@ test_that("missing algorithm performances are not added as NA with sanity check 
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, check=FALSE)
 
-  expectedAlgorithms <- c("A1", "A2")
-  expectedValues <- c(0.8, 0.6)
-  expectedCases <- c("C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 0.6))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2"))
 })
 
 test_that("missing algorithm performances are added as NA with sanity check enabled for multi-task challenge (1 task in data set)", {
@@ -144,13 +117,9 @@ test_that("missing algorithm performances are added as NA with sanity check enab
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
 
-  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
-  expectedValues <- c(0.8, NA, NA, 0.6)
-  expectedCases <- c("C1", "C2", "C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
+  expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("missing algorithm performances are not added as NA with sanity check disabled for multi-task challenge (1 task in data set)", {
@@ -162,13 +131,9 @@ test_that("missing algorithm performances are not added as NA with sanity check 
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, check=FALSE)
 
-  expectedAlgorithms <- c("A1", "A2")
-  expectedValues <- c(0.8, 0.6)
-  expectedCases <- c("C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 0.6))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2"))
 })
 
 test_that("missing algorithm performances are added as NA with sanity check enabled for multi-task challenge (2 tasks in data set)", {
@@ -189,21 +154,13 @@ test_that("missing algorithm performances are added as NA with sanity check enab
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
 
-  expectedAlgorithmsTask1 <- c("A1", "A1", "A2", "A2")
-  expectedValuesTask1 <- c(0.8, NA, NA, 0.6)
-  expectedCasesTask1 <- c("C1", "C2", "C1", "C2")
+  expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
+  expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2", "C1", "C2"))
 
-  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
-
-  expectedAlgorithmsTask2 <- c("A1", "A1", "A2", "A2")
-  expectedValuesTask2 <- c(0.2, 0.3, 0.4, NA)
-  expectedCasesTask2 <- c("C1", "C2", "C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
-  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
-  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+  expect_equal(as.vector(actualChallenge$T2$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$T2$value), c(0.2, 0.3, 0.4, NA))
+  expect_equal(as.vector(actualChallenge$T2$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("case cannot appear more than once per algorithm with sanity check enabled for single-task challenge", {
@@ -301,13 +258,9 @@ test_that("multi-task data set containing one task is interpreted as single-task
   expect_message(actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
                  "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
 
-  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
-  expectedValues <- c(0.8, NA, NA, 0.6)
-  expectedCases <- c("C1", "C2", "C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, NA, NA, 0.6))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("multi-task data set containing one task is interpreted as single-task data set, case cannot appear more than once per algorithm", {
@@ -368,13 +321,9 @@ test_that("NAs are replaced by numeric value for single-task challenge", {
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0)
 
-  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
-  expectedValues <- c(0.8, 0.0, 0.6, 0.0)
-  expectedCases <- c("C1", "C2", "C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 0.0, 0.6, 0.0))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("NAs are replaced by function value for single-task challenge", {
@@ -389,13 +338,9 @@ test_that("NAs are replaced by function value for single-task challenge", {
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=replacementFunction)
 
-  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
-  expectedValues <- c(0.8, 2.0, 0.6, 2.0)
-  expectedCases <- c("C1", "C2", "C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 2.0, 0.6, 2.0))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("NAs are removed for single-task challenge", {
@@ -408,13 +353,9 @@ test_that("NAs are removed for single-task challenge", {
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm")
 
-  expectedAlgorithms <- c("A1", "A2")
-  expectedValues <- c(0.8, 0.6)
-  expectedCases <- c("C1", "C1")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 0.6))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C1"))
 })
 
 test_that("automatically added NAs are replaced by numeric value for single-task challenge", {
@@ -426,13 +367,9 @@ test_that("automatically added NAs are replaced by numeric value for single-task
   expect_message(actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0),
                  "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
 
-  expectedAlgorithms <- c("A1", "A1", "A2", "A2")
-  expectedValues <- c(0.8, 0.0, 0.0, 0.6)
-  expectedCases <- c("C1", "C2", "C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 0.0, 0.0, 0.6))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("automatically added NAs are removed for single-task challenge", {
@@ -444,13 +381,9 @@ test_that("automatically added NAs are removed for single-task challenge", {
   expect_message(actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm"),
                  "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
 
-  expectedAlgorithms <- c("A1", "A2")
-  expectedValues <- c(0.8, 0.6)
-  expectedCases <- c("C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$algo), expectedAlgorithms)
-  expect_equal(as.vector(actualChallenge$value), expectedValues)
-  expect_equal(as.vector(actualChallenge$case), expectedCases)
+  expect_equal(as.vector(actualChallenge$algo), c("A1", "A2"))
+  expect_equal(as.vector(actualChallenge$value), c(0.8, 0.6))
+  expect_equal(as.vector(actualChallenge$case), c("C1", "C2"))
 })
 
 test_that("NAs are replaced by numeric value for multi-task challenge", {
@@ -470,21 +403,13 @@ test_that("NAs are replaced by numeric value for multi-task challenge", {
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0)
 
-  expectedAlgorithmsTask1 <- c("A1", "A1")
-  expectedValuesTask1 <- c(0.8, 0.0)
-  expectedCasesTask1 <- c("C1", "C2")
+  expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1"))
+  expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.0))
+  expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2"))
 
-  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
-
-  expectedAlgorithmsTask2 <- c("A2", "A2")
-  expectedValuesTask2 <- c(0.0, 0.5)
-  expectedCasesTask2 <- c("C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
-  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
-  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+  expect_equal(as.vector(actualChallenge$T2$algo), c("A2", "A2"))
+  expect_equal(as.vector(actualChallenge$T2$value), c(0.0, 0.5))
+  expect_equal(as.vector(actualChallenge$T2$case), c("C1", "C2"))
 })
 
 test_that("NAs are replaced by function value for multi-task challenge", {
@@ -506,21 +431,13 @@ test_that("NAs are replaced by function value for multi-task challenge", {
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=replacementFunction)
 
-  expectedAlgorithmsTask1 <- c("A1", "A1")
-  expectedValuesTask1 <- c(0.8, 2.0)
-  expectedCasesTask1 <- c("C1", "C2")
+  expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1"))
+  expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 2.0))
+  expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2"))
 
-  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
-
-  expectedAlgorithmsTask2 <- c("A2", "A2")
-  expectedValuesTask2 <- c(2.0, 0.5)
-  expectedCasesTask2 <- c("C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
-  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
-  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+  expect_equal(as.vector(actualChallenge$T2$algo), c("A2", "A2"))
+  expect_equal(as.vector(actualChallenge$T2$value), c(2.0, 0.5))
+  expect_equal(as.vector(actualChallenge$T2$case), c("C1", "C2"))
 })
 
 test_that("NAs are removed for multi-task challenge", {
@@ -540,21 +457,13 @@ test_that("NAs are removed for multi-task challenge", {
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm")
 
-  expectedAlgorithmsTask1 <- c("A1")
-  expectedValuesTask1 <- c(0.8)
-  expectedCasesTask1 <- c("C1")
+  expect_equal(as.vector(actualChallenge$T1$algo), c("A1"))
+  expect_equal(as.vector(actualChallenge$T1$value), c(0.8))
+  expect_equal(as.vector(actualChallenge$T1$case), c("C1"))
 
-  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
-
-  expectedAlgorithmsTask2 <- c("A2")
-  expectedValuesTask2 <- c(0.5)
-  expectedCasesTask2 <- c("C2")
-
-  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
-  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
-  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+  expect_equal(as.vector(actualChallenge$T2$algo), c("A2"))
+  expect_equal(as.vector(actualChallenge$T2$value), c(0.5))
+  expect_equal(as.vector(actualChallenge$T2$case), c("C2"))
 })
 
 test_that("automatically added NAs are replaced by numeric value for multi-task challenge", {
@@ -575,21 +484,13 @@ test_that("automatically added NAs are replaced by numeric value for multi-task 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0),
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
 
-  expectedAlgorithmsTask1 <- c("A1", "A1", "A2", "A2")
-  expectedValuesTask1 <- c(0.8, 0.0, 0.0, 0.6)
-  expectedCasesTask1 <- c("C1", "C2", "C1", "C2")
+  expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.0, 0.0, 0.6))
+  expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2", "C1", "C2"))
 
-  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
-
-  expectedAlgorithmsTask2 <- c("A1", "A1", "A2", "A2")
-  expectedValuesTask2 <- c(0.2, 0.3, 0.4, 0.0)
-  expectedCasesTask2 <- c("C1", "C2", "C1", "C2")
-
-  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
-  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
-  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+  expect_equal(as.vector(actualChallenge$T2$algo), c("A1", "A1", "A2", "A2"))
+  expect_equal(as.vector(actualChallenge$T2$value), c(0.2, 0.3, 0.4, 0.0))
+  expect_equal(as.vector(actualChallenge$T2$case), c("C1", "C2", "C1", "C2"))
 })
 
 test_that("automatically added NAs are removed for multi-task challenge", {
@@ -610,19 +511,11 @@ test_that("automatically added NAs are removed for multi-task challenge", {
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm"),
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
 
-  expectedAlgorithmsTask1 <- c("A1", "A2")
-  expectedValuesTask1 <- c(0.8, 0.6)
-  expectedCasesTask1 <- c("C1", "C2")
+  expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A2"))
+  expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.6))
+  expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2"))
 
-  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
-  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
-  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
-
-  expectedAlgorithmsTask2 <- c("A1", "A1", "A2")
-  expectedValuesTask2 <- c(0.2, 0.3, 0.4)
-  expectedCasesTask2 <- c("C1", "C2", "C1")
-
-  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
-  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
-  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+  expect_equal(as.vector(actualChallenge$T2$algo), c("A1", "A1", "A2"))
+  expect_equal(as.vector(actualChallenge$T2$value), c(0.2, 0.3, 0.4))
+  expect_equal(as.vector(actualChallenge$T2$case), c("C1", "C2", "C1"))
 })
