@@ -416,3 +416,107 @@ test_that("NA is removed for single-task challenge", {
   expect_equal(as.vector(actualChallenge$value), expectedValues)
   expect_equal(as.vector(actualChallenge$case), expectedCases)
 })
+
+test_that("NA is replaced by numeric value for multi-task challenge", {
+  dataTask1=cbind(task="T1",
+                  rbind(
+                    data.frame(algo="A1", value=0.8, case="C1"),
+                    data.frame(algo="A1", value=NA, case="C2")
+                  ))
+
+  dataTask2=cbind(task="T2",
+                  rbind(
+                    data.frame(algo="A2", value=NA, case="C1"),
+                    data.frame(algo="A2", value=0.5, case="C2")
+                  ))
+
+  data=rbind(dataTask1, dataTask2)
+
+  actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0)
+
+  expectedAlgorithmsTask1 <- c("A1", "A1")
+  expectedValuesTask1 <- c(0.8, 0.0)
+  expectedCasesTask1 <- c("C1", "C2")
+
+  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
+  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
+  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
+
+  expectedAlgorithmsTask2 <- c("A2", "A2")
+  expectedValuesTask2 <- c(0.0, 0.5)
+  expectedCasesTask2 <- c("C1", "C2")
+
+  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
+  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
+  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+})
+
+test_that("NA is replaced by function value for multi-task challenge", {
+  dataTask1=cbind(task="T1",
+                  rbind(
+                    data.frame(algo="A1", value=0.8, case="C1"),
+                    data.frame(algo="A1", value=NA, case="C2")
+                  ))
+
+  dataTask2=cbind(task="T2",
+                  rbind(
+                    data.frame(algo="A2", value=NA, case="C1"),
+                    data.frame(algo="A2", value=0.5, case="C2")
+                  ))
+
+  data=rbind(dataTask1, dataTask2)
+
+  replacementFunction <- function(x) { 2 }
+
+  actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=replacementFunction)
+
+  expectedAlgorithmsTask1 <- c("A1", "A1")
+  expectedValuesTask1 <- c(0.8, 2.0)
+  expectedCasesTask1 <- c("C1", "C2")
+
+  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
+  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
+  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
+
+  expectedAlgorithmsTask2 <- c("A2", "A2")
+  expectedValuesTask2 <- c(2.0, 0.5)
+  expectedCasesTask2 <- c("C1", "C2")
+
+  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
+  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
+  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+})
+
+test_that("NA is removed for multi-task challenge", {
+  dataTask1=cbind(task="T1",
+                  rbind(
+                    data.frame(algo="A1", value=0.8, case="C1"),
+                    data.frame(algo="A1", value=NA, case="C2")
+                  ))
+
+  dataTask2=cbind(task="T2",
+                  rbind(
+                    data.frame(algo="A2", value=NA, case="C1"),
+                    data.frame(algo="A2", value=0.5, case="C2")
+                  ))
+
+  data=rbind(dataTask1, dataTask2)
+
+  actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm")
+
+  expectedAlgorithmsTask1 <- c("A1")
+  expectedValuesTask1 <- c(0.8)
+  expectedCasesTask1 <- c("C1")
+
+  expect_equal(as.vector(actualChallenge$T1$algo), expectedAlgorithmsTask1)
+  expect_equal(as.vector(actualChallenge$T1$value), expectedValuesTask1)
+  expect_equal(as.vector(actualChallenge$T1$case), expectedCasesTask1)
+
+  expectedAlgorithmsTask2 <- c("A2")
+  expectedValuesTask2 <- c(0.5)
+  expectedCasesTask2 <- c("C2")
+
+  expect_equal(as.vector(actualChallenge$T2$algo), expectedAlgorithmsTask2)
+  expect_equal(as.vector(actualChallenge$T2$value), expectedValuesTask2)
+  expect_equal(as.vector(actualChallenge$T2$case), expectedCasesTask2)
+})
