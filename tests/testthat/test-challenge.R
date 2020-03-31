@@ -1,10 +1,9 @@
 test_that("attributes are set for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A1", value=0.4, case="C2"),
-    data.frame(algo="A2", value=0.6, case="C1"),
-    data.frame(algo="A2", value=0.7, case="C2")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A1", value=0.4, case="C2"),
+            data.frame(algo="A2", value=0.6, case="C1"),
+            data.frame(algo="A2", value=0.7, case="C2"))
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE)
 
@@ -18,18 +17,18 @@ test_that("attributes are set for single-task challenge", {
 })
 
 test_that("attributes are set for multi-task challenge with sanity check enabled", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A2", value=0.6, case="C1")
-                  ))
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A1", value=0.2, case="C1"),
-                    data.frame(algo="A2", value=0.3, case="C1")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A2", value=0.6, case="C1")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.2, case="C1"),
+                       data.frame(algo="A2", value=0.3, case="C1")
+                     ))
 
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=TRUE, check=TRUE)
 
@@ -55,18 +54,18 @@ test_that("attributes are set for multi-task challenge with sanity check enabled
 })
 
 test_that("attributes are set for multi-task challenge with sanity check disabled", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A2", value=0.6, case="C1")
-                  ))
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A1", value=0.2, case="C1"),
-                    data.frame(algo="A2", value=0.3, case="C1")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A2", value=0.6, case="C1")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.2, case="C1"),
+                       data.frame(algo="A2", value=0.3, case="C1")
+                     ))
 
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=TRUE, check=FALSE)
 
@@ -81,10 +80,9 @@ test_that("attributes are set for multi-task challenge with sanity check disable
 })
 
 test_that("missing algorithm performances are added as NA with sanity check enabled for single-task challenge", {
-  data=rbind(
-         data.frame(algo="A1", value=0.8, case="C1"),
-         data.frame(algo="A2", value=0.6, case="C2")
-       )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
                  "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
@@ -95,10 +93,9 @@ test_that("missing algorithm performances are added as NA with sanity check enab
 })
 
 test_that("missing algorithm performances are not added as NA with sanity check disabled for single-task challenge", {
-  data=rbind(
-         data.frame(algo="A1", value=0.8, case="C1"),
-         data.frame(algo="A2", value=0.6, case="C2")
-       )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A2", value=0.6, case="C2"))
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, check=FALSE)
 
@@ -108,11 +105,11 @@ test_that("missing algorithm performances are not added as NA with sanity check 
 })
 
 test_that("missing algorithm performances are added as NA with sanity check enabled for multi-task challenge (1 task in data set)", {
-  data=cbind(task="T1",
-             rbind(
-               data.frame(algo="A1", value=0.8, case="C1"),
-               data.frame(algo="A2", value=0.6, case="C2")
-             ))
+  data <- cbind(task="T1",
+                rbind(
+                  data.frame(algo="A1", value=0.8, case="C1"),
+                  data.frame(algo="A2", value=0.6, case="C2")
+                ))
 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
@@ -123,11 +120,11 @@ test_that("missing algorithm performances are added as NA with sanity check enab
 })
 
 test_that("missing algorithm performances are not added as NA with sanity check disabled for multi-task challenge (1 task in data set)", {
-  data=cbind(task="T1",
-             rbind(
-               data.frame(algo="A1", value=0.8, case="C1"),
-               data.frame(algo="A2", value=0.6, case="C2")
-             ))
+  data <- cbind(task="T1",
+                rbind(
+                  data.frame(algo="A1", value=0.8, case="C1"),
+                  data.frame(algo="A2", value=0.6, case="C2")
+                ))
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, check=FALSE)
 
@@ -137,19 +134,19 @@ test_that("missing algorithm performances are not added as NA with sanity check 
 })
 
 test_that("missing algorithm performances are added as NA with sanity check enabled for multi-task challenge (2 tasks in data set)", {
-  dataTask1=cbind(task="T1",
-               rbind(
-                 data.frame(algo="A1", value=0.8, case="C1"),
-                 data.frame(algo="A2", value=0.6, case="C2")
-               ))
-  dataTask2=cbind(task="T2",
-               rbind(
-                 data.frame(algo="A1", value=0.2, case="C1"),
-                 data.frame(algo="A1", value=0.3, case="C2"),
-                 data.frame(algo="A2", value=0.4, case="C1")
-               ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A2", value=0.6, case="C2")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.2, case="C1"),
+                       data.frame(algo="A1", value=0.3, case="C2"),
+                       data.frame(algo="A2", value=0.4, case="C1")
+                     ))
 
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
@@ -164,95 +161,92 @@ test_that("missing algorithm performances are added as NA with sanity check enab
 })
 
 test_that("case cannot appear more than once per algorithm with sanity check enabled for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A1", value=0.8, case="C1")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A1", value=0.8, case="C1"))
 
   expect_error(as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
                "Case(s) (C1) appear(s) more than once for the same algorithm", fixed=TRUE)
 })
 
 test_that("cases cannot appear more than once per algorithm with sanity check enabled for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A2", value=0.7, case="C1"),
-    data.frame(algo="A1", value=0.5, case="C2"),
-    data.frame(algo="A2", value=0.6, case="C2"),
-    data.frame(algo="A2", value=0.6, case="C2")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A2", value=0.7, case="C1"),
+            data.frame(algo="A1", value=0.5, case="C2"),
+            data.frame(algo="A2", value=0.6, case="C2"),
+            data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_error(as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
                "Case(s) (C1, C2) appear(s) more than once for the same algorithm", fixed=TRUE)
 })
 
 test_that("cases cannot appear more than once per algorithm when missing data was added with sanity check enabled for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A2", value=0.6, case="C2"),
-    data.frame(algo="A2", value=0.6, case="C2")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A2", value=0.6, case="C2"),
+            data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_error(as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
                "Case(s) (C1, C2) appear(s) more than once for the same algorithm", fixed=TRUE)
 })
 
 test_that("case cannot appear more than once per algorithm with sanity check enabled for multi-task challenge (1 task in data set)", {
-  data=cbind(task="T1",
-             rbind(
-               data.frame(algo="A1", value=0.8, case="C1"),
-               data.frame(algo="A1", value=0.8, case="C1")
-             ))
+  data <- cbind(task="T1",
+                rbind(
+                  data.frame(algo="A1", value=0.8, case="C1"),
+                  data.frame(algo="A1", value=0.8, case="C1")
+                ))
 
   expect_error(as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
                "Case(s) (C1) appear(s) more than once for the same algorithm in task T1", fixed=TRUE)
 })
 
 test_that("cases cannot appear more than once per algorithm with sanity check enabled for multi-task challenge (1 task in data set)", {
-  data=cbind(task="T1",
-             rbind(
-               data.frame(algo="A1", value=0.8, case="C1"),
-               data.frame(algo="A1", value=0.8, case="C1"),
-               data.frame(algo="A2", value=0.7, case="C1"),
-               data.frame(algo="A1", value=0.5, case="C2"),
-               data.frame(algo="A2", value=0.6, case="C2"),
-               data.frame(algo="A2", value=0.6, case="C2")
-             ))
+  data <- cbind(task="T1",
+                rbind(
+                  data.frame(algo="A1", value=0.8, case="C1"),
+                  data.frame(algo="A1", value=0.8, case="C1"),
+                  data.frame(algo="A2", value=0.7, case="C1"),
+                  data.frame(algo="A1", value=0.5, case="C2"),
+                  data.frame(algo="A2", value=0.6, case="C2"),
+                  data.frame(algo="A2", value=0.6, case="C2")
+                ))
 
   expect_error(as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
                "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task T1", fixed=TRUE)
 })
 
 test_that("cases cannot appear more than once per algorithm with sanity check enabled for multi-task challenge (2 tasks in data set)", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1") # let T1 pass
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1") # let T1 pass
+                     ))
 
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A2", value=0.7, case="C1"),
-                    data.frame(algo="A1", value=0.5, case="C2"),
-                    data.frame(algo="A2", value=0.6, case="C2"),
-                    data.frame(algo="A2", value=0.6, case="C2")
-                  ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A2", value=0.7, case="C1"),
+                       data.frame(algo="A1", value=0.5, case="C2"),
+                       data.frame(algo="A2", value=0.6, case="C2"),
+                       data.frame(algo="A2", value=0.6, case="C2")
+                     ))
 
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   expect_error(as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
                "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task T2", fixed=TRUE)
 })
 
 test_that("multi-task data set containing one task is interpreted as single-task data set, missing algorithm performances are added", {
-  data=cbind(task="T1",
-             rbind(
-               data.frame(algo="A1", value=0.8, case="C1"),
-               data.frame(algo="A2", value=0.6, case="C2")
-             ))
+  data <- cbind(task="T1",
+                rbind(
+                  data.frame(algo="A1", value=0.8, case="C1"),
+                  data.frame(algo="A2", value=0.6, case="C2")
+                ))
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_message(actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
@@ -264,11 +258,11 @@ test_that("multi-task data set containing one task is interpreted as single-task
 })
 
 test_that("multi-task data set containing one task is interpreted as single-task data set, case cannot appear more than once per algorithm", {
-  data=cbind(task="T1",
-             rbind(
-               data.frame(algo="A1", value=0.8, case="C1"),
-               data.frame(algo="A1", value=0.8, case="C1")
-             ))
+  data <- cbind(task="T1",
+                rbind(
+                  data.frame(algo="A1", value=0.8, case="C1"),
+                  data.frame(algo="A1", value=0.8, case="C1")
+                ))
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_error(as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
@@ -276,17 +270,17 @@ test_that("multi-task data set containing one task is interpreted as single-task
 })
 
 test_that("user is notified of duplicate cases when multi-task data set is interpreted as single-task data set (2 tasks in data set)", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1")
+                     ))
 
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1")
-                  ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1")
+                     ))
 
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_error(as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
@@ -294,17 +288,17 @@ test_that("user is notified of duplicate cases when multi-task data set is inter
 })
 
 test_that("user is notified of missing algorithm performance when multi-task data set is interpreted as single-task data set (2 tasks in data set)", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1")
+                     ))
 
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A2", value=0.6, case="C2")
-                  ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A2", value=0.6, case="C2")
+                     ))
 
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_message(as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
@@ -312,12 +306,11 @@ test_that("user is notified of missing algorithm performance when multi-task dat
 })
 
 test_that("NAs are replaced by numeric value for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A1", value=NA, case="C2"),
-    data.frame(algo="A2", value=0.6, case="C1"),
-    data.frame(algo="A2", value=NA, case="C2")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A1", value=NA, case="C2"),
+            data.frame(algo="A2", value=0.6, case="C1"),
+            data.frame(algo="A2", value=NA, case="C2"))
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0)
 
@@ -327,12 +320,11 @@ test_that("NAs are replaced by numeric value for single-task challenge", {
 })
 
 test_that("NAs are replaced by function value for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A1", value=NA, case="C2"),
-    data.frame(algo="A2", value=0.6, case="C1"),
-    data.frame(algo="A2", value=NA, case="C2")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A1", value=NA, case="C2"),
+            data.frame(algo="A2", value=0.6, case="C1"),
+            data.frame(algo="A2", value=NA, case="C2"))
 
   replacementFunction <- function(x) { 2 }
 
@@ -344,12 +336,11 @@ test_that("NAs are replaced by function value for single-task challenge", {
 })
 
 test_that("NAs are removed for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A1", value=NA, case="C2"),
-    data.frame(algo="A2", value=0.6, case="C1"),
-    data.frame(algo="A2", value=NA, case="C2")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A1", value=NA, case="C2"),
+            data.frame(algo="A2", value=0.6, case="C1"),
+            data.frame(algo="A2", value=NA, case="C2"))
 
   actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm")
 
@@ -359,10 +350,9 @@ test_that("NAs are removed for single-task challenge", {
 })
 
 test_that("automatically added NAs are replaced by numeric value for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A2", value=0.6, case="C2")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0),
                  "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
@@ -373,10 +363,9 @@ test_that("automatically added NAs are replaced by numeric value for single-task
 })
 
 test_that("automatically added NAs are removed for single-task challenge", {
-  data=rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A2", value=0.6, case="C2")
-  )
+  data <- rbind(
+            data.frame(algo="A1", value=0.8, case="C1"),
+            data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm"),
                  "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
@@ -387,19 +376,18 @@ test_that("automatically added NAs are removed for single-task challenge", {
 })
 
 test_that("NAs are replaced by numeric value for multi-task challenge", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A1", value=NA, case="C2")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A1", value=NA, case="C2")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A2", value=NA, case="C1"),
+                       data.frame(algo="A2", value=0.5, case="C2")
+                     ))
 
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A2", value=NA, case="C1"),
-                    data.frame(algo="A2", value=0.5, case="C2")
-                  ))
-
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0)
 
@@ -413,19 +401,18 @@ test_that("NAs are replaced by numeric value for multi-task challenge", {
 })
 
 test_that("NAs are replaced by function value for multi-task challenge", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A1", value=NA, case="C2")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A1", value=NA, case="C2")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A2", value=NA, case="C1"),
+                       data.frame(algo="A2", value=0.5, case="C2")
+                     ))
 
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A2", value=NA, case="C1"),
-                    data.frame(algo="A2", value=0.5, case="C2")
-                  ))
-
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   replacementFunction <- function(x) { 2 }
 
@@ -441,19 +428,18 @@ test_that("NAs are replaced by function value for multi-task challenge", {
 })
 
 test_that("NAs are removed for multi-task challenge", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A1", value=NA, case="C2")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A1", value=NA, case="C2")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A2", value=NA, case="C1"),
+                       data.frame(algo="A2", value=0.5, case="C2")
+                     ))
 
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A2", value=NA, case="C1"),
-                    data.frame(algo="A2", value=0.5, case="C2")
-                  ))
-
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm")
 
@@ -467,19 +453,19 @@ test_that("NAs are removed for multi-task challenge", {
 })
 
 test_that("automatically added NAs are replaced by numeric value for multi-task challenge", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A2", value=0.6, case="C2")
-                  ))
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A1", value=0.2, case="C1"),
-                    data.frame(algo="A1", value=0.3, case="C2"),
-                    data.frame(algo="A2", value=0.4, case="C1")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A2", value=0.6, case="C2")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.2, case="C1"),
+                       data.frame(algo="A1", value=0.3, case="C2"),
+                       data.frame(algo="A2", value=0.4, case="C1")
+                     ))
 
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0),
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
@@ -494,19 +480,19 @@ test_that("automatically added NAs are replaced by numeric value for multi-task 
 })
 
 test_that("automatically added NAs are removed for multi-task challenge", {
-  dataTask1=cbind(task="T1",
-                  rbind(
-                    data.frame(algo="A1", value=0.8, case="C1"),
-                    data.frame(algo="A2", value=0.6, case="C2")
-                  ))
-  dataTask2=cbind(task="T2",
-                  rbind(
-                    data.frame(algo="A1", value=0.2, case="C1"),
-                    data.frame(algo="A1", value=0.3, case="C2"),
-                    data.frame(algo="A2", value=0.4, case="C1")
-                  ))
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A2", value=0.6, case="C2")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.2, case="C1"),
+                       data.frame(algo="A1", value=0.3, case="C2"),
+                       data.frame(algo="A2", value=0.4, case="C1")
+                     ))
 
-  data=rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2)
 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm"),
                  "Performance of not all algorithms is observed for all cases in task T1. Inserted as missings in following cases:")
