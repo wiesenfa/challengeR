@@ -4,7 +4,7 @@ params:
   colors: NA
   name: NULL
 title: "Benchmarking report for `r params$name` "
-author: created by challengeR `r packageVersion('challengeR')` (Wiesenfarth, Reinke, Cardoso, Maier-Hein & Kopp-Schneider, 2019)
+author: created by challengeR `r packageVersion('challengeR')` (Wiesenfarth, Reinke, Landman, Cardoso, Maier-Hein & Kopp-Schneider, 2019)
 date: "`r Sys.setlocale('LC_TIME', 'English'); format(Sys.time(), '%d %B, %Y')`"
 editor_options: 
   chunk_output_type: console
@@ -241,7 +241,7 @@ methodsplot(object )+scale_color_manual(values=cols)
 # Reference
 
 
-Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
+Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
 
 
 M. J. A. Eugster, T. Hothorn, and F. Leisch, “Exploratory

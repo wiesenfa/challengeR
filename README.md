@@ -43,7 +43,7 @@ might not be problematic and you can try to proceed.
 
 Licenced under GPL-3. If you use this software for a publication, cite
 
-Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein,
+Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein,
 L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
 analyzing and visualizing challenge results. *arXiv preprint
 arXiv:1910.05121*
@@ -364,7 +364,7 @@ ranking_bootstrapped %>%
 
 # Reference
 
-Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein,
+Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein,
 L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
 analyzing and visualizing challenge results. *arXiv preprint
 arXiv:1910.05121*
