@@ -2,7 +2,7 @@ Methods and open-source toolkit for analyzing and visualizing challenge
 results
 ================
 
-Note that this is ongoing work (version 0.3.1), there may be updates
+Note that this is ongoing work (version 0.3.2), there may be updates
 with possibly major changes. *Please make sure that you use the most
 current version\!*
 
