@@ -1,12 +1,8 @@
 bibentry(
   bibtype="Article",
-   title={"Methods and open-source toolkit for analyzing and visualizing challenge results"},
+  title={"Methods and open-source toolkit for analyzing and visualizing challenge results"},
   journal={"arXiv preprint arXiv:1910.05121"},
-   year="2019",
-  author=
-  personList(as.person("Manuel Wiesenfarth"), as.person("Annika Reinke")
-  , as.person("Bennett A. Landman"), as.person("SManuel Jorge Cardoso") , as.person("Lena Maier-Hein},") , as.person("Annette Kopp-Schneider")  ),
-  textVersion="Wiesenfarth, M., Reinke, A., Landmann A.L., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. arXiv preprint arXiv:1910.05121" )
-
-
-
+  year="2019",
+  author=personList(as.person("Manuel Wiesenfarth"), as.person("Annika Reinke"), as.person("Bennett A. Landman"), as.person("Manuel Jorge Cardoso"), as.person("Lena Maier-Hein"), as.person("Annette Kopp-Schneider")),
+  textVersion="Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. arXiv preprint arXiv:1910.05121"
+)
