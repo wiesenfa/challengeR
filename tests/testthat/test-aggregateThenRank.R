@@ -60,6 +60,17 @@ test_that("aggregate-than-rank by mean works with two algorithms (reverse order)
   expect_equal(ranking$mat, expectedRanking)
 })
 
+test_that("aggregate-than-rank raises error for invalid aggregation function", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.6, case="C1"),
+    data.frame(algo="A2", value=0.6, case="C1"))
+
+  challenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  expect_error(challenge%>%aggregateThenRank(FUN = meanx),
+               "object 'meanx' not found", fixed = TRUE)
+})
+
 test_that("aggregate-than-rank by mean works with two algorithms for one case and 'min' as ties method", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
