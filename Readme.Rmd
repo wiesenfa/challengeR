@@ -11,9 +11,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-
-
-
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
  collapse = TRUE,
@@ -30,6 +27,13 @@ Note that this is ongoing work (version `r packageVersion("challengeR")`), there
 
 Change log at the end of this document.
 
+# Introduction
+
+The current framework is a tool for analyzing and visualizing challenge results in the field of biomedical image analysis and beyond.
+
+Biomedical challenges have become the de facto standard for benchmarking biomedical image analysis algorithms. While the number of challenges is steadily increasing, surprisingly little effort has been invested in ensuring high quality design, execution and reporting for these international competitions. Specifically, results analysis and visualization in the event of uncertainties have been given almost no attention in the literature. 
+
+Given these shortcomings, the current framework aims to enable fast and wide adoption of comprehensively analyzing and visualizing the results of single-task and multi-task challenges and applying them to a number of simulated and real-life challenges to demonstrate their specific strengths and weaknesses. This approach offers an intuitive way to gain important insights into the relative and absolute performance of algorithms, which cannot be revealed by commonly applied visualization techniques.
 
 # Installation
 
@@ -280,6 +284,117 @@ ranking_bootstrapped %>%
         )
 ```
 
+# Troubleshooting
+
+In this section are compiled issues that the users reported.
+
+### RStudio specific
+
+#### Warnings while installing the Github repository
+##### Error:
+
+While trying to install the current version of the repository:
+
+```{r, eval=F, echo=T}
+devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
+```
+
+The following warning showed up in the output:
+```{r, eval=F, echo=T}
+WARNING: Rtools is required to build R packages, but is not currently installed.
+```
+
+Therefore, Rtools was installed via a separate executable: https://cran.r-project.org/bin/windows/Rtools/ and the warning disappeared.
+	
+##### Solution: 
+
+Actually there is no need of installing Rtools, it is not really used in the toolkit. Insted, choose not to install it when it is asked. See comment in the installation section: 
+
+“If you are asked whether you want to update installed packages and you type “a” for all, you might need administrator rights to update R core packages. You can also try to type “n” for updating no packages. If you are asked “Do you want to install from sources the packages which need compilation? (Yes/no/cancel)”, you can safely type “no”.”
+
+#### - Unable to install the current version of the tool from Github
+##### Error:
+
+While trying the current version of the tool from github, it was unable to install. 
+
+The error message was:
+
+```{r, eval=F, echo=T}
+byte-compile and prepare package for lazy loading
+Error: (converted from warning) package 'ggplot2' was built under R version 3.6.3
+Execution halted
+ERROR: lazy loading failed for package 'challengeR'
+* removing 'C:/Users/.../Documents/R/win-library/3.6/challengeR'
+* restoring previous 'C:/Users/.../Documents/R/win-library/3.6/challengeR'
+Error: Failed to install 'challengeR' from GitHub:
+  (converted from warning) installation of package 'C:/Users/.../AppData/Local/Temp/Rtmp615qmV/file4fd419555eb4/challengeR_0.3.1.tar.gz' had non-zero exit status
+```
+
+The problem was that some of the packages that were built under R3.6.1 had been updated, but the current installed version was still R3.6.1. 
+
+##### Solution:
+
+The solution was to update R3.6.1 to R3.6.3. Another way would have been to reset the single packages to the versions built under R3.6.1
+
+
+#### - Unable to install R
+##### Error:
+
+While trying to install the package in the R, after running the following commands:
+
+```{r, eval=F, echo=T}
+if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+BiocManager::install("Rgraphviz", dependencies = TRUE)
+devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
+```
+
+The error message was:
+
+```{r, eval=F, echo=T}
+ERROR:
+1: In file(con, "r") :
+ URL 'https://bioconductor.org/config.yaml': status was 'SSL connect error'
+2: packages ‘BiocVersion’, ‘Rgraphviz’ are not available (for R version 3.6.1)
+```
+
+##### Solution:
+
+The solution was to restart RStudio.
+
+
+#### - Incorrect column order
+##### Error:
+
+When naming the columns "task" and "case", R was confused because the arguments in the challenge object are also called like this and it produced the following error:
+
+```{r, eval=F, echo=T}
+Error in table(object[[task]][[algorithm]], object[[task]][[case]]) : all arguments must have the same length
+```
+
+##### Solution:
+
+The solution was to rename the columns.
+
+
+
+### Related to MikText
+
+#### - Missing packages
+##### Error:
+
+While generating the PDF with Miktext (2.9), the following error showed up: 
+
+```{r, eval=F, echo=T}
+fatal pdflatex - gui framework cannot be initialized
+```
+
+There is an issue with installing missing packages in LaTeX.
+
+##### Solution:
+
+Open your MiKTeX Console --> Settings, select "Always install missing packages on-the-fly". Then generate the report. Once the report is generated, you can reset the settings to your preferred ones.
+
 
 # Changes
 
@@ -309,9 +424,20 @@ ranking_bootstrapped %>%
 - `report()` function can be applied to ranked object before bootstrapping (and thus excluding figures based on bootstrapping), i.e. in the example `ranking %>% report(...)`
 - bug fixes
   
+# Team
+
+The developer team includes members from both Computer Assisted Medical Interventions (CAMI) and Biostatistics Division from the German Cancer Research Center (DKFZ): 
+
+- Manuel Wiesenfarth 
+- Annette Kopp-Schneider
+- Annika Reinke
+- Matthias Eisenmann
+- Laura Aguilera Saiz
+- Lena Maier-Hein
   
 # Reference
 
 Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
 
-![alt text](HIP_Logo.png){width=100px}
+![alt text](HIP_Logo.png){width=50px}
+![alt text](DKFZ_Logo.png){width=100px}
