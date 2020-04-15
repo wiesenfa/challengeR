@@ -1,0 +1,306 @@
+---
+title: Overwiew of the used methods
+output:
+  github_document:
+    toc: yes
+    toc_depth: 1
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+ collapse = TRUE,
+  comment = "#>",
+ # fig.path = "README-",
+    fig.width = 9,
+    fig.height = 5,
+    width=160
+)
+```
+
+# Introduction
+
+This document is meant to be an overview guide of the methods and different steps used in the tutorial scripts, and aims to achieve a deeper understanding of the analysis and visualization toolkit. The overview is divided in sections, following the usage.
+
+# Ranking configuration
+
+Once the data has been loaded (either manually or using a .csv file), the first thing to do is to create a challenge object. Then, the ranking method will be chosen and configured.
+
+## Define challenge object
+
+A challenge object will be created using "challengeR.R" class, which will be now analysed.
+
+The following code refers to the constructor:
+```{r, eval=F, echo=T}
+as.challenge=function(object, 
+                      value, 
+                      algorithm ,
+                      case=NULL,
+                      by=NULL, 
+                      annotator=NULL, 
+                      smallBetter=FALSE,
+                      na.treat=NULL, # optional
+                      check=TRUE)
+```
+
+Each parameter corresponds to:
+
+- object: the object that will be returned, in the specific case, challenge
+- value: column corresponding to the values of the metrics
+- algorithm: column corresponding to the algorithm
+- case: column corresponding to the test case identifier
+- by: (="task" ), use it when it is a multitask challenge
+- annotator: specify here if there are more than one annotator
+- smallBetter: specify if small metric values are better
+- na.treat: treatment of empty values (NA)
+- check: computes sanity check if TRUE. The sanity check can be computed for both single and multi-task challenges. It checks missing algorithm performance, and also wether the test cases appear more than once.
+
+An example of how to use it (for a multi-task challenge):
+```{r, eval=F, echo=T}
+  challenge=as.challenge(data_matrix, 
+                         value="value",
+                         algorithm="alg_name", 
+                         case="case",  
+                         by="task",
+                         smallBetter = FALSE)
+```
+
+! Take into account that the code differst for multi/single task challenges !
+
+In case of a single task challenge, create first a dataSubset, where the name of the task is unique. 
+
+```{r, eval=F, echo=T}
+  dataSubset=subset(data_matrix, task=="c_random")
+```
+
+dataSubset will be used to create the challenge object then.
+
+## Configure ranking method
+
+The classes "wrapper.R", "aaggregate.R" and "Rank.aggregated.R" (?) are used.
+
+In order to configure the ranking methods, the next parameters are considered:
+
+- FUN: aggregation function, e.g. mean, median, min, max, or e.g. function(x) quantile(x, probs=0.05)
+- na.treat: treatment of`missing data / null values (already specified when the challenge object was created, do we need to specify here again?) either "na.rm" to remove missing data, set missings to numeric value (e.g. 0) or specify a function e.g. function(x) min(x)
+- ties.method: a character string specifying how ties are treated, see ?base::rank
+- alpha: significance level (only for Significance ranking)
+- p.adjust.method: method for adjustment for multiple testing, see ?p.adjust
+
+Different ranking methods are available:
+
+#### Metric-based aggregation -> aggregateThenRank method
+
+```{r, eval=F, echo=T}
+# wrapper.R
+aggregateThenRank=function(object,FUN,ties.method = "min",...){
+  object %>% 
+    aggregate(FUN=FUN,...) %>% 
+    rank(ties.method = ties.method)
+}
+```
+
+First, (object %<% aggregate), the challenge object is aggregated:
+```{r, eval=F, echo=T}
+# aaggregate.R
+aggregate.challenge=function(x,
+                             FUN=mean,
+                             na.treat, #either "na.rm", numeric value or function
+                             alpha=0.05, p.adjust.method="none",# only needed for significance 
+                             parallel=FALSE,
+                             progress="none",...)
+```
+
+Second, (aggregate %<% rank), the aggregated challenge is ranked:
+```{r, eval=F, echo=T}
+# Rank.aggregated.R
+rank.aggregated <-function(object,
+                           ties.method="min",
+                           largeBetter,
+                           ...)
+```
+
+An example for "aggregate-then-rank" use (takink mean for aggregation):
+  
+```{r, eval=F, echo=T}
+ranking=challenge%>%aggregateThenRank(FUN = mean, # aggregation function, 
+                                                  # e.g. mean, median, min, max, 
+                                                  # or e.g. function(x) quantile(x, probs=0.05)
+                                      na.treat=0, # either "na.rm" to remove missing data, 
+                                                  # set missings to numeric value (e.g. 0) 
+                                                  # or specify a function, 
+                                                  # e.g. function(x) min(x)
+                                      ties.method = "min" # a character string specifying 
+                                                          # how ties are treated, see ?base::rank
+                                            )  
+```
+
+#### Case-based aggregation -> rankThenAggregate method
+
+```{r, eval=F, echo=T}
+# wrapper.R
+rankThenAggregate=function(object,
+                           FUN,
+                           ties.method = "min"
+                           ){
+  object %>% 
+        rank(ties.method = ties.method)%>% 
+          aggregate(FUN=FUN) %>% 
+          rank(ties.method = ties.method) #small rank is always best, i.e. largeBetter always FALSE
+}
+```
+ 
+First, (object %<% rank), the challenge object is ranked:
+```{r, eval=F, echo=T}
+# rrank.R
+rank.challenge=function(object,
+                        x,
+                        ties.method="min",...)
+```
+
+Second, (rank %<% aggregate), the ranked challenge object is aggregated:
+```{r, eval=F, echo=T}
+# aaggregate.R
+aggregate.ranked <-function(x,
+                            FUN=mean, ...                      )
+```
+
+Third, (aggregate %<% rank), the previously ranked and aggregated challenge is again ranked:
+```{r, eval=F, echo=T}
+# Rank.aggregated.R
+rank.aggregated <-function(object,
+                           ties.method="min",
+                           largeBetter,
+                           ...)
+```
+
+An example for  "rank-then-aggregate" with arguments as above (taking mean for aggregation):
+```{r, eval=F, echo=T}
+ranking=challenge%>%rankThenAggregate(FUN = mean,
+                                      ties.method = "min"
+                                      )
+```
+
+
+#### Significance ranking -> testThenRank method
+
+This method is similar to "aggregateThenRank", but having a fixed "significance" function.
+
+```{r, eval=F, echo=T}
+# wrapper.R
+testThenRank=function(object,FUN,ties.method = "min",...){
+  object %>% 
+    aggregate(FUN="significance",...) %>% 
+    rank(ties.method = ties.method)
+}
+```
+
+First, (object %<% aggregate), the challenge object is aggregated:
+
+! No need to specify the function again !
+```{r, eval=F, echo=T}
+# aaggregate.R
+aggregate.challenge=function(x,
+                             FUN="significance", 
+                             na.treat, #either "na.rm", numeric value or function
+                             alpha=0.05, p.adjust.method="none",# only needed for significance 
+                             parallel=FALSE,
+                             progress="none",...)
+```
+
+Second, (aggregate %<% rank), the aggregated challenge is ranked:
+```{r, eval=F, echo=T}
+# Rank.aggregated.R
+rank.aggregated <-function(object,
+                           ties.method="min",
+                           largeBetter,
+                           ...)
+```
+
+An example for test-then-rank based on Wilcoxon signed rank test:
+```{r, eval=F, echo=T}
+ranking=challenge%>%testThenRank(alpha=0.05, # significance level
+                                 p.adjust.method="none",  # method for adjustment for
+                                                          # multiple testing, see ?p.adjust
+                                 na.treat=0, # either "na.rm" to remove missing data,
+                                             # set missings to numeric value (e.g. 0)
+                                             # or specify a function, e.g. function(x) min(x)
+                                 ties.method = "min" # a character string specifying
+                                                     # how ties are treated, see ?base::rank
+                     )
+
+```
+
+<!-- # Perform bootstrapping -->
+
+<!-- Perform bootstrapping with 1000 bootstrap samples using one CPU -->
+<!-- ```{r, eval=F, echo=T} -->
+<!-- set.seed(1) -->
+<!-- ranking_bootstrapped=ranking%>%bootstrap(nboot=1000) -->
+<!-- ``` -->
+
+<!-- If you want to use multiple CPUs (here: 8 CPUs), use -->
+
+<!-- ```{r, eval=F, echo=T} -->
+<!-- library(doParallel) -->
+<!-- registerDoParallel(cores=8)   -->
+<!-- set.seed(1) -->
+<!-- ranking_bootstrapped=ranking%>%bootstrap(nboot=1000, parallel=TRUE, progress = "none") -->
+<!-- stopImplicitCluster() -->
+<!-- ``` -->
+
+
+
+<!-- # Generate the report -->
+<!-- Generate report in PDF, HTML or DOCX format. Code differs slightly for single and multi task challenges. -->
+
+<!-- ## 5.1 For single task challenges -->
+<!-- ```{r, eval=F, echo=T} -->
+<!-- ranking_bootstrapped %>%  -->
+<!--   report(title="singleTaskChallengeExample", # used for the title of the report -->
+<!--          file = "filename",  -->
+<!--          format = "PDF", # format can be "PDF", "HTML" or "Word" -->
+<!--          latex_engine="pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex" -->
+<!--          clean=TRUE #optional. Using TRUE will clean intermediate files that are created during rendering. -->
+<!--         )  -->
+
+<!-- ``` -->
+
+<!-- Argument *file* allows for specifying the output file path as well, otherwise the working directory is used. -->
+<!-- If file is specified but does not have a file extension, an extension will be automatically added according to the output format given in *format*.  -->
+<!-- Using argument *clean=FALSE* allows to retain intermediate files, such as separate files for each figure. -->
+
+<!-- If argument "file" is omitted, the report is  created in a temporary folder with file name "report". -->
+
+
+<!-- ## 5.1 For multi task challenges -->
+<!-- Same as for single task challenges, but additionally consensus ranking (rank aggregation across tasks) has to be given. -->
+
+<!-- Compute ranking consensus across tasks (here: consensus ranking according to mean ranks across tasks): -->
+
+<!-- ```{r, eval=F, echo=T} -->
+<!-- # See ?relation_consensus for different methods to derive consensus ranking -->
+<!-- meanRanks=ranking%>%consensus(method = "euclidean")  -->
+<!-- meanRanks # note that there may be ties (i.e. some algorithms have identical mean rank) -->
+<!-- ``` -->
+
+<!-- Generate report as above, but with additional specification of consensus ranking -->
+<!-- ```{r, eval=F, echo=T} -->
+<!-- ranking_bootstrapped %>%  -->
+<!--   report(consensus=meanRanks, -->
+<!--          title="multiTaskChallengeExample", -->
+<!--          file = "filename",  -->
+<!--          format = "PDF", # format can be "PDF", "HTML" or "Word" -->
+<!--          latex_engine="pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex" -->
+<!--         ) -->
+<!-- ``` -->
+
+
+# Terms of use
+Licenced under GPL-3. If you use this software for a publication, cite
+
+Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
