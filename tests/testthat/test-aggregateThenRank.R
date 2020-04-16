@@ -324,3 +324,23 @@ test_that("NAs are replaced by numeric value in multi-task challenge (2 tasks in
   expect_equal(ranking$matlist$T2, expectedRankingTask2)
 })
 
+test_that("aggregate-than-rank raises error when no NA treatment specified but NAs are contained in multi-task challenge (2 tasks in data set)", {
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.6, case="C1"),
+                       data.frame(algo="A2", value=0.8, case="C1")
+                     ))
+
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=NA, case="C1"),
+                       data.frame(algo="A2", value=0.4, case="C1")
+                     ))
+
+  data <- rbind(dataTask1, dataTask2)
+
+  challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  expect_error(challenge%>%aggregateThenRank(FUN = mean),
+               "argument \"na.treat\" is missing, with no default", fixed = TRUE)
+})
