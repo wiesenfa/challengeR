@@ -396,6 +396,41 @@ There is an issue with installing missing packages in LaTeX.
 Open your MiKTeX Console --> Settings, select "Always install missing packages on-the-fly". Then generate the report. Once the report is generated, you can reset the settings to your preferred ones.
 
 
+#### - Unable to generate report
+##### Error:
+
+While generating the PDF with Miktext (2.9):
+
+```{r, eval=F, echo=T}
+ranking_bootstrapped %>% 
+  report(title="singleTaskChallengeExample", # used for the title of the report
+         file = "filename", 
+         format = "PDF", # format can be "PDF", "HTML" or "Word"
+         latex_engine="pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+         clean=TRUE #optional. Using TRUE will clean intermediate files that are created during rendering.
+        ) 
+
+```
+
+The following error showed up: 
+
+```{r, eval=F, echo=T}
+output file: filename.knit.md
+
+"C:/Program Files/RStudio/bin/pandoc/pandoc" +RTS -K512m -RTS filename.utf8.md --to latex --from markdown+autolink_bare_uris+tex_math_single_backslash --output filename.tex --self-contained --number-sections --highlight-style tango --pdf-engine pdflatex --variable graphics --lua-filter "C:/Users/adm/Documents/R/win-library/3.6/rmarkdown/rmd/lua/pagebreak.lua" --lua-filter "C:/Users/adm/Documents/R/win-library/3.6/rmarkdown/rmd/lua/latex-div.lua" --variable "geometry:margin=1in" 
+
+Error: LaTeX failed to compile filename.tex. See https://yihui.org/tinytex/r/#debugging for debugging tips.
+
+  Warning message:
+In system2(..., stdout = if (use_file_stdout()) f1 else FALSE, stderr = f2) :
+  '"pdflatex"' not found
+```
+
+##### Solution:
+
+The solution was to restart RStudio.
+
+
 # Changes
 
 #### Version 0.3.0
