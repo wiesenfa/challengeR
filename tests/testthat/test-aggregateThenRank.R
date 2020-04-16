@@ -194,7 +194,7 @@ test_that("aggregate-than-rank raises error when invalid NA treatment specified 
   challenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter = FALSE)
 
   expect_error(challenge%>%aggregateThenRank(FUN = mean, na.treat = "na.rmx"),
-               "argument \"na.treat\" is invalid, with no default", fixed = TRUE)
+               "Argument \"na.treat\" is invalid. It can be \"na.rm\", numeric value or function.", fixed = TRUE)
 })
 
 test_that("specified NA treatment does not influence ranking when no NAs are contained", {

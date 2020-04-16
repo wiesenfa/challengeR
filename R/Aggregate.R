@@ -21,7 +21,8 @@ Aggregate.data.frame <-function(object,
   if (is.numeric(na.treat)) object[,x][is.na(object[,x])]=na.treat
   else if (is.function(na.treat)) object[,x][is.na(object[,x])]=na.treat(object[,x][is.na(object[,x])])
   else if (na.treat=="na.rm") object=object[!is.na(object[,x]),]
-  
+  else stop("Argument \"na.treat\" is invalid. It can be \"na.rm\", numeric value or function.")
+
   if (is.character(FUN) && FUN=="significance"){
     if(missing(case)| missing(largeBetter)| missing(alpha)) stop("If FUN='significance' arguments case, largeBetter and alpha need to be given")
     if (length(unique(object[[algorithm]]))<=1){
