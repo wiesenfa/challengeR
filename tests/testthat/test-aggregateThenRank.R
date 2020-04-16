@@ -261,3 +261,35 @@ test_that("NAs are removed", {
 
   expect_equal(ranking$mat, expectedRanking)
 })
+
+test_that("aggregate-than-rank by mean works for multi-task challenge (2 tasks in data set), no missing data", {
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.6, case="C1"),
+                       data.frame(algo="A2", value=0.8, case="C1")
+                     ))
+
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.5, case="C1"),
+                       data.frame(algo="A2", value=0.4, case="C1")
+                     ))
+
+  data <- rbind(dataTask1, dataTask2)
+
+  challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  ranking <- challenge%>%aggregateThenRank(FUN = mean)
+
+  expectedRankingTask1 <- rbind(
+    "A1" = data.frame(value_FUN = 0.6, rank = 1),
+    "A2" = data.frame(value_FUN = 0.8, rank = 2))
+
+  expectedRankingTask2 <- rbind(
+    "A1" = data.frame(value_FUN = 0.5, rank = 2),
+    "A2" = data.frame(value_FUN = 0.4, rank = 1))
+
+  expect_equal(ranking$matlist$T1, expectedRankingTask1)
+  expect_equal(ranking$matlist$T2, expectedRankingTask2)
+})
+
