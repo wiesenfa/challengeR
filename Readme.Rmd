@@ -283,6 +283,15 @@ ranking_bootstrapped %>%
 
 # Changes
 
+#### Version 0.3.3
+- Force line break to avoid that authors exceed the page in generated PDF reports
+
+#### Version 0.3.2
+- Correct names of authors
+
+#### Version 0.3.1
+- Refactoring
+
 #### Version 0.3.0
 - Major bug fix release
 
