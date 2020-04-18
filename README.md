@@ -2,7 +2,13 @@ Methods and open-source toolkit for analyzing and visualizing challenge
 results
 ================
 
-Note that this is ongoing work (version 0.3.2), there may be updates
+  - [Installation](#installation)
+  - [Terms of use](#terms-of-use)
+  - [Usage](#usage)
+  - [Changes](#changes)
+  - [Reference](#reference)
+
+Note that this is ongoing work (version 0.3.3), there may be updates
 with possibly major changes. *Please make sure that you use the most
 current version\!*
 
@@ -20,8 +26,7 @@ otherwise you’ll need to install Pandoc for your platform
 a pdf report you will need to have LaTeX installed (e.g. MiKTeX, MacTeX
 or TinyTeX).
 
-To get the current development version of the R package from
-Github:
+To get the current development version of the R package from Github:
 
 ``` r
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
@@ -107,8 +112,7 @@ quotation marks.
 
 For illustration purposes, in the following simulated data is generated
 *instead* (skip the following code chunk if you have already loaded
-data). The data is also stored as “data\_matrix.csv” in the
-repository.
+data). The data is also stored as “data\_matrix.csv” in the repository.
 
 ``` r
 if (!requireNamespace("permute", quietly = TRUE)) install.packages("permute")
@@ -168,8 +172,7 @@ In case of a single task challenge use
                         smallBetter = FALSE)
 ```
 
-*Instead*, for a multi-task challenge
-use
+*Instead*, for a multi-task challenge use
 
 ``` r
 # Same as above but with 'by="task"' where variable "task" contains the task identifier
@@ -183,8 +186,7 @@ use
 
 Different ranking methods are available, choose one of them:
 
-  - for “aggregate-then-rank” use (here: take mean for
-aggregation)
+  - for “aggregate-then-rank” use (here: take mean for aggregation)
 
 <!-- end list -->
 
@@ -281,8 +283,7 @@ Same as for single task challenges, but additionally consensus ranking
 (rank aggregation across tasks) has to be given.
 
 Compute ranking consensus across tasks (here: consensus ranking
-according to mean ranks across
-tasks):
+according to mean ranks across tasks):
 
 ``` r
 # See ?relation_consensus for different methods to derive consensus ranking
@@ -305,6 +306,19 @@ ranking_bootstrapped %>%
 
 # Changes
 
+#### Version 0.3.3
+
+  - Force line break to avoid that authors exceed the page in generated
+    PDF reports
+
+#### Version 0.3.2
+
+  - Correct names of authors
+
+#### Version 0.3.1
+
+  - Refactoring
+
 #### Version 0.3.0
 
   - Major bug fix release
@@ -320,8 +334,8 @@ ranking_bootstrapped %>%
 #### Version 0.2.3
 
   - Bug fixes
-  - Reports for subsets (top list) of algorithms: Use e.g.
-    `subset(ranking_bootstrapped, top=3) %>% report(...)` (or
+  - Reports for subsets (top list) of algorithms: Use
+    e.g. `subset(ranking_bootstrapped, top=3) %>% report(...)` (or
     `subset(ranking, top=3) %>% report(...)` for report without
     bootstrap results) to only show the top 3 algorithms according to
     the chosen ranking methods, where `ranking_bootstrapped` and
@@ -332,7 +346,7 @@ ranking_bootstrapped %>%
     heatmap neglect excluded algorithms. Only available for single task
     challenges (for mutli task challenges not sensible because each task
     would contain a different sets of algorithms).
-  - Reports for subsets of tasks: Use e.g. `subset(ranking_bootstrapped,
+  - Reports for subsets of tasks: Use e.g. `subset(ranking_bootstrapped,
     tasks=c("task1", "task2","task3)) %>% report(...)` to restrict
     report to tasks “task1”, “task2”,"task3. You may want to recompute
     the consensus ranking before using `meanRanks=subset(ranking,
@@ -343,7 +357,7 @@ ranking_bootstrapped %>%
   - Introduction in reports now mentions e.g. ranking method, number of
     test cases,…
   - Function `subset()` allows selection of tasks after bootstrapping,
-    e.g. `subset(ranking_bootstrapped,1:3)`
+    e.g. `subset(ranking_bootstrapped,1:3)`
   - `report()` functions gain argument `colors` (default:
     `default_colors`). Change e.g. to `colors=viridisLite::inferno`
     which “is designed in such a way that it will analytically be
