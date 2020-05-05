@@ -161,3 +161,17 @@ test_that("rank-then-aggregate by median works with two algorithms for two cases
   expect_equal(ranking$mat, expectedRanking)
 })
 
+test_that("rank-then-aggregate by mean works with one algorithm for one case", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.6, case="C1"))
+
+  challenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  ranking <- challenge%>%rankThenAggregate(FUN = mean)
+
+  expectedRanking <- rbind(
+    "A1" = data.frame(rank_mean = 1, rank = 1))
+
+  expect_equal(ranking$mat, expectedRanking)
+})
+
