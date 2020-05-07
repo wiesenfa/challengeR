@@ -191,3 +191,14 @@ test_that("rank-then-aggregate assigns worst rank for NA", {
   expect_equal(ranking$mat, expectedRanking)
 })
 
+test_that("rank-then-aggregate raises error for unused NA treatment argument", {
+  data <- rbind(
+    data.frame(algo="A1", value=NA, case="C1"),
+    data.frame(algo="A2", value=0.8, case="C1"))
+
+  challenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter = FALSE)
+
+  expect_error(challenge%>%rankThenAggregate(FUN = mean, na.treat = 0),
+               "unused argument (na.treat = 0)", fixed = TRUE)
+})
+
