@@ -125,7 +125,7 @@ test_that("aggregate-than-rank raises error for invalid ties method even when no
                "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
 })
 
-test_that("aggregate-than-rank by mean works with two algorithms for two case", {
+test_that("aggregate-than-rank by mean works with two algorithms for two cases", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A1", value=0.4, case="C2"),
@@ -143,7 +143,7 @@ test_that("aggregate-than-rank by mean works with two algorithms for two case", 
   expect_equal(ranking$mat, expectedRanking)
 })
 
-test_that("aggregate-than-rank by median works with two algorithms for two case", {
+test_that("aggregate-than-rank by median works with two algorithms for two cases", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A1", value=0.4, case="C2"),
