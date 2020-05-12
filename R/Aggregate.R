@@ -4,24 +4,24 @@ Aggregate.default <- function(object, ...) aggregate(object,...)  #stats::aggreg
 
 Aggregate.data.frame <-function(object,
                                 x,
-                                algorithm, 
+                                algorithm,
                                 FUN=mean,
                                 na.treat="na.rm", #can be na.rm, numeric value or function
-                                case, 
-                                alpha=0.05, p.adjust.method="none", 
+                                case,
+                                alpha=0.05, p.adjust.method="none",
                                 alternative="one.sided",
                                 test.fun=function(x,y) wilcox.test(x,
                                                                    y,
                                                                    alternative = alternative,
-                                                                   exact=FALSE, 
+                                                                   exact=FALSE,
                                                                    paired = TRUE)$p.value,
-                                largeBetter=TRUE, # only needed for significance 
+                                largeBetter=TRUE, # only needed for significance
                                 ...                      ){
-  call=match.call(expand.dots = T)  
+  call=match.call(expand.dots = T)
   if (is.numeric(na.treat)) object[,x][is.na(object[,x])]=na.treat
   else if (is.function(na.treat)) object[,x][is.na(object[,x])]=na.treat(object[,x][is.na(object[,x])])
   else if (na.treat=="na.rm") object=object[!is.na(object[,x]),]
-  else stop("Argument \"na.treat\" is invalid. It can be \"na.rm\", numeric value or function.")
+  else stop("Argument 'na.treat' is invalid. It can be 'na.rm', numeric value or function.")
 
   if (is.character(FUN) && FUN=="significance"){
     if(missing(case)| missing(largeBetter)| missing(alpha)) stop("If FUN='significance' arguments case, largeBetter and alpha need to be given")
@@ -44,7 +44,7 @@ Aggregate.data.frame <-function(object,
   } else {
     FUNname=as.character(call$FUN)
     if (is.character(FUN))  FUN=try(eval(parse(text=FUN)),silent = T)
-    
+
     if (!is.function(FUN)) stop("FUN has to be a function (possibly as character) or 'significance'")
     agg <- aggregate(object[, x],
                      by = list(object[, algorithm]),
@@ -63,10 +63,10 @@ Aggregate.data.frame <-function(object,
            data=object,
            mat=agg,
            isSignificance= isSignificance)
-  
+
   class(res)=c("aggregated",class(res))
   res
-  
+
 }
 
 
@@ -88,25 +88,27 @@ Aggregate.list <-function(object,
                                                                 paired = TRUE)$p.value,
                           largeBetter = TRUE,   # only needed for significance
                           ...            ) {
-  call=match.call(expand.dots = T)  
+  call=match.call(expand.dots = T)
   if (is.character(FUN) && FUN=="significance"){
     if(missing(case)|  missing(largeBetter)|  missing(alpha)) stop("If FUN='significance' arguments case, largeBetter and alpha need to be given")
-    matlist=llply(1:length(object), 
-                  function(id){ 
+    matlist=llply(1:length(object),
+                  function(id){
                     piece=object[[id]]
                     if (length(unique(piece[[algorithm]]))<=1){
                       warning("only one ", algorithm, " available in element ", names(object)[id])
                       return(data.frame("prop_significance"=rep(NA,length(unique(piece[[algorithm]]))),
-                                        row.names = unique(piece[[algorithm]])))  
-                    } 
+                                        row.names = unique(piece[[algorithm]])))
+                    }
                     if (is.numeric(na.treat)) piece[,x][is.na(piece[,x])]=na.treat
                     else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x][is.na(piece[,x])])
                     else if (na.treat=="na.rm") piece=piece[!is.na(piece[,x]),]
-                    xmean <- significance(piece, 
-                                          x, 
-                                          algorithm, 
-                                          case, 
-                                          alpha, 
+                    else stop("Argument 'na.treat' is invalid. It can be 'na.rm', numeric value or function.")
+
+                    xmean <- significance(piece,
+                                          x,
+                                          algorithm,
+                                          case,
+                                          alpha,
                                           p.adjust.method=p.adjust.method,
                                           largeBetter,
                                           alternative=alternative,
@@ -114,33 +116,34 @@ Aggregate.list <-function(object,
                     class(xmean)=c("aggregated",
                                    class(xmean))
                     xmean
-                    }, 
+                    },
                   .parallel=parallel,
                   .progress=progress
     )
     isSignificance=TRUE
-    
+
   } else {
     if (is.character(FUN)) FUN=try(eval(parse(text=FUN)),
                                    silent = T)
     FUNname=as.character(call$FUN)
     if (!is.function(FUN)) stop("FUN has to be a function (possibly as character) or 'significance'")
-    
-    matlist=llply(object, 
-                  function(piece){ 
+
+    matlist=llply(object,
+                  function(piece){
                     if (is.numeric(na.treat)) piece[,x][is.na(piece[,x])]=na.treat
                     else if (is.function(na.treat)) piece[,x][is.na(piece[,x])]=na.treat(piece[,x][is.na(piece[,x])])
                     else if (na.treat=="na.rm") piece=piece[!is.na(piece[,x]),]
-                    
-                    xmean <- aggregate(piece[,x], 
-                                       by=list(piece[,algorithm]), 
+                    else stop("Argument 'na.treat' is invalid. It can be 'na.rm', numeric value or function.")
+
+                    xmean <- aggregate(piece[,x],
+                                       by=list(piece[,algorithm]),
                                        FUN=function(z) do.call(FUN,args=list(x=z)))
                     names(xmean)=c(algorithm,
                                    paste0(x,"_",FUNname))
                     rownames(xmean)=xmean[,1]
                     xmean=xmean[,-1,drop=F]
                     xmean
-                  }, 
+                  },
                   .parallel=parallel,
                   .progress=progress
                   )
@@ -151,17 +154,10 @@ Aggregate.list <-function(object,
            FUN.list=list(FUN),
            call=list(call),
            data=object,
-           matlist=matlist, 
+           matlist=matlist,
            isSignificance=isSignificance
            )
-  
+
   class(res)=c("aggregated.list",class(res))
   res
 }
-
-
-
-
-
-
-
