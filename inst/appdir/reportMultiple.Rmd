@@ -200,9 +200,7 @@ temp=utils::capture.output(rankingHeatmap(object))
 # Visualization of ranking stability
 
 
-
-## *Blob plot* for visualizing ranking stability 
-based on bootstrap sampling}\label{blobByTask}
+## *Blob plot* for visualizing ranking stability based on bootstrap sampling \label{blobByTask}
 
 Algorithms are color-coded, and the area of each blob at position $\left( A_i, \text{rank } j \right)$ is proportional to the relative frequency $A_i$ achieved rank $j$ across $b=$ `r ncol(boot_object$bootsrappedRanks[[1]])` bootstrap samples. The median rank for each algorithm is indicated by a black cross. 95\% bootstrap intervals across bootstrap samples are indicated by black lines. 
 
