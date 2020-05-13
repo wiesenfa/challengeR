@@ -35,7 +35,7 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
     
     rankingHeatmap(dd,
                    ordering=ordering,
-                   ties.method=ties.method,...)
+                   ties.method=ties.method,...) + ggtitle(subt) 
   })
   a
 }
