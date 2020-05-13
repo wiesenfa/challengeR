@@ -462,7 +462,7 @@ if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
 <!-- as well as different agglomeration methods (here: complete and average).  -->
 
 
-Dendrogram from hierarchical cluster analysis} and \textit{network-type graphs} for assessing the similarity of tasks based on challenge rankings. 
+Dendrogram from hierarchical cluster analysis and \textit{network-type graphs} for assessing the similarity of tasks based on challenge rankings. 
 
 A dendrogram is a visualization approach based on hierarchical clustering. It depicts clusters according to a chosen distance measure (here: Spearman's footrule) as well as a chosen agglomeration method (here: complete and average agglomeration). 
 \bigskip
