@@ -323,7 +323,7 @@ Algorithms are ordered according to consensus ranking.
 <!-- achieved in any task. If all tasks would provide the same -->
 <!-- stable ranking, narrow intervals around the diagonal would -->
 <!-- be expected. -->
-blob plot similar to the one shown in Fig.~\ref{blobByTask} substituting rankings based on bootstrap samples with the rankings corresponding to multiple tasks. This way, the distribution of ranks across tasks can be intuitively visualized.
+Blob plot similar to the one shown in section \ref{blobByTask} substituting rankings based on bootstrap samples with the rankings corresponding to multiple tasks. This way, the distribution of ranks across tasks can be intuitively visualized.
 
 
 \bigskip
