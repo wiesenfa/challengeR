@@ -26,7 +26,8 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
   a=lapply(names(x$matlist),function(subt){
     ordering=rownames(x$matlist[[subt]])[order(x$matlist[[subt]]$rank)]
     
-    dd=as.challenge(xx[[subt]],value=attr(xx,"value"), 
+    dd=as.challenge(xx[[subt]],
+                    value=attr(xx,"value"), 
                     algorithm=attr(xx,"algorithm") ,
                     case=attr(xx,"case"),
                     annotator = attr(xx,"annotator"),
@@ -35,21 +36,23 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
     
     rankingHeatmap(dd,
                    ordering=ordering,
-                   ties.method=ties.method,...)
-  })
+                   ties.method=ties.method,
+                   ...) + ggtitle(subt) 
+    })
   a
 }
 
-
 rankingHeatmap.challenge=function(x,
                                   ordering,
-                                  ties.method="min",...){
+                                  ties.method="min"
+                                  ,...){
   ranking=x%>%rank( ties.method = ties.method )
   
   dat=as.data.frame(table(ranking$mat[[attr(x,"algorithm")]],
                           ranking$mat$rank,
                           dnn=c("algorithm","rank")),
-                    responseName = "Count")
+                    responseName = "Count"
+                    ) 
   dat$algorithm=factor(dat$algorithm, levels=ordering)
   # dat$Count=as.factor(dat$Count)
   # dat$Count[dat$Count==0]=NA
@@ -67,7 +70,7 @@ rankingHeatmap.challenge=function(x,
                          # na.value = "white"
     )+
     theme(axis.text.x = element_text(angle = 90),
-          aspect.ratio=1)+
+          aspect.ratio=1) +
     xlab("Algorithm")+
     ylab("Rank")
   #scale_y_discrete(name="Rank",breaks=rev(ranking$matlist[[subt]]$rank))
