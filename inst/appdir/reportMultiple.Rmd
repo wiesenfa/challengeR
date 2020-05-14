@@ -85,11 +85,21 @@ if (bootstrappingEnabled) {
 
 This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and test cases. Generated plots are:
 
-* Visualization of assessment data: Dot- and boxplots, podium plots and ranking heatmaps
-* Visualization of ranking robustness: Line plots
-* Visualization of ranking stability: Significance maps
-* Visualization of cross-task insights
+```{r, child=if (!isMultiTask && !bootstrappingEnabled) './inst/appdir/overviewSingleTaskNoBootstrapping.Rmd'}
 
+```
+
+```{r, child=if (!isMultiTask && bootstrappingEnabled) './inst/appdir/overviewSingleTaskBootstrapping.Rmd'}
+
+```
+
+```{r, child=if (isMultiTask && !bootstrappingEnabled) './inst/appdir/overviewMultiTaskNoBootstrapping.Rmd'}
+
+```
+
+```{r, child=if (isMultiTask && bootstrappingEnabled) './inst/appdir/overviewMultiTaskBootstrapping.Rmd'}
+
+```
 
 Ranking of algorithms within tasks according to the following chosen ranking scheme:
 
