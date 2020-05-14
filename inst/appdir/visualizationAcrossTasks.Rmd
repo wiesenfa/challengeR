@@ -30,7 +30,7 @@ stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+scale_co
 
 
 
-```{r, child=if (isMultiTask && bootstrappingEnabled) 'characterizationOfAlgorithmsBootstrapping.Rmd'}
+```{r, child=if (isMultiTask && bootstrappingEnabled) system.file("appdir", "characterizationOfAlgorithmsBootstrapping.Rmd", package="challengeR")}
 
 ```
 
@@ -39,7 +39,7 @@ stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+scale_co
 ## Characterization of tasks
 
 
-```{r, child=if (isMultiTask && bootstrappingEnabled) 'characterizationOfTasksBootstrapping.Rmd'}
+```{r, child=if (isMultiTask && bootstrappingEnabled) system.file("appdir", "characterizationOfTasksBootstrapping.Rmd", package="challengeR")}
 
 ```
 

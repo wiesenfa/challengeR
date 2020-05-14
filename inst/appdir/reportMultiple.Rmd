@@ -85,19 +85,19 @@ if (bootstrappingEnabled) {
 
 This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and test cases. Generated plots are:
 
-```{r, child=if (!isMultiTask && !bootstrappingEnabled) './inst/appdir/overviewSingleTaskNoBootstrapping.Rmd'}
+```{r, child=if (!isMultiTask && !bootstrappingEnabled) system.file("appdir", "overviewSingleTaskNoBootstrapping.Rmd", package="challengeR")}
 
 ```
 
-```{r, child=if (!isMultiTask && bootstrappingEnabled) './inst/appdir/overviewSingleTaskBootstrapping.Rmd'}
+```{r, child=if (!isMultiTask && bootstrappingEnabled) system.file("appdir", "overviewSingleTaskBootstrapping.Rmd", package="challengeR")}
 
 ```
 
-```{r, child=if (isMultiTask && !bootstrappingEnabled) './inst/appdir/overviewMultiTaskNoBootstrapping.Rmd'}
+```{r, child=if (isMultiTask && !bootstrappingEnabled) system.file("appdir", "overviewMultiTaskNoBootstrapping.Rmd", package="challengeR")}
 
 ```
 
-```{r, child=if (isMultiTask && bootstrappingEnabled) './inst/appdir/overviewMultiTaskBootstrapping.Rmd'}
+```{r, child=if (isMultiTask && bootstrappingEnabled) system.file("appdir", "overviewMultiTaskBootstrapping.Rmd", package="challengeR")}
 
 ```
 
@@ -140,7 +140,7 @@ for (t in 1:length(object$matlist)){
 \bigskip
 
 
-```{r, child=if (isMultiTask) './inst/appdir/consensusRanking.Rmd'}
+```{r, child=if (isMultiTask) system.file("appdir", "consensusRanking.Rmd", package="challengeR")}
 
 ```
 
@@ -229,11 +229,11 @@ temp=utils::capture.output(rankingHeatmap(object))
 
 # Visualization of ranking stability
 
-```{r, child=if (bootstrappingEnabled) './inst/appdir/visualizationBlobPlots.Rmd'}
+```{r, child=if (bootstrappingEnabled) system.file("appdir", "visualizationBlobPlots.Rmd", package="challengeR")}
 
 ```
 
-```{r, child=if (bootstrappingEnabled) './inst/appdir/visualizationViolinPlots.Rmd'}
+```{r, child=if (bootstrappingEnabled) system.file("appdir", "visualizationViolinPlots.Rmd", package="challengeR")}
 
 ```
 
@@ -293,7 +293,7 @@ if (length(object$matlist)<=6 &nrow((object$matlist[[1]]))<=10 ){
 
 
 
-```{r, child=if (isMultiTask) './inst/appdir/visualizationAcrossTasks.Rmd'}
+```{r, child=if (isMultiTask) system.file("appdir", "visualizationAcrossTasks.Rmd", package="challengeR")}
 
 ```
 
