@@ -9,9 +9,8 @@ test_that("PDF report for single-task data set without bootstrapping is created"
 
   ranking %>%
     report(title="Test Challenge",
-           file = "testthat_single_task_no_bootstrapping",
-           format = "PDF",
-           latex_engine="pdflatex",
+           file="testthat_single_task_no_bootstrapping",
+           format="PDF",
            clean=TRUE,
            open=FALSE)
 
@@ -35,9 +34,8 @@ test_that("HTML report for single-task data set without bootstrapping is created
 
   ranking %>%
     report(title="Test Challenge",
-           file = "testthat_single_task_no_bootstrapping",
-           format = "HTML",
-           latex_engine="pdflatex",
+           file="testthat_single_task_no_bootstrapping",
+           format="HTML",
            clean=TRUE,
            open=FALSE)
 
@@ -61,9 +59,8 @@ test_that("Word report for single-task data set without bootstrapping is created
 
   ranking %>%
     report(title="Test Challenge",
-           file = "testthat_single_task_no_bootstrapping",
-           format = "Word",
-           latex_engine="pdflatex",
+           file="testthat_single_task_no_bootstrapping",
+           format="Word",
            clean=TRUE,
            open=FALSE)
 
@@ -94,9 +91,8 @@ test_that("PDF report for single-task data set with bootstrapping is created", {
 
   rankingBootstrapped %>%
     report(title="Test Challenge",
-           file = "testthat_single_task_bootstrapping",
-           format = "PDF",
-           latex_engine="pdflatex",
+           file="testthat_single_task_bootstrapping",
+           format="PDF",
            clean=TRUE,
            open=FALSE)
 
@@ -127,9 +123,8 @@ test_that("HTML report for single-task data set with bootstrapping is created", 
 
   rankingBootstrapped %>%
     report(title="Test Challenge",
-           file = "testthat_single_task_bootstrapping",
-           format = "HTML",
-           latex_engine="pdflatex",
+           file="testthat_single_task_bootstrapping",
+           format="HTML",
            clean=TRUE,
            open=FALSE)
 
@@ -160,9 +155,8 @@ test_that("Word report for single-task data set with bootstrapping is created", 
 
   rankingBootstrapped %>%
     report(title="Test Challenge",
-           file = "testthat_single_task_bootstrapping",
-           format = "Word",
-           latex_engine="pdflatex",
+           file="testthat_single_task_bootstrapping",
+           format="Word",
            clean=TRUE,
            open=FALSE)
 
