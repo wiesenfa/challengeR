@@ -4,6 +4,8 @@ params:
   colors: NA
   name: NULL
   consensus: NA
+  isMultiTask: NA
+  bootstrappingEnabled: NA
 title: "Benchmarking report for `r params$name` "
 author: "created by challengeR v`r packageVersion('challengeR')`  \nWiesenfarth, Reinke, Landman, Cardoso, Maier-Hein & Kopp-Schneider (2019)"
 date: "`r Sys.setlocale('LC_TIME', 'English'); format(Sys.time(), '%d %B, %Y')`"
@@ -38,24 +40,44 @@ knitr::opts_chunk$set(echo = F,#fig.width=7,fig.height = 3,dpi=300,
                       fig.align="center")
 theme_set(theme_light())
 
+isMultiTask = params$isMultiTask
+bootstrappingEnabled = params$bootstrappingEnabled
+
 ```
 
 
 ```{r }
-boot_object = params$object
+object = params$object
+if (isMultiTask) {
 ordering_consensus=names(params$consensus)
+} else
+{
+  ordering_consensus=names(sort(t(object$matlist[[1]][,"rank",drop=F])["rank",]))
+}
 color.fun=params$colors
+
 ```
 
 ```{r }
-challenge_multiple=boot_object$data
 
-ranking.fun=boot_object$FUN
-object=challenge_multiple%>%ranking.fun
+challenge_multiple=object$data
+ranking.fun=object$FUN
 
-cols_numbered=cols=color.fun(length(ordering_consensus))
-names(cols)=ordering_consensus
-names(cols_numbered)= paste(1:length(cols),names(cols))
+  cols_numbered=cols=color.fun(length(ordering_consensus))
+  names(cols)=ordering_consensus
+  names(cols_numbered)= paste(1:length(cols),names(cols))
+
+if (bootstrappingEnabled) {
+  boot_object = params$object
+  challenge_multiple=boot_object$data
+
+  ranking.fun=boot_object$FUN
+  object=challenge_multiple%>%ranking.fun
+
+  cols_numbered=cols=color.fun(length(ordering_consensus))
+  names(cols)=ordering_consensus
+  names(cols_numbered)= paste(1:length(cols),names(cols))
+}
 
 
 ```
@@ -65,7 +87,7 @@ This document presents a systematic report on a benchmark study. Input data comp
 
 * Visualization of assessment data: Dot- and boxplots, podium plots and ranking heatmaps
 * Visualization of ranking robustness: Line plots
-* Visualization of ranking stability: Blob plots, violin plots and significance maps
+* Visualization of ranking stability: Significance maps
 * Visualization of cross-task insights
 
 
@@ -92,13 +114,12 @@ Ranking list for each task:
 for (t in 1:length(object$matlist)){
   cat("\n",names(object$matlist)[t],": ")
   n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
+
   cat("\nAnalysis based on ", 
       n.cases,
       " test cases which included", 
       sum(is.na(challenge_multiple[[t]][[attr(challenge_multiple,"value")]])),
       " missing values.")
-  
-  if (n.cases<log2(5000)) warning("Associated figures based on bootstrapping should be treated with caution due to small number of test cases!")
   
   x=object$matlist[[t]]
   print(knitr::kable(x[order(x$rank),]))
@@ -108,11 +129,9 @@ for (t in 1:length(object$matlist)){
 
 \bigskip
 
-Consensus ranking according to chosen method `r attr(params$consensus,"method")`:
-```{r}
-knitr::kable(data.frame(value=round(params$consensus,3), 
-                        rank=rank(params$consensus, 
-                                  ties.method="min")))
+
+```{r, child=if (isMultiTask) './inst/appdir/consensusRanking.Rmd'}
+
 ```
 
 
@@ -126,8 +145,8 @@ Algorithms are ordered according to chosen ranking scheme for each task.
 \bigskip
 
 ```{r boxplots}
-temp=boxplot(object,size=.8)
-temp=lapply(temp,function(x) utils::capture.output(x+xlab("Algorithm")+ylab("Metric value")))
+temp=boxplot(object, size=.8)
+temp=lapply(temp, function(x) utils::capture.output(x+xlab("Algorithm")+ylab("Metric value")))
 
 ```
 
@@ -153,12 +172,13 @@ addy=max(grconvertY(l$rect$h,"user","inches"),6)
 
 ```{r podium,eval=T,fig.width=12, fig.height=addy}
 #c(bottom, left, top, right
+
 op<-par(pin=c(par()$pin[1],6),
         omd=c(0, 1-w, 0, 1),
         mar=c(par('mar')[1:3], 0)+c(-.5,0.5,-.5,0),
         cex.axis=1.5,
         cex.lab=1.5,
-        cex.main=1.7)#,mar=c(5, 4, 4, 2) + 0.1)
+        cex.main=1.7)
 
 oh=grconvertY(l$rect$h,"user","lines")-grconvertY(6,"inches","lines")
 if (oh>0) par(oma=c(oh,0,0,0))
@@ -199,55 +219,13 @@ temp=utils::capture.output(rankingHeatmap(object))
 
 # Visualization of ranking stability
 
-
-
-## *Blob plot* for visualizing ranking stability 
-based on bootstrap sampling}\label{blobByTask}
-
-Algorithms are color-coded, and the area of each blob at position $\left( A_i, \text{rank } j \right)$ is proportional to the relative frequency $A_i$ achieved rank $j$ across $b=$ `r ncol(boot_object$bootsrappedRanks[[1]])` bootstrap samples. The median rank for each algorithm is indicated by a black cross. 95\% bootstrap intervals across bootstrap samples are indicated by black lines. 
-
-
-\bigskip
-
-```{r blobplot_bootstrap,fig.width=9, fig.height=9}
-pl=list()
-for (subt in names(boot_object$bootsrappedRanks)){
-  a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
-         matlist=list(boot_object$matlist[[subt]]))
-  names(a$bootsrappedRanks)=names(a$matlist)=subt
-  class(a)="bootstrap.list"
-  r=boot_object$matlist[[subt]]
-
-  pl[[subt]]=stabilityByTask(a,
-                             max_size =8,
-                             ordering=rownames(r[order(r$rank),]),
-                             size.ranks=.25*theme_get()$text$size,
-                             size=8,
-                             shape=4) + scale_color_manual(values=cols)
-
-}
-
-# if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-#   ggpubr::ggarrange(plotlist = pl)
-# } else {
-  for (i in 1:length(pl)) print(pl[[i]])
-#}
+```{r, child=if (bootstrappingEnabled) './inst/appdir/visualizationBlobPlots.Rmd'}
 
 ```
 
+```{r, child=if (bootstrappingEnabled) './inst/appdir/visualizationViolinPlots.Rmd'}
 
-## *Violin plot* for visualizing ranking stability based on bootstrapping \label{violin}
-
-The ranking list based on the full assessment data is pairwisely compared with the ranking lists based on the individual bootstrap samples (here $b=$ `r ncol(boot_object$bootsrappedRanks[[1]])` samples). For each pair of rankings, Kendall's $\tau$ correlation is computed. Kendall’s $\tau$ is a scaled index determining the correlation between the lists. It is computed by evaluating the number of pairwise concordances and discordances between ranking lists and produces values between $-1$ (for inverted order) and $1$ (for identical order). A violin plot, which simultaneously depicts a boxplot and a density plot, is generated from the results.
-
-\bigskip
-
-```{r violin}
-violin(boot_object)
 ```
-
-
-
 
 
 ## *Significance maps* for visualizing ranking stability based on statistical significance
@@ -261,6 +239,7 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 ```{r significancemap,fig.width=6, fig.height=6,out.width='200%'}
 temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="holm")
         )
+
 ```
 
 <!-- \subsubsection{Hasse diagram} -->
@@ -278,12 +257,11 @@ temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="ho
 \bigskip
 
 ```{r lineplot,fig.width=7,fig.height = 5}
-if (length(boot_object$matlist)<=6 &
-    nrow((boot_object$matlist[[1]]))<=10 ){
+if (length(object$matlist)<=6 &nrow((object$matlist[[1]]))<=10 ){
   methodsplot(challenge_multiple,
               ordering = ordering_consensus,
               na.treat=object$call[[1]][[1]]$na.treat) + scale_color_manual(values=cols)
-} else {
+}else {
   x=challenge_multiple
   for (subt in names(challenge_multiple)){
      dd=as.challenge(x[[subt]],
@@ -305,248 +283,13 @@ if (length(boot_object$matlist)<=6 &
 
 
 
-
-
-# Visualization of cross-task insights
-
-Algorithms are ordered according to consensus ranking.
-
-
-
-
-## Characterization of algorithms
-
-### Ranking stability: Variability of achieved rankings across tasks
-<!-- Variability of achieved rankings across tasks: If a -->
-<!-- reasonably large number of tasks is available, a blob plot -->
-<!-- can be drawn, visualizing the distribution -->
-<!-- of ranks each algorithm attained across tasks. -->
-<!-- Displayed are all ranks and their frequencies an algorithm -->
-<!-- achieved in any task. If all tasks would provide the same -->
-<!-- stable ranking, narrow intervals around the diagonal would -->
-<!-- be expected. -->
-blob plot similar to the one shown in Fig.~\ref{blobByTask} substituting rankings based on bootstrap samples with the rankings corresponding to multiple tasks. This way, the distribution of ranks across tasks can be intuitively visualized.
-
-
-\bigskip
-
-```{r blobplot_raw}
-#stability.ranked.list
-stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+scale_color_manual(values=cols)
-```
-
-
-### Ranking stability: Ranking variability via bootstrap approach
-
-Blob plot of bootstrap results over the different tasks separated
-by algorithm allows another perspective on the assessment data. This gives deeper insights into the characteristics
-of tasks and the ranking uncertainty of the algorithms in each
-task. 
-<!-- 1000 bootstrap Rankings were performed for each task. -->
-<!-- Each algorithm is considered separately and for each subtask (x-axis) all observed ranks across bootstrap samples (y-axis) are displayed. Additionally, medians and IQR is shown in black. -->
-
-<!-- We see which algorithm is consistently among best, which is consistently among worst, which vary extremely... -->
-
-
-\bigskip
-
-```{r blobplot_bootstrap_byAlgorithm,fig.width=7,fig.height = 5}
-#stabilityByAlgorithm.bootstrap.list
-if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-  stabilityByAlgorithm(boot_object,
-                       ordering=ordering_consensus,
-                       max_size = 9,
-                       size=4,
-                       shape=4,
-                       single = F) + scale_color_manual(values=cols)
-} else {
-  pl=stabilityByAlgorithm(boot_object,
-                          ordering=ordering_consensus,
-                          max_size = 9,
-                          size=4,
-                          shape=4,
-                          single = T)
-  for (i in 1:length(pl)) print(pl[[i]] + 
-                                  scale_color_manual(values=cols) +
-                                  guides(size = guide_legend(title="%"),color="none")
-                                )
-}
-
-```
-
-<!-- Stacked frequencies of observed ranks across bootstrap samples are displayed with colouring according to subtask. Vertical lines provide original (non-bootstrap) rankings for each subtask. -->
-
-An alternative representation is provided by a stacked
-frequency plot of the observed ranks, separated by algorithm. Observed ranks across bootstrap samples are
-displayed with colouring according to task. For algorithms that
-achieve the same rank in different tasks for the full assessment
-data set, vertical lines are on top of each other. Vertical lines
-allow to compare the achieved rank of each algorithm over
-different tasks.
-
-\bigskip
-
-
-```{r stackedFrequencies_bootstrap_byAlgorithm,fig.width=7,fig.height = 5}
-#stabilityByAlgorithmStacked.bootstrap.list
-stabilityByAlgorithmStacked(boot_object,ordering=ordering_consensus)
-```
-
-
-
-
-## Characterization of tasks
-
-
-### Visualizing bootstrap results
-To investigate which
-tasks separate algorithms well (i.e., lead to a stable ranking),
-two visualization methods are recommended.
-
-Bootstrap results can be shown in a blob plot showing one plot for each
-task. In this view, the spread of the blobs for each algorithm
-can be compared across tasks. Deviations from the diagonal indicate deviations
-from the consensus ranking (over tasks). Specifically, if rank
-distribution of an algorithm is consistently below the diagonal,
-the algorithm performed better in this task than on average
-across tasks, while if the rank distribution of an algorithm
-is consistently above the diagonal, the algorithm performed
-worse in this task than on average across tasks. At the bottom
-of each panel, ranks for each algorithm in the tasks is provided.
-
-
-<!-- Shows which subtask leads to stable ranking and in which subtask ranking is more uncertain. -->
-
-
-Same as in Section \ref{blobByTask} but now ordered according to consensus.
-
-\bigskip
-
-```{r blobplot_bootstrap_byTask,fig.width=9, fig.height=9}
-#stabilityByTask.bootstrap.list
-if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
-  stabilityByTask(boot_object,
-                  ordering=ordering_consensus,
-                  max_size = 9,
-                  size=4,
-                  shape=4) + scale_color_manual(values=cols)
-} else {
-  pl=list()
-  for (subt in names(boot_object$bootsrappedRanks)){
-    a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
-           matlist=list(boot_object$matlist[[subt]]))
-    names(a$bootsrappedRanks)=names(a$matlist)=subt
-    class(a)="bootstrap.list"
-    r=boot_object$matlist[[subt]]
-    
-    pl[[subt]]=stabilityByTask(a,
-                               max_size = 9,
-                               ordering=ordering_consensus,
-                               size.ranks=.25*theme_get()$text$size,
-                               size=4,
-                               shape=4) + scale_color_manual(values=cols)
-  }
-  for (i in 1:length(pl)) print(pl[[i]])
-}
-```
-
-
-### Cluster Analysis
-<!-- Quite a different question of interest -->
-<!-- is to investigate the similarity of tasks with respect to their -->
-<!-- rankings, i.e., which tasks lead to similar ranking lists and the -->
-<!-- ranking of which tasks are very different. For this question -->
-<!-- a hierarchical cluster analysis is performed based on the -->
-<!-- distance between ranking lists. Different distance measures -->
-<!-- can be used (here: Spearman's footrule distance) -->
-<!-- as well as different agglomeration methods (here: complete and average).  -->
-
-
-Dendrogram from hierarchical cluster analysis} and \textit{network-type graphs} for assessing the similarity of tasks based on challenge rankings. 
-
-A dendrogram is a visualization approach based on hierarchical clustering. It depicts clusters according to a chosen distance measure (here: Spearman's footrule) as well as a chosen agglomeration method (here: complete and average agglomeration). 
-\bigskip
-
-```{r , fig.width=6, fig.height=5,out.width='60%'}
-#d=relation_dissimilarity.ranked.list(object,method=kendall)
-
-# use ranking list
-  relensemble=as.relation.ranked.list(object)
- 
-# # use relations
-#   a=challenge_multi%>%decision.challenge(p.adjust.method="none")
-#   aa=lapply(a,as.relation.challenge.incidence)
-#   names(aa)=names(challenge_multi)
-#   relensemble= do.call(relation_ensemble,args = aa)
-d <- relation_dissimilarity(relensemble, method = "symdiff")
-```
-
-  
-```{r dendrogram_complete, fig.width=6, fig.height=5,out.width='60%'}
-if (length(relensemble)>2) {
-  plot(hclust(d,method="complete")) #,main="Symmetric difference distance - complete"
-} else cat("\nCluster analysis only sensible if there are >2 tasks.\n\n")
-```
-
-\bigskip
-
-
-```{r dendrogram_average, fig.width=6, fig.height=5,out.width='60%'}
-if (length(relensemble)>2) plot(hclust(d,method="average")) #,main="Symmetric difference distance - average"
-```
-
-<!-- An alternative representation of -->
-<!-- distances between tasks (see Eugster et al, 2008) is provided by networktype -->
-<!-- graphs. -->
-<!-- Every task is represented by a node and nodes are connected -->
-<!-- by edges. Distance between nodes increase exponentially with -->
-<!-- the chosen distance measure d (here: distance between nodes -->
-<!-- equal to 1:05d). Thick edges represent smaller distance, i.e., -->
-<!-- the ranking lists of corresponding tasks are similar. Tasks with -->
-<!-- a unique winner are filled to indicate the algorithm. In case -->
-<!-- there are more than one first-ranked algorithm, nodes remain -->
-<!-- uncoloured. -->
-
-
-In network-type graphs (see Eugster et al, 2008), every task is represented by a node and nodes are connected by edges whose length is determined by a chosen distance measure. Here, distances between nodes are chosen to increase exponentially in Spearman's footrule distance with growth rate 0.05 to accentuate large distances.
-Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are colored-coded by the winning algorithm. In case there are more than one first-ranked algorithms in a task, the corresponding node remains uncolored.
-\bigskip
-
-```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
-if (length(relensemble)>2) {
-  netw=network(object,
-               method = "symdiff", 
-               edge.col=grDevices::grey.colors,
-               edge.lwd=1,
-               rate=1.05,
-               cols=cols
-               )
-  
-  plot.new()
-  leg=legend("topright",  names(netw$leg.col), lwd = 1, col = netw$leg.col, bg =NA,plot=F,cex=.8)
-  w <- grconvertX(leg$rect$w, to='inches')
-  addy=6+w
-} else addy=1
-
-```
-
-```{r network, fig.width=addy, fig.height=6,out.width='100%'}
-if (length(relensemble)>2) {
-  plot(netw,
-       layoutType = "neato",
-       fixedsize=TRUE,
-       # fontsize,
-       # width,
-       # height,
-       shape="ellipse",
-       cex=.8
-       )
-}
+```{r, child=if (isMultiTask) './inst/appdir/visualizationAcrossTasks.Rmd'}
 
 ```
 
 
-# Reference
+
+# References
 
 Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
 
@@ -556,10 +299,3 @@ Institut fuer Statistik, Ludwig-Maximilians-
 Universitaet Muenchen, Germany, Technical Report 30,
 2008. [Online]. Available: http://epub.ub.uni-muenchen.
 de/4134/.
-
-
-
-
-
-
-

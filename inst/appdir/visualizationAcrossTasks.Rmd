@@ -1,0 +1,138 @@
+# Visualization of cross-task insights
+
+Algorithms are ordered according to consensus ranking.
+
+
+
+
+## Characterization of algorithms
+
+### Ranking stability: Variability of achieved rankings across tasks
+<!-- Variability of achieved rankings across tasks: If a -->
+<!-- reasonably large number of tasks is available, a blob plot -->
+<!-- can be drawn, visualizing the distribution -->
+<!-- of ranks each algorithm attained across tasks. -->
+<!-- Displayed are all ranks and their frequencies an algorithm -->
+<!-- achieved in any task. If all tasks would provide the same -->
+<!-- stable ranking, narrow intervals around the diagonal would -->
+<!-- be expected. -->
+Blob plot similar to the one shown in Section \ref{blobByTask} substituting rankings based on bootstrap samples with the rankings corresponding to multiple tasks. This way, the distribution of ranks across tasks can be intuitively visualized.
+
+
+\bigskip
+
+```{r blobplot_raw}
+#stability.ranked.list
+stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+scale_color_manual(values=cols)
+```
+
+
+
+
+
+```{r, child=if (isMultiTask && bootstrappingEnabled) 'characterizationOfAlgorithmsBootstrapping.Rmd'}
+
+```
+
+
+
+## Characterization of tasks
+
+
+```{r, child=if (isMultiTask && bootstrappingEnabled) 'characterizationOfTasksBootstrapping.Rmd'}
+
+```
+
+### Cluster Analysis
+<!-- Quite a different question of interest -->
+<!-- is to investigate the similarity of tasks with respect to their -->
+<!-- rankings, i.e., which tasks lead to similar ranking lists and the -->
+<!-- ranking of which tasks are very different. For this question -->
+<!-- a hierarchical cluster analysis is performed based on the -->
+<!-- distance between ranking lists. Different distance measures -->
+<!-- can be used (here: Spearman's footrule distance) -->
+<!-- as well as different agglomeration methods (here: complete and average).  -->
+
+
+Dendrogram from hierarchical cluster analysis} and \textit{network-type graphs} for assessing the similarity of tasks based on challenge rankings. 
+
+A dendrogram is a visualization approach based on hierarchical clustering. It depicts clusters according to a chosen distance measure (here: Spearman's footrule) as well as a chosen agglomeration method (here: complete and average agglomeration). 
+\bigskip
+
+```{r , fig.width=6, fig.height=5,out.width='60%'}
+#d=relation_dissimilarity.ranked.list(object,method=kendall)
+
+# use ranking list
+  relensemble=as.relation.ranked.list(object)
+ 
+# # use relations
+#   a=challenge_multi%>%decision.challenge(p.adjust.method="none")
+#   aa=lapply(a,as.relation.challenge.incidence)
+#   names(aa)=names(challenge_multi)
+#   relensemble= do.call(relation_ensemble,args = aa)
+d <- relation_dissimilarity(relensemble, method = "symdiff")
+```
+
+  
+```{r dendrogram_complete, fig.width=6, fig.height=5,out.width='60%'}
+if (length(relensemble)>2) {
+  plot(hclust(d,method="complete")) #,main="Symmetric difference distance - complete"
+} else cat("\nCluster analysis only sensible if there are >2 tasks.\n\n")
+```
+
+\bigskip
+
+
+```{r dendrogram_average, fig.width=6, fig.height=5,out.width='60%'}
+if (length(relensemble)>2) plot(hclust(d,method="average")) #,main="Symmetric difference distance - average"
+```
+
+<!-- An alternative representation of -->
+<!-- distances between tasks (see Eugster et al, 2008) is provided by networktype -->
+<!-- graphs. -->
+<!-- Every task is represented by a node and nodes are connected -->
+<!-- by edges. Distance between nodes increase exponentially with -->
+<!-- the chosen distance measure d (here: distance between nodes -->
+<!-- equal to 1:05d). Thick edges represent smaller distance, i.e., -->
+<!-- the ranking lists of corresponding tasks are similar. Tasks with -->
+<!-- a unique winner are filled to indicate the algorithm. In case -->
+<!-- there are more than one first-ranked algorithm, nodes remain -->
+<!-- uncoloured. -->
+
+
+In network-type graphs (see Eugster et al, 2008), every task is represented by a node and nodes are connected by edges whose length is determined by a chosen distance measure. Here, distances between nodes are chosen to increase exponentially in Spearman's footrule distance with growth rate 0.05 to accentuate large distances.
+Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are colored-coded by the winning algorithm. In case there are more than one first-ranked algorithms in a task, the corresponding node remains uncolored.
+\bigskip
+
+```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
+if (length(relensemble)>2) {
+  netw=network(object,
+               method = "symdiff", 
+               edge.col=grDevices::grey.colors,
+               edge.lwd=1,
+               rate=1.05,
+               cols=cols
+               )
+  
+  plot.new()
+  leg=legend("topright",  names(netw$leg.col), lwd = 1, col = netw$leg.col, bg =NA,plot=F,cex=.8)
+  w <- grconvertX(leg$rect$w, to='inches')
+  addy=6+w
+} else addy=1
+
+```
+
+```{r network, fig.width=addy, fig.height=6,out.width='100%'}
+if (length(relensemble)>2) {
+  plot(netw,
+       layoutType = "neato",
+       fixedsize=TRUE,
+       # fontsize,
+       # width,
+       # height,
+       shape="ellipse",
+       cex=.8
+       )
+}
+
+```
