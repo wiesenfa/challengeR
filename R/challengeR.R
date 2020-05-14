@@ -28,29 +28,31 @@ as.challenge=function(object,
 
   object=object[,c(value, algorithm, case, by, annotator)]
 
-  if (!is.null(by) && !is.null(taskName)) {
-    warning("Argument 'taskName' is ignored for multi-task data set.")
-  }
-
-  # Require argument 'taskName' for data set without task column.
-  if (is.null(by) && is.null(taskName)) {
-    stop("Argument 'by' or 'taskName' is missing.")
-  }
-
-  # Add task column for data set without task column.
-  if (is.null(by) && !is.null(taskName)) {
-    taskName <- trimws(taskName)
-
-    if (taskName == "") {
-      stop("Argument 'taskName' is empty.")
-    }
-
-    object <- cbind(task=taskName, object)
-    by = "task"
-  }
-
   # sanity checks
   if (check) {
+
+    if (!is.null(by) && !is.null(taskName)) {
+      warning("Argument 'taskName' is ignored for multi-task data set.")
+    }
+
+    # Require argument 'taskName' for data set without task column.
+    if (is.null(by) && is.null(taskName)) {
+      stop("Argument 'by' or 'taskName' is missing.")
+    }
+
+    # Add task column for data set without task column.
+    if (is.null(by) && !is.null(taskName)) {
+      taskName <- trimws(taskName)
+
+      if (taskName == "") {
+        stop("Argument 'taskName' is empty.")
+      }
+
+      object <- cbind(task=taskName, object)
+      by = "task"
+    }
+
+
     object=splitby(object,by=by)
     object=lapply(object,droplevels)
     for (task in names(object)) {
