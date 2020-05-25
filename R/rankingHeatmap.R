@@ -37,8 +37,14 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
 
     rankingHeatmap(dd,
                    ordering=ordering,
-                   ties.method=ties.method,...)
+                   ties.method=ties.method,...) + ggtitle(subt)
   })
+
+  # Remove title for single-task data set
+  if (length(a) == 1) {
+    a[[1]]$labels$title <- NULL
+  }
+
   a
 }
 
