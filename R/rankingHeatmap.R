@@ -1,24 +1,6 @@
 rankingHeatmap <- function(x,...) UseMethod("rankingHeatmap")
 rankingHeatmap.default <- function(x, ...) stop("not implemented for this class")
 
-rankingHeatmap.ranked=function (x,ties.method="min",...) {
-  ordering=rownames(x$mat)[order(x$mat$rank)]
-  #dd=x$data
-  # dd will be same as x$data, except that na.treat is handled if aggregateThenRank
-  dd=as.challenge(x$data,
-                  value=attr(x$data,"value"),
-                  algorithm=attr(x$data,"algorithm") ,
-                  case=attr(x$data,"case"),
-                  annotator = attr(x$data,"annotator"),
-                  smallBetter = !attr(x$data,"largeBetter"),
-                  na.treat=x$call[[1]][[1]]$na.treat)
-
-  rankingHeatmap(dd,
-                 ordering=ordering,
-                 ties.method=ties.method,...)
-}
-
-
 rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
 
   xx=x$data

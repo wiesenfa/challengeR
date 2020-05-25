@@ -29,7 +29,7 @@ export(
   "rankFrequencies", "rankFrequencies.bootstrap",    "rankFrequencies.bootstrap.list", #"rankFrequencies.default",
   #"rankNA2",
   "rankThenAggregate",
-  "rankingHeatmap","rankingHeatmap.ranked","rankingHeatmap.ranked.list", "relation_dissimilarity.ranked.list",
+  "rankingHeatmap", "rankingHeatmap.ranked.list", "relation_dissimilarity.ranked.list",
   "report", "report.bootstrap.list",
   "second",
   "select.if", "select.if.aggregated.list", "select.if.comparedRanks.list", "select.if.list", "select.if.ranked.list",
@@ -201,9 +201,6 @@ S3method(violin,bootstrap.list)
 S3method(violin,bootstrap)
 S3method(violin,default)
 
-
-#S3method(rankingHeatmap,challenge)
-S3method(rankingHeatmap,ranked)
 S3method(rankingHeatmap,ranked.list)
 S3method(rankingHeatmap,default)
 
