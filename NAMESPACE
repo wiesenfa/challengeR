@@ -7,7 +7,7 @@ export(
   "as.challenge",
   "as.relation.challenge.incidence", "as.relation.ranked.list",
   "bootstrap", "bootstrap.ranked", "bootstrap.ranked.list", #"bootstrap.default",
-  "boxplot.ranked", "boxplot.ranked.list", "boxplot.bootstrap.list", "boxplot.comparedRanks.list",
+  "boxplot.ranked.list", "boxplot.bootstrap.list", "boxplot.comparedRanks.list",
   #"check_strict_preference",
   "compareRanks",    "compareRanks.ranked",    "compareRanks.ranked.list", # "compareRanks.default",
   "consensus",       "consensus.ranked.list", #"consensus.default",
@@ -140,7 +140,6 @@ S3method(melt,ranked.list)
 S3method(melt,ranked)
 S3method(melt,aggregated.list)
 
-S3method(boxplot,ranked)
 S3method(boxplot,ranked.list)
 S3method(boxplot,comparedRanks.list)
 S3method(boxplot,bootstrap.list)

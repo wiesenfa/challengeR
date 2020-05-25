@@ -1,23 +1,4 @@
 
-
-boxplot.ranked=function(x,
-                        color="blue",
-                        jitter.width=0.25,...){
-  algo=attr(x$data,"algorithm")
-  value=attr(x$data,"value")
-  ranking=x
-  x=x$data
-
-  x[[algo]]=factor(x[[algo]],
-                   levels=rownames(ranking$mat[order(ranking$mat$rank),]))
-  ggplot(aes_string(algo,value),data=x)+
-    geom_jitter(position=position_jitter(width=jitter.width, height=0),color=color,...)+
-    geom_boxplot(outlier.shape = NA,fill=NA)+
-    theme(axis.text.x=element_text(angle = -90, hjust = 0))
-
-}
-
-
 boxplot.ranked.list=function(x,
                              color="blue",
                              jitter.width=0.25,...){
