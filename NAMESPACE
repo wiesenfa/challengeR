@@ -191,11 +191,8 @@ S3method(methodsplot,ranked)
 S3method(methodsplot,default)
 
 S3method(significanceMap,data.frame)
-S3method(significanceMap,ranked)
 S3method(significanceMap,ranked.list)
 S3method(significanceMap,default)
-
-
 
 S3method(violin,bootstrap.list)
 S3method(violin,bootstrap)
