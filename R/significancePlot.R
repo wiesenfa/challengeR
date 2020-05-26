@@ -44,10 +44,14 @@ significanceMap.ranked.list=function(object,
                                            size.rank=size.rank,...
                                            ) + ggtitle(Task)
     
+
+  # Remove title for single-task data set
+  if (length(res) == 1) {
+    res[[1]]$labels$title <- NULL
   }
-  
-  res  
-}  
+
+  res
+}
 
 
 
