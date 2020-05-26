@@ -20,7 +20,7 @@ export(
   #  "melt.aggregated.list",    "melt.ranked", "melt.ranked.list",
   # "merge.list",
   "lineplot.challenge",
-  "methodsplot","methodsplot.challenge","methodsplot.ranked",
+  "methodsplot","methodsplot.challenge",
   "network", "plot.network",
   "podium", "podium.ranked","podium.ranked.list", "podium.challenge",#"podium.default",
   "print.aggregated", "print.aggregated.list", "print.comparedRanks",    "print.ranked", "print.ranked.list",
@@ -187,7 +187,6 @@ S3method(lineplot,challenge)
 S3method(lineplot,default)
 
 S3method(methodsplot,challenge)
-S3method(methodsplot,ranked)
 S3method(methodsplot,default)
 
 S3method(significanceMap,data.frame)

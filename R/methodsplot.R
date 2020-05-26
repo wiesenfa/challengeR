@@ -54,16 +54,22 @@ methodsplot.challenge=function(x,
     mutate(task=factor(.data$task))%>%
     mutate(algorithm=factor(.data$algorithm, levels=lev,labels = lab))
 
-  ggplot(data = dat) +
+  linePlot <- ggplot(data = dat) +
     aes(x = rankingMethod, y = rank, color=algorithm, group=algorithm ) +
     geom_line(size=1)+
-    facet_wrap( ~ task)+
     xlab("Ranking method")  +
     ylab("Rank")+
     theme(
       strip.placement = "outside",
       axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
     )
+
+  # Create multi-panel plot with task names as titles for multi-task data set
+  if (length(x) > 1) {
+    linePlot <- linePlot + facet_wrap(~ task)
+  }
+
+  return(linePlot)
 }
 
 # methodsplot.ranked.list does not exist, use methodpsplot.challenge instead since consonsus ranking needed for ordering (or alphabetical ordering instead)
