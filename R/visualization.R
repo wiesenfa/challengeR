@@ -76,8 +76,13 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                                              probs=c(.025,.975),
                                              max_size=3,
                                              shape=4,
-                                             single=FALSE,...){
- rankDist=rankdist.bootstrap.list(x)
+                                             single=FALSE,...) {
+
+  if (length(x$data) < 2) {
+    stop("The stability of rankings by algorithm cannot be computed for less than two tasks.")
+  }
+
+  rankDist=rankdist.bootstrap.list(x)
 
 if (!missing(ordering)) rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
                                                                     levels=ordering))
