@@ -154,7 +154,11 @@ if (single==FALSE){
 
 stabilityByAlgorithmStacked.bootstrap.list=function(x,
                                                     ordering,
-                                                    freq=FALSE,...){
+                                                    freq=FALSE,...) {
+  if (length(x$data) < 2) {
+    stop("The stability of rankings by algorithm cannot be computed for less than two tasks.")
+  }
+
   rankDist=rankdist.bootstrap.list(x)
   if (!missing(ordering)) rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
                                                                       levels=ordering))
