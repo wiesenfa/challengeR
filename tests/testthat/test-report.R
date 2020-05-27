@@ -180,8 +180,13 @@ test_that("PDF report for multi-task data set without bootstrapping is created",
                        data.frame(algo="A1", value=0.2, case="C1"),
                        data.frame(algo="A2", value=0.3, case="C1")
                      ))
+  dataTask3 <- cbind(task="T3",
+                     rbind(
+                       data.frame(algo="A1", value=0.1, case="C1"),
+                       data.frame(algo="A2", value=0.8, case="C1")
+                     ))
 
-  data <- rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2, dataTask3)
 
   challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE)
 
@@ -217,8 +222,13 @@ test_that("HTML report for multi-task data set without bootstrapping is created"
                        data.frame(algo="A1", value=0.2, case="C1"),
                        data.frame(algo="A2", value=0.3, case="C1")
                      ))
+  dataTask3 <- cbind(task="T3",
+                     rbind(
+                       data.frame(algo="A1", value=0.1, case="C1"),
+                       data.frame(algo="A2", value=0.8, case="C1")
+                     ))
 
-  data <- rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2, dataTask3)
 
   challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE)
 
@@ -254,8 +264,13 @@ test_that("Word report for multi-task data set without bootstrapping is created"
                        data.frame(algo="A1", value=0.2, case="C1"),
                        data.frame(algo="A2", value=0.3, case="C1")
                      ))
+  dataTask3 <- cbind(task="T3",
+                     rbind(
+                       data.frame(algo="A1", value=0.1, case="C1"),
+                       data.frame(algo="A2", value=0.8, case="C1")
+                     ))
 
-  data <- rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2, dataTask3)
 
   challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE)
 
@@ -299,8 +314,17 @@ test_that("PDF report for multi-task data set with bootstrapping is created", {
                        data.frame(algo="A2", value=0.8, case="C2"),
                        data.frame(algo="A3", value=0.9, case="C2")
                      ))
+  dataTask3 <- cbind(task="T3",
+                     rbind(
+                       data.frame(algo="A1", value=0.1, case="C1"),
+                       data.frame(algo="A2", value=0.2, case="C1"),
+                       data.frame(algo="A3", value=0.3, case="C1"),
+                       data.frame(algo="A1", value=0.6, case="C2"),
+                       data.frame(algo="A2", value=0.7, case="C2"),
+                       data.frame(algo="A3", value=0.8, case="C2")
+                     ))
 
-  data <- rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2, dataTask3)
 
   challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE)
 
@@ -347,8 +371,17 @@ test_that("HTML report for multi-task data set with bootstrapping is created", {
                        data.frame(algo="A2", value=0.8, case="C2"),
                        data.frame(algo="A3", value=0.9, case="C2")
                      ))
+  dataTask3 <- cbind(task="T3",
+                     rbind(
+                       data.frame(algo="A1", value=0.1, case="C1"),
+                       data.frame(algo="A2", value=0.2, case="C1"),
+                       data.frame(algo="A3", value=0.3, case="C1"),
+                       data.frame(algo="A1", value=0.6, case="C2"),
+                       data.frame(algo="A2", value=0.7, case="C2"),
+                       data.frame(algo="A3", value=0.8, case="C2")
+                     ))
 
-  data <- rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2, dataTask3)
 
   challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE)
 
@@ -395,8 +428,17 @@ test_that("Word report for multi-task data set with bootstrapping is created", {
                        data.frame(algo="A2", value=0.8, case="C2"),
                        data.frame(algo="A3", value=0.9, case="C2")
                      ))
+  dataTask3 <- cbind(task="T3",
+                     rbind(
+                       data.frame(algo="A1", value=0.1, case="C1"),
+                       data.frame(algo="A2", value=0.2, case="C1"),
+                       data.frame(algo="A3", value=0.3, case="C1"),
+                       data.frame(algo="A1", value=0.6, case="C2"),
+                       data.frame(algo="A2", value=0.7, case="C2"),
+                       data.frame(algo="A3", value=0.8, case="C2")
+                     ))
 
-  data <- rbind(dataTask1, dataTask2)
+  data <- rbind(dataTask1, dataTask2, dataTask3)
 
   challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE)
 
