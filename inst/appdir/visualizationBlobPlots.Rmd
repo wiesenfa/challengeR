@@ -6,6 +6,12 @@ Algorithms are color-coded, and the area of each blob at position $\left( A_i, \
 \bigskip
 
 ```{r blobplot_bootstrap,fig.width=9, fig.height=9}
+showLabelForSingleTask <- FALSE
+
+if (length(names(boot_object$bootsrappedRanks)) > 1) {
+  showLabelForSingleTask <- TRUE
+}
+
 pl=list()
 for (subt in names(boot_object$bootsrappedRanks)){
   a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
@@ -19,7 +25,8 @@ for (subt in names(boot_object$bootsrappedRanks)){
                              ordering=rownames(r[order(r$rank),]),
                              size.ranks=.25*theme_get()$text$size,
                              size=8,
-                             shape=4) + scale_color_manual(values=cols)
+                             shape=4,
+                             showLabelForSingleTask=showLabelForSingleTask) + scale_color_manual(values=cols)
 
 }
 
