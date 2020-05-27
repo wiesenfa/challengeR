@@ -1,15 +1,6 @@
 violin <- function(x,...) UseMethod("violin")
 violin.default <- function(x, ...) stop("not implemented for this class")
 
-violin.bootstrap=function(x,...){
-  a=list(bootsrappedRanks=list(x$bootsrappedRanks),
-         matlist=list(x$mat))
-  names(a$bootsrappedRanks)=names(a$matlist)=""
-  violin.bootstrap.list(a,...)
-
-}
-
-
 violin.bootstrap.list=function(x,...){
   ken=melt(kendall.bootstrap.list(x))
   colnames(ken)[2]="Task"

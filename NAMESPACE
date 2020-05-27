@@ -44,7 +44,7 @@ export(
   "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", "subset.ranked","subset.bootstrap",#"which.top",
   "test",    "test.challenge", "test.default",
   "testThenRank",
-  "violin", "violin.bootstrap.list","violin.bootstrap",
+  "violin", "violin.bootstrap.list",
   "winner", "winner.bootstrap",    "winner.bootstrap.list", "winner.default", "winner.ranked",    "winner.ranked.list",
   "winnerFrequencies",    "winnerFrequencies.bootstrap", "winnerFrequencies.bootstrap.list",    "winnerFrequencies.default"
   )
@@ -194,7 +194,6 @@ S3method(significanceMap,ranked.list)
 S3method(significanceMap,default)
 
 S3method(violin,bootstrap.list)
-S3method(violin,bootstrap)
 S3method(violin,default)
 
 S3method(rankingHeatmap,ranked.list)
