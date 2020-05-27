@@ -13,7 +13,11 @@ stability.ranked.list=function(x,
                                probs=c(.025,.975),
                                max_size=6,
                                freq=FALSE,
-                               shape=4,...){
+                               shape=4,...) {
+  if (length(x$data) < 2) {
+    stop("The stability of rankings across tasks cannot be computed for less than two tasks.")
+  }
+
   dd=melt(x,
           measure.vars="rank",
           value.name="rank") %>% dplyr::rename(task="L1")
