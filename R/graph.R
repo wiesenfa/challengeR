@@ -2,17 +2,19 @@ network <- function(x,...) UseMethod("network")
 network.default <- function(x, ...) stop("not implemented for this class")
 
 network.ranked.list=function(x,
-                             method = "symdiff", 
+                             method = "symdiff",
                              edge.col,
                              edge.lwd,
                              rate=1.05,
                              cols,
-                              ...
-                             
-){
+                              ...) {
+  if (length(x$data) < 3) {
+    stop("The cluster analysis is only sensible for more than two tasks.")
+  }
+
   # use ranking list
   relensemble=as.relation.ranked.list(x)
-  
+
   # # use relations
   #   a=challenge_multi%>%decision.challenge(p.adjust.method="none")
   #   aa=lapply(a,as.relation.challenge.incidence)
@@ -32,8 +34,8 @@ network.ranked.list=function(x,
   # use ranking list
   uw=lapply(x$matlist,function(task.i) rownames(task.i)[which(task.i$rank==1)])
   uw=sapply(uw, function(task.i) ifelse(length(task.i)==1,yes = task.i,no="none"))
-  
-  network.dist(d, 
+
+  network.dist(d,
                  edge.col = edge.col,# grDevices::grey.colors(nn), #terrain_hcl(nn, c=c(65,0), l=c(45,90), power=c(1/2,1.5)),
                  edge.lwd =edge.lwd,#4*rev(1.2^seq_len(length(unique(d)))/(1.2^length((unique(d))))),# seq(1, .001, length.out=nn),
                  rate=rate,
@@ -44,10 +46,10 @@ network.ranked.list=function(x,
 
 
 network.dist=
-  function (x, rate=1.05, #ndists.show = length(sort(unique(x))), 
-            edge.col = gray(0.7), 
-            edge.lwd = 1, 
-            node.fill = NULL, 
+  function (x, rate=1.05, #ndists.show = length(sort(unique(x))),
+            edge.col = gray(0.7),
+            edge.lwd = 1,
+            node.fill = NULL,
             ...) {
     nn=length(unique(c(x))) # ==max(rm) number of different distance levels
     if (is.function(edge.col)) edge.col=edge.col(nn)
@@ -56,7 +58,7 @@ network.dist=
     nnodes <- length(nodes)
     dists <- sort(unique(x))
     ndists <- length(dists)
-    dshow <- dists#[seq_len(ndists.show)] 
+    dshow <- dists#[seq_len(ndists.show)]
     ndshow <- length(dshow)
     edge.col <- rep(edge.col, ndshow)
     edge.lwd <- rep(edge.lwd, ndshow)
@@ -64,10 +66,10 @@ network.dist=
     #   edge.len <- ceiling((1.2)^(seq_len(ndists) - 1)) #verwende ordnung
     #   edge.len <- ceiling((1.05)^(dists-min(dists)+1))# verwende distance mit min==1
     edge.weight <- rev(dists) #rev(seq_len(ndists))
-    edge.lty <- c(rep("solid", ndshow), 
+    edge.lty <- c(rep("solid", ndshow),
                   rep("blank", length(dists) - ndshow))
-    graph <- new("graphNEL", 
-                 nodes = nodes, 
+    graph <- new("graphNEL",
+                 nodes = nodes,
                  edgemode = "undirected")
     edgeAttrs <- list()
     nodeAttrs <- list()
@@ -86,11 +88,11 @@ network.dist=
         #   }
       }
     }
-    if (!is.null(node.fill)) 
+    if (!is.null(node.fill))
       nodeAttrs$fillcolor[nodes] <- node.fill
-    
+
     out= list(graph=graph,
-              nodeAttrs = nodeAttrs, 
+              nodeAttrs = nodeAttrs,
               edgeAttrs = edgeAttrs,
               tasknames=nodes,
               leg.col=node.fill[unique(names(node.fill))]
@@ -114,7 +116,7 @@ plot.network=function(x,
   nodeAttrs=x$nodeAttrs
   edgeAttrs=x$edgeAttrs
   leg.col=x$leg.col
-  
+
   layoutType = layoutType
   attrs <- Rgraphviz::getDefaultAttrs(layoutType = layoutType)
   attrs$node$fixedsize <- fixedsize
@@ -123,37 +125,37 @@ plot.network=function(x,
     attrs$node$fontsize <- max(sapply(x$tasknames,nchar))-1
   } else attrs$node$fontsize=fontsize
   if (missing(width)){
-    attrs$node$width <- max(sapply(x$tasknames,nchar)) 
+    attrs$node$width <- max(sapply(x$tasknames,nchar))
   } else attrs$node$width=width
   if (missing(height)) {
     attrs$node$height <- max(sapply(x$tasknames,nchar))/2
   } else attrs$node$height=height
-  
-  ag <- Rgraphviz::agopen(graph, 
-                          "", 
-                          layoutType = layoutType, 
-                          attrs = attrs, 
-                          nodeAttrs = nodeAttrs, 
+
+  ag <- Rgraphviz::agopen(graph,
+                          "",
+                          layoutType = layoutType,
+                          attrs = attrs,
+                          nodeAttrs = nodeAttrs,
                           edgeAttrs = edgeAttrs)
-  
+
     plot.new()
-    l=legend("topright",  
-             names(leg.col), 
-             lwd = 1, 
-             cex=cex, 
+    l=legend("topright",
+             names(leg.col),
+             lwd = 1,
+             cex=cex,
              bg =NA,
              plot=F)# bg="white")
     w <- grconvertX(l$rect$w, to='inches')
-    
+
     Rgraphviz::plot(ag,mai=c(0,0,0,w),...)
-    legend(par('usr')[2], par('usr')[4], 
-           xpd=NA,  
-           names(leg.col), 
-           lwd = 1, 
-           col = leg.col, 
+    legend(par('usr')[2], par('usr')[4],
+           xpd=NA,
+           names(leg.col),
+           lwd = 1,
+           col = leg.col,
            bg =NA,
            cex=cex)# bg="white")
- 
+
 }
 
 
