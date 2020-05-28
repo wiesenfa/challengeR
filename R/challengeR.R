@@ -4,7 +4,7 @@
 #' @param value
 #' @param algorithm
 #' @param case
-#' @param taskName Required for single-task data set that does not contain a task column.
+#' @param taskName Optional for single-task data set that does not contain a task column.
 #' @param by The name of the column that contains the task identifiers. Required for multi-task data set.
 #' @param annotator
 #' @param smallBetter
@@ -35,12 +35,7 @@ as.challenge=function(object,
       warning("Argument 'taskName' is ignored for multi-task data set.")
     }
 
-    # Require argument 'taskName' for data set without task column.
-    if (is.null(by) && is.null(taskName)) {
-      stop("Argument 'by' or 'taskName' is missing.")
-    }
-
-    # Add task column for data set without task column.
+    # Add task column for data set without task column by using the specified task name.
     if (is.null(by) && !is.null(taskName)) {
       taskName <- trimws(taskName)
 
@@ -52,6 +47,11 @@ as.challenge=function(object,
       by = "task"
     }
 
+    # Add task column for data set without task column by using a dummy task name.
+    if (is.null(by) && is.null(taskName)) {
+      object <- cbind(task="dummyTask", object)
+      by = "task"
+    }
 
     object=splitby(object,by=by)
     object=lapply(object,droplevels)

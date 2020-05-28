@@ -1,12 +1,3 @@
-test_that("attribute 'taskName' is required for single-task challenge", {
-  data <- rbind(
-    data.frame(algo="A1", value=0.8, case="C1"),
-    data.frame(algo="A2", value=0.6, case="C1"))
-
-  expect_error(as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE),
-               "Argument 'by' or 'taskName' is missing.", fixed=TRUE)
-})
-
 test_that("empty attribute 'taskName' raises error for single-task challenge", {
   data <- rbind(
       data.frame(algo="A1", value=0.8, case="C1"),
@@ -25,7 +16,7 @@ test_that("only whitespaces in attribute 'taskName' raises error for single-task
                "Argument 'taskName' is empty.", fixed=TRUE)
 })
 
-test_that("attributes are set for single-task challenge", {
+test_that("attributes are set for single-task challenge with specified task name", {
   data <- rbind(
     data.frame(algo="A1", value=0.8, case="C1"),
     data.frame(algo="A2", value=0.6, case="C1"))
@@ -46,6 +37,29 @@ test_that("attributes are set for single-task challenge", {
   expect_equal(attr(actualChallenge, "task"), NULL)
   expect_equal(attr(actualChallenge$T1, "task"), NULL)
   expect_equal(attr(actualChallenge$T2, "task"), NULL)
+})
+
+test_that("attributes are set for single-task challenge with dummy task name", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A2", value=0.6, case="C1"))
+
+  actualChallenge <- as.challenge(data, algorithm="algo", case="case", value="value", smallBetter=FALSE)
+
+  expect_equal(attr(actualChallenge, "annotator"), NULL)
+  expect_equal(attr(actualChallenge, "by"), "task")
+  expect_equal(attr(actualChallenge, "largeBetter"), TRUE)
+  expect_equal(attr(actualChallenge, "check"), TRUE)
+
+  expect_equal(as.vector(actualChallenge$dummyTask$algo), c("A1", "A2"))
+  expect_equal(as.vector(actualChallenge$dummyTask$value), c(0.8, 0.6))
+  expect_equal(as.vector(actualChallenge$dummyTask$case), c("C1", "C1"))
+  expect_equal(as.vector(actualChallenge$dummyTask$task), c("dummyTask", "dummyTask"))
+
+  # expect that there's no attribute "task"
+  expect_equal(attr(actualChallenge, "task"), NULL)
+  expect_equal(attr(actualChallenge$dummyTask, "task"), NULL)
+  expect_equal(attr(actualChallenge$dummyTask, "task"), NULL)
 })
 
 test_that("leading and trailing whitespaces are trimmed for attribute 'taskName'", {
