@@ -1,3 +1,9 @@
+subset <- function(x,...) UseMethod("subset")
+subset.default <- function(x, ...) stop("not implemented for this class")
+taskSubset <- function(x,...) UseMethod("taskSubset")
+taskSubset.default <- function(x, ...) stop("not implemented for this class")
+
+
 subset.comparedRanks.list=function(x,
                                    tasks,...){
   res=x[tasks]
@@ -33,8 +39,8 @@ which.top=function(object,
   rownames(mat)#[order(mat$rank)]
 }
 
-subset.ranked.list=function(x,
-                            top,...) {
+subset.ranked.list <- function(x,
+                               top,...) {
 
   if (length(x$matlist) != 1) {
     stop("Subset of algorithms only sensible for single-task challenges.")
@@ -71,3 +77,20 @@ subset.bootstrap.list=function(x,
   objectTop
 }
 
+
+taskSubset.ranked.list <- function(x,
+                                   tasks,...) {
+
+  res=list(matlist=x$matlist[tasks],
+           data=x$data[tasks],
+           call=x$call,
+           FUN=x$FUN,
+           FUN.list=x$FUN.list
+  )
+
+  attrib=attributes(x$data)
+  attrib$names=attr(res$data,"names")
+  attributes(res$data)=attrib
+  class(res)=c("ranked.list","list")
+  res
+}
