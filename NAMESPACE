@@ -41,7 +41,7 @@ export(
   "stabilityByAlgorithm.bootstrap.list",
   "stabilityByAlgorithmStacked.bootstrap.list",
   "stabilityByTask.bootstrap.list",
-  "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", "subset.ranked","subset.bootstrap",#"which.top",
+  "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", "subset.bootstrap",#"which.top",
   "test",    "test.challenge", "test.default",
   "testThenRank",
   "violin", "violin.bootstrap.list",
@@ -155,7 +155,6 @@ S3method(subset,bootstrap.list)
 S3method(subset,aggregated.list)
 S3method(subset,ranked.list)
 S3method(subset,comparedRanks.list)
-S3method(subset,ranked)
 S3method(subset,bootstrap)
 
 
