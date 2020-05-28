@@ -77,3 +77,26 @@ test_that("extraction of subset returns all algorithms even when more are reques
 
   expect_equal(rankingSubset$matlist$T1, expectedRankingSubset)
 })
+
+test_that("extraction of subset returns more algorithms then requested when ties are present", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A2", value=0.8, case="C1"),
+    data.frame(algo="A3", value=0.8, case="C1"),
+    data.frame(algo="A1", value=0.2, case="C2"),
+    data.frame(algo="A2", value=0.2, case="C2"),
+    data.frame(algo="A3", value=0.2, case="C2"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE)
+
+  ranking <- challenge%>%aggregateThenRank(FUN=mean, ties.method="min")
+
+  rankingSubset <- subset(ranking, top=2)
+
+  expectedRankingSubset <- rbind(
+    "A1" = data.frame(value_FUN = 0.5, rank = 1),
+    "A2" = data.frame(value_FUN = 0.5, rank = 1),
+    "A3" = data.frame(value_FUN = 0.5, rank = 1))
+
+  expect_equal(rankingSubset$matlist$T1, expectedRankingSubset)
+})
