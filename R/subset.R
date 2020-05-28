@@ -10,24 +10,6 @@ subset.list=function(x,
   x[tasks]
 }
 
-subset.bootstrap.list=function(x,
-                               tasks,...){
-  if (!is.null(as.list(match.call(expand.dots = T))$top)) stop("Subset of algorithms only sensible for single task challenges.")
-  res=list(bootsrappedRanks=x$bootsrappedRanks[tasks],
-           bootsrappedAggregate=x$bootsrappedAggregate[tasks],
-           matlist=x$matlist[tasks],
-           data=x$data[tasks],
-           FUN=x$FUN
-  )
-
-  attrib=attributes(x$data)
-  attrib$names=attr(res$data,"names")
-  attributes(res$data)=attrib
-  class(res)="bootstrap.list"
-  res
-
-}
-
 subset.aggregated.list=function(x,
                                 tasks,...){
   call=match.call(expand.dots = T)
@@ -75,15 +57,17 @@ subset.ranked.list=function(x,
 }
 
 
-subset.bootstrap=function(x,
-                          top,...){
-  objectTop=x
-  objectTop$mat=objectTop$mat[objectTop$mat$rank<=top,]
-  objectTop$data=objectTop$data[objectTop$data[[attr(objectTop$data,"algorithm")]]%in% rownames(objectTop$mat),]
-  objectTop$data[[attr(objectTop$data,"algorithm")]]=droplevels(objectTop$data[[attr(objectTop$data,"algorithm")]])
-  objectTop$fulldata=x$data
-  objectTop$bootsrappedRanks=objectTop$bootsrappedRanks[rownames(objectTop$mat),]
-  objectTop$bootsrappedAggregate=objectTop$bootsrappedAggregate[rownames(objectTop$mat),]
+subset.bootstrap.list=function(x,
+                               top,...) {
+
+  if (length(x$matlist) != 1) {
+    stop("Subset of algorithms only sensible for single-task challenges.")
+  }
+
+  objectTop <- subset.ranked.list(x, top = top)
+
+  objectTop$bootsrappedRanks[[1]] <- objectTop$bootsrappedRanks[[1]][rownames(objectTop$matlist[[1]]),]
+  objectTop$bootsrappedAggregate[[1]] <- objectTop$bootsrappedAggregate[[1]][rownames(objectTop$matlist[[1]]),]
   objectTop
 }
 

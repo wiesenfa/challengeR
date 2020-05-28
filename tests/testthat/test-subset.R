@@ -100,3 +100,36 @@ test_that("extraction of subset returns more algorithms then requested when ties
 
   expect_equal(rankingSubset$matlist$T1, expectedRankingSubset)
 })
+
+test_that("top 2 performing algorithms are extracted from bootstrap ranking and data set is reduced respectively", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A2", value=0.6, case="C1"),
+    data.frame(algo="A3", value=0.4, case="C1"),
+    data.frame(algo="A1", value=0.2, case="C2"),
+    data.frame(algo="A2", value=0.1, case="C2"),
+    data.frame(algo="A3", value=0.0, case="C2"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE)
+
+  ranking <- challenge%>%aggregateThenRank(FUN=mean, ties.method="min")
+
+  set.seed(1)
+  rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
+
+  rankingBootstrappedSubset <- subset(rankingBootstrapped, top=2)
+
+  expectedRankingSubset <- rbind(
+    "A1" = data.frame(value_FUN = 0.5, rank = 1),
+    "A2" = data.frame(value_FUN = 0.35, rank = 2))
+
+  expect_equal(rankingBootstrappedSubset$matlist$T1, expectedRankingSubset)
+
+  expect_equal(as.vector(rankingBootstrappedSubset$data$T1$algo), c("A1", "A2", "A1", "A2"))
+  expect_equal(as.vector(rankingBootstrappedSubset$data$T1$value), c(0.8, 0.6, 0.2, 0.1))
+  expect_equal(as.vector(rankingBootstrappedSubset$data$T1$case), c("C1", "C1", "C2", "C2"))
+  expect_equal(as.vector(rankingBootstrappedSubset$data$T1$task), c("T1", "T1", "T1", "T1"))
+
+  expect_equal(dim(rankingBootstrappedSubset$bootsrappedRanks$T1), c(2, 10))
+  expect_equal(dim(rankingBootstrappedSubset$bootsrappedAggregate$T1), c(2, 10))
+})
