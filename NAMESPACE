@@ -1,31 +1,28 @@
 #exportPattern("^[[:alpha:]]+")
 
 export(
-  "aggregate.bootstrap", "aggregate.bootstrap.list", "aggregate.challenge", "aggregate.ranked", "aggregate.ranked.list",
-  "aggregateList", #?
+  "aggregate.bootstrap", "aggregate.bootstrap.list", "aggregate.challenge", "aggregate.ranked.list",
   "aggregateThenRank",
   "as.challenge",
   "as.relation.challenge.incidence", "as.relation.ranked.list",
-  "bootstrap", "bootstrap.ranked", "bootstrap.ranked.list", #"bootstrap.default",
+  "bootstrap", "bootstrap.ranked.list", #"bootstrap.default",
   "boxplot.ranked.list", "boxplot.bootstrap.list", "boxplot.comparedRanks.list",
   #"check_strict_preference",
   "compareRanks",    "compareRanks.ranked",    "compareRanks.ranked.list", # "compareRanks.default",
   "consensus",       "consensus.ranked.list", #"consensus.default",
   "Decision", "decision.challenge",
-  "blobplot","blobplot.ranked",
   "default_colors",
   "density.bootstrap.list",
   "extract.workflow",
   "kendall",    "kendall.bootstrap.list",
-  #  "melt.aggregated.list",    "melt.ranked", "melt.ranked.list",
   # "merge.list",
   "lineplot.challenge",
   "methodsplot","methodsplot.challenge",
   "network", "plot.network",
-  "podium", "podium.ranked","podium.ranked.list", "podium.challenge",#"podium.default",
+  "podium","podium.ranked.list", "podium.challenge",#"podium.default",
   "print.aggregated", "print.aggregated.list", "print.comparedRanks",    "print.ranked", "print.ranked.list",
   #"quickmerge.list",
-  "rank",    "rank.aggregated", "rank.aggregated.list", "rank.aggregatedRanks", "rank.aggregatedRanks.list", "rank.challenge", #"rank.default",
+  "rank", "rank.aggregated.list", "rank.aggregatedRanks.list", "rank.challenge", #"rank.default",
   "rankFrequencies", "rankFrequencies.bootstrap",    "rankFrequencies.bootstrap.list", #"rankFrequencies.default",
   #"rankNA2",
   "rankThenAggregate",
@@ -37,7 +34,7 @@ export(
   "spearmansFootrule", "spearmansWeightedFootrule",
   "splitby",
   "stability", "stabilityByAlgorithm", "stabilityByAlgorithmStacked","stabilityByTask",
-  "stability.ranked.list", "stability.bootstrap","relation_dissimilarity",
+  "stability.ranked.list", "relation_dissimilarity",
   "stabilityByAlgorithm.bootstrap.list",
   "stabilityByAlgorithmStacked.bootstrap.list",
   "stabilityByTask.bootstrap.list",
@@ -86,7 +83,6 @@ S3method(print, aggregated.list)
 S3method(print, ranked.list)
 
 S3method(aggregate, challenge)
-S3method(aggregate, ranked)
 S3method(aggregate, ranked.list)
 S3method(aggregate, bootstrap.list)
 S3method(aggregate, bootstrap)
@@ -99,21 +95,14 @@ S3method(Aggregate, data.frame)
 S3method(Aggregate, list)
 
 S3method(Rank, default)
-S3method(Rank, data.frame)
 S3method(Rank, list)
 
 S3method(rank, default)
 S3method(rank, challenge)
-S3method(rank, aggregated)
 S3method(rank, aggregated.list)
-S3method(rank, aggregatedRanks)
 S3method(rank, aggregatedRanks.list)
 
-S3method(blobplot, default)
-S3method(blobplot, ranked)
-
 S3method(bootstrap, default)
-S3method(bootstrap, ranked)
 S3method(bootstrap, ranked.list)
 
 S3method(winner, default)
@@ -138,7 +127,6 @@ S3method(compareRanks,ranked.list)
 S3method(merge,list)
 
 S3method(melt,ranked.list)
-S3method(melt,ranked)
 S3method(melt,aggregated.list)
 
 S3method(boxplot,ranked.list)
@@ -162,7 +150,6 @@ S3method(taskSubset,bootstrap.list)
 
 S3method(podium,default)
 S3method(podium,challenge)
-S3method(podium,ranked)
 S3method(podium,ranked.list)
 
 S3method(network,default)
@@ -205,7 +192,6 @@ S3method(relation_dissimilarity,default)
 
 S3method(stabilityByTask,bootstrap.list)
 S3method(stabilityByTask,default)
-S3method(stability,bootstrap)
 S3method(stability,default)
 S3method(stability,ranked.list)
 

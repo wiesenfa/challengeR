@@ -1,65 +1,6 @@
 podium <- function(object,...) UseMethod("podium")
 podium.default <- function(object, ...) stop("not implemented for this class")
 
-
-podium.ranked=function(object,
-                       xlab = NULL,
-                       ylab = NULL,
-                       lines.show = TRUE,
-                       lines.alpha = 0.2,
-                       lines.lwd = 1,
-                       col,
-                       lines.col = col,
-                       dots.pch = 19,
-                       dots.cex = 1,
-                       places.lty = 2,
-                       places.col = 1,
-                       legendfn = function(algs, cols) {
-                         legend("topleft",
-                                algs,
-                                lwd = 1,
-                                col = cols,
-                                bg = "white")
-                       },
-                       layout.heights = c(1, 0.4),
-                       ...) {
-  ordering=t(object$mat[,"rank",drop=F])["rank",]
-  if (is.null(xlab)) xlab <- "Podium"
-  if (is.null(ylab)) ylab <- "Performance"
-  if (missing(col)) col=default_colors(length(ordering),
-                                       algorithms = names(ordering))
-  #dd=object$data
-  # dd will be same as object$data, except that na.treat is handled if aggregateThenRank
-    x=object$data
-    dd=as.challenge(x,
-                    value=attr(x,"value"),
-                    algorithm=attr(x,"algorithm") ,
-                    case=attr(x,"case"),
-                    by=attr(x, "by"),
-                    annotator = attr(x,"annotator"),
-                    smallBetter = !attr(x,"largeBetter"),
-                    na.treat=object$call[[1]][[1]]$na.treat)
-
-  podium( dd,
-          ordering=ordering,
-          xlab = xlab,
-          ylab = ylab,
-          lines.show = lines.show,
-          lines.alpha = lines.alpha,
-          lines.lwd = lines.lwd,
-          col=col,
-          lines.col = lines.col,
-          dots.pch = dots.pch,
-          dots.cex = dots.cex,
-          places.lty = places.lty,
-          places.col = places.col,
-          legendfn = legendfn,
-          layout.heights=layout.heights,
-          ...)
-}
-
-
-
 podium.ranked.list=function(object,
                             xlab = NULL,
                             ylab = NULL,
@@ -80,6 +21,9 @@ podium.ranked.list=function(object,
     if (is.null(xlab)) xlab <- "Podium"
     if (is.null(ylab)) ylab <- "Performance"
     x=object$data
+
+    podiumPlots <- length(names(x))
+
     for (subt in names(x)) {
       ordering=t(object$matlist[[subt]][,"rank",drop=F])["rank",]
       if (missing(col)) col=default_colors(length(ordering),
@@ -94,7 +38,7 @@ podium.ranked.list=function(object,
                       smallBetter = !attr(x,"largeBetter"),
                       na.treat=object$call[[1]][[1]]$na.treat)
 
-      podium(dd,
+      podiumPlot <- podium(dd,
              ordering=ordering,
              xlab = xlab, ylab = ylab,
              lines.show = lines.show,
@@ -110,6 +54,8 @@ podium.ranked.list=function(object,
              layout.heights=layout.heights,
              ...)
       title(subt,outer=T,line=-3)
+
+      append(podiumPlots, podiumPlot)
     }
 }
 

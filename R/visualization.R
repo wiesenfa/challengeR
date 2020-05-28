@@ -208,28 +208,6 @@ stabilityByAlgorithmStacked.bootstrap.list=function(x,
 }
 
 
-stability.bootstrap=function(x,
-                             ordering,
-                             probs=c(.025,.975),
-                             max_size=3,
-                             size.ranks=.3*theme_get()$text$size,
-                             shape=4,...){
-  if (missing(ordering)) ordering=  names(sort(t(x$mat[,"rank",drop=F])["rank",]))
-  a=list(bootsrappedRanks=list(x$bootsrappedRanks),
-         matlist=list(x$mat))
-  names(a$bootsrappedRanks)=names(a$matlist)=""
-  stabilityByTask.bootstrap.list(a,
-                                 ordering=ordering,
-                                 probs=probs,
-                                 max_size = max_size,
-                                 size.ranks=size.ranks,
-                                 shape=shape,...)
-
-
-}
-
-
-
 stabilityByTask.bootstrap.list=function(x,
                                         ordering,
                                         probs=c(.025,.975),
