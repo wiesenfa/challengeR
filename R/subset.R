@@ -94,3 +94,20 @@ taskSubset.ranked.list <- function(x,
   class(res)=c("ranked.list","list")
   res
 }
+
+taskSubset.bootstrap.list <- function(x,
+                                      tasks,...) {
+
+  res=list(bootsrappedRanks=x$bootsrappedRanks[tasks],
+           bootsrappedAggregate=x$bootsrappedAggregate[tasks],
+           matlist=x$matlist[tasks],
+           data=x$data[tasks],
+           FUN=x$FUN
+  )
+
+  attrib=attributes(x$data)
+  attrib$names=attr(res$data,"names")
+  attributes(res$data)=attrib
+  class(res)="bootstrap.list"
+  res
+}
