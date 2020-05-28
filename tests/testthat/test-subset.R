@@ -166,3 +166,29 @@ test_that("extraction of bootstrap ranking subset raises error for multi-task da
   expect_error(subset(subset(rankingBootstrapped, top=2), top=2),
                "Subset of algorithms only sensible for single-task challenges.", fixed=TRUE)
 })
+
+test_that("extraction of bootstrap ranking subset returns all algorithms even when more are requested", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A2", value=0.6, case="C1"),
+    data.frame(algo="A3", value=0.4, case="C1"),
+    data.frame(algo="A1", value=0.2, case="C2"),
+    data.frame(algo="A2", value=0.1, case="C2"),
+    data.frame(algo="A3", value=0.0, case="C2"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE)
+
+  ranking <- challenge%>%aggregateThenRank(FUN=mean, ties.method="min")
+
+  set.seed(1)
+  rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
+
+  rankingBootstrappedSubset <- subset(rankingBootstrapped, top=4)
+
+  expectedRankingSubset <- rbind(
+    "A1" = data.frame(value_FUN = 0.5, rank = 1),
+    "A2" = data.frame(value_FUN = 0.35, rank = 2),
+    "A3" = data.frame(value_FUN = 0.2, rank = 3))
+
+  expect_equal(rankingBootstrappedSubset$matlist$T1, expectedRankingSubset)
+})
