@@ -53,7 +53,10 @@ podium.ranked.list=function(object,
              legendfn = legendfn,
              layout.heights=layout.heights,
              ...)
-      title(subt,outer=T,line=-3)
+
+      if (length(names(x)) > 1) {
+        title(subt,outer=T,line=-3)
+      }
 
       append(podiumPlots, podiumPlot)
     }
