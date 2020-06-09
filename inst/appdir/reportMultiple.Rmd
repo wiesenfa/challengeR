@@ -63,9 +63,9 @@ color.fun=params$colors
 challenge_multiple=object$data
 ranking.fun=object$FUN
 
-  cols_numbered=cols=color.fun(length(ordering_consensus))
-  names(cols)=ordering_consensus
-  names(cols_numbered)= paste(1:length(cols),names(cols))
+cols_numbered=cols=color.fun(length(ordering_consensus))
+names(cols)=ordering_consensus
+names(cols_numbered)= paste(1:length(cols),names(cols))
 
 if (bootstrappingEnabled) {
   boot_object = params$object
@@ -73,6 +73,8 @@ if (bootstrappingEnabled) {
 
   ranking.fun=boot_object$FUN
   object=challenge_multiple%>%ranking.fun
+
+  object$fulldata=boot_object$fulldata  # only not NULL if subset of algorithms used
 
   cols_numbered=cols=color.fun(length(ordering_consensus))
   names(cols)=ordering_consensus
@@ -98,6 +100,18 @@ This document presents a systematic report on a benchmark study. Input data comp
 ```
 
 ```{r, child=if (isMultiTask && bootstrappingEnabled) system.file("appdir", "overviewMultiTaskBootstrapping.Rmd", package="challengeR")}
+
+```
+
+```{r,results='asis'}
+
+if (!isMultiTask && !is.null(object$fulldata[[1]])) {
+  cat("Only top ",
+      length(levels(challenge_multiple[[1]][[attr(challenge_multiple,"algorithm")]])),
+      " out of ",
+      length(levels(object$fulldata[[1]][[attr(challenge_multiple,"algorithm")]])),
+      " algorithms visualized.\n")
+}
 
 ```
 
