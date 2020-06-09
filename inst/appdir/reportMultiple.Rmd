@@ -118,20 +118,36 @@ cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
 if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal to the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
 ```
 
-
-Ranking list for each task:
 ```{r,results='asis'}
-for (t in 1:length(object$matlist)){
-  cat("\n",names(object$matlist)[t],": ")
-  n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
 
-  cat("\nAnalysis based on ", 
+if (isMultiTask) {
+  cat("Ranking list for each task:\n")
+
+  for (t in 1:length(object$matlist)){
+    cat("\n",names(object$matlist)[t],": ")
+    n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
+
+    cat("\nAnalysis based on ",
+        n.cases,
+        " test cases which included",
+        sum(is.na(challenge_multiple[[t]][[attr(challenge_multiple,"value")]])),
+        " missing values.")
+
+    x=object$matlist[[t]]
+    print(knitr::kable(x[order(x$rank),]))
+  }
+} else {
+  n.cases=nrow(challenge_multiple[[1]])/length(unique(challenge_multiple[[1]][[attr(challenge_multiple,"algorithm")]]))
+
+  cat("\nAnalysis based on ",
       n.cases,
-      " test cases which included", 
-      sum(is.na(challenge_multiple[[t]][[attr(challenge_multiple,"value")]])),
+      " test cases which included",
+      sum(is.na(challenge_multiple[[1]][[attr(challenge_multiple,"value")]])),
       " missing values.")
-  
-  x=object$matlist[[t]]
+
+  cat("\n\nRanking list:")
+
+  x=object$matlist[[1]]
   print(knitr::kable(x[order(x$rank),]))
 }
 
