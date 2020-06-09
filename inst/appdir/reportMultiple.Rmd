@@ -176,7 +176,14 @@ if (isMultiTask) {
 
 
 # Visualization of raw assessment data
-Algorithms are ordered according to chosen ranking scheme for each task.
+
+```{r,results='asis'}
+
+if (isMultiTask) {
+  cat("Algorithms are ordered according to chosen ranking scheme for each task.")
+}
+
+```
 
 ## Dot- and boxplots
 
