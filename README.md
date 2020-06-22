@@ -163,7 +163,9 @@ In case of a single task challenge use
 # Use only task "c_random" in object data_matrix
   dataSubset=subset(data_matrix, task=="c_random")
 
-  challenge=as.challenge(dataSubset, 
+  challenge=as.challenge(dataSubset,
+                        # Specify how to refer to the task in plots and reports
+                        taskName="Task 1",
                         # Specify which column contains the algorithm, 
                         # which column contains a test case identifier 
                         # and which contains the metric value:
