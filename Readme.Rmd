@@ -290,7 +290,7 @@ In this section are compiled issues that the users reported.
 
 ### RStudio specific
 
-#### Warnings while installing the Github repository
+#### - Warnings while installing the Github repository
 ##### Error:
 
 While trying to install the current version of the repository:
@@ -335,6 +335,34 @@ The problem was that some of the packages that were built under R3.6.1 had been 
 ##### Solution:
 
 The solution was to update R3.6.1 to R3.6.3. Another way would have been to reset the single packages to the versions built under R3.6.1
+
+
+#### - Unable to install the toolkit from Github
+##### Error:
+
+While trying the current version of the tool from github, it was unable to install. 
+
+```{r, eval=F, echo=T}
+ devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
+```
+
+The error message was:
+
+```{r, eval=F, echo=T}
+Error: .onLoad failed in loadNamespace() for 'pkgload', details:
+  call: loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]])
+  error: there is no package called ‘backports’
+```
+
+The problem was that the packages 'backports' had not been installed. 
+
+##### Solution:
+
+The solution was to install 'backports' manually.
+
+```{r, eval=F, echo=T}
+ install.packages("backports")
+```
 
 
 #### - Unable to install R
