@@ -266,7 +266,7 @@ bootstrap.ranked=function(object,
 
 - nboot: number of bootstrap datasets to generate
 - parallel: TRUE when using multiple CPUs
-- progress: when setting it to "text", indicate the progress of the bootstrapping
+- progress: when setting it to "text", a progress bar indicating the progress of the bootstrapping is shown
 
 An example of bootstrapping using multiple CPUs (8 CPUs):
 
