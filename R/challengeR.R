@@ -26,7 +26,7 @@ as.challenge=function(object,
                       na.treat=NULL, # optional
                       check=TRUE) {
 
-  object=object[,c(value, algorithm, case, by, annotator)]
+  object=as.data.frame(object[,c(value, algorithm, case, by, annotator)])
 
   # sanity checks
   if (check) {
