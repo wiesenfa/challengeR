@@ -14,6 +14,17 @@ violin.bootstrap.list=function(x,...){
 
   print(as.data.frame(ss))
 
+  # drop task if no kendall could be computed
+    noResults <- sapply(split(ss,ss$Task), 
+                        function(x) all(is.na(x[,-1])))
+    if (any(noResults)) {
+      message("No Kendall's tau could be calculated for any bootstrap sample in task ", 
+              names(noResults)[noResults],
+              " because of missing variability. Task dropped from figure.")
+      ken <- ken %>% filter(Task %in% names(noResults)[!noResults])
+    
+    }
+  
   xAxisText <- element_blank()
 
   # Show task names as tick mark labels only for multi-task data set
@@ -26,8 +37,10 @@ violin.bootstrap.list=function(x,...){
     ggplot(aes(Task,value))+
     geom_violin(alpha=.3,
                 color=NA,
+                na.rm=TRUE,
                 fill="blue")+
     geom_boxplot(width=0.1,
+                 na.rm=TRUE,
                  fill="white")+
     theme(axis.text.x = xAxisText,
           legend.position = "none")+
