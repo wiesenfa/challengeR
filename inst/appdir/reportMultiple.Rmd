@@ -303,11 +303,12 @@ temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="ho
 
 \bigskip
 
-```{r lineplot,fig.width=7,fig.height = 5}
+```{r lineplot,fig.width=8, fig.height=6,out.width='95%'}
 if (length(object$matlist)<=6 &nrow((object$matlist[[1]]))<=10 ){
   methodsplot(challenge_multiple,
               ordering = ordering_consensus,
-              na.treat=object$call[[1]][[1]]$na.treat) + scale_color_manual(values=cols)
+              na.treat=object$call[[1]][[1]]$na.treat) + 
+    scale_color_manual(values=cols)
 }else {
   x=challenge_multiple
   for (subt in names(challenge_multiple)){
@@ -322,7 +323,8 @@ if (length(object$matlist)<=6 &nrow((object$matlist[[1]]))<=10 ){
                      )
  
     print(methodsplot(dd,
-                      ordering = ordering_consensus) + scale_color_manual(values=cols)
+                      ordering = ordering_consensus) + 
+            scale_color_manual(values=cols)
           )
   }
 }

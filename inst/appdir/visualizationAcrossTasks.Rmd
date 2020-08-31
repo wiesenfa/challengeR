@@ -21,9 +21,10 @@ Blob plot similar to the one shown in Section \ref{blobByTask} substituting rank
 
 \bigskip
 
-```{r blobplot_raw}
+```{r blobplot_raw,fig.width=9, fig.height=9}
 #stability.ranked.list
-stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+scale_color_manual(values=cols)
+stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+
+  scale_color_manual(values=cols)
 ```
 
 
