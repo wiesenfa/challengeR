@@ -118,7 +118,7 @@ if (!isMultiTask && !is.null(object$fulldata[[1]])) {
 Ranking of algorithms within tasks according to the following chosen ranking scheme:
 
 ```{r,results='asis'}
-a=(  lapply(object$FUN.list,function(x) {
+a=(  lapply(object$FUN.list[1:2],function(x) {
                  if (!is.character(x)) return(paste0("aggregate using function ",
                                                      paste(gsub("UseMethod","",
                                                                 deparse(functionBody(x))),
