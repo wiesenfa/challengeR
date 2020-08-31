@@ -6,6 +6,7 @@ params:
   consensus: NA
   isMultiTask: NA
   bootstrappingEnabled: NA
+  fig.format: NULL
 title: "Benchmarking report for `r params$name` "
 author: "created by challengeR v`r packageVersion('challengeR')`  \nWiesenfarth, Reinke, Landman, Cardoso, Maier-Hein & Kopp-Schneider (2019)"
 date: "`r Sys.setlocale('LC_TIME', 'English'); format(Sys.time(), '%d %B, %Y')`"
@@ -36,8 +37,11 @@ img_template <- switch( out.format,
 
 knitr::opts_template$set( img_template )
 
-knitr::opts_chunk$set(echo = F,#fig.width=7,fig.height = 3,dpi=300,
-                      fig.align="center")
+knitr::opts_chunk$set(echo = F) # ,#fig.width=7,fig.height = 3,dpi=300,
+
+if (out.format != "word") knitr::opts_chunk$set(fig.align = "center")
+if (!is.null(params$fig.format)) knitr::opts_chunk$set(dev = params$fig.format) # can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
+
 theme_set(theme_light())
 
 isMultiTask = params$isMultiTask

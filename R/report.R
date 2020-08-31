@@ -8,6 +8,7 @@ report.bootstrap.list=function(object,
                                colors=default_colors,
                                format="PDF",
                                latex_engine="pdflatex",
+                               fig.format = NULL, # file format of figures if clean=FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
                                open=TRUE,...){
 
   # Copy the report file to a temporary directory before processing it, in
@@ -45,7 +46,8 @@ report.bootstrap.list=function(object,
     name=title,
     colors=colors,
     isMultiTask=isMultiTask,
-    bootstrappingEnabled=TRUE
+    bootstrappingEnabled=TRUE,
+    fig.format = fig.format
   )
 
   # Knit the document, passing in the `params` list, and eval it in a
@@ -87,6 +89,7 @@ report.ranked.list=function(object,
                             colors=default_colors,
                             format="PDF",
                             latex_engine="pdflatex",
+                            fig.format = NULL, # file format of figures if clean=FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
                             open=TRUE,
                             ...){
 
@@ -130,7 +133,8 @@ report.ranked.list=function(object,
     name=title,
     colors=colors,
     isMultiTask=isMultiTask,
-    bootstrappingEnabled=FALSE
+    bootstrappingEnabled=FALSE,
+    fig.format = fig.format
   )
 
   # Knit the document, passing in the `params` list, and eval it in a
