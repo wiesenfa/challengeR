@@ -23,9 +23,11 @@ editor_options:
 
 ```{r setup, include=FALSE}
 options(width=80)
-out.format <- knitr::opts_knit$get("out.format")
+#out.format <- knitr::opts_knit$get("out.format")
+out.format <- knitr::opts_knit$get("rmarkdown.pandoc.to")
+
 img_template <- switch( out.format,
-                     word = list("img-params"=list(dpi=150,
+                     docx = list("img-params"=list(dpi=150,
                                                fig.width=6,
                                                fig.height=6,
                                                out.width="504px",
@@ -39,7 +41,7 @@ knitr::opts_template$set( img_template )
 
 knitr::opts_chunk$set(echo = F) # ,#fig.width=7,fig.height = 3,dpi=300,
 
-if (out.format != "word") knitr::opts_chunk$set(fig.align = "center")
+if (out.format != "docx") knitr::opts_chunk$set(fig.align = "center")
 if (!is.null(params$fig.format)) knitr::opts_chunk$set(dev = params$fig.format) # can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
 
 theme_set(theme_light())
@@ -206,7 +208,7 @@ temp=lapply(temp, function(x) utils::capture.output(x+xlab("Algorithm")+ylab("Me
 ## Podium plots
 *Podium plots* (see also Eugster et al, 2008) for visualizing raw assessment data. Upper part (spaghetti plot): Participating algorithms are color-coded, and each colored dot in the plot represents a metric value achieved with the respective algorithm. The actual metric value is encoded by the y-axis. Each podium (here: $p$=`r length(ordering_consensus)`) represents one possible rank, ordered from best (1) to last (here: `r length(ordering_consensus)`). The assignment of metric values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding test case. Note that the plot part above each podium place is further subdivided into $p$ "columns", where each column represents one participating algorithm (here: $p=$ `r length(ordering_consensus)`).  Dots corresponding to identical test cases are connected by a line, leading to the shown spaghetti structure. Lower part: Bar charts represent the relative frequency for each algorithm to achieve the rank encoded by the podium place. 
 
-```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
+```{r, include=FALSE, fig.keep="none",dev=NULL}
 plot.new()
 algs=ordering_consensus
 l=legend("topright", 

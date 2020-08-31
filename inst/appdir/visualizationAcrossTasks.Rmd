@@ -105,7 +105,7 @@ In network-type graphs (see Eugster et al, 2008), every task is represented by a
 Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are colored-coded by the winning algorithm. In case there are more than one first-ranked algorithms in a task, the corresponding node remains uncolored.
 \bigskip
 
-```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
+```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE, fig.keep="none"}
 if (length(relensemble)>2) {
   netw=network(object,
                method = "symdiff", 
