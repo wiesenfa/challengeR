@@ -76,13 +76,31 @@ as.challenge=function(object,
                            object[[task]][[case]]),
                      2,
                      function(x) all(x==1))
-          if (!all(all1)) stop ("Case(s) (",
-                                paste(names(which(all1!=1)),
-                                      collapse=", "),
-                                ") appear(s) more than once for the same algorithm in task '",
-                                task, 
-                                "'. Please revise.")
-    #  }
+          if (!all(all1)) {
+            n.duplicated <- sum(all1!=1)
+            
+            if (length(object) == 1 ) { # single task 
+              if (n.duplicated/length(all1) >= 1/5) { # at least a quarter of the cases is duplicated
+                stop ("The following cases appear more than once. Please revise. ",  
+                      "Or are you considering a multi-task challenge and forgot to specify argument 'by'?\n",
+                      "Cases: ",
+                      paste(names(which(all1!=1)), collapse=", ")
+                      )
+              } else {
+                stop ("The following case(s) appear(s) more than once. Please revise.\n",  
+                      "Case(s): ",
+                      paste(names(which(all1!=1)), collapse=", ")
+                      )
+              }
+            } else {
+              stop ("The following case(s) appear(s) more than once for the same algorithm in task '",
+                    task, "'. Please revise.\n",
+                     "Case(s): ",
+                    paste(names(which(all1!=1)), collapse=", ")
+                    )
+
+            }
+          }
 
       if (!is.null(na.treat)) {
         if (is.numeric(na.treat)) object[[task]][,value][is.na(object[[task]][,value])]=na.treat
