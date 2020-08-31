@@ -60,24 +60,12 @@ Dendrogram from hierarchical cluster analysis} and \textit{network-type graphs} 
 A dendrogram is a visualization approach based on hierarchical clustering. It depicts clusters according to a chosen distance measure (here: Spearman's footrule) as well as a chosen agglomeration method (here: complete and average agglomeration). 
 \bigskip
 
-```{r , fig.width=6, fig.height=5,out.width='60%'}
-#d=relation_dissimilarity.ranked.list(object,method=kendall)
 
-# use ranking list
-  relensemble=as.relation.ranked.list(object)
- 
-# # use relations
-#   a=challenge_multi%>%decision.challenge(p.adjust.method="none")
-#   aa=lapply(a,as.relation.challenge.incidence)
-#   names(aa)=names(challenge_multi)
-#   relensemble= do.call(relation_ensemble,args = aa)
-d <- relation_dissimilarity(relensemble, method = "symdiff")
-```
-
-  
 ```{r dendrogram_complete, fig.width=6, fig.height=5,out.width='60%'}
-if (length(relensemble)>2) {
-  plot(hclust(d,method="complete")) #,main="Symmetric difference distance - complete"
+if (length(object$matlist)>2) {
+  dendrogram(object,
+             dist = "symdiff",
+             method="complete")
 } else cat("\nCluster analysis only sensible if there are >2 tasks.\n\n")
 ```
 
@@ -85,7 +73,11 @@ if (length(relensemble)>2) {
 
 
 ```{r dendrogram_average, fig.width=6, fig.height=5,out.width='60%'}
-if (length(relensemble)>2) plot(hclust(d,method="average")) #,main="Symmetric difference distance - average"
+if (length(object$matlist)>2)   
+  dendrogram(object,
+             dist = "symdiff",
+             method="average")
+
 ```
 
 <!-- An alternative representation of -->
@@ -105,8 +97,13 @@ In network-type graphs (see Eugster et al, 2008), every task is represented by a
 Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are colored-coded by the winning algorithm. In case there are more than one first-ranked algorithms in a task, the corresponding node remains uncolored.
 \bigskip
 
+<<<<<<< HEAD
 ```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE, fig.keep="none"}
 if (length(relensemble)>2) {
+=======
+```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE}
+if (length(object$matlist)>2) {
+>>>>>>> feature/T27452-dendrogram
   netw=network(object,
                method = "symdiff", 
                edge.col=grDevices::grey.colors,
@@ -124,7 +121,7 @@ if (length(relensemble)>2) {
 ```
 
 ```{r network, fig.width=addy, fig.height=6,out.width='100%'}
-if (length(relensemble)>2) {
+if (length(object$matlist)>2) {
   plot(netw,
        layoutType = "neato",
        fixedsize=TRUE,
