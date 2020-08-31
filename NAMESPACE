@@ -13,6 +13,7 @@ export(
   "Decision", "decision.challenge",
   "default_colors",
   "density.bootstrap.list",
+  "dendrogram", "dendrogram.ranked.list",
   "extract.workflow",
   "kendall",    "kendall.bootstrap.list",
   # "merge.list",
@@ -104,6 +105,9 @@ S3method(rank, aggregatedRanks.list)
 
 S3method(bootstrap, default)
 S3method(bootstrap, ranked.list)
+
+S3method(dendrogram, default)
+S3method(dendrogram, ranked.list)
 
 S3method(winner, default)
 S3method(winner, ranked)
