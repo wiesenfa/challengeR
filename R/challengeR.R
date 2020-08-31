@@ -63,9 +63,14 @@ as.challenge=function(object,
           anti_join(object[[task]],
                     by=c( algorithm,case))
         if (nrow(missingData)>0) {
-          message("Performance of not all algorithms is observed for all cases in task '",
-                  task,
-                  "'. Inserted as missings in following cases:")
+          if (length(object) == 1 ) { # single task 
+            message("Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
+          } else { # multi task
+            message("Performance of not all algorithms is observed for all cases in task '",
+                    task,
+                    "'. Inserted as missings in following cases:")
+            
+          }
           print(as.data.frame(missingData))
           object[[task]]=as.data.frame(object[[task]] %>%
                                          complete(!!as.symbol(algorithm),
@@ -92,7 +97,7 @@ as.challenge=function(object,
                       paste(names(which(all1!=1)), collapse=", ")
                       )
               }
-            } else {
+            } else { # multi task
               stop ("The following case(s) appear(s) more than once for the same algorithm in task '",
                     task, "'. Please revise.\n",
                      "Case(s): ",
