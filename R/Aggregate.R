@@ -42,7 +42,8 @@ Aggregate.data.frame <-function(object,
     }
     isSignificance=TRUE
   } else {
-    FUNname=as.character(call$FUN)
+    if (is.function(FUN)) FUNname <-gsub('\")',"",gsub('UseMethod(\"',"",deparse(functionBody(FUN)),fixed = T),fixed=T)
+    else if (is.character(FUN)) FUNname=FUN
     if (is.character(FUN))  FUN=try(eval(parse(text=FUN)),silent = T)
 
     if (!is.function(FUN)) stop("FUN has to be a function (possibly as character) or 'significance'")
@@ -123,9 +124,11 @@ Aggregate.list <-function(object,
     isSignificance=TRUE
 
   } else {
+    if (is.function(FUN)) FUNname <-gsub('\")',"",gsub('UseMethod(\"',"",deparse(functionBody(FUN)),fixed = T),fixed=T)
+    else if (is.character(FUN)) FUNname=FUN
+    
     if (is.character(FUN)) FUN=try(eval(parse(text=FUN)),
                                    silent = T)
-    FUNname=as.character(call$FUN)
     if (!is.function(FUN)) stop("FUN has to be a function (possibly as character) or 'significance'")
 
     matlist=llply(object,
