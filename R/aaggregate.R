@@ -26,7 +26,8 @@ aggregate.challenge=function(x,
                              parallel=FALSE,
                              progress="none",...){
   call=as.list(match.call())
-
+  if (missing(na.treat) && !is.null(attr(x,"na.treat"))) na.treat <- attr(x, "na.treat")
+  
   if (missing(na.treat)){ #na.treat only optional if no missing values in data set
     if (!inherits(x,"list")){
       if (!any(is.na(x[,attr(x, "value")]))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
@@ -34,7 +35,7 @@ aggregate.challenge=function(x,
       if (!any(sapply(x,
                       function(task) any(is.na(task[,attr(x, "value")]))))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
     }
-  }
+  } else attr(x,"na.treat") <- na.treat
 
   res1=do.call("Aggregate",list(object=x,
                                 x=attr(x,"value"),

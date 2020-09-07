@@ -55,23 +55,28 @@ as.challenge=function(object,
 
     object=splitby(object,by=by)
     object=lapply(object,droplevels)
+    missingData = n.missing = list()
     for (task in names(object)) {
+      if (!all(is.numeric(object[[task]][[value]]))) stop("Performance values must be numeric.")
+      
+      n.missing[[task]] <- sum(is.na(object[[task]][[value]])) # already missing before na.treat; for report
+      if (n.missing[[task]]>0) message("Note: ", n.missing, " missing(s) present in the data set.")
       # check for missing cases
-        missingData=object[[task]] %>%
+        missingData[[task]]=object[[task]] %>%
           expand(!!as.symbol(algorithm),
                  !!as.symbol(case))%>%
           anti_join(object[[task]],
                     by=c( algorithm,case))
-        if (nrow(missingData)>0) {
+        if (nrow(missingData[[task]])>0) {
           if (length(object) == 1 ) { # single task 
-            message("Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
+            message("Note: Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
           } else { # multi task
-            message("Performance of not all algorithms is observed for all cases in task '",
+            message("Note: Performance of not all algorithms is observed for all cases in task '",
                     task,
                     "'. Inserted as missings in following cases:")
             
           }
-          print(as.data.frame(missingData))
+          print(as.data.frame(missingData[[task]]))
           object[[task]]=as.data.frame(object[[task]] %>%
                                          complete(!!as.symbol(algorithm),
                                                   !!as.symbol(case)))
@@ -110,11 +115,28 @@ as.challenge=function(object,
       if (!is.null(na.treat)) {
         if (is.numeric(na.treat)) object[[task]][,value][is.na(object[[task]][,value])]=na.treat
         else if (is.function(na.treat)) object[[task]][,value][is.na(object[[task]][,value])]=na.treat(object[[task]][,value][is.na(object[[task]][,value])])
-        else if (na.treat=="na.rm") object[[task]]=object[[task]][!is.na(object[[task]][,value]),]
+        else if (is.character(na.treat) && na.treat=="na.rm") object[[task]]=object[[task]][!is.na(object[[task]][,value]),]
       }
     }
   }
-
+  if (check==TRUE && (any(sapply(missingData, function(x) nrow(x))>0) |any(n.missing>0)))  {
+    if (is.null(na.treat)) message("For aggregate-then-rank, na.treat will have to be specified. ",
+                                   "For rank-then-aggregate, missings will implicitly lead to the algorithm ranked last for the missing test case."
+                               )
+    else if (is.numeric(na.treat)) message("All missings have been replaced by the value ", na.treat,".\n")
+    else if (is.character(na.treat) && na.treat=="na.rm") message("All missings have been removed.")
+    else if (is.function(na.treat)) {
+      message("Missings have been replaced using function ")
+      print(na.treat)
+    }
+  }
+  
+  if (check==TRUE){
+    attr(object,"n.missing")=n.missing
+    attr(object,"missingData")=missingData
+  }
+  attr(object,"na.treat")=na.treat
+  
   attr(object,"algorithm")=algorithm
   attr(object,"value")=value
   attr(object,"case")=case

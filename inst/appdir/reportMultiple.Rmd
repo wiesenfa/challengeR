@@ -79,6 +79,7 @@ if (bootstrappingEnabled) {
 
   ranking.fun=boot_object$FUN
   object=challenge_multiple%>%ranking.fun
+  object$FUN.list = boot_object$FUN.list
 
   object$fulldata=boot_object$fulldata  # only not NULL if subset of algorithms used
 
@@ -142,31 +143,60 @@ if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") 
 
 if (isMultiTask) {
   cat("Ranking list for each task:\n")
-
+  
   for (t in 1:length(object$matlist)){
     cat("\n",names(object$matlist)[t],": ")
     n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
-
-    cat("\nAnalysis based on ",
+    
+    cat("\nAnalysis based on",
         n.cases,
-        " test cases which included",
-        sum(is.na(challenge_multiple[[t]][[attr(challenge_multiple,"value")]])),
-        " missing values.")
-
+        "test cases.",
+        attr(object$data,"n.missing")[[t]], "observations had been missing. ")
+    
+    if (nrow(attr(object$data,"missingData")[[t]])>0)  {
+      cat("Performance of not all algorithms is observed for all cases in task '",
+          names(object$matlist)[t],
+          "'. Therefore, missings have been inserted in the following cases:")
+      print(knitr::kable(as.data.frame(attr(object$data,"missingData")[[t]])))
+    }
+    
+    if (nrow(attr(object$data,"missingData")[[t]])>0 | attr(object$data,"n.missing")[[t]]>0)  {
+      if (is.numeric(attr(object$data,"na.treat"))) cat("All missings have been replaced by values of", attr(object$data,"na.treat"),".\n")
+      else if (is.character(attr(object$data,"na.treat")) && attr(object$data,"na.treat")=="na.rm") cat("All missings have been removed.")
+      else if (is.function(attr(object$data,"na.treat"))) {
+        cat("Missings have been replaced using function ")
+        print(attr(object$data,"na.treat"))
+      }
+      else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing test case.")
+    }
+    
     x=object$matlist[[t]]
     print(knitr::kable(x[order(x$rank),]))
   }
 } else {
   n.cases=nrow(challenge_multiple[[1]])/length(unique(challenge_multiple[[1]][[attr(challenge_multiple,"algorithm")]]))
-
-  cat("\nAnalysis based on ",
+  
+  cat("\nAnalysis based on",
       n.cases,
-      " test cases which included",
-      sum(is.na(challenge_multiple[[1]][[attr(challenge_multiple,"value")]])),
-      " missing values.")
-
+      "test cases.",
+      attr(object$data,"n.missing")[[1]], "observations had been missing. ")
+  
+  if (nrow(attr(object$data,"missingData")[[1]])>0)  {
+    cat("Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:")
+    print(knitr::kable(as.data.frame(attr(object$data,"missingData")[[1]])))
+   }
+  
+  if (nrow(attr(object$data,"missingData")[[1]])>0 | attr(object$data,"n.missing")[[1]]>0)  {
+    if (is.numeric(attr(object$data,"na.treat"))) cat("All missings have been replaced by values of", attr(object$data,"na.treat"),".\n")
+    else if (is.character(attr(object$data,"na.treat")) && attr(object$data,"na.treat")=="na.rm") cat("All missings have been removed.")
+    else if (is.function(attr(object$data,"na.treat"))) {
+      cat("Missings have been replaced using function ")
+      print(attr(object$data,"na.treat"))
+    }
+      else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing test case.")
+  }
   cat("\n\nRanking list:")
-
+  
   x=object$matlist[[1]]
   print(knitr::kable(x[order(x$rank),]))
 }
