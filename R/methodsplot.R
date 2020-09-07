@@ -67,7 +67,7 @@ methodsplot.challenge=function(x,
   # Create multi-panel plot with task names as titles for multi-task data set
   if (length(x) > 1) {
     linePlot <- linePlot + facet_wrap(~ task)
-  }
+   }
 
   return(linePlot)
 }

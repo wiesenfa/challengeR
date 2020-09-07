@@ -25,6 +25,9 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
   # Remove title for single-task data set
   if (length(a) == 1) {
     a[[1]]$labels$title <- NULL
+  } else {
+    names(a) = names(x$matlist)
+    class(a) <- "ggList"
   }
 
   a

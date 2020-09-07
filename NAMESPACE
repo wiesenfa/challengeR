@@ -1,5 +1,8 @@
 #exportPattern("^[[:alpha:]]+")
-
+S3method("+",ggList)
+S3method(print,ggList)
+export("%++%")
+#export("%+%")
 export(
   "aggregate.bootstrap", "aggregate.bootstrap.list", "aggregate.challenge", "aggregate.ranked.list",
   "aggregateThenRank",

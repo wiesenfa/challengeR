@@ -21,11 +21,15 @@ boxplot.ranked.list=function(x,
       theme(axis.text.x=element_text(angle = -90, hjust = 0))
 
   })
+  names(a) = names(x)
 
   # Remove title for single-task data set
   if (length(a) == 1) {
     a[[1]]$labels$title <- NULL
   }
+  if (length(a) >1) class(a) <- "ggList"
+  else a <- a[[1]]
+  
   a
 }
 

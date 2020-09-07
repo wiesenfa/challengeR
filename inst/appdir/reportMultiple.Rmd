@@ -228,9 +228,7 @@ if (isMultiTask) {
 \bigskip
 
 ```{r boxplots}
-temp=boxplot(object, size=.8)
-temp=lapply(temp, function(x) utils::capture.output(x+xlab("Algorithm")+ylab("Metric value")))
-
+boxplot(object, size=.8) +xlab("Algorithm")+ylab("Metric value")
 ```
 
 
@@ -295,7 +293,7 @@ par(op)
 \bigskip
 
 ```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
-temp=utils::capture.output(rankingHeatmap(object))
+rankingHeatmap(object)
 ```
 
 
@@ -320,9 +318,7 @@ pairwise significant test results for the one-sided Wilcoxon signed rank test at
 \bigskip
 
 ```{r significancemap,fig.width=6, fig.height=6,out.width='200%'}
-temp=utils::capture.output(significanceMap(object,alpha=0.05,p.adjust.method="holm")
-        )
-
+significanceMap(object,alpha=0.05,p.adjust.method="holm")
 ```
 
 <!-- \subsubsection{Hasse diagram} -->

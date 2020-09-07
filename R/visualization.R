@@ -144,6 +144,9 @@ if (single==FALSE){
 
 
   }
+  names(pl) = names(x$matlist)
+  class(pl) <- "ggList"
+  
   pl
 }
 
