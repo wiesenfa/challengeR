@@ -14,8 +14,8 @@ test_that("top 2 performing algorithms are extracted and data set is reduced res
   rankingSubset <- subset(ranking, top=2)
 
   expectedRankingSubset <- rbind(
-    "A1" = data.frame(value_FUN = 0.5, rank = 1),
-    "A2" = data.frame(value_FUN = 0.35, rank = 2))
+    "A1" = data.frame(value_mean = 0.5, rank = 1),
+    "A2" = data.frame(value_mean = 0.35, rank = 2))
 
   expect_equal(rankingSubset$matlist$T1, expectedRankingSubset)
 
@@ -71,9 +71,9 @@ test_that("extraction of subset returns all algorithms even when more are reques
   rankingSubset <- subset(ranking, top=4)
 
   expectedRankingSubset <- rbind(
-    "A1" = data.frame(value_FUN = 0.5, rank = 1),
-    "A2" = data.frame(value_FUN = 0.35, rank = 2),
-    "A3" = data.frame(value_FUN = 0.2, rank = 3))
+    "A1" = data.frame(value_mean = 0.5, rank = 1),
+    "A2" = data.frame(value_mean = 0.35, rank = 2),
+    "A3" = data.frame(value_mean = 0.2, rank = 3))
 
   expect_equal(rankingSubset$matlist$T1, expectedRankingSubset)
 })
@@ -94,9 +94,9 @@ test_that("extraction of subset returns more algorithms then requested when ties
   rankingSubset <- subset(ranking, top=2)
 
   expectedRankingSubset <- rbind(
-    "A1" = data.frame(value_FUN = 0.5, rank = 1),
-    "A2" = data.frame(value_FUN = 0.5, rank = 1),
-    "A3" = data.frame(value_FUN = 0.5, rank = 1))
+    "A1" = data.frame(value_mean = 0.5, rank = 1),
+    "A2" = data.frame(value_mean = 0.5, rank = 1),
+    "A3" = data.frame(value_mean = 0.5, rank = 1))
 
   expect_equal(rankingSubset$matlist$T1, expectedRankingSubset)
 })
@@ -120,8 +120,8 @@ test_that("top 2 performing algorithms are extracted from bootstrap ranking and 
   rankingBootstrappedSubset <- subset(rankingBootstrapped, top=2)
 
   expectedRankingSubset <- rbind(
-    "A1" = data.frame(value_FUN = 0.5, rank = 1),
-    "A2" = data.frame(value_FUN = 0.35, rank = 2))
+    "A1" = data.frame(value_mean = 0.5, rank = 1),
+    "A2" = data.frame(value_mean = 0.35, rank = 2))
 
   expect_equal(rankingBootstrappedSubset$matlist$T1, expectedRankingSubset)
 
@@ -186,9 +186,9 @@ test_that("extraction of bootstrap ranking subset returns all algorithms even wh
   rankingBootstrappedSubset <- subset(rankingBootstrapped, top=4)
 
   expectedRankingSubset <- rbind(
-    "A1" = data.frame(value_FUN = 0.5, rank = 1),
-    "A2" = data.frame(value_FUN = 0.35, rank = 2),
-    "A3" = data.frame(value_FUN = 0.2, rank = 3))
+    "A1" = data.frame(value_mean = 0.5, rank = 1),
+    "A2" = data.frame(value_mean = 0.35, rank = 2),
+    "A3" = data.frame(value_mean = 0.2, rank = 3))
 
   expect_equal(rankingBootstrappedSubset$matlist$T1, expectedRankingSubset)
 })
@@ -212,9 +212,9 @@ test_that("extraction of bootstrap ranking subset returns more algorithms then r
   rankingBootstrappedSubset <- subset(rankingBootstrapped, top=2)
 
   expectedRankingSubset <- rbind(
-    "A1" = data.frame(value_FUN = 0.5, rank = 1),
-    "A2" = data.frame(value_FUN = 0.5, rank = 1),
-    "A3" = data.frame(value_FUN = 0.5, rank = 1))
+    "A1" = data.frame(value_mean = 0.5, rank = 1),
+    "A2" = data.frame(value_mean = 0.5, rank = 1),
+    "A3" = data.frame(value_mean = 0.5, rank = 1))
 
   expect_equal(rankingBootstrappedSubset$matlist$T1, expectedRankingSubset)
 })
