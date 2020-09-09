@@ -8,8 +8,8 @@ test_that("rank-then-aggregate by mean works with two algorithms for one case, s
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
   expectedRanking <- rbind(
-    "A1" = data.frame(rank_FUN = 1, rank = 1),
-    "A2" = data.frame(rank_FUN = 2, rank = 2))
+    "A1" = data.frame(rank_mean = 1, rank = 1),
+    "A2" = data.frame(rank_mean = 2, rank = 2))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -23,8 +23,8 @@ test_that("rank-then-aggregate by mean works with two algorithms (reverse order)
 
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
-  expectedRanking <- rbind("A2" = data.frame(rank_FUN = 2, rank = 2),
-                           "A1" = data.frame(rank_FUN = 1, rank = 1))
+  expectedRanking <- rbind("A2" = data.frame(rank_mean = 2, rank = 2),
+                           "A1" = data.frame(rank_mean = 1, rank = 1))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -39,8 +39,8 @@ test_that("rank-then-aggregate by mean works with two algorithms for one case, l
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
   expectedRanking <- rbind(
-    "A1" = data.frame(rank_FUN = 2, rank = 2),
-    "A2" = data.frame(rank_FUN = 1, rank = 1))
+    "A1" = data.frame(rank_mean = 2, rank = 2),
+    "A2" = data.frame(rank_mean = 1, rank = 1))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -54,8 +54,8 @@ test_that("rank-then-aggregate by mean works with two algorithms (reverse order)
 
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
-  expectedRanking <- rbind("A2" = data.frame(rank_FUN = 1, rank = 1),
-                           "A1" = data.frame(rank_FUN = 2, rank = 2))
+  expectedRanking <- rbind("A2" = data.frame(rank_mean = 1, rank = 1),
+                           "A1" = data.frame(rank_mean = 2, rank = 2))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -81,8 +81,8 @@ test_that("rank-then-aggregate by mean works with two algorithms for one case an
   ranking <- challenge%>%rankThenAggregate(FUN = mean, ties.method = "min")
 
   expectedRanking <- rbind(
-    "A1" = data.frame(rank_FUN = 1, rank = 1),
-    "A2" = data.frame(rank_FUN = 1, rank = 1))
+    "A1" = data.frame(rank_mean = 1, rank = 1),
+    "A2" = data.frame(rank_mean = 1, rank = 1))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -97,8 +97,8 @@ test_that("rank-then-aggregate by mean works with two algorithms for one case an
   ranking <- challenge%>%rankThenAggregate(FUN = mean, ties.method = "max")
 
   expectedRanking <- rbind(
-    "A1" = data.frame(rank_FUN = 2, rank = 2),
-    "A2" = data.frame(rank_FUN = 2, rank = 2))
+    "A1" = data.frame(rank_mean = 2, rank = 2),
+    "A2" = data.frame(rank_mean = 2, rank = 2))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -137,8 +137,8 @@ test_that("rank-then-aggregate by mean works with two algorithms for two cases",
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
   expectedRanking <- rbind(
-    "A1" = data.frame(rank_FUN = 1, rank = 1),
-    "A2" = data.frame(rank_FUN = 2, rank = 2))
+    "A1" = data.frame(rank_mean = 1, rank = 1),
+    "A2" = data.frame(rank_mean = 2, rank = 2))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -155,8 +155,8 @@ test_that("rank-then-aggregate by median works with two algorithms for two cases
   ranking <- challenge%>%rankThenAggregate(FUN = median)
 
   expectedRanking <- rbind(
-    "A1" = data.frame(rank_FUN = 1, rank = 1),
-    "A2" = data.frame(rank_FUN = 2, rank = 2))
+    "A1" = data.frame(rank_median = 1, rank = 1),
+    "A2" = data.frame(rank_median = 2, rank = 2))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -170,7 +170,7 @@ test_that("rank-then-aggregate by mean works with one algorithm for one case", {
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
   expectedRanking <- rbind(
-    "A1" = data.frame(rank_FUN = 1, rank = 1))
+    "A1" = data.frame(rank_mean = 1, rank = 1))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -185,8 +185,8 @@ test_that("rank-then-aggregate assigns worst rank for NA", {
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
   expectedRanking <- rbind(
-    "A1" = data.frame(rank_FUN = 2, rank = 2),
-    "A2" = data.frame(rank_FUN = 1, rank = 1))
+    "A1" = data.frame(rank_mean = 2, rank = 2),
+    "A2" = data.frame(rank_mean = 1, rank = 1))
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
@@ -222,12 +222,12 @@ test_that("rank-then-aggregate by mean works for multi-task challenge (2 tasks i
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
   expectedRankingTask1 <- rbind(
-    "A1" = data.frame(rank_FUN = 1, rank = 1),
-    "A2" = data.frame(rank_FUN = 2, rank = 2))
+    "A1" = data.frame(rank_mean = 1, rank = 1),
+    "A2" = data.frame(rank_mean = 2, rank = 2))
 
   expectedRankingTask2 <- rbind(
-    "A1" = data.frame(rank_FUN = 2, rank = 2),
-    "A2" = data.frame(rank_FUN = 1, rank = 1))
+    "A1" = data.frame(rank_mean = 2, rank = 2),
+    "A2" = data.frame(rank_mean = 1, rank = 1))
 
   expect_equal(ranking$matlist$T1, expectedRankingTask1)
   expect_equal(ranking$matlist$T2, expectedRankingTask2)
@@ -253,12 +253,12 @@ test_that("rank-then-aggregate assigns worst rank for NA in multi-task challenge
   ranking <- challenge%>%rankThenAggregate(FUN = mean)
 
   expectedRankingTask1 <- rbind(
-    "A1" = data.frame(rank_FUN = 1, rank = 1),
-    "A2" = data.frame(rank_FUN = 2, rank = 2))
+    "A1" = data.frame(rank_mean = 1, rank = 1),
+    "A2" = data.frame(rank_mean = 2, rank = 2))
 
   expectedRankingTask2 <- rbind(
-    "A1" = data.frame(rank_FUN = 2, rank = 2),
-    "A2" = data.frame(rank_FUN = 1, rank = 1))
+    "A1" = data.frame(rank_mean = 2, rank = 2),
+    "A2" = data.frame(rank_mean = 1, rank = 1))
 
   expect_equal(ranking$matlist$T1, expectedRankingTask1)
   expect_equal(ranking$matlist$T2, expectedRankingTask2)
