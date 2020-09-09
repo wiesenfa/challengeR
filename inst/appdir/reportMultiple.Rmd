@@ -228,7 +228,7 @@ if (isMultiTask) {
 \bigskip
 
 ```{r boxplots}
-boxplot(object, size=.8) +xlab("Algorithm")+ylab("Metric value")
+boxplot(object, size=.8)
 ```
 
 
