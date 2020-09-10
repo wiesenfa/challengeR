@@ -18,18 +18,19 @@ boxplot.ranked.list=function(x,
                   color=color,...)+
       geom_boxplot(outlier.shape = NA,fill=NA)+
       ggtitle(names(x)[id]) +
-      theme(axis.text.x=element_text(angle = -90, hjust = 0))
-
+      theme(axis.text.x=element_text(angle = -90, hjust = 0)) +
+      xlab("Algorithm") +
+      ylab("Metric value")
   })
-  names(a) = names(x)
 
   # Remove title for single-task data set
   if (length(a) == 1) {
     a[[1]]$labels$title <- NULL
+  } else {
+    names(a) = names(x$matlist)
+    class(a) <- "ggList"
   }
-  if (length(a) >1) class(a) <- "ggList"
-  else a <- a[[1]]
-  
+
   a
 }
 

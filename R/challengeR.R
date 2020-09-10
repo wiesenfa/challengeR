@@ -58,7 +58,7 @@ as.challenge=function(object,
     missingData = n.missing = list()
     for (task in names(object)) {
       if (!all(is.numeric(object[[task]][[value]]))) stop("Performance values must be numeric.")
-      
+
       n.missing[[task]] <- sum(is.na(object[[task]][[value]])) # already missing before na.treat; for report
       if (n.missing[[task]]>0) message("Note: ", n.missing, " missing(s) present in the data set.")
       # check for missing cases
@@ -68,13 +68,13 @@ as.challenge=function(object,
           anti_join(object[[task]],
                     by=c( algorithm,case))
         if (nrow(missingData[[task]])>0) {
-          if (length(object) == 1 ) { # single task 
-            message("Note: Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
+          if (length(object) == 1 ) { # single task
+            message("Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
           } else { # multi task
-            message("Note: Performance of not all algorithms is observed for all cases in task '",
+            message("Performance of not all algorithms is observed for all cases in task '",
                     task,
                     "'. Inserted as missings in following cases:")
-            
+
           }
           print(as.data.frame(missingData[[task]]))
           object[[task]]=as.data.frame(object[[task]] %>%
@@ -88,16 +88,16 @@ as.challenge=function(object,
                      function(x) all(x==1))
           if (!all(all1)) {
             n.duplicated <- sum(all1!=1)
-            
-            if (length(object) == 1 ) { # single task 
+
+            if (length(object) == 1 ) { # single task
               if (n.duplicated/length(all1) >= 1/5) { # at least a quarter of the cases is duplicated
-                stop ("The following cases appear more than once. Please revise. ",  
+                stop ("The following case(s) appear(s) more than once for the same algorithm. Please revise. ",
                       "Or are you considering a multi-task challenge and forgot to specify argument 'by'?\n",
-                      "Cases: ",
+                      "Case(s): ",
                       paste(names(which(all1!=1)), collapse=", ")
                       )
               } else {
-                stop ("The following case(s) appear(s) more than once. Please revise.\n",  
+                stop ("The following case(s) appear(s) more than once for the same algorithm. Please revise.\n",
                       "Case(s): ",
                       paste(names(which(all1!=1)), collapse=", ")
                       )
@@ -130,13 +130,13 @@ as.challenge=function(object,
       print(na.treat)
     }
   }
-  
+
   if (check==TRUE){
     attr(object,"n.missing")=n.missing
     attr(object,"missingData")=missingData
   }
   attr(object,"na.treat")=na.treat
-  
+
   attr(object,"algorithm")=algorithm
   attr(object,"value")=value
   attr(object,"case")=case
