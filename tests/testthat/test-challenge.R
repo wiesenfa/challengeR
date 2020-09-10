@@ -164,6 +164,7 @@ test_that("missing algorithm performances are added as NAs for single-task chall
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
   expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2", "C1", "C2"))
+  expect_equal(as.vector(actualChallenge$T1$task), c("T1", "T1", "T1", "T1"))
 })
 
 test_that("multi-task data set containing one task is interpreted as single-task data set, missing algorithm performances are added", {
@@ -203,10 +204,12 @@ test_that("missing algorithm performances are added as NAs for multi-task challe
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
   expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2", "C1", "C2"))
+  expect_equal(as.vector(actualChallenge$T1$task), c("T1", "T1", "T1", "T1"))
 
   expect_equal(as.vector(actualChallenge$T2$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T2$value), c(0.2, 0.3, 0.4, NA))
   expect_equal(as.vector(actualChallenge$T2$case), c("C1", "C2", "C1", "C2"))
+  expect_equal(as.vector(actualChallenge$T2$task), c("T2", "T2", "T2", "T2"))
 })
 
 test_that("missing algorithm performances are not added as NA with sanity check disabled for single-task challenge", {

@@ -78,7 +78,8 @@ as.challenge=function(object,
           }
           print(as.data.frame(missingData[[task]]))
           object[[task]]=as.data.frame(object[[task]] %>%
-                                         complete(!!as.symbol(algorithm),
+                                         complete(task,
+                                                  !!as.symbol(algorithm),
                                                   !!as.symbol(case)))
         }
       # check duplicate cases
