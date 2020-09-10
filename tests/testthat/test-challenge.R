@@ -159,7 +159,7 @@ test_that("missing algorithm performances are added as NAs for single-task chall
     data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-                 "Performance of not all algorithms is observed for all cases in task 'T1'. Inserted as missings in following cases:", fixed=TRUE)
+                 "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
@@ -175,7 +175,7 @@ test_that("multi-task data set containing one task is interpreted as single-task
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_message(actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-                 "Performance of not all algorithms is observed for all cases in task 'T1'. Inserted as missings in following cases:", fixed=TRUE)
+                 "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
@@ -249,7 +249,7 @@ test_that("case cannot appear more than once per algorithm for single-task chall
     data.frame(algo="A1", value=0.8, case="C1"))
 
   expect_error(as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-               "Case(s) (C1) appear(s) more than once for the same algorithm in task 'T1'.", fixed=TRUE)
+               "The following case(s) appear(s) more than once for the same algorithm. Please revise. Or are you considering a multi-task challenge and forgot to specify argument 'by'?\nCase(s): C1", fixed=TRUE)
 })
 
 test_that("multi-task data set containing one task is interpreted as single-task data set, case cannot appear more than once per algorithm", {
@@ -261,7 +261,7 @@ test_that("multi-task data set containing one task is interpreted as single-task
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_error(as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-               "Case(s) (C1) appear(s) more than once for the same algorithm in task 'T1'.", fixed=TRUE)
+               "The following case(s) appear(s) more than once for the same algorithm. Please revise. Or are you considering a multi-task challenge and forgot to specify argument 'by'?\nCase(s): C1", fixed=TRUE)
 })
 
 test_that("case cannot appear more than once per algorithm for multi-task challenge (1 task in data set)", {
@@ -272,7 +272,7 @@ test_that("case cannot appear more than once per algorithm for multi-task challe
                 ))
 
   expect_error(as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-               "Case(s) (C1) appear(s) more than once for the same algorithm in task 'T1'.", fixed=TRUE)
+               "The following case(s) appear(s) more than once for the same algorithm. Please revise. Or are you considering a multi-task challenge and forgot to specify argument 'by'?\nCase(s): C1", fixed=TRUE)
 })
 
 test_that("cases cannot appear more than once per algorithm for single-task challenge", {
@@ -285,7 +285,7 @@ test_that("cases cannot appear more than once per algorithm for single-task chal
     data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_error(as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-               "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task 'T1'.", fixed=TRUE)
+               "The following case(s) appear(s) more than once for the same algorithm. Please revise. Or are you considering a multi-task challenge and forgot to specify argument 'by'?\nCase(s): C1, C2", fixed=TRUE)
 })
 
 test_that("cases cannot appear more than once per algorithm for multi-task challenge (1 task in data set)", {
@@ -300,7 +300,7 @@ test_that("cases cannot appear more than once per algorithm for multi-task chall
                 ))
 
   expect_error(as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-               "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task 'T1'.", fixed=TRUE)
+               "The following case(s) appear(s) more than once for the same algorithm. Please revise. Or are you considering a multi-task challenge and forgot to specify argument 'by'?\nCase(s): C1, C2", fixed=TRUE)
 })
 
 test_that("cases cannot appear more than once per algorithm for multi-task challenge (2 tasks in data set)", {
@@ -322,7 +322,7 @@ test_that("cases cannot appear more than once per algorithm for multi-task chall
   data <- rbind(dataTask1, dataTask2)
 
   expect_error(as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-               "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task 'T2'.", fixed=TRUE)
+               "The following case(s) appear(s) more than once for the same algorithm in task 'T2'. Please revise.\nCase(s): C1, C2", fixed=TRUE)
 })
 
 test_that("cases cannot appear more than once per algorithm when missing data was added for single-task challenge", {
@@ -332,8 +332,8 @@ test_that("cases cannot appear more than once per algorithm when missing data wa
     data.frame(algo="A2", value=0.6, case="C2"),
     data.frame(algo="A2", value=0.6, case="C2"))
 
-  #expect_error(as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-  #             "Case(s) (C1, C2) appear(s) more than once for the same algorithm in task 'T1'.", fixed=TRUE)
+  expect_error(as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
+               "The following case(s) appear(s) more than once for the same algorithm. Please revise. Or are you considering a multi-task challenge and forgot to specify argument 'by'?\nCase(s): C1, C2", fixed=TRUE)
 })
 
 test_that("user is notified of duplicate cases when multi-task data set is interpreted as single-task data set (2 tasks in data set)", {
@@ -351,7 +351,7 @@ test_that("user is notified of duplicate cases when multi-task data set is inter
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_error(as.challenge(data, taskName="New task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-               "Case(s) (C1) appear(s) more than once for the same algorithm in task 'New task'.", fixed=TRUE)
+               "The following case(s) appear(s) more than once for the same algorithm. Please revise. Or are you considering a multi-task challenge and forgot to specify argument 'by'?\nCase(s): C1", fixed=TRUE)
 })
 
 test_that("user is notified of missing algorithm performance when multi-task data set is interpreted as single-task data set (2 tasks in data set)", {
@@ -369,7 +369,7 @@ test_that("user is notified of missing algorithm performance when multi-task dat
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_message(as.challenge(data, taskName="New task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-                 "Performance of not all algorithms is observed for all cases in task 'New task'. Inserted as missings in following cases:", fixed=TRUE)
+                 "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:", fixed=TRUE)
 })
 
 test_that("NAs are replaced by numeric value for single-task challenge", {
@@ -499,7 +499,7 @@ test_that("automatically added NAs are replaced by numeric value for single-task
     data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0),
-                 "Performance of not all algorithms is observed for all cases in task 'T1'. Inserted as missings in following cases:", fixed=TRUE)
+                 "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.0, 0.0, 0.6))
@@ -539,7 +539,7 @@ test_that("automatically added NAs are removed for single-task challenge", {
     data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm"),
-                 "Performance of not all algorithms is observed for all cases in task 'T1'. Inserted as missings in following cases:", fixed=TRUE)
+                 "Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.6))

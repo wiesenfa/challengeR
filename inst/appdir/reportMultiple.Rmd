@@ -150,7 +150,7 @@ if (isMultiTask) {
     
     cat("\nAnalysis based on",
         n.cases,
-        "test cases.",
+        "cases.",
         attr(object$data,"n.missing")[[t]], "observations had been missing. ")
     
     if (nrow(attr(object$data,"missingData")[[t]])>0)  {
@@ -178,7 +178,7 @@ if (isMultiTask) {
   
   cat("\nAnalysis based on",
       n.cases,
-      "test cases.",
+      "cases.",
       attr(object$data,"n.missing")[[1]], "observations had been missing. ")
   
   if (nrow(attr(object$data,"missingData")[[1]])>0)  {
