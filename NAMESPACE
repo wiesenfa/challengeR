@@ -65,7 +65,8 @@ importFrom("viridisLite", "viridis","cividis")
 importFrom("ggplot2", "aes","aes_string","geom_abline", "geom_bar", "geom_boxplot", "geom_count", "geom_density", "geom_jitter",
     "geom_line", "geom_point", "geom_raster", "geom_step", "geom_text", "geom_violin","annotate","guide_legend",
     "geom_vline", "ggplot", "ggtitle","vars","xlab","ylab","scale_size_area","theme_get","rel","geom_hline","ggplot_build","scale_fill_manual",
-    "scale_y_continuous","coord_cartesian", "element_text", "facet_wrap", "position_jitter", "stat", "stat_summary", "theme", "unit","guides","scale_fill_viridis_c")
+    "scale_y_continuous","coord_cartesian", "element_text", "facet_wrap", "position_jitter", "stat", "stat_summary", "theme", "unit","guides","scale_fill_viridis_c",
+    "theme_set", "theme_light", "scale_color_manual", "element_blank")
 importFrom("grDevices", "col2rgb", "gray", "rgb", "grey")
 importFrom("graphics", "abline", "axis", "barplot", "box", "layout",
                "legend", "par", "plot", "points", "segments","boxplot", "stripchart", "title", "grconvertX", "plot.new")
