@@ -92,7 +92,7 @@ if (bootstrappingEnabled) {
 ```
 
 
-This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and test cases. Generated plots are:
+This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and cases. Generated plots are:
 
 ```{r, child=if (!isMultiTask && !bootstrappingEnabled) system.file("appdir", "overviewSingleTaskNoBootstrapping.Rmd", package="challengeR")}
 
@@ -167,7 +167,7 @@ if (isMultiTask) {
         cat("Missings have been replaced using function ")
         print(attr(object$data,"na.treat"))
       }
-      else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing test case.")
+      else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing case.")
     }
     
     x=object$matlist[[t]]
@@ -193,7 +193,7 @@ if (isMultiTask) {
       cat("Missings have been replaced using function ")
       print(attr(object$data,"na.treat"))
     }
-      else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing test case.")
+      else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing case.")
   }
   cat("\n\nRanking list:")
   
@@ -223,7 +223,7 @@ if (isMultiTask) {
 
 ## Dot- and boxplots
 
-*Dot- and boxplots* for visualizing raw assessment data separately for each algorithm. Boxplots representing descriptive statistics over all test cases (median, quartiles and outliers) are combined with horizontally jittered dots representing individual test cases.
+*Dot- and boxplots* for visualizing raw assessment data separately for each algorithm. Boxplots representing descriptive statistics over all cases (median, quartiles and outliers) are combined with horizontally jittered dots representing individual cases.
 
 \bigskip
 
@@ -234,7 +234,7 @@ boxplot(object, size=.8)
 
 
 ## Podium plots
-*Podium plots* (see also Eugster et al, 2008) for visualizing raw assessment data. Upper part (spaghetti plot): Participating algorithms are color-coded, and each colored dot in the plot represents a metric value achieved with the respective algorithm. The actual metric value is encoded by the y-axis. Each podium (here: $p$=`r length(ordering_consensus)`) represents one possible rank, ordered from best (1) to last (here: `r length(ordering_consensus)`). The assignment of metric values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding test case. Note that the plot part above each podium place is further subdivided into $p$ "columns", where each column represents one participating algorithm (here: $p=$ `r length(ordering_consensus)`).  Dots corresponding to identical test cases are connected by a line, leading to the shown spaghetti structure. Lower part: Bar charts represent the relative frequency for each algorithm to achieve the rank encoded by the podium place. 
+*Podium plots* (see also Eugster et al, 2008) for visualizing raw assessment data. Upper part (spaghetti plot): Participating algorithms are color-coded, and each colored dot in the plot represents a metric value achieved with the respective algorithm. The actual metric value is encoded by the y-axis. Each podium (here: $p$=`r length(ordering_consensus)`) represents one possible rank, ordered from best (1) to last (here: `r length(ordering_consensus)`). The assignment of metric values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding case. Note that the plot part above each podium place is further subdivided into $p$ "columns", where each column represents one participating algorithm (here: $p=$ `r length(ordering_consensus)`).  Dots corresponding to identical cases are connected by a line, leading to the shown spaghetti structure. Lower part: Bar charts represent the relative frequency for each algorithm to achieve the rank encoded by the podium place. 
 
 ```{r, include=FALSE, fig.keep="none",dev=NULL}
 plot.new()
@@ -288,7 +288,7 @@ par(op)
 
 
 ## Ranking heatmaps
-*Ranking heatmaps* for visualizing raw assessment data. Each cell $\left( i, A_j \right)$ shows the absolute frequency of test cases in which algorithm $A_j$ achieved rank $i$.
+*Ranking heatmaps* for visualizing raw assessment data. Each cell $\left( i, A_j \right)$ shows the absolute frequency of cases in which algorithm $A_j$ achieved rank $i$.
 
 \bigskip
 
