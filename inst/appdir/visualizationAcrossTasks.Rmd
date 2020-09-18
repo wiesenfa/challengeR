@@ -16,7 +16,7 @@ Algorithms are ordered according to consensus ranking.
 <!-- achieved in any task. If all tasks would provide the same -->
 <!-- stable ranking, narrow intervals around the diagonal would -->
 <!-- be expected. -->
-Blob plot similar to the one shown in Section \ref{blobByTask} substituting rankings based on bootstrap samples with the rankings corresponding to multiple tasks. This way, the distribution of ranks across tasks can be intuitively visualized.
+Algorithms are color-coded, and the area of each blob at position $\left( A_i, \text{rank } j \right)$ is proportional to the relative frequency $A_i$ achieved rank $j$ across multiple tasks. The median rank for each algorithm is indicated by a black cross. This way, the distribution of ranks across tasks can be intuitively visualized.
 
 
 \bigskip
