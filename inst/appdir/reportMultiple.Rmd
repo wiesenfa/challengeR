@@ -91,8 +91,7 @@ if (bootstrappingEnabled) {
 
 ```
 
-
-This document presents a systematic report on a benchmark study. Input data comprises raw metric values for all algorithms and cases. Generated plots are:
+This document presents a systematic report on the benchmark study "`r params$name`". Input data comprises raw metric values for all algorithms and cases. Generated plots are:
 
 ```{r, child=if (!isMultiTask && !bootstrappingEnabled) system.file("appdir", "overviewSingleTaskNoBootstrapping.Rmd", package="challengeR")}
 
