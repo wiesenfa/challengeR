@@ -1,3 +1,2 @@
 * Visualization of assessment data: Dot- and boxplot, podium plot and ranking heatmap
-* Visualization of ranking stability: Blob plot, violin plot and significance map
-* Visualization of ranking robustness: Line plot
+* Visualization of ranking stability: Blob plot, violin plot and significance map, line plot
