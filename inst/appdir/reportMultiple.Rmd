@@ -81,8 +81,6 @@ if (bootstrappingEnabled) {
   object=challenge_multiple%>%ranking.fun
   object$FUN.list = boot_object$FUN.list
 
-  object$fulldata=boot_object$fulldata  # only not NULL if subset of algorithms used
-
   cols_numbered=cols=color.fun(length(ordering_consensus))
   names(cols)=ordering_consensus
   names(cols_numbered)= paste(1:length(cols),names(cols))
@@ -113,12 +111,10 @@ Details can be found in Wiesenfarth et al. (2019).
 
 ```{r,results='asis'}
 
-if (!isMultiTask && !is.null(object$fulldata[[1]])) {
-  cat("Only top ",
-      length(levels(challenge_multiple[[1]][[attr(challenge_multiple,"algorithm")]])),
-      " out of ",
-      length(levels(object$fulldata[[1]][[attr(challenge_multiple,"algorithm")]])),
-      " algorithms visualized.\n")
+if (isMultiTask) {
+  cat("# Rankings\n")
+} else {
+  cat("# Ranking")
 }
 
 ```
@@ -144,14 +140,17 @@ if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") 
 ```{r,results='asis'}
 
 if (isMultiTask) {
-  cat("# Rankings\n")
   cat("Ranking for each task:\n")
   
   for (t in 1:length(object$matlist)){
     cat("\n",names(object$matlist)[t],": ")
     n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
+
+    numberOfAlgorithms <- length(levels(challenge_multiple[[t]][[attr(challenge_multiple, "algorithm")]]))
     
-    cat("\nAnalysis based on",
+    cat("\nThe analysis is based on",
+        numberOfAlgorithms,
+        "algorithms and",
         n.cases,
         "cases.",
         attr(object$data,"n.missing")[[t]], "observations had been missing. ")
@@ -177,10 +176,19 @@ if (isMultiTask) {
     print(knitr::kable(x[order(x$rank),]))
   }
 } else {
-  n.cases=nrow(challenge_multiple[[1]])/length(unique(challenge_multiple[[1]][[attr(challenge_multiple,"algorithm")]]))
   
-  cat("# Ranking")
-  cat("\nAnalysis based on",
+  algorithmAttribute <- attr(challenge_multiple, "algorithm")
+  totalNumberOfAlgorithms <- length(levels(attr(object$data, "missingData")[[1]][[algorithmAttribute]]))
+
+  cat("The top ",
+      length(levels(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
+      " out of ",
+      totalNumberOfAlgorithms,
+      " algorithms are considered.\n")
+
+  n.cases=nrow(challenge_multiple[[1]])/length(unique(challenge_multiple[[1]][[attr(challenge_multiple,"algorithm")]]))
+
+  cat("\nThe analysis is based on",
       n.cases,
       "cases.",
       attr(object$data,"n.missing")[[1]], "observations had been missing. ")
