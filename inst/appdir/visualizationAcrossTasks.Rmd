@@ -1,9 +1,6 @@
 # Visualization of cross-task insights
 
-Algorithms are ordered according to consensus ranking.
-
-
-
+The algorithms are ordered according to consensus ranking.
 
 ## Characterization of algorithms
 
@@ -28,13 +25,9 @@ stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+
 ```
 
 
-
-
-
 ```{r, child=if (isMultiTask && bootstrappingEnabled) system.file("appdir", "characterizationOfAlgorithmsBootstrapping.Rmd", package="challengeR")}
 
 ```
-
 
 
 ## Characterization of tasks

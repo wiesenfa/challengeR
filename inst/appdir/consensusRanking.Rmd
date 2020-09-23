@@ -1,4 +1,4 @@
-Consensus ranking according to chosen method `r attr(params$consensus,"method")`:
+Consensus ranking across tasks according to chosen method "`r attr(params$consensus,"method")`":
 ```{r}
 knitr::kable(data.frame(value=round(params$consensus,3), 
                         rank=rank(params$consensus, 

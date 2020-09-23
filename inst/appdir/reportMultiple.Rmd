@@ -119,7 +119,8 @@ if (isMultiTask) {
 
 ```
 
-Ranking of algorithms within tasks according to the following chosen ranking scheme:
+
+Algorithms within a task are ranked according to the following ranking scheme:
 
 ```{r,results='asis'}
 a=(  lapply(object$FUN.list[1:2],function(x) {
@@ -207,7 +208,7 @@ if (isMultiTask) {
     }
       else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing case.")
   }
-  cat("\n\nRanking list:")
+  cat("\n\nRanking:")
   
   x=object$matlist[[1]]
   print(knitr::kable(x[order(x$rank),]))
@@ -228,7 +229,7 @@ if (isMultiTask) {
 ```{r,results='asis'}
 
 if (isMultiTask) {
-  cat("Algorithms are ordered according to chosen ranking scheme for each task.")
+  cat("The algorithms are ordered according to the computed ranks for each task.")
 }
 
 ```
@@ -389,5 +390,4 @@ Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Ko
 M. J. A. Eugster, T. Hothorn, and F. Leisch, “Exploratory
 and inferential analysis of benchmark experiments,”
 Institut fuer Statistik, Ludwig-Maximilians-Universitaet Muenchen, Germany, Technical Report 30,
-2008. [Online]. Available: http://epub.ub.uni-muenchen.
-de/4134/.
+2008. [Online]. Available: http://epub.ub.uni-muenchen.de/4134/.
