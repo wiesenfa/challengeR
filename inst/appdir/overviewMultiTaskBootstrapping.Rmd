@@ -1,4 +1,3 @@
 * Visualization of assessment data: Dot- and boxplots, podium plots and ranking heatmaps
-* Visualization of ranking stability: Blob plots, violin plots and significance maps
-* Visualization of ranking robustness: Line plots
-* Visualization of cross-task insights
+* Visualization of ranking stability: Blob plots, violin plots and significance maps, line plots
+* Visualization of cross-task insights: Blob plots, stacked frequency plots, dendrogram, network plot
