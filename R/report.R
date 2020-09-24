@@ -9,7 +9,7 @@ report.bootstrap.list=function(object,
                                format="PDF",
                                latex_engine="pdflatex",
                                fig.format = NULL, # file format of figures if clean=FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
-                               dpi = NULL, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
+                               dpi = 300, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
                                open=TRUE,...){
 
   # Copy the report file to a temporary directory before processing it, in
@@ -94,7 +94,7 @@ report.ranked.list=function(object,
                             format="PDF",
                             latex_engine="pdflatex",
                             fig.format = NULL, # file format of figures if clean=FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
-                            dpi = NULL, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
+                            dpi = 300, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
                             open=TRUE,
                             ...){
 
