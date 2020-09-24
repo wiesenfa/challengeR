@@ -24,7 +24,7 @@ test_that("extraction of task subset works for multi-task data set", {
 
   ranking <- challenge%>%aggregateThenRank(FUN=mean, ties.method="min")
 
-  rankingSubset <- taskSubset(ranking, tasks=c("T2"))
+  rankingSubset <- subset(ranking, tasks=c("T2"))
 
   expect_equal(length(rankingSubset$matlist), 1)
   expect_is(rankingSubset$matlist$T2, "data.frame")
@@ -46,7 +46,7 @@ test_that("extraction of task subset works for single-task data set", {
 
   ranking <- challenge%>%aggregateThenRank(FUN=mean, ties.method="min")
 
-  rankingSubset <- taskSubset(ranking, tasks=c("T1"))
+  rankingSubset <- subset(ranking, tasks=c("T1"))
 
   expect_equal(length(rankingSubset$matlist), 1)
   expect_is(rankingSubset$matlist$T1, "data.frame")
@@ -68,7 +68,7 @@ test_that("extraction of task subset does not raise an error for invalid task na
 
   ranking <- challenge%>%aggregateThenRank(FUN=mean, ties.method="min")
 
-  rankingSubset <- taskSubset(ranking, tasks=c("T1x"))
+  rankingSubset <- subset(ranking, tasks=c("T1x"))
 
   expect_equal(length(rankingSubset$matlist), 1)
   expect_equal(rankingSubset$matlist$T1, NULL)
@@ -106,7 +106,7 @@ test_that("extraction of task subset from bootstrap ranking works for multi-task
   set.seed(1)
   rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
 
-  rankingBootstrappedSubset <- taskSubset(rankingBootstrapped, tasks=c("T2"))
+  rankingBootstrappedSubset <- subset(rankingBootstrapped, tasks=c("T2"))
 
   expect_equal(length(rankingBootstrappedSubset$matlist), 1)
   expect_is(rankingBootstrappedSubset$matlist$T2, "data.frame")
@@ -137,7 +137,7 @@ test_that("extraction of task subset from bootstrap ranking works for single-tas
   set.seed(1)
   rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
 
-  rankingBootstrappedSubset <- taskSubset(rankingBootstrapped, tasks=c("T1"))
+  rankingBootstrappedSubset <- subset(rankingBootstrapped, tasks=c("T1"))
 
   expect_equal(length(rankingBootstrappedSubset$matlist), 1)
   expect_is(rankingBootstrappedSubset$matlist$T1, "data.frame")
@@ -168,7 +168,7 @@ test_that("extraction of task subset from bootstrap ranking does not raise an er
   set.seed(1)
   rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
 
-  rankingBootstrappedSubset <- taskSubset(rankingBootstrapped, tasks=c("T1x"))
+  rankingBootstrappedSubset <- subset(rankingBootstrapped, tasks=c("T1x"))
 
   expect_equal(length(rankingBootstrappedSubset$matlist), 1)
   expect_equal(rankingBootstrappedSubset$matlist$T1, NULL)
@@ -182,3 +182,4 @@ test_that("extraction of task subset from bootstrap ranking does not raise an er
   expect_equal(length(rankingBootstrappedSubset$bootsrappedAggregate), 1)
   expect_equal(rankingBootstrappedSubset$bootsrappedAggregate$T1, NULL)
 })
+

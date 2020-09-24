@@ -42,7 +42,7 @@ subset.ranked.list <- function(x,
                                top,
                                tasks,...) {
   
-  if (!missing(tasks) & length(x$matlist) == 1) stop("Subset of tasks only sensible for multi task challenges.")
+#  if (!missing(tasks) & length(x$matlist) == 1) stop("Subset of tasks only sensible for multi task challenges.")
   if (!missing(top) & length(x$matlist) != 1)  stop("Subset of algorithms only sensible for single-task challenges. Otherwise no consensus ranking is possible.")
   
   if (!missing(top)){
@@ -60,7 +60,7 @@ subset.ranked.list <- function(x,
     
     objectTop$fulldata=x$data
     return(objectTop)
-  } else if (!missing(task)){
+  } else if (!missing(tasks)){
     res=list(matlist=x$matlist[tasks],
              data=x$data[tasks],
              call=x$call,
@@ -83,7 +83,7 @@ subset.bootstrap.list=function(x,
                                top,
                                tasks, ...) {
   
-  if (!missing(tasks) & length(x$matlist) == 1) stop("Subset of tasks only sensible for multi task challenges.")
+ # if (!missing(tasks) & length(x$matlist) == 1) stop("Subset of tasks only sensible for multi task challenges.")
   if (!missing(top) & length(x$matlist) != 1)  stop("Subset of algorithms only sensible for single-task challenges. Otherwise no consensus ranking is possible.")
   
   if (!missing(top)){
@@ -92,7 +92,7 @@ subset.bootstrap.list=function(x,
     objectTop$bootsrappedRanks[[1]] <- objectTop$bootsrappedRanks[[1]][rownames(objectTop$matlist[[1]]),]
     objectTop$bootsrappedAggregate[[1]] <- objectTop$bootsrappedAggregate[[1]][rownames(objectTop$matlist[[1]]),]
     return(objectTop)
-  } else if (!missing(task)){
+  } else if (!missing(tasks)){
     res=list(bootsrappedRanks=x$bootsrappedRanks[tasks],
              bootsrappedAggregate=x$bootsrappedAggregate[tasks],
              matlist=x$matlist[tasks],
