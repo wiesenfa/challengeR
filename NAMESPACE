@@ -1,8 +1,5 @@
-#exportPattern("^[[:alpha:]]+")
 S3method("+",ggList)
 S3method(print,ggList)
-export("%++%")
-#export("%+%")
 export(
   "aggregate.bootstrap", "aggregate.bootstrap.list", "aggregate.challenge", "aggregate.ranked.list",
   "aggregateThenRank",
@@ -42,8 +39,8 @@ export(
   "stabilityByAlgorithm.bootstrap.list",
   "stabilityByAlgorithmStacked.bootstrap.list",
   "stabilityByTask.bootstrap.list",
+  "subset",
   "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", #"which.top",
-  "taskSubset.ranked.list", "taskSubset.bootstrap.list",
   "test",    "test.challenge", "test.default",
   "testThenRank",
   "violin", "violin.bootstrap.list",
@@ -152,9 +149,6 @@ S3method(subset,bootstrap.list)
 S3method(subset,aggregated.list)
 S3method(subset,ranked.list)
 S3method(subset,comparedRanks.list)
-
-S3method(taskSubset,ranked.list)
-S3method(taskSubset,bootstrap.list)
 
 S3method(podium,default)
 S3method(podium,challenge)
