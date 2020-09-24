@@ -85,6 +85,8 @@ if (bootstrappingEnabled) {
   object=challenge_multiple%>%ranking.fun
   object$FUN.list = boot_object$FUN.list
 
+  object$fulldata=boot_object$fulldata  # only not NULL if subset of algorithms used
+
   cols_numbered=cols=color.fun(length(ordering_consensus))
   names(cols)=ordering_consensus
   names(cols_numbered)= paste(1:length(cols),names(cols))
@@ -182,23 +184,29 @@ if (isMultiTask) {
     print(knitr::kable(x[order(x$rank),]))
   }
 } else {
-  
-  algorithmAttribute <- attr(challenge_multiple, "algorithm")
-  totalNumberOfAlgorithms <- length(levels(attr(object$data, "missingData")[[1]][[algorithmAttribute]]))
-
-  cat("The top ",
-      length(levels(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
-      " out of ",
-      totalNumberOfAlgorithms,
-      " algorithms are considered.\n")
 
   n.cases=nrow(challenge_multiple[[1]])/length(unique(challenge_multiple[[1]][[attr(challenge_multiple,"algorithm")]]))
-
-  cat("\nThe analysis is based on",
-      n.cases,
-      "cases.",
-      attr(object$data,"n.missing")[[1]], "missing cases have been found in the data set. ")
   
+  # Is subset of algorithms used?
+  if (!is.null(object$fulldata[[1]])) {
+    cat("The top ",
+        length(levels(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
+        " out of ",
+        length(levels(object$fulldata[[1]][[attr(challenge_multiple, "algorithm")]])),
+        " algorithms are considered.\n")
+    cat("\nThe analysis is based on",
+        n.cases,
+        "cases. ")
+  } else {
+    cat("\nThe analysis is based on",
+        length(levels(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
+        "algorithms and",
+        n.cases,
+        "cases. ")
+  }
+
+  cat(attr(object$data,"n.missing")[[1]], "missing cases have been found in the data set. ")
+
   if (nrow(attr(object$data,"missingData")[[1]])>0)  {
     
     if(attr(object$data,"n.missing")[[1]]==0 ) cat("However, ")
