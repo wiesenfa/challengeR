@@ -7,15 +7,16 @@ Author: Manuel Wiesenfarth, Annette Kopp-Schneider
 Maintainer: Manuel Wiesenfarth <m.wiesenfarth@dkfz.de>
 Description: Analyzing assessment data of biomedical image analysis competitions and visualization of results.
 License: GPL-3
-Depends: R (>= 3.5.2)
+Depends:
+  R (>= 3.5.2),
+  ggplot2 (>= 3.3.0),
+  purrr (>= 0.3.3)
 Imports:
   dplyr (>= 0.8.5),
-  ggplot2 (>= 3.3.0),
   graph (>= 1.64.0),
   knitr (>= 1.28),
   methods (>= 3.6.0),
   plyr (>= 1.8.6),
-  purrr (>= 0.3.3),
   relations (>= 0.6-9),
   reshape2 (>= 1.4.3),
   rlang (>= 0.4.5),
