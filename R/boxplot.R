@@ -28,9 +28,8 @@ boxplot.ranked.list=function(x,
     a[[1]]$labels$title <- NULL
   } else {
     names(a) = names(x$matlist)
-    class(a) <- "ggList"
   }
-
+  class(a) <- "ggList"
   a
 }
 

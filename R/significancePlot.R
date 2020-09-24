@@ -30,10 +30,10 @@ significanceMap.ranked.list=function(object,
     res[[1]]$labels$title <- NULL
   } else {
     names(res) = names(object$matlist)
-    class(res) <- "ggList"
     
   }
 
+  class(res) <- "ggList"
   res
 }
 

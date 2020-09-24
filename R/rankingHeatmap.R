@@ -27,9 +27,9 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
     a[[1]]$labels$title <- NULL
   } else {
     names(a) = names(x$matlist)
-    class(a) <- "ggList"
   }
 
+  class(a) <- "ggList"
   a
 }
 
