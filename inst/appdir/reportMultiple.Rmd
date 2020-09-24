@@ -7,6 +7,7 @@ params:
   isMultiTask: NA
   bootstrappingEnabled: NA
   fig.format: NULL
+  dpi: NULL
 title: "Benchmarking report for `r params$name` "
 author: "created by challengeR v`r packageVersion('challengeR')`"
 date: "`r Sys.setlocale('LC_TIME', 'English'); format(Sys.time(), '%d %B, %Y')`"
@@ -34,7 +35,9 @@ img_template <- switch( out.format,
                                                out.height="504px")),
                      {
                        # default
-                       list("img-params"=list( fig.width=7,fig.height = 3,dpi=300))
+                       list("img-params"=list( fig.width=7,
+                                               fig.height = 3,
+                                               dpi=300))
                      } )
 
 knitr::opts_template$set( img_template )
@@ -43,6 +46,7 @@ knitr::opts_chunk$set(echo = F) # ,#fig.width=7,fig.height = 3,dpi=300,
 
 if (out.format != "docx") knitr::opts_chunk$set(fig.align = "center")
 if (!is.null(params$fig.format)) knitr::opts_chunk$set(dev = params$fig.format) # can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
+if (!is.null(params$dpi)) knitr::opts_chunk$set(dpi = params$dpi) 
 
 theme_set(theme_light())
 

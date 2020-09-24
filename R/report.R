@@ -9,6 +9,7 @@ report.bootstrap.list=function(object,
                                format="PDF",
                                latex_engine="pdflatex",
                                fig.format = NULL, # file format of figures if clean=FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
+                               dpi = NULL, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
                                open=TRUE,...){
 
   # Copy the report file to a temporary directory before processing it, in
@@ -40,6 +41,8 @@ report.bootstrap.list=function(object,
   }
 
   # Set up parameters to pass to Rmd document
+  if (!is.null(fig.format) & format=="PDF") fig.format=c("pdf",fig.format)
+  if (!is.null(fig.format) && fig.format[1]=="pdf" && format=="Word") fig.format <- c(fig.format[-1], fig.format[1]) # in word avoid use of pdf to be embedded in document
   params <- list(
     object=object,
     consensus=consensus,
@@ -47,7 +50,8 @@ report.bootstrap.list=function(object,
     colors=colors,
     isMultiTask=isMultiTask,
     bootstrappingEnabled=TRUE,
-    fig.format = fig.format
+    fig.format = fig.format,
+    dpi = dpi
   )
 
   # Knit the document, passing in the `params` list, and eval it in a
@@ -90,6 +94,7 @@ report.ranked.list=function(object,
                             format="PDF",
                             latex_engine="pdflatex",
                             fig.format = NULL, # file format of figures if clean=FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
+                            dpi = NULL, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
                             open=TRUE,
                             ...){
 
@@ -127,6 +132,8 @@ report.ranked.list=function(object,
   }
 
   # Set up parameters to pass to Rmd document
+  if (!is.null(fig.format) & format=="PDF") fig.format=c("pdf",fig.format)
+  if (!is.null(fig.format) && fig.format[1]=="pdf" && format=="Word") fig.format <- c(fig.format[-1], fig.format[1]) # in word avoid use of pdf to be embedded in document
   params <- list(
     object=object,
     consensus=consensus,
@@ -134,7 +141,8 @@ report.ranked.list=function(object,
     colors=colors,
     isMultiTask=isMultiTask,
     bootstrappingEnabled=FALSE,
-    fig.format = fig.format
+    fig.format = fig.format,
+    dpi = dpi
   )
 
   # Knit the document, passing in the `params` list, and eval it in a
