@@ -23,6 +23,9 @@ test_that("top 2 performing algorithms are extracted and data set is reduced res
   expect_equal(as.vector(rankingSubset$data$T1$value), c(0.8, 0.6, 0.2, 0.1))
   expect_equal(as.vector(rankingSubset$data$T1$case), c("C1", "C1", "C2", "C2"))
   expect_equal(as.vector(rankingSubset$data$T1$task), c("T1", "T1", "T1", "T1"))
+
+  # check that full data set is preserved
+  expect_equal(rankingSubset$fulldata$T1, challenge$T1)
 })
 
 test_that("extraction of subset raises error for multi-task data set", {
@@ -132,6 +135,9 @@ test_that("top 2 performing algorithms are extracted from bootstrap ranking and 
 
   expect_equal(dim(rankingBootstrappedSubset$bootsrappedRanks$T1), c(2, 10))
   expect_equal(dim(rankingBootstrappedSubset$bootsrappedAggregate$T1), c(2, 10))
+
+  # check that full data set is preserved
+  expect_equal(rankingBootstrappedSubset$fulldata$T1, challenge$T1)
 })
 
 test_that("extraction of bootstrap ranking subset raises error for multi-task data set", {
