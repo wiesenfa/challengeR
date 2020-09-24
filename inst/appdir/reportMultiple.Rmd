@@ -137,7 +137,6 @@ cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
 if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal to the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
 ```
 
-
 ```{r,results='asis'}
 
 if (isMultiTask) {
@@ -154,10 +153,12 @@ if (isMultiTask) {
         "algorithms and",
         n.cases,
         "cases.",
-        attr(object$data,"n.missing")[[t]], "observations had been missing. ")
+        attr(object$data,"n.missing")[[t]], "missing cases have been found in the data set. ")
     
     if (nrow(attr(object$data,"missingData")[[t]])>0)  {
-      cat("Performance of not all algorithms is observed for all cases in task '",
+      if(attr(object$data,"n.missing")[[t]]==0 ) cat("However, ")
+      else if(attr(object$data,"n.missing")[[t]]>0 ) cat("Additionally, ")
+      cat("performance of not all algorithms has been observed for all cases in task '",
           names(object$matlist)[t],
           "'. Therefore, missings have been inserted in the following cases:")
       print(knitr::kable(as.data.frame(attr(object$data,"missingData")[[t]])))
@@ -192,10 +193,13 @@ if (isMultiTask) {
   cat("\nThe analysis is based on",
       n.cases,
       "cases.",
-      attr(object$data,"n.missing")[[1]], "observations had been missing. ")
+      attr(object$data,"n.missing")[[1]], "missing cases have been found in the data set. ")
   
   if (nrow(attr(object$data,"missingData")[[1]])>0)  {
-    cat("Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:")
+    
+    if(attr(object$data,"n.missing")[[1]]==0 ) cat("However, ")
+    else if(attr(object$data,"n.missing")[[1]]>0 ) cat("Additionally, ")
+    cat("performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:")
     print(knitr::kable(as.data.frame(attr(object$data,"missingData")[[1]])))
    }
   

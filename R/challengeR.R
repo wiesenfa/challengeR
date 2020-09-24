@@ -60,7 +60,7 @@ as.challenge=function(object,
       if (!all(is.numeric(object[[task]][[value]]))) stop("Performance values must be numeric.")
 
       n.missing[[task]] <- sum(is.na(object[[task]][[value]])) # already missing before na.treat; for report
-      if (n.missing[[task]]>0) message("Note: ", n.missing, " missing(s) present in the data set.")
+      if (n.missing[[task]]>0) message("Note: ", n.missing, " missing cases have been found in the data set.")
       # check for missing cases
         missingData[[task]]=object[[task]] %>%
           expand(!!as.symbol(algorithm),
@@ -68,12 +68,12 @@ as.challenge=function(object,
           anti_join(object[[task]],
                     by=c( algorithm,case))
         if (nrow(missingData[[task]])>0) {
-          if (length(object) == 1 ) { # single task
-            message("Performance of not all algorithms is observed for all cases. Inserted as missings in following cases:")
+             if (length(object) == 1 ) { # single task
+            message("Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:")
           } else { # multi task
-            message("Performance of not all algorithms is observed for all cases in task '",
+            message("Performance of not all algorithms has been observed for all cases in task '",
                     task,
-                    "'. Inserted as missings in following cases:")
+                    "'. Therefore, missings have been inserted in the following cases:")
 
           }
           print(as.data.frame(missingData[[task]]))
