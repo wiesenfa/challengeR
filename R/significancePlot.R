@@ -106,18 +106,20 @@ significanceMap.data.frame=function(object,
   # grid on top
     lt=th_get$panel.grid$linetype
     if (is.null(lt)) lt=th_get$line$linetype
+    gridSize=c(th_get$panel.grid.major$size,th_get$panel.grid$size,th_get$line$size)[1]
+    
 
   #p=p+theme(panel.background = element_rect(fill = NA),panel.ontop=TRUE) #-> grid will be on top of diagonal
   #fix:
     f=ggplot_build(p)
-    p= p + geom_vline(xintercept=f$layout$panel_params[[1]]$x.major_source,
+    p= p + geom_vline(xintercept=f$layout$panel_params[[1]]$x$breaks,
                       linetype=lt,
                       color=th_get$panel.grid$colour,
-                      size=rel(th_get$panel.grid.major$size))+
-      geom_hline(yintercept=f$layout$panel_params[[1]]$y.major_source,
+                      size=gridSize)+
+      geom_hline(yintercept=f$layout$panel_params[[1]]$y$breaks,
                  linetype=lt,
                  color=th_get$panel.grid$colour,
-                 size=rel(th_get$panel.grid.major$size))+
+                 size=gridSize)+
       geom_abline(slope=1)+
       geom_text(aes(x=algorithm,y=fixy,label=rank),
                 nudge_y=.5,
