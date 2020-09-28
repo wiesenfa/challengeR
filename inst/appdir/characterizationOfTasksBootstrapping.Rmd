@@ -1,7 +1,5 @@
 ### Visualizing bootstrap results
-To investigate which
-tasks separate algorithms well (i.e., lead to a stable ranking),
-two visualization methods are recommended.
+To investigate which tasks separate algorithms well (i.e., lead to a stable ranking), a blob plot is recommended.
 
 Bootstrap results can be shown in a blob plot showing one plot for each
 task. In this view, the spread of the blobs for each algorithm
