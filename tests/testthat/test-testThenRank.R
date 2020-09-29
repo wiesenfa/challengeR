@@ -58,3 +58,21 @@ test_that("test-then-rank works with two algorithms, large values are better", {
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
+
+test_that("test-then-rank works for ties method 'max'", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.6, case="C1"),
+    data.frame(algo="A1", value=0.6, case="C2"),
+    data.frame(algo="A2", value=0.8, case="C1"),
+    data.frame(algo="A2", value=0.8, case="C2"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  ranking <- challenge%>%testThenRank(ties.method = "max")
+
+  expectedRanking <- rbind(
+    "A1" = data.frame(prop_significance = 0, rank = 2),
+    "A2" = data.frame(prop_significance = 0, rank = 2))
+
+  expect_equal(ranking$matlist$T1, expectedRanking)
+})
