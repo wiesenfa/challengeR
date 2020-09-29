@@ -268,3 +268,41 @@ test_that("test-then-rank works for multi-task data set with no missing data", {
   expect_equal(ranking$matlist$T1, expectedRankingTask1)
   expect_equal(ranking$matlist$T2, expectedRankingTask2)
 })
+
+test_that("NAs are replaced by numeric value in multi-task data set", {
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=NA, case="C1"),
+                       data.frame(algo="A1", value=0.2, case="C2"),
+                       data.frame(algo="A1", value=0.2, case="C3"),
+                       data.frame(algo="A1", value=0.2, case="C4"),
+                       data.frame(algo="A2", value=1.0, case="C1"),
+                       data.frame(algo="A2", value=1.0, case="C2"),
+                       data.frame(algo="A2", value=1.0, case="C3"),
+                       data.frame(algo="A2", value=1.0, case="C4")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.6, case="C1"),
+                       data.frame(algo="A1", value=0.6, case="C2"),
+                       data.frame(algo="A2", value=0.8, case="C1"),
+                       data.frame(algo="A2", value=0.8, case="C2")
+                     ))
+
+  data <- rbind(dataTask1, dataTask2)
+
+  challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  ranking <- challenge%>%testThenRank(na.treat = 0)
+
+  expectedRankingTask1 <- rbind(
+    "A1" = data.frame(prop_significance = 1, rank = 1),
+    "A2" = data.frame(prop_significance = 0, rank = 2))
+
+  expectedRankingTask2 <- rbind(
+    "A1" = data.frame(prop_significance = 0, rank = 1),
+    "A2" = data.frame(prop_significance = 0, rank = 1))
+
+  expect_equal(ranking$matlist$T1, expectedRankingTask1)
+  expect_equal(ranking$matlist$T2, expectedRankingTask2)
+})
