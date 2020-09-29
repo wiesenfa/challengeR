@@ -96,7 +96,7 @@ Aggregate.list <-function(object,
                   function(id){
                     piece=object[[id]]
                     if (length(unique(piece[[algorithm]]))<=1){
-                      warning("only one ", algorithm, " available in element ", names(object)[id])
+                      warning("Only one algorithm available in task '", names(object)[id], "'.")
                       return(data.frame("prop_significance"=rep(NA,length(unique(piece[[algorithm]]))),
                                         row.names = unique(piece[[algorithm]])))
                     }
@@ -126,7 +126,7 @@ Aggregate.list <-function(object,
   } else {
     if (is.function(FUN)) FUNname <-gsub('\")',"",gsub('UseMethod(\"',"",deparse(functionBody(FUN)),fixed = T),fixed=T)
     else if (is.character(FUN)) FUNname=FUN
-    
+
     if (is.character(FUN)) FUN=try(eval(parse(text=FUN)),
                                    silent = T)
     if (!is.function(FUN)) stop("FUN has to be a function (possibly as character) or 'significance'")

@@ -15,6 +15,16 @@ test_that("test-then-rank raises warning for one case", {
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
+test_that("test-then-rank raises warning for one algorithm", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.6, case="C1"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  expect_warning(ranking <- challenge%>%testThenRank(),
+                 "Only one algorithm available in task 'T1'.", fixed = TRUE)
+})
+
 test_that("test-then-rank works with two algorithms, small values are better", {
   data <- rbind(
     data.frame(algo="A1", value=0.2, case="C1"),
