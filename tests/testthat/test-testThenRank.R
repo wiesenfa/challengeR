@@ -76,3 +76,16 @@ test_that("test-then-rank works for ties method 'max'", {
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
+
+test_that("test-then-rank raises error for invalid ties method", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.6, case="C1"),
+    data.frame(algo="A1", value=0.6, case="C2"),
+    data.frame(algo="A2", value=0.8, case="C1"),
+    data.frame(algo="A2", value=0.8, case="C2"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  expect_error(challenge%>%testThenRank(FUN = mean, ties.method = "maxx"),
+               "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
+})
