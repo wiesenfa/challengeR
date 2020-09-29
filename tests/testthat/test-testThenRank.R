@@ -14,3 +14,47 @@ test_that("test-then-rank raises warning for one case", {
 
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
+
+test_that("test-then-rank works with two algorithms, small values are better", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.2, case="C1"),
+    data.frame(algo="A1", value=0.2, case="C2"),
+    data.frame(algo="A1", value=0.2, case="C3"),
+    data.frame(algo="A1", value=0.2, case="C4"),
+    data.frame(algo="A2", value=1.0, case="C1"),
+    data.frame(algo="A2", value=1.0, case="C2"),
+    data.frame(algo="A2", value=1.0, case="C3"),
+    data.frame(algo="A2", value=1.0, case="C4"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  ranking <- challenge%>%testThenRank()
+
+  expectedRanking <- rbind(
+    "A1" = data.frame(prop_significance = 1, rank = 1),
+    "A2" = data.frame(prop_significance = 0, rank = 2))
+
+  expect_equal(ranking$matlist$T1, expectedRanking)
+})
+
+test_that("test-then-rank works with two algorithms, large values are better", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.2, case="C1"),
+    data.frame(algo="A1", value=0.2, case="C2"),
+    data.frame(algo="A1", value=0.2, case="C3"),
+    data.frame(algo="A1", value=0.2, case="C4"),
+    data.frame(algo="A2", value=1.0, case="C1"),
+    data.frame(algo="A2", value=1.0, case="C2"),
+    data.frame(algo="A2", value=1.0, case="C3"),
+    data.frame(algo="A2", value=1.0, case="C4"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = FALSE)
+
+  ranking <- challenge%>%testThenRank()
+
+  expectedRanking <- rbind(
+    "A1" = data.frame(prop_significance = 0, rank = 2),
+    "A2" = data.frame(prop_significance = 1, rank = 1))
+
+  expect_equal(ranking$matlist$T1, expectedRanking)
+})
