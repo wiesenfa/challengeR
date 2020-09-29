@@ -89,3 +89,20 @@ test_that("test-then-rank raises error for invalid ties method", {
   expect_error(challenge%>%testThenRank(FUN = mean, ties.method = "maxx"),
                "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
 })
+
+test_that("test-then-rank raises error for invalid ties method even when no ties present", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.2, case="C1"),
+    data.frame(algo="A1", value=0.2, case="C2"),
+    data.frame(algo="A1", value=0.2, case="C3"),
+    data.frame(algo="A1", value=0.2, case="C4"),
+    data.frame(algo="A2", value=1.0, case="C1"),
+    data.frame(algo="A2", value=1.0, case="C2"),
+    data.frame(algo="A2", value=1.0, case="C3"),
+    data.frame(algo="A2", value=1.0, case="C4"))
+
+  challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
+
+  expect_error(challenge%>%testThenRank(FUN = mean, ties.method = "maxx"),
+               "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
+})
