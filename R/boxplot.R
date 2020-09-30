@@ -66,15 +66,3 @@ boxplot.bootstrap.list=function(x,...){
              vertical = TRUE, method = "jitter",
              pch = 21, col = "blue", add=TRUE,...)
 }
-
-
-
-
-# winnerFrequencies(bb)
- # winner.datax=winner(datax, largeBetter=TRUE) #no bootstrap
- #  x2=numberRank1(datax,originalranking.datax,datax_boot)
- #  boot_W_1=x2[which(x2$algorithm_id==winner.datax),3]
- #  boot_NW_1=sum(x2[-which(x2$algorithm_id==winner.datax),3]>9)
-# perc_boot_Winner=boot_W_1/Data$N_Bootstraps
-# perc_boot_NotWinner=Data$Bootstrap_Rank1_NotWinner/(Data$N_Algo-1)
-
