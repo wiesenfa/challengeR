@@ -1,24 +1,16 @@
 ---
-title: Overwiew of the used methods
-output:
-  pdf_document:
-    toc: yes
-    toc_depth: '3'
-  github_document:
-    toc: yes
-    toc_depth: 1
-editor_options:
-  chunk_output_type: console
+title: "How to use challengeR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to use challengeR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r, echo = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
- collapse = TRUE,
-  comment = "#>",
- # fig.path = "README-",
-    fig.width = 9,
-    fig.height = 5,
-    width=160
+  collapse = TRUE,
+  comment = "#>"
 )
 ```
 

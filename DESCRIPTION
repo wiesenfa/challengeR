@@ -29,3 +29,4 @@ Suggests:
   ggpubr (>= 0.2.5),
   Rgraphviz (>= 2.30.0),
   testthat (>= 2.1.0)
+VignetteBuilder: knitr
