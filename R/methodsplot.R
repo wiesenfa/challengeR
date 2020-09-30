@@ -31,7 +31,7 @@ methodsplot.challenge=function(x,
                      case=attr(x,"case"),
                      by=attr(x,"by"),
                      annotator = attr(x,"annotator"),
-                     smallBetter = !attr(x,"largeBetter"),
+                     smallBetter = attr(x,"smallBetter"),
                      na.treat=na.treat)
     }
   }

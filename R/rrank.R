@@ -11,13 +11,13 @@ rank.challenge=function(object,
                x=attr(object,"value"),
                annotator=c(attr(object,"annotator")),
                ties.method=ties.method,
-               largeBetter=attr(object,"largeBetter")
+               smallBetter=attr(object,"smallBetter")
              )
     res1=do.call("Rank",list(object=object,
                              x=attr(object,"value"),
                              annotator=c(attr(object,"annotator")),
                              ties.method=ties.method,
-                             largeBetter=attr(object,"largeBetter")
+                             smallBetter=attr(object,"smallBetter")
            ))
 
   } else {
@@ -25,12 +25,12 @@ rank.challenge=function(object,
                object=call$object,
                x=attr(object,"value"),
                ties.method=ties.method,
-               largeBetter=attr(object,"largeBetter")
+               smallBetter=attr(object,"smallBetter")
              )
     res1=do.call("Rank",list(object=object,
                              x=attr(object,"value"),
                              ties.method=ties.method,
-                             largeBetter=attr(object,"largeBetter")
+                             smallBetter=attr(object,"smallBetter")
            ))
 
   }
@@ -44,5 +44,3 @@ rank.challenge=function(object,
   class(res)=c("ranked.list",class(res))
   res
 }
-
-

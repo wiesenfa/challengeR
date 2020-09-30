@@ -5,7 +5,7 @@ Rank.list <- function(object,
                       x,
                       annotator,
                       ties.method="min",
-                      largeBetter=FALSE,
+                      smallBetter=TRUE,
                       ...){
 
     call=match.call(expand.dots = T)
@@ -13,7 +13,7 @@ Rank.list <- function(object,
     if (any(sapply(object,
                    function(task) {
                      (attr(object,"check") &&
-                      largeBetter &&
+                      smallBetter &&
                       any(is.na(task[[x]])) &&
                       min(task[[x]], na.rm=TRUE)==0)
                   })
@@ -33,7 +33,7 @@ Rank.list <- function(object,
                                   cbind(task.case,
                                         rank=rankNA2(task.case[[x]],
                                                      ties.method = ties.method,
-                                                     largeBetter = largeBetter)
+                                                     smallBetter = smallBetter)
                                         )
                                 )
                          )
@@ -52,7 +52,7 @@ Rank.list <- function(object,
                                                cbind(annotator.case,
                                                      rank=rankNA2(annotator.case[[x]],
                                                                   ties.method = ties.method,
-                                                                  largeBetter = largeBetter)
+                                                                  smallBetter = smallBetter)
                                                      )
                                              )
                                     )

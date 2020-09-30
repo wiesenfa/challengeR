@@ -17,11 +17,11 @@ Aggregate.list <-function(object,
                                                                 alternative = alternative,
                                                                 exact = FALSE,
                                                                 paired = TRUE)$p.value,
-                          largeBetter = TRUE,   # only needed for significance
+                          smallBetter = FALSE,   # only needed for significance
                           ...            ) {
   call=match.call(expand.dots = T)
   if (is.character(FUN) && FUN=="significance"){
-    if(missing(case)|  missing(largeBetter)|  missing(alpha)) stop("If FUN='significance' arguments case, largeBetter and alpha need to be given")
+    if(missing(case)|  missing(smallBetter)|  missing(alpha)) stop("If FUN='significance' arguments case, smallBetter and alpha need to be given")
     matlist=llply(1:length(object),
                   function(id){
                     piece=object[[id]]
@@ -41,7 +41,7 @@ Aggregate.list <-function(object,
                                           case,
                                           alpha,
                                           p.adjust.method=p.adjust.method,
-                                          largeBetter,
+                                          smallBetter,
                                           alternative=alternative,
                                           ...)
                     class(xmean)=c("aggregated",
