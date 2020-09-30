@@ -120,12 +120,12 @@ aggregate.challenge=function(x,
                              ...)
 ```
 
-Second, (aggregate %>% rank), the aggregated metric values are converted into a ranking list, following the largeBetter argument defined above:
+Second, (aggregate %>% rank), the aggregated metric values are converted into a ranking list, following the smallBetter argument defined above:
 ```{r, eval=F, echo=T}
 # Rank.aggregated.R
 rank.aggregated <-function(object,
                            ties.method="min",
-                           largeBetter,
+                           smallBetter,
                            ...)
 ```
 
@@ -174,7 +174,7 @@ Third, (aggregate %>% rank), the previously ranked and aggregated values are con
 # Rank.aggregated.R
 rank.aggregated <-function(object,
                            ties.method="min",
-                           largeBetter,
+                           smallBetter,
                            ...)
 ```
 
@@ -219,7 +219,7 @@ Second, (aggregate %>% rank), the aggregated values are converted to a ranking l
 # Rank.aggregated.R
 rank.aggregated <-function(object,
                            ties.method="min",
-                           largeBetter,
+                           smallBetter,
                            ...)
 ```
 

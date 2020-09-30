@@ -143,7 +143,7 @@ as.challenge=function(object,
   attr(object,"case")=case
   attr(object,"annotator")=annotator
   attr(object,"by")=by
-  attr(object,"largeBetter")=!smallBetter
+  attr(object,"smallBetter")=smallBetter
   attr(object,"check")=check
   class(object)=c("challenge", class(object))
   object

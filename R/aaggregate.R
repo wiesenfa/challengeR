@@ -27,7 +27,7 @@ aggregate.challenge=function(x,
                              progress="none",...){
   call=as.list(match.call())
   if (missing(na.treat) && !is.null(attr(x,"na.treat"))) na.treat <- attr(x, "na.treat")
-  
+
   if (missing(na.treat)){ #na.treat only optional if no missing values in data set
     if (!inherits(x,"list")){
       if (!any(is.na(x[,attr(x, "value")]))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
@@ -46,7 +46,7 @@ aggregate.challenge=function(x,
                                 progress=progress,
                                 case=attr(x,"case"),
                                 alpha=alpha, p.adjust.method=p.adjust.method,
-                                largeBetter=attr(x,"largeBetter") # only needed for significance
+                                smallBetter=attr(x,"smallBetter") # only needed for significance
   ))
 
   call2=call("Aggregate",
@@ -58,7 +58,7 @@ aggregate.challenge=function(x,
              parallel=parallel,progress=progress,
              case=attr(x,"case"),
              alpha=alpha, p.adjust.method=p.adjust.method,
-             largeBetter=attr(x,"largeBetter") # only needed for significance
+             smallBetter=attr(x,"smallBetter") # only needed for significance
   )
 
   if (inherits(x,"list")){

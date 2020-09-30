@@ -25,7 +25,7 @@ test_that("attributes are set for single-task challenge with specified task name
 
   expect_equal(attr(actualChallenge, "annotator"), NULL)
   expect_equal(attr(actualChallenge, "by"), "task")
-  expect_equal(attr(actualChallenge, "largeBetter"), TRUE)
+  expect_equal(attr(actualChallenge, "smallBetter"), FALSE)
   expect_equal(attr(actualChallenge, "check"), TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A2"))
@@ -48,7 +48,7 @@ test_that("attributes are set for single-task challenge with dummy task name", {
 
   expect_equal(attr(actualChallenge, "annotator"), NULL)
   expect_equal(attr(actualChallenge, "by"), "task")
-  expect_equal(attr(actualChallenge, "largeBetter"), TRUE)
+  expect_equal(attr(actualChallenge, "smallBetter"), FALSE)
   expect_equal(attr(actualChallenge, "check"), TRUE)
 
   expect_equal(as.vector(actualChallenge$dummyTask$algo), c("A1", "A2"))
@@ -90,7 +90,7 @@ test_that("attributes are set for multi-task challenge", {
 
   expect_equal(attr(actualChallenge, "annotator"), NULL)
   expect_equal(attr(actualChallenge, "by"), "task")
-  expect_equal(attr(actualChallenge, "largeBetter"), FALSE)
+  expect_equal(attr(actualChallenge, "smallBetter"), TRUE)
   expect_equal(attr(actualChallenge, "check"), TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A2"))
@@ -127,7 +127,7 @@ test_that("attributes are set for multi-task challenge with sanity check disable
 
   expect_equal(attr(actualChallenge, "annotator"), NULL)
   expect_equal(attr(actualChallenge, "by"), "task")
-  expect_equal(attr(actualChallenge, "largeBetter"), FALSE)
+  expect_equal(attr(actualChallenge, "smallBetter"), TRUE)
   expect_equal(attr(actualChallenge, "check"), FALSE)
   expect_equal(as.vector(actualChallenge$algo), c("A1", "A2", "A1", "A2"))
   expect_equal(as.vector(actualChallenge$value), c(0.8, 0.6, 0.2, 0.3))
@@ -566,7 +566,7 @@ test_that("automatically added NAs are removed for multi-task challenge", {
 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm"),
                  "Performance of not all algorithms has been observed for all cases in task 'T1'. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
-  
+
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.6))
   expect_equal(as.vector(actualChallenge$T1$case), c("C1", "C2"))

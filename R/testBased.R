@@ -24,7 +24,7 @@ decision.challenge=function(x,
   }
 
 
-  if (alternative!="two.sided") alternative=ifelse(attr(x,"largeBetter"),
+  if (alternative!="two.sided") alternative=ifelse(!attr(x,"smallBetter"),
                                                    yes="greater",
                                                    no="less")
   call=match.call(expand.dots = T)
@@ -33,8 +33,8 @@ decision.challenge=function(x,
   algorithm=attr(object,"algorithm")
   case=attr(object,"case")
   value=attr(object,"value")
-  largeBetter=attr(object,"largeBetter")
-  if(missing(case)| missing(largeBetter)) stop("arguments case and alpha need to be given in as.challenge()")
+  smallBetter=attr(object,"smallBetter")
+  if(missing(case)| missing(smallBetter)) stop("arguments case and alpha need to be given in as.challenge()")
 
 
   if (inherits(object,"list")){
@@ -47,7 +47,7 @@ decision.challenge=function(x,
                     if (is.numeric(na.treat)) piece[,value][is.na(piece[,value])]=na.treat
                     else if (is.function(na.treat)) piece[,value][is.na(piece[,value])]=na.treat(piece[,value][is.na(piece[,value])])
                     else if (na.treat=="na.rm") piece=piece[!is.na(piece[,value]),]
-                    mat=Decision(piece, value, algorithm, case, alpha, largeBetter,
+                    mat=Decision(piece, value, algorithm, case, alpha, smallBetter,
                                  p.adjust.method=p.adjust.method,
                                  alternative=alternative,
                                  test.fun=test.fun)
@@ -72,7 +72,7 @@ decision.challenge=function(x,
                    algorithm,
                    case,
                    alpha,
-                   largeBetter,
+                   smallBetter,
                    p.adjust.method=p.adjust.method,
                    alternative=alternative,
                    test.fun=test.fun)
@@ -92,7 +92,7 @@ Decision=function(object,
                   by,
                   case,
                   alpha,
-                  largeBetter=FALSE,
+                  smallBetter=TRUE,
                   p.adjust.method="none",
                   alternative="one.sided",
                   test.fun=function(x,y) wilcox.test(x,y,
@@ -160,13 +160,13 @@ significance=function(object,
                       algorithm,
                       case,
                       alpha,
-                      largeBetter=FALSE,...) {
+                      smallBetter=TRUE,...) {
 
   xx=as.challenge(object,
                   value=value,
                   algorithm=algorithm,
                   case=case,
-                  smallBetter = !largeBetter,
+                  smallBetter = smallBetter,
                   check=FALSE)
   a=decision.challenge(xx,...)
   prop_significance=rowSums(a)/(ncol(a)-1)

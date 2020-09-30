@@ -14,7 +14,7 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
                     case=attr(xx,"case"),
                     by=attr(xx, "by"),
                     annotator = attr(xx,"annotator"),
-                    smallBetter = !attr(xx,"largeBetter"),
+                    smallBetter = attr(xx,"smallBetter"),
                     na.treat=x$call[[1]][[1]]$na.treat)
 
     rankingHeatmap(dd,

@@ -35,7 +35,7 @@ podium.ranked.list=function(object,
                       case=attr(x,"case"),
                       by=attr(x, "by"),
                       annotator = attr(x,"annotator"),
-                      smallBetter = !attr(x,"largeBetter"),
+                      smallBetter = attr(x,"smallBetter"),
                       na.treat=object$call[[1]][[1]]$na.treat)
 
       podiumPlot <- podium(dd,
