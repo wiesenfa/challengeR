@@ -1,4 +1,4 @@
-test_that("aggregate-than-rank by mean works with two algorithms for one case, small values are better", {
+test_that("aggregate-then-rank by mean works with two algorithms for one case, small values are better", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A2", value=0.8, case="C1"))
@@ -14,7 +14,7 @@ test_that("aggregate-than-rank by mean works with two algorithms for one case, s
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank by mean works with two algorithms (reverse order) for one case, small values are better", {
+test_that("aggregate-then-rank by mean works with two algorithms (reverse order) for one case, small values are better", {
   data <- rbind(
             data.frame(algo = "A2", value = 0.8, case = "C1"),
             data.frame(algo = "A1", value = 0.6, case = "C1"))
@@ -29,7 +29,7 @@ test_that("aggregate-than-rank by mean works with two algorithms (reverse order)
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank by mean works with two algorithms for one case, large values are better", {
+test_that("aggregate-then-rank by mean works with two algorithms for one case, large values are better", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A2", value=0.8, case="C1"))
@@ -45,7 +45,7 @@ test_that("aggregate-than-rank by mean works with two algorithms for one case, l
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank by mean works with two algorithms (reverse order) for one case, large values are better", {
+test_that("aggregate-then-rank by mean works with two algorithms (reverse order) for one case, large values are better", {
   data <- rbind(
     data.frame(algo = "A2", value = 0.8, case = "C1"),
     data.frame(algo = "A1", value = 0.6, case = "C1"))
@@ -60,7 +60,7 @@ test_that("aggregate-than-rank by mean works with two algorithms (reverse order)
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank raises error for invalid aggregation function", {
+test_that("aggregate-then-rank raises error for invalid aggregation function", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A2", value=0.6, case="C1"))
@@ -71,7 +71,7 @@ test_that("aggregate-than-rank raises error for invalid aggregation function", {
                "object 'meanx' not found", fixed = TRUE)
 })
 
-test_that("aggregate-than-rank by mean works with two algorithms for one case and 'min' as ties method", {
+test_that("aggregate-then-rank by mean works with two algorithms for one case and 'min' as ties method", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A2", value=0.6, case="C1"))
@@ -87,7 +87,7 @@ test_that("aggregate-than-rank by mean works with two algorithms for one case an
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank by mean works with two algorithms for one case and 'max' as ties method", {
+test_that("aggregate-then-rank by mean works with two algorithms for one case and 'max' as ties method", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A2", value=0.6, case="C1"))
@@ -103,7 +103,7 @@ test_that("aggregate-than-rank by mean works with two algorithms for one case an
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank raises error for invalid ties method", {
+test_that("aggregate-then-rank raises error for invalid ties method", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A2", value=0.6, case="C1"))
@@ -114,7 +114,7 @@ test_that("aggregate-than-rank raises error for invalid ties method", {
                "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
 })
 
-test_that("aggregate-than-rank raises error for invalid ties method even when no ties present", {
+test_that("aggregate-then-rank raises error for invalid ties method even when no ties present", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A2", value=0.8, case="C1"))
@@ -125,7 +125,7 @@ test_that("aggregate-than-rank raises error for invalid ties method even when no
                "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
 })
 
-test_that("aggregate-than-rank by mean works with two algorithms for two cases", {
+test_that("aggregate-then-rank by mean works with two algorithms for two cases", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A1", value=0.4, case="C2"),
@@ -143,7 +143,7 @@ test_that("aggregate-than-rank by mean works with two algorithms for two cases",
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank by median works with two algorithms for two cases", {
+test_that("aggregate-then-rank by median works with two algorithms for two cases", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"),
     data.frame(algo="A1", value=0.4, case="C2"),
@@ -161,7 +161,7 @@ test_that("aggregate-than-rank by median works with two algorithms for two cases
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank by mean works with one algorithm for one case", {
+test_that("aggregate-then-rank by mean works with one algorithm for one case", {
   data <- rbind(
     data.frame(algo="A1", value=0.6, case="C1"))
 
@@ -175,7 +175,7 @@ test_that("aggregate-than-rank by mean works with one algorithm for one case", {
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank raises error when no NA treatment specified but NAs are contained", {
+test_that("aggregate-then-rank raises error when no NA treatment specified but NAs are contained", {
   data <- rbind(
     data.frame(algo="A1", value=NA, case="C1"),
     data.frame(algo="A2", value=0.8, case="C1"))
@@ -186,7 +186,7 @@ test_that("aggregate-than-rank raises error when no NA treatment specified but N
                "argument \"na.treat\" is missing, with no default", fixed = TRUE)
 })
 
-test_that("aggregate-than-rank raises error when invalid NA treatment specified and NAs are contained", {
+test_that("aggregate-then-rank raises error when invalid NA treatment specified and NAs are contained", {
   data <- rbind(
     data.frame(algo="A1", value=NA, case="C1"),
     data.frame(algo="A2", value=0.8, case="C1"))
@@ -262,7 +262,7 @@ test_that("NAs are removed", {
   expect_equal(ranking$matlist$T1, expectedRanking)
 })
 
-test_that("aggregate-than-rank by mean works for multi-task challenge (2 tasks in data set), no missing data", {
+test_that("aggregate-then-rank by mean works for multi-task challenge (2 tasks in data set), no missing data", {
   dataTask1 <- cbind(task="T1",
                      rbind(
                        data.frame(algo="A1", value=0.6, case="C1"),
@@ -324,7 +324,7 @@ test_that("NAs are replaced by numeric value in multi-task challenge (2 tasks in
   expect_equal(ranking$matlist$T2, expectedRankingTask2)
 })
 
-test_that("aggregate-than-rank raises error when no NA treatment specified but NAs are contained in multi-task challenge (2 tasks in data set)", {
+test_that("aggregate-then-rank raises error when no NA treatment specified but NAs are contained in multi-task challenge (2 tasks in data set)", {
   dataTask1 <- cbind(task="T1",
                      rbind(
                        data.frame(algo="A1", value=0.6, case="C1"),

@@ -140,7 +140,7 @@ a=(  lapply(object$FUN.list[1:2],function(x) {
   }))
 cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
 
-if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop.sign' is equal to the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
+if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop_significance' is equal to the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
 ```
 
 ```{r,results='asis'}

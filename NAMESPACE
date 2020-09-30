@@ -93,7 +93,6 @@ S3method(test, default)
 S3method(test, challenge)
 
 S3method(Aggregate, default)
-S3method(Aggregate, data.frame)
 S3method(Aggregate, list)
 
 S3method(Rank, default)

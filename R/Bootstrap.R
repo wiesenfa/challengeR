@@ -47,25 +47,6 @@ bootstrap.ranked.list=function(object,
              .parallel = parallel,
              .progress = progress)
 
-
-
-  # rankmatlist=lapply(res[[1]],function(z) z[,"rank",drop=F])
-  # for (j in 2:length(res)){
-  #   rankmatlist=merge.list(rankmatlist,lapply(res[[j]],function(z) z[,"rank",drop=F]),by="row.names", suffixes = c(paste0(".",j-1),paste0(".",j)))
-  #   rankmatlist=lapply(rankmatlist, function(z) {
-  #     rownames(z)=z[,"Row.names"]
-  #     z=z[,-1]
-  #     })
-  # }
-  #
-  # aggmatlist=lapply(res[[1]],function(z) z[,-2,drop=F])
-  # for (j in 2:length(res)){
-  #   aggmatlist=merge.list(aggmatlist,lapply(res[[j]],function(z) z[,-2,drop=F]),by="row.names", suffixes = c(paste0(".",j-1),paste0(".",j)))
-  #   aggmatlist=lapply(aggmatlist, function(z) {
-  #     rownames(z)=z[,"Row.names"]
-  #     z=z[,-1]
-  #     })
-  # }
   rankmatlist = lapply(res[[1]],
                        function(z) z[, "rank", drop = F]
                        )
