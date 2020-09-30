@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This tutorial intends to give customized scripts to genrate reports quicky, whithout going through all the installation and usage steps. 
+This tutorial intends to give customized scripts to generate reports quickly, without going through all the installation and usage steps in detail.
 
-The tutorial contains the following scripts, which are included in the "Tutorial" folder:
+The tutorial contains the following scripts, which are included in the "vignettes" directory:
 
 - SingleTask_aggregate-then-rank.R
 - MultiTask_rank-then-aggregate.R
