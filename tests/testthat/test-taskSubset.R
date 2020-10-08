@@ -147,7 +147,7 @@ test_that("extraction of task subset from bootstrap ranking works for single-tas
   expect_is(rankingBootstrappedSubset$bootsrappedAggregate$T1, "data.frame")
 })
 
-test_that("extraction of task subset from bootstrap ranking does not raise an error for invalid task name", {
+test_that("extraction of task subset from bootstrap ranking raises an error for invalid task name", {
   data <- rbind(
     data.frame(algo="A1", value=0.8, case="C1"),
     data.frame(algo="A2", value=0.6, case="C1"),
@@ -163,18 +163,8 @@ test_that("extraction of task subset from bootstrap ranking does not raise an er
   set.seed(1)
   rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
 
-  rankingBootstrappedSubset <- subset(rankingBootstrapped, tasks=c("T1x"))
+  expect_error(subset(rankingBootstrapped, tasks=c("T1x")),
+               "There is/are no task(s) called T1x.", fixed=TRUE)
 
-  expect_equal(length(rankingBootstrappedSubset$matlist), 1)
-  expect_equal(rankingBootstrappedSubset$matlist$T1, NULL)
-
-  expect_equal(length(rankingBootstrappedSubset$data), 1)
-  expect_equal(rankingBootstrappedSubset$data$T1, NULL)
-
-  expect_equal(length(rankingBootstrappedSubset$bootsrappedRanks), 1)
-  expect_equal(rankingBootstrappedSubset$bootsrappedRanks$T1, NULL)
-
-  expect_equal(length(rankingBootstrappedSubset$bootsrappedAggregate), 1)
-  expect_equal(rankingBootstrappedSubset$bootsrappedAggregate$T1, NULL)
 })
 
