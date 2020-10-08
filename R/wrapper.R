@@ -4,7 +4,7 @@ aggregateThenRank=function(object,FUN,ties.method = "min",...){
     rank(ties.method = ties.method)
 }
 
-testThenRank=function(object,FUN,ties.method = "min",...){
+testThenRank=function(object, ties.method = "min",...){
   object %>%
     aggregate(FUN="significance",...) %>%
     rank(ties.method = ties.method)

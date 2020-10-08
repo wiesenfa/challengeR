@@ -168,7 +168,7 @@ significance=function(object,
                   case=case,
                   smallBetter = smallBetter,
                   check=FALSE)
-  a=decision.challenge(xx,...)
+  a=decision.challenge(xx, alpha=alpha, ...)
   prop_significance=rowSums(a)/(ncol(a)-1)
   return(data.frame("prop_significance"=prop_significance,
                     row.names = names(prop_significance)))
