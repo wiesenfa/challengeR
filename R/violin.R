@@ -4,7 +4,7 @@ violin.default <- function(x, ...) stop("not implemented for this class")
 violin.bootstrap.list=function(x,...){
   ken=melt(kendall.bootstrap.list(x))
   colnames(ken)[2]="Task"
-  cat("\n\nSummary Kendall's tau\n")
+  cat("\n\nSummary Kendall's tau:\n")
   ss=ken%>%group_by(Task)%>%
     summarise(mean=mean(value,na.rm=T),
               median=median(value,na.rm=T),
@@ -12,15 +12,15 @@ violin.bootstrap.list=function(x,...){
               q75=quantile(value,probs = .75,na.rm=T))%>%
     arrange(desc(median))
 
-  print(as.data.frame(ss))
+  print(knitr::kable(as.data.frame(ss)))
 
   # drop task if no kendall could be computed
     noResults <- sapply(split(ss,ss$Task), 
                         function(x) all(is.na(x[,-1])))
     if (any(noResults)) {
-      message("No Kendall's tau could be calculated for any bootstrap sample in task ", 
+      cat("\nNo Kendall's tau could be calculated for any bootstrap sample in task ", 
               names(noResults)[noResults],
-              " because of missing variability. Task dropped from figure.")
+              " because of missing variability. Task dropped from figure.",fill=F)
       ken <- ken %>% filter(Task %in% names(noResults)[!noResults])
     
     }

@@ -4,6 +4,6 @@ The ranking list based on the full assessment data is pairwisely compared with t
 
 \bigskip
 
-```{r violin}
+```{r violin, results='asis'}
 violin(boot_object)
 ```
