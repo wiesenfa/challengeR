@@ -73,52 +73,43 @@ if (length(object$matlist)>2)
 
 ```
 
-<!-- An alternative representation of -->
-<!-- distances between tasks (see Eugster et al, 2008) is provided by networktype -->
-<!-- graphs. -->
-<!-- Every task is represented by a node and nodes are connected -->
-<!-- by edges. Distance between nodes increase exponentially with -->
-<!-- the chosen distance measure d (here: distance between nodes -->
-<!-- equal to 1:05d). Thick edges represent smaller distance, i.e., -->
-<!-- the ranking lists of corresponding tasks are similar. Tasks with -->
-<!-- a unique winner are filled to indicate the algorithm. In case -->
-<!-- there are more than one first-ranked algorithm, nodes remain -->
-<!-- uncoloured. -->
 
 
-In network-type graphs (see Eugster et al, 2008), every task is represented by a node and nodes are connected by edges whose length is determined by a chosen distance measure. Here, distances between nodes are chosen to increase exponentially in Spearman's footrule distance with growth rate 0.05 to accentuate large distances.
-Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are colored-coded by the winning algorithm. In case there are more than one first-ranked algorithms in a task, the corresponding node remains uncolored.
-\bigskip
+<!-- In network-type graphs (see Eugster et al, 2008), every task is represented by a node and nodes are connected by edges whose length is determined by a chosen distance measure. Here, distances between nodes are chosen to increase exponentially in Spearman's footrule distance with growth rate 0.05 to accentuate large distances. -->
+<!-- Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are colored-coded by the winning algorithm. In case there are more than one first-ranked algorithms in a task, the corresponding node remains uncolored. -->
+<!-- \bigskip -->
 
-```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE, fig.keep="none"}
-if (length(object$matlist)>2) {
-  netw=network(object,
-               method = "symdiff", 
-               edge.col=grDevices::grey.colors,
-               edge.lwd=1,
-               rate=1.05,
-               cols=cols
-               )
-  
-  plot.new()
-  leg=legend("topright",  names(netw$leg.col), lwd = 1, col = netw$leg.col, bg =NA,plot=F,cex=.8)
-  w <- grconvertX(leg$rect$w, to='inches')
-  addy=6+w
-} else addy=1
+<!-- ```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE, fig.keep="none"} -->
+<!-- if (length(object$matlist)>2) { -->
+<!--   netw=network(object, -->
+<!--                method = "symdiff",  -->
+<!--                edge.col=grDevices::grey.colors, -->
+<!--                edge.lwd=1, -->
+<!--                rate=1.05, -->
+<!--                cols=cols -->
+<!--                ) -->
 
-```
+<!--   plot.new() -->
+<!--   leg=legend("topright",  names(netw$leg.col), lwd = 1, col = netw$leg.col, bg =NA,plot=F,cex=.8) -->
+<!--   w <- grconvertX(leg$rect$w, to='inches') -->
+<!--   addy=6+w -->
+<!-- } else addy=1 -->
 
-```{r network, fig.width=addy, fig.height=6,out.width='100%',dev=NULL}
-if (length(object$matlist)>2) {
-  plot(netw,
-       layoutType = "neato",
-       fixedsize=TRUE,
-       # fontsize,
-       # width,
-       # height,
-       shape="ellipse",
-       cex=.8
-       )
-}
+<!-- ``` -->
 
-```
+<!-- ```{r network, fig.width=addy, fig.height=6,out.width='100%',dev=NULL} -->
+<!-- if (length(object$matlist)>2) { -->
+<!--   plot(netw, -->
+<!--        layoutType = "neato", -->
+<!--        fixedsize=TRUE, -->
+<!--        # fontsize, -->
+<!--        # width, -->
+<!--        # height, -->
+<!--        shape="ellipse", -->
+<!--        cex=.8 -->
+<!--        ) -->
+<!-- } -->
+
+<!-- ``` -->
+
+
