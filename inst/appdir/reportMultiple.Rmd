@@ -384,7 +384,7 @@ if (length(object$matlist)<=6 &nrow((object$matlist[[1]]))<=10 ){
                      )
  
     print(methodsplot(dd,
-                      ordering = ordering_consensus) + 
+                      ordering = ordering_consensus) + ggtitle(subt) +
             scale_color_manual(values=cols)
           )
   }
