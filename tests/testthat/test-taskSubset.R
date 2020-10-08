@@ -55,7 +55,7 @@ test_that("extraction of task subset works for single-task data set", {
   expect_is(rankingSubset$data$T1, "data.frame")
 })
 
-test_that("extraction of task subset does not raise an error for invalid task name", {
+test_that("extraction of task subset raises an error for invalid task name", {
   data <- rbind(
     data.frame(algo="A1", value=0.8, case="C1"),
     data.frame(algo="A2", value=0.6, case="C1"),
@@ -68,13 +68,8 @@ test_that("extraction of task subset does not raise an error for invalid task na
 
   ranking <- challenge%>%aggregateThenRank(FUN=mean, ties.method="min")
 
-  rankingSubset <- subset(ranking, tasks=c("T1x"))
-
-  expect_equal(length(rankingSubset$matlist), 1)
-  expect_equal(rankingSubset$matlist$T1, NULL)
-
-  expect_equal(length(rankingSubset$data), 1)
-  expect_equal(rankingSubset$data$T1, NULL)
+  expect_error(subset(ranking, tasks=c("T1x")),
+               "There is/are no task(s) called T1x.", fixed=TRUE)
 })
 
 test_that("extraction of task subset from bootstrap ranking works for multi-task data set", {
