@@ -406,6 +406,11 @@ Error in table(object[[task]][[algorithm]], object[[task]][[case]]) : all argume
 
 The solution was to rename the columns.
 
+#### - Wrong versions of packages
+##### Error:
+
+##### Solution:
+
 
 
 ### Related to MikText
