@@ -341,7 +341,7 @@ rankingHeatmap(object)
 ## *Significance maps* for visualizing ranking stability based on statistical significance
 
 *Significance maps* depict incidence matrices of
-pairwise significant test results for the one-sided Wilcoxon signed rank test at a 5\% significance level with adjustment for multiple testing according to Holm. Yellow shading indicates that metric values of the algorithm on the x-axis were significantly superior to those from the algorithm on the y-axis, blue color indicates no significant difference.
+pairwise significant test results for the one-sided Wilcoxon signed rank test at a 5\% significance level with adjustment for multiple testing according to Holm. Yellow shading indicates that metric values from the algorithm on the x-axis were significantly superior to those from the algorithm on the y-axis, blue color indicates no significant difference.
 
 
 \bigskip
@@ -360,7 +360,7 @@ significanceMap(object,alpha=0.05,p.adjust.method="holm")
 
 
 ## Ranking robustness to ranking methods
-*Line plots* for visualizing rankings robustness across different ranking methods. Each algorithm is represented by one colored line. For each ranking method encoded on the x-axis, the height of the line represents the corresponding rank. Horizontal lines indicate identical ranks for all methods.
+*Line plots* for visualizing ranking robustness across different ranking methods. Each algorithm is represented by one colored line. For each ranking method encoded on the x-axis, the height of the line represents the corresponding rank. Horizontal lines indicate identical ranks for all methods.
 
 \bigskip
 

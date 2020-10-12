@@ -48,7 +48,7 @@ stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+
 <!-- as well as different agglomeration methods (here: complete and average).  -->
 
 
-Dendrogram from hierarchical cluster analysis} and \textit{network-type graphs} for assessing the similarity of tasks based on challenge rankings. 
+Dendrogram from hierarchical cluster analysis and \textit{network-type graphs} for assessing the similarity of tasks based on challenge rankings. 
 
 A dendrogram is a visualization approach based on hierarchical clustering. It depicts clusters according to a chosen distance measure (here: Spearman's footrule) as well as a chosen agglomeration method (here: complete and average agglomeration). 
 \bigskip
@@ -76,7 +76,7 @@ if (length(object$matlist)>2)
 
 
 <!-- In network-type graphs (see Eugster et al, 2008), every task is represented by a node and nodes are connected by edges whose length is determined by a chosen distance measure. Here, distances between nodes are chosen to increase exponentially in Spearman's footrule distance with growth rate 0.05 to accentuate large distances. -->
-<!-- Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are colored-coded by the winning algorithm. In case there are more than one first-ranked algorithms in a task, the corresponding node remains uncolored. -->
+<!-- Hence, tasks that are similar with respect to their algorithm ranking appear closer together than those that are dissimilar. Nodes representing tasks with a unique winner are color-coded by the winning algorithm. In case more than one algorithm ranks first in a task, the corresponding node remains uncolored. -->
 <!-- \bigskip -->
 
 <!-- ```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE, fig.keep="none"} -->

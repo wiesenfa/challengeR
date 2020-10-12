@@ -10,7 +10,7 @@ the algorithm performed better in this task than on average
 across tasks, while if the rank distribution of an algorithm
 is consistently above the diagonal, the algorithm performed
 worse in this task than on average across tasks. At the bottom
-of each panel, ranks for each algorithm in the tasks is provided.
+of each panel, ranks for each algorithm in the tasks are provided.
 
 
 <!-- Shows which subtask leads to stable ranking and in which subtask ranking is more uncertain. -->
