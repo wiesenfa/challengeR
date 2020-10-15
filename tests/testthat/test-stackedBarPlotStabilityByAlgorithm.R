@@ -14,7 +14,7 @@ test_that("stacked bar plot for visualizing ranking stability by algorithm raise
   set.seed(1)
   rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
 
-  expect_error(stabilityByAlgorithmStacked(rankingBootstrapped),
+  expect_error(stabilityByAlgorithm(rankingBootstrapped, stacked =TRUE),
                "The stability of rankings by algorithm cannot be computed for less than two tasks.", fixed=TRUE)
 })
 
@@ -47,6 +47,6 @@ test_that("stacked bar plot for visualizing ranking stability by algorithm retur
   set.seed(1)
   rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
 
-  actualPlot <- stabilityByAlgorithmStacked(rankingBootstrapped)
+  actualPlot <- stabilityByAlgorithm(rankingBootstrapped, stacked =TRUE)
   expect_is(actualPlot, "ggplot")
 })
