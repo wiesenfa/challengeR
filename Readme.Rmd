@@ -406,6 +406,34 @@ Error in table(object[[task]][[algorithm]], object[[task]][[case]]) : all argume
 
 The solution was to rename the columns.
 
+#### - Wrong versions of packages
+##### Error:
+
+While running this command :
+
+```{r, eval=F, echo=T}
+ devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
+```
+
+I had the following errors : 
+- Error : the package 'purrr' has been compiled with version of R 3.6.3
+- Error : the package 'ggplot2' has been compiled with version of R 3.6.3
+- Error in loadNamespace(j <- i[[L]], c(lib.loc, .libPaths()), versionCheck = vI[[j]])
+  namespace 'glue' 1.3.1 is already loaded, but >= 1.3.2 is required
+  
+##### Solution:
+
+To solve the issue I changed the versions of the packages.
+I had the following versions : 
+- purrr 0.3.4
+- ggplot2 3.3.2
+- glue 1.3.1
+
+I moved to the following ones :
+- purrr 0.3.3
+- ggplot2 3.3.0
+- glue 1.4.2
+
 
 
 ### Related to MikText

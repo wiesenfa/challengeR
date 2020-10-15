@@ -41,7 +41,7 @@ if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
 
 An alternative representation is provided by a stacked
 frequency plot of the observed ranks, separated by algorithm. Observed ranks across bootstrap samples are
-displayed with colouring according to task. For algorithms that
+displayed with coloring according to task. For algorithms that
 achieve the same rank in different tasks for the full assessment
 data set, vertical lines are on top of each other. Vertical lines
 allow to compare the achieved rank of each algorithm over
