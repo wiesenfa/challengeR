@@ -44,6 +44,6 @@ if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
                                size=4,
                                shape=4) + scale_color_manual(values=cols) + ggtitle(subt)
   }
-  for (i in 1:length(pl)) print(pl[[i]])
+  print(pl)
 }
 ```

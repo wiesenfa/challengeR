@@ -33,7 +33,7 @@ for (subt in names(boot_object$bootsrappedRanks)){
 # if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
 #   ggpubr::ggarrange(plotlist = pl)
 # } else {
-  for (i in 1:length(pl)) print(pl[[i]])
+  print(pl)
 #}
 
 ```

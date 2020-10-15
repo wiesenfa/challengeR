@@ -2,8 +2,6 @@ stability <- function(x,...) UseMethod("stability")
 stability.default <- function(x, ...) stop("not implemented for this class")
 stabilityByAlgorithm <- function(x,...) UseMethod("stabilityByAlgorithm")
 stabilityByAlgorithm.default <- function(x, ...) stop("not implemented for this class")
-stabilityByAlgorithmStacked <- function(x,...) UseMethod("stabilityByAlgorithmStacked")
-stabilityByAlgorithmStacked.default <- function(x, ...) stop("not implemented for this class")
 stabilityByTask <- function(x,...) UseMethod("stabilityByTask")
 stabilityByTask.default <- function(x, ...) stop("not implemented for this class")
 
@@ -73,142 +71,172 @@ rankdist.bootstrap.list=function(x,...){
 
 stabilityByAlgorithm.bootstrap.list=function(x,
                                              ordering,
-                                             probs=c(.025,.975),
-                                             max_size=3,
-                                             shape=4,
+                                             stacked = FALSE,
+                                             probs=c(.025,.975),#only for !stacked
+                                             max_size=3,#only for !stacked
+                                             shape=4,#only for !stacked
+                                             freq=FALSE, #only for stacked
                                              single=FALSE,...) {
-
+  
   if (length(x$data) < 2) {
     stop("The stability of rankings by algorithm cannot be computed for less than two tasks.")
   }
-
-  rankDist=rankdist.bootstrap.list(x)
-
-if (!missing(ordering)) rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
-                                                                    levels=ordering))
-
-if (single==FALSE){
-  ggplot(rankDist)+
-    geom_count(aes(task ,
-                   rank,
-                   color=algorithm,
-                   size = stat(prop*100),
-                   group = task ))+
-    scale_size_area(max_size = max_size)+
-    stat_summary(aes(task ,rank ),
-                 geom="point",
-                 shape=shape,
-                 fun.data=function(x) data.frame(y=median(x)),...)+
-    stat_summary(aes(task ,rank ),
-                 geom="linerange",
-                 fun.data=function(x) data.frame(ymin=quantile(x,probs[1]),
-                                                 ymax=quantile(x,probs[2])))+
-    facet_wrap(vars(algorithm))+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
-    guides(size = guide_legend(title="%"))+
-    scale_y_continuous(minor_breaks=NULL,
-                       limits=c(1,max(5,max(rankDist$rank))),
-                       breaks=c(1,seq(5,max(5,max(rankDist$rank)),by=5)))+
-    xlab("Task")+
-    ylab("Rank")
-
-} else {
-  pl=list()
-  for (alg in ordering){
-    rankDist.alg=subset(rankDist,
-                        rankDist$algorithm==alg)
-    pl[[alg]]=ggplot(rankDist.alg)+
-            geom_count(aes(task ,
-                           rank,
-                           color=algorithm,
-                           size = stat(prop*100),
-                           group = task ))+
-            scale_size_area(max_size = max_size)+
-            stat_summary(aes(task ,
-                             rank ),
-                         geom="point",
-                         shape=shape,
-                         fun.data=function(x) data.frame(y=median(x)),...)+
-            stat_summary(aes(task ,rank ),
-                         geom="linerange",
-                         fun.data=function(x) data.frame(ymin=quantile(x,probs[1]),
-                                                         ymax=quantile(x,probs[2])))+
-            facet_wrap(vars(algorithm))+
-            theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
-            guides(size = guide_legend(title="%"))+
-            scale_y_continuous(minor_breaks=NULL,
-                               limits=c(1,max(5,max(rankDist$rank))),
-                               breaks=c(1,seq(5,max(5,max(rankDist$rank)),by=5)))+
-            xlab("Task")+
-            ylab("Rank")
-
-
-  }
-  names(pl) = names(x$matlist)
-  class(pl) <- "ggList"
   
+  rankDist=rankdist.bootstrap.list(x)
+  
+  if (!missing(ordering)) rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
+                                                                      levels=ordering))
+  
+  if (!stacked){
+    if (single==FALSE){
+      pl <- ggplot(rankDist)+
+        geom_count(aes(task ,
+                       rank,
+                       color=algorithm,
+                       size = stat(prop*100),
+                       group = task ))+
+        scale_size_area(max_size = max_size)+
+        stat_summary(aes(task ,rank ),
+                     geom="point",
+                     shape=shape,
+                     fun.data=function(x) data.frame(y=median(x)),...)+
+        stat_summary(aes(task ,rank ),
+                     geom="linerange",
+                     fun.data=function(x) data.frame(ymin=quantile(x,probs[1]),
+                                                     ymax=quantile(x,probs[2])))+
+        facet_wrap(vars(algorithm))+
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+        guides(size = guide_legend(title="%"))+
+        scale_y_continuous(minor_breaks=NULL,
+                           limits=c(1,max(5,max(rankDist$rank))),
+                           breaks=c(1,seq(5,max(5,max(rankDist$rank)),by=5)))+
+        xlab("Task")+
+        ylab("Rank")
+ 
+    } else {
+      pl=list()
+      for (alg in ordering){
+        rankDist.alg=subset(rankDist,
+                            rankDist$algorithm==alg)
+        pl[[alg]]=ggplot(rankDist.alg)+
+          geom_count(aes(task ,
+                         rank,
+                         color=algorithm,
+                         size = stat(prop*100),
+                         group = task ))+
+          scale_size_area(max_size = max_size)+
+          stat_summary(aes(task ,
+                           rank ),
+                       geom="point",
+                       shape=shape,
+                       fun.data=function(x) data.frame(y=median(x)),...)+
+          stat_summary(aes(task ,rank ),
+                       geom="linerange",
+                       fun.data=function(x) data.frame(ymin=quantile(x,probs[1]),
+                                                       ymax=quantile(x,probs[2])))+
+          facet_wrap(vars(algorithm))+
+          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
+          guides(size = guide_legend(title="%"))+
+          scale_y_continuous(minor_breaks=NULL,
+                             limits=c(1,max(5,max(rankDist$rank))),
+                             breaks=c(1,seq(5,max(5,max(rankDist$rank)),by=5)))+
+          xlab("Task")+
+          ylab("Rank")
+      }
+      names(pl) = names(x$matlist)
+      class(pl) <- "ggList"
+    }
+    
+  } else { #stacked
+    rankDist=rankDist%>%
+      group_by(task)%>%
+      dplyr::count(.data$algorithm,
+                   .data$rank)%>%
+      group_by(.data$algorithm)%>%
+      mutate(prop=.data$n/sum(.data$n)*100)%>%
+      ungroup%>%
+      data.frame%>%
+      mutate(rank=as.factor(.data$rank))
+
+    results= melt.ranked.list(x,
+                              measure.vars="rank",
+                              value.name="rank") %>%
+      dplyr::select(-.data$variable)
+    colnames(results)[3]="task"
+    if (!missing(ordering)) results=results%>%mutate(algorithm=factor(.data$algorithm,
+                                                                      levels=ordering))
+    
+    if (single==FALSE){
+      pl<- ggplot(rankDist) +
+        facet_wrap(vars(algorithm))+
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+      
+      if (freq){
+        pl <- pl +   geom_bar(aes(rank,
+                                  n,
+                                  fill=task ),
+                              position = "stack",
+                              stat = "identity") +
+          ylab("Frequency")
+      } else {
+        pl <- pl +   geom_bar(aes(rank,
+                                  prop,
+                                  fill=task ),
+                              position = "stack",
+                              stat = "identity")+
+          ylab("Proportion (%)")
+      }
+      
+     pl <-  pl +
+        geom_vline(aes(xintercept=rank,
+                       color=task),
+                   size=.4,
+                   linetype="dotted",
+                   data=results) +
+        xlab("Rank")
+    } else {
+      pl=list()
+      for (alg in ordering){
+        rankDist.alg=subset(rankDist,
+                            rankDist$algorithm==alg)
+        results.alg=subset(results,
+                           results$algorithm==alg)
+        pl[[alg]]=ggplot(rankDist.alg)+
+          facet_wrap(vars(algorithm))+
+          theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+        
+        if (freq){
+          pl[[alg]] <- pl[[alg]] +   geom_bar(aes(rank,
+                                                  n,
+                                                  fill=task ),
+                                              position = "stack",
+                                              stat = "identity") +
+            ylab("Frequency")
+        } else {
+          pl[[alg]] <- pl[[alg]] +   geom_bar(aes(rank,
+                                                  prop,
+                                                  fill=task ),
+                                              position = "stack",
+                                              stat = "identity")+
+            ylab("Proportion (%)")
+        }
+        
+        pl[[alg]] <- pl[[alg]] + 
+          geom_vline(aes(xintercept=rank,
+                         color=task),
+                     size=.4,
+                     linetype="dotted",
+                     data=results.alg) +
+          xlab("Rank")
+      }
+      names(pl) = names(x$matlist)
+      class(pl) <- "ggList"
+    }
+  }
   pl
 }
 
-}
 
-
-
-
-stabilityByAlgorithmStacked.bootstrap.list=function(x,
-                                                    ordering,
-                                                    freq=FALSE,...) {
-  if (length(x$data) < 2) {
-    stop("The stability of rankings by algorithm cannot be computed for less than two tasks.")
-  }
-
-  rankDist=rankdist.bootstrap.list(x)
-  if (!missing(ordering)) rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
-                                                                      levels=ordering))
-  rankDist=rankDist%>%group_by(task)%>%dplyr::count(.data$algorithm,
-                                                    .data$rank)
-  rankDist=rankDist%>%group_by(.data$algorithm)%>%mutate(prop=.data$n/sum(.data$n))%>%ungroup
-  rankDist=rankDist%>%data.frame%>%mutate(rank=as.factor(.data$rank))
-
-
-  results= melt.ranked.list(x,
-                            measure.vars="rank",
-                            value.name="rank") %>%dplyr::select(-.data$variable)
-  colnames(results)[3]="task"
-  if (!missing(ordering)) results=results%>%mutate(algorithm=factor(.data$algorithm,
-                                                                    levels=ordering))
-
-  if (freq)
-    ggplot(rankDist) +
-      geom_bar(aes(rank,
-                   n,
-                   fill=task ),
-               position = "stack",
-               stat = "identity") +
-      facet_wrap(vars(algorithm))+
-      geom_vline(aes(xintercept=rank,
-                     color=task),
-                 size=.6,
-                 linetype="dotted",
-                 data=results )+
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
-      xlab("Rank")
-  else
-    ggplot(rankDist)+
-      geom_bar(aes(rank,
-                   prop,
-                   fill=task ),
-               position = "stack",
-               stat = "identity")+
-      facet_wrap(vars(algorithm))+
-      geom_vline(aes(xintercept=rank,
-                     color=task),
-                 size=.4,
-                 linetype="dotted",
-                 data=results)+
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
-      xlab("Rank")
-}
 
 
 stabilityByTask.bootstrap.list=function(x,

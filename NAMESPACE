@@ -1,5 +1,7 @@
 S3method("+",ggList)
 S3method(print,ggList)
+export("%++%")
+#export("%+%")
 export(
   "aggregate.bootstrap", "aggregate.bootstrap.list", "aggregate.challenge", "aggregate.ranked.list",
   "aggregateThenRank",
@@ -34,10 +36,9 @@ export(
   "significanceMap",
   "spearmansFootrule", "spearmansWeightedFootrule",
   "splitby",
-  "stability", "stabilityByAlgorithm", "stabilityByAlgorithmStacked","stabilityByTask",
+  "stability", "stabilityByAlgorithm", "stabilityByTask",
   "stability.ranked.list", "relation_dissimilarity",
   "stabilityByAlgorithm.bootstrap.list",
-  "stabilityByAlgorithmStacked.bootstrap.list",
   "stabilityByTask.bootstrap.list",
   "subset",
   "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", #"which.top",
@@ -198,9 +199,6 @@ S3method(stability,ranked.list)
 
 S3method(stabilityByAlgorithm,bootstrap.list)
 S3method(stabilityByAlgorithm,default)
-
-S3method(stabilityByAlgorithmStacked,bootstrap.list)
-S3method(stabilityByAlgorithmStacked,default)
 
 S3method(consensus,ranked.list)
 S3method(consensus,default)
