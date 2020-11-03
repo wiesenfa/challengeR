@@ -16,11 +16,11 @@
 #'
 #' @examples
 as.challenge=function(object,
+                      case,
+                      algorithm,
                       value,
-                      algorithm ,
-                      case=NULL,
-                      taskName=NULL,
                       by=NULL,
+                      taskName=NULL,
                       annotator=NULL,
                       smallBetter=FALSE,
                       na.treat=NULL, # optional
