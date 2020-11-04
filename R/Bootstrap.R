@@ -2,6 +2,38 @@ bootstrap <- function(object,...) UseMethod("bootstrap")
 bootstrap.default <- function(object, ...) stop("not implemented for this class")
 
 
+#' Performs bootstrapping
+#'
+#' Performs bootstrapping on a ranked assessment data set and applies the ranking method to each bootstrap sample. One bootstrap sample of
+#' a task with \code{n} cases consists of \code{n} cases randomly drawn with replacement from this task.
+#' A total of \code{nboot} of these bootstrap samples are drawn.
+#'
+#' @param object The ranked assessment data set.
+#' @param nboot The number of bootstrap samples.
+#' @param parallel A boolean specifying whether parallel processing should be enabled.
+#' @param progress A string specifying the type of progress indication.
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return An S3 object of class "bootstrap.list" to represent a bootstrapped, ranked assessment data set.
+#'
+#' @examples
+#'
+#' \dontrun{
+#'  # perform bootstrapping with 1000 bootstrap samples using one CPU
+#'  set.seed(1)
+#'  ranking_bootstrapped <- bootstrap(ranking, nboot = 1000)
+#' }
+#'
+#' \dontrun{
+#'  # perform bootstrapping using multiple CPUs (here: 8 CPUs)
+#'  library(doParallel)
+#'  registerDoParallel(cores=8)
+#'  set.seed(1)
+#'  ranking_bootstrapped <- bootstrap(ranking, nboot = 1000, parallel = TRUE, progress = "none")
+#'  stopImplicitCluster()
+#' }
+#'
+#' @export
 bootstrap.ranked.list=function(object,
                                nboot,
                                parallel=FALSE,

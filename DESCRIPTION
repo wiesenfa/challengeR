@@ -30,3 +30,4 @@ Suggests:
   Rgraphviz (>= 2.30.0),
   testthat (>= 2.1.0)
 VignetteBuilder: knitr
+RoxygenNote: 7.1.0

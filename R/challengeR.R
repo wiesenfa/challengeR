@@ -1,26 +1,64 @@
-#' Title
+#' Constructs a challenge object
 #'
-#' @param object
-#' @param value
-#' @param algorithm
-#' @param case
-#' @param taskName Optional for single-task data set that does not contain a task column.
-#' @param by The name of the column that contains the task identifiers. Required for multi-task data set.
-#' @param annotator
-#' @param smallBetter
-#' @param na.treat
-#' @param check
+#' Constructs an S3 object to represent the configuration of an assessment data set originating from a benchmarking competition (so-called "challenge").
 #'
-#' @return
-#' @export
+#' @section Assessment data set:
+#' The toolkit provides visualization approaches for both challenges designed around a single task (single-task challenges) and for challenges comprising multiple tasks (multi-task challenges).
+#' For a single-task challenge, the assessment data set (argument \code{object}) requires the following columns:
+#' \itemize{
+#'   \item test case identifier (string or numeric)
+#'   \item algorithm identifier (string or numeric)
+#'   \item performance value (numeric)
+#' }
+#'
+#' For a multi-task challenge, the assessment data set (argument \code{object}) requires the following columns:
+#' \itemize{
+#'   \item task identifier (string or numeric)
+#'   \item test case identifier (string or numeric)
+#'   \item algorithm identifier (string or numeric)
+#'   \item performance value (numeric)
+#' }
+#'
+#' @section Sanity check:
+#' It is highly recommended that the sanity check is not disabled when the data set is provided initially.
+#' It checks that:
+#' \itemize{
+#'   \item performance values are numeric (if not, raises error)
+#'   \item algorithm performances are observed for all cases (if not, adds them as NA and emits a message)
+#'   \item cases appear only once for the same algorithm (if not, raises error)
+#' }
+#' If the argument \code{na.treat} for treatment of NA is specified, NAs will be handled respectively.
+#'
+#' It might be reasonable to disable the sanity check for further computations (e.g., for performance reasons
+#' during bootstrapping (\code{\link{bootstrap.ranked.list}}) where cases are actually allowed to appear more than once for the same algorithm).
+#'
+#' @param object A data frame containing the assessment data.
+#' @param case A string specifying the name of the column that contains the case identifiers.
+#' @param algorithm A string specifying the name of the column that contains the algorithm identifiers.
+#' @param value A string specifying the name of the column that contains the performance values.
+#' @param by A string specifying the name of the column that contains the task identifiers. Required for multi-task data set.
+#' @param taskName A string specifying the task name for single-task data set that does not contain a task column.
+#'   This argument is optional for a single-task data set and is ignored for a multi-task data set.
+#' @param annotator Not supported
+#' @param smallBetter A boolean specifying whether small performance values indicate better algorithm performance.
+#' @param na.treat Indicates how missing perfomance values are treated if sanity check is enabled. It can be 'na.rm', numeric value or function.
+#'   For a numeric value or function, NAs will be replaced by the specified values. For 'na.rm', rows that contain missing values will be removed.
+#' @param check A boolean to indicate to perform a sanity check of the specified data set and arguments if set to \code{TRUE}.
+#'
+#' @return An S3 object to represent the configuration of an assessment data set.
 #'
 #' @examples
+#' # single-task data set
+#'
+#' # multi-task data set
+#'
+#' @export
 as.challenge=function(object,
+                      case,
+                      algorithm,
                       value,
-                      algorithm ,
-                      case=NULL,
-                      taskName=NULL,
                       by=NULL,
+                      taskName=NULL,
                       annotator=NULL,
                       smallBetter=FALSE,
                       na.treat=NULL, # optional
