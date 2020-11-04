@@ -8,7 +8,8 @@ report.bootstrap.list=function(object,
                                colors=default_colors,
                                format="PDF",
                                latex_engine="pdflatex",
-                               fig.format = NULL, # file format of figures if clean=FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
+                               clean=TRUE,
+                               fig.format = NULL, # file format of figures if clean==FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
                                dpi = 150, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
                                open=TRUE,...){
 
@@ -73,6 +74,7 @@ report.bootstrap.list=function(object,
                   ),
                 params = params,
                 envir = new.env(parent = globalenv()),
+                clean = clean,
                 ...
   )
 
@@ -95,9 +97,10 @@ report.ranked.list=function(object,
                             colors=default_colors,
                             format="PDF",
                             latex_engine="pdflatex",
+                            clean=TRUE,
                             fig.format = NULL, # file format of figures if clean=FALSE, can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
                             dpi = 150, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
                             open=TRUE,
                             ...){
-  report.bootstrap.list(object, consensus, file, title, colors, format, latex_engine, fig.format, dpi, open, ...)
+  report.bootstrap.list(object, consensus, file, title, colors, format, latex_engine, clean, fig.format, dpi, open, ...)
 }
