@@ -12,7 +12,7 @@
 #' @examples
 #'
 #' \dontrun{
-#'  aggregateThenRank(challenge, FUN = mean, ties.method="average", na.treat = 0)
+#'  aggregateThenRank(challenge, FUN = mean, ties.method = "average", na.treat = 0)
 #' }
 #'
 #' @family ranking functions
@@ -23,6 +23,28 @@ aggregateThenRank=function(object,FUN,ties.method = "min",...){
     rank(ties.method = ties.method)
 }
 
+#' Performs ranking via test-then-rank
+#'
+#' Computes statistical hypothesis tests based on Wilcoxon signed rank test for each possible
+#' pair of algorithms to assess differences in metric values between the algorithms.
+#' Then ranking is performed according to the number of significant one-sided test results.
+#' If algorithms have the same number of significant test results, then they obtain the same rank.
+#'
+#' @param object The challenge object.
+#' @param ties.method A string specifying how ties are treated, see \code{\link{base::rank}}.
+#'
+#' @return An S3 object of class "ranked.list" to represent a ranked assessment data set.
+#'
+#' @examples
+#' \dontrun{
+#'  testThenRank(challenge,
+#'               alpha=0.05, # significance level
+#'               p.adjust.method="none", # method for adjustment for multiple testing, see ?p.adjust
+#'               na.treat = 0)
+#' }
+#'
+#' @family ranking functions
+#' @export
 testThenRank=function(object, ties.method = "min",...){
   object %>%
     aggregate(FUN="significance",...) %>%
