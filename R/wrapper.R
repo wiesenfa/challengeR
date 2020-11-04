@@ -6,6 +6,7 @@
 #' @param object The challenge object.
 #' @param FUN The aggregation function, e.g. mean, median, min, max, function(x), quantile(x, probs=0.05).
 #' @param ties.method A string specifying how ties are treated, see \code{\link{base::rank}}.
+#' @param ... Further arguments passed to or from other functions.
 #'
 #' @return An S3 object of class "ranked.list" to represent a ranked assessment data set.
 #'
@@ -32,6 +33,7 @@ aggregateThenRank=function(object,FUN,ties.method = "min",...){
 #'
 #' @param object The challenge object.
 #' @param ties.method A string specifying how ties are treated, see \code{\link{base::rank}}.
+#' @param ... Further arguments passed to or from other functions.
 #'
 #' @return An S3 object of class "ranked.list" to represent a ranked assessment data set.
 #'

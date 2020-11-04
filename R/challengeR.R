@@ -46,13 +46,13 @@
 #' @param check A boolean to indicate to perform a sanity check of the specified data set and arguments if set to \code{TRUE}.
 #'
 #' @return An S3 object to represent the configuration of an assessment data set.
-#' @export
 #'
 #' @examples
 #' # single-task data set
 #'
 #' # multi-task data set
 #'
+#' @export
 as.challenge=function(object,
                       case,
                       algorithm,
