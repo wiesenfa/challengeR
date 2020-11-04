@@ -127,7 +127,7 @@ report.bootstrap.list=function(object,
 #' For multi-task challenges, it also contains plots of cross-task insights. If you are interested in
 #' the individual plots as separate files, set argument \code{clean} to \code{FALSE} and specify \code{fig.format}.
 #'
-#' @param object The ranked (bootstrapped) assessment data set.
+#' @param object The ranked assessment data set.
 #' @param consensus The rank aggregation across tasks (consensus ranking). Only needed for a multi-task data set.
 #' @param file A string specifying the file name of the report. It allows for specifying the output file path as well,
 #'   otherwise the working directory is used. If \code{file} does not have a file extension, an extension will be automatically
