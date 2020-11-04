@@ -29,6 +29,26 @@ testThenRank=function(object, ties.method = "min",...){
     rank(ties.method = ties.method)
 }
 
+#' Performs ranking via rank-then-aggregate
+#'
+#' Performs ranking by first computing a rank for each case for each algorithm (”rank first”).
+#' The final rank is based on the aggregated ranks for the cases. This ranking method handles missing values implicitly
+#' by assigning the worst rank to missing algorithm performances.
+#'
+#'
+#' @param object The challenge object.
+#' @param FUN The aggregation function, e.g., mean, median, min, max, function(x), quantile(x, probs=0.05).
+#' @param ties.method A string specifying how ties are treated, see \code{\link{base::rank}}.
+#'
+#' @return An S3 object of class "ranked.list" to represent a ranked assessment data set.
+#'
+#' @examples
+#' \dontrun{
+#'  rankThenAggregate(challenge, FUN = mean)
+#' }
+#'
+#' @family ranking functions
+#' @export
 rankThenAggregate=function(object,
                            FUN,
                            ties.method = "min"
