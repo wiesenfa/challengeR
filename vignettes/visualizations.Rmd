@@ -19,8 +19,8 @@ library(challengeR)
 ```
 
 ## Introduction
-The package enables the user to generate a benchmarking report that contains visualizations and respective explanations.
-An overview of all available visualization is provided on this page along with their configurations. You can also look up the names of the functions that generate the visualizations (e.g. if you are interested in generating the plots on your own to apply other styles).
+The package offers an intuitive way to gain important insights into the relative and absolute performance of algorithms. It enables you to generate a benchmarking report that contains visualizations and respective explanations. An overview of all available visualizations is provided on this page demonstrating the use of their corresponding plot functions. This might be of interest if you want to generate the plots separately (e.g. to apply other styles).
+
 
 ## Visualizing assessment data
 
@@ -109,7 +109,22 @@ meanRanks <- ranking%>%consensus(method = "euclidean")
 
 Blob plots visualize the distribution of ranks across tasks. All ranks that an algorithm achieved in any task are displayed along the y-axis, with the area of the blob being proportional to the frequency. If all tasks provided the same stable ranking, narrow intervals around the diagonal would be expected. Consensus rankings above algorithm names highlight the presence of ties.
 
-```{r}
-# disabled until error is fixed: T27943
-# stability(ranking, ordering = meanRanks)
+```{r, fig.width = 5, fig.height = 4}
+stability(ranking)
+```
+
+#### Blob plots visualizing the ranking variability based on bootstrapping
+
+This variant of the blob plot approach involves replacing the algorithms on the x-axis with the tasks and then generating a separate plot for each algorithm. This allows assessing the variability of rankings for each algorithm across multiple tasks and bootstrap samples. Here, color coding is used for the tasks, and separation by algorithm enables a relatively straightforward strength-weaknesses analysis for individual methods.
+
+```{r, fig.width = 7, fig.height = 5}
+stabilityByAlgorithm(rankingBootstrapped)
+```
+
+#### Stacked frequency plots visualizing the ranking variability based on bootstrapping
+
+An alternative representation is provided by a stacked frequency plot of the observed ranks, separated by algorithm. Observed ranks across bootstrap samples are displayed with coloring according to the task. For algorithms that achieve the same rank in different tasks for the full assessment data set, vertical lines are on top of each other. Vertical lines allow to compare the achieved rank of each algorithm over different tasks.
+
+```{r, fig.width = 7, fig.height = 5}
+stabilityByAlgorithm(rankingBootstrapped, stacked = TRUE)
 ```
