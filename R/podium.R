@@ -1,9 +1,40 @@
+#' @export
 podium <- function(object,...) UseMethod("podium")
+
+#' @export
 podium.default <- function(object, ...) stop("not implemented for this class")
 
+#' Creates podium plots
+#'
+#' Creates podium plots from one or more ranked assessment data sets.
+#'
+#' @param object The ranked asssessment data set.
+#' @param xlab A string specifying the x-axis label.
+#' @param ylab A string specifying the y-axis label.
+#' @param lines.show
+#' @param lines.alpha
+#' @param lines.lwd
+#' @param col
+#' @param lines.col
+#' @param dots.pch
+#' @param dots.cex
+#' @param places.lty
+#' @param places.col
+#' @param legendfn
+#' @param layout.heights
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize assessment data
+#' @export
 podium.ranked.list=function(object,
-                            xlab = NULL,
-                            ylab = NULL,
+                            xlab = "Podium",
+                            ylab = "Performance",
                             lines.show = TRUE,
                             lines.alpha = 0.2,
                             lines.lwd = 1,
@@ -18,8 +49,6 @@ podium.ranked.list=function(object,
                             },
                             layout.heights=c(1,0.4),
                             ...){
-    if (is.null(xlab)) xlab <- "Podium"
-    if (is.null(ylab)) ylab <- "Performance"
     x=object$data
 
     podiumPlots <- length(names(x))
@@ -62,6 +91,35 @@ podium.ranked.list=function(object,
     }
 }
 
+#' Creates a podium plot
+#'
+#' Creates a podium plot from a challenge object.
+#'
+#' @param object The challenge object.
+#' @param ordering
+#' @param xlab A string specifying the x-axis label.
+#' @param ylab A string specifying the y-axis label.
+#' @param lines.show
+#' @param lines.alpha
+#' @param lines.lwd
+#' @param col
+#' @param lines.col
+#' @param dots.pch
+#' @param dots.cex
+#' @param places.lty
+#' @param places.col
+#' @param legendfn
+#' @param layout.heights
+#' @param ...
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize assessment data
+#' @export
 podium.challenge=function(object,
                           ordering,
                           xlab = NULL, ylab = NULL,
