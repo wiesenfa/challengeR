@@ -1,4 +1,22 @@
-
+#' Creates dot- and boxplots
+#'
+#' Creates dot- and boxplots visualizing the assessment data separately for each algorithm.
+#' Boxplots representing descriptive statistics for all test cases (median, quartiles and outliers)
+#' are combined with horizontally jittered dots representing individual test cases.
+#'
+#' @param x The ranked assessment data set.
+#' @param color A string specifying the color of the dots.
+#' @param jitter.width A numeric value specifying the jitter width of the dots.
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize assessment data
+#' @export
 boxplot.ranked.list=function(x,
                              color="blue",
                              jitter.width=0.25,...){
@@ -33,11 +51,6 @@ boxplot.ranked.list=function(x,
   a
 }
 
-
-
-
-
-
 boxplot.comparedRanks.list=function(x,...){
   tau=sapply(x,function(z) z$tau)
   boxplot(tau,ylim=c(0,1.0),las=2, outline=FALSE,
@@ -47,7 +60,6 @@ boxplot.comparedRanks.list=function(x,...){
              pch = 21, col = "blue", add=TRUE,...)
 
 }
-
 
 boxplot.bootstrap.list=function(x,...){
   winner.noboot=winner.ranked.list(x)
