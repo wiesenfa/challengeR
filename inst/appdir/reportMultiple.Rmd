@@ -59,7 +59,7 @@ bootstrappingEnabled = params$bootstrappingEnabled
 ```{r }
 object = params$object
 if (isMultiTask) {
-ordering_consensus=names(params$consensus)
+  ordering_consensus=names(params$consensus)
 } else
 {
   ordering_consensus=names(sort(t(object$matlist[[1]][,"rank",drop=F])["rank",]))
@@ -86,10 +86,6 @@ if (bootstrappingEnabled) {
   object$FUN.list = boot_object$FUN.list
 
   object$fulldata=boot_object$fulldata  # only not NULL if subset of algorithms used
-
-  cols_numbered=cols=color.fun(length(ordering_consensus))
-  names(cols)=ordering_consensus
-  names(cols_numbered)= paste(1:length(cols),names(cols))
 }
 
 
