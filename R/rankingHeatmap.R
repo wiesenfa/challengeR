@@ -1,6 +1,25 @@
+#' @export
 rankingHeatmap <- function(x,...) UseMethod("rankingHeatmap")
+
+#' @export
 rankingHeatmap.default <- function(x, ...) stop("not implemented for this class")
 
+#' Creates ranking heatmaps
+#'
+#' Creates ranking heatmaps from one or more ranked assessment data sets.
+#'
+#' @param x The ranked asssessment data set.
+#' @param ties.method A string specifying how ties are treated, see [base::rank()].
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize assessment data
+#' @export
 rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
 
   xx=x$data
@@ -33,7 +52,23 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
   a
 }
 
-
+#' Creates a ranking heatmap
+#'
+#' Creates a ranking heatmap from a challenge object.
+#'
+#' @param x The challenge object.
+#' @param ordering
+#' @param ties.method A string specifying how ties are treated, see [base::rank()].
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize assessment data
+#' @export
 rankingHeatmap.challenge=function(x,
                                   ordering,
                                   ties.method="min",...) {
