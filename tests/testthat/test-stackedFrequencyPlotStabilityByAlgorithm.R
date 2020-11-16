@@ -1,4 +1,4 @@
-test_that("blob plot for visualizing ranking stability by algorithm raises error for single-task data set", {
+test_that("stacked frequency plot for visualizing ranking stability by algorithm raises error for single-task data set", {
   data <- rbind(
     data.frame(algo="A1", value=0.8, case="C1"),
     data.frame(algo="A2", value=0.6, case="C1"),
@@ -14,20 +14,20 @@ test_that("blob plot for visualizing ranking stability by algorithm raises error
   set.seed(1)
   rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
 
-  expect_error(stabilityByAlgorithm(rankingBootstrapped),
+  expect_error(stabilityByAlgorithm(rankingBootstrapped, stacked = TRUE),
                "The stability of rankings by algorithm cannot be computed for less than two tasks.", fixed=TRUE)
 })
 
-test_that("blob plot for visualizing ranking stability by algorithm returns one plot for multi-task data set", {
+test_that("stacked frequency plot for visualizing ranking stability by algorithm returns one plot for multi-task data set", {
   dataTask1 <- cbind(task="T1",
                      rbind(
-                        data.frame(algo="A1", value=0.8, case="C1"),
-                        data.frame(algo="A2", value=0.6, case="C1"),
-                        data.frame(algo="A3", value=0.4, case="C1"),
-                        data.frame(algo="A1", value=0.2, case="C2"),
-                        data.frame(algo="A2", value=0.1, case="C2"),
-                        data.frame(algo="A3", value=0.0, case="C2")
-                      ))
+                       data.frame(algo="A1", value=0.8, case="C1"),
+                       data.frame(algo="A2", value=0.6, case="C1"),
+                       data.frame(algo="A3", value=0.4, case="C1"),
+                       data.frame(algo="A1", value=0.2, case="C2"),
+                       data.frame(algo="A2", value=0.1, case="C2"),
+                       data.frame(algo="A3", value=0.0, case="C2")
+                     ))
   dataTask2 <- cbind(task="T2",
                      rbind(
                        data.frame(algo="A1", value=0.2, case="C1"),
@@ -47,11 +47,11 @@ test_that("blob plot for visualizing ranking stability by algorithm returns one 
   set.seed(1)
   rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
 
-  actualPlot <- stabilityByAlgorithm(rankingBootstrapped)
+  actualPlot <- stabilityByAlgorithm(rankingBootstrapped, stacked = TRUE)
   expect_is(actualPlot, "ggplot")
 })
 
-test_that("blob plot for visualizing ranking stability by algorithm returns a plot for each algorithm", {
+test_that("stacked frequency plot for visualizing ranking stability by algorithm returns a plot for each algorithm", {
   dataTask1 <- cbind(task="T1",
                      rbind(
                        data.frame(algo="A1", value=0.8, case="C1"),
@@ -82,7 +82,7 @@ test_that("blob plot for visualizing ranking stability by algorithm returns a pl
 
   meanRanks <- ranking%>%consensus(method = "euclidean")
 
-  actualPlot <- stabilityByAlgorithm(rankingBootstrapped, ordering = names(meanRanks), single = TRUE)
+  actualPlot <- stabilityByAlgorithm(rankingBootstrapped, ordering = names(meanRanks), stacked = TRUE, single = TRUE)
   expect_equal(length(actualPlot), 3)
   expect_is(actualPlot[[1]], "ggplot")
   expect_is(actualPlot[[2]], "ggplot")
