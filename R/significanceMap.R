@@ -1,6 +1,28 @@
+#' @export
 significanceMap <- function(object,...) UseMethod("significanceMap")
+
+#' @export
 significanceMap.default <- function(object, ...) stop("not implemented for this class")
 
+#' Creates significance maps
+#'
+#' Creates significance maps from a ranked assessment data set.
+#'
+#' @param object The ranked assessment data set.
+#' @param alpha A numeric values specifying the significance level.
+#' @param p.adjust.method A string specifying the adjustment method for multiple testing, see [stats::p.adjust()].
+#' @param order
+#' @param size.rank
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize ranking stability
+#' @export
 significanceMap.ranked.list=function(object,
                                      alpha=0.05,p.adjust.method="holm",
                                      order=FALSE,
@@ -30,7 +52,7 @@ significanceMap.ranked.list=function(object,
     res[[1]]$labels$title <- NULL
   } else {
     names(res) = names(object$matlist)
-    
+
   }
 
   class(res) <- "ggList"
@@ -107,7 +129,7 @@ significanceMap.data.frame=function(object,
     lt=th_get$panel.grid$linetype
     if (is.null(lt)) lt=th_get$line$linetype
     gridSize=c(th_get$panel.grid.major$size,th_get$panel.grid$size,th_get$line$size)[1]
-    
+
 
   #p=p+theme(panel.background = element_rect(fill = NA),panel.ontop=TRUE) #-> grid will be on top of diagonal
   #fix:
