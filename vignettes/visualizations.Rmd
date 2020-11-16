@@ -2,7 +2,7 @@
 title: "Visualizations"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{visualizations}
+  %\VignetteIndexEntry{Visualizations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -25,6 +25,8 @@ The provided plots are described in the following sections:
 * Visualizing assessment data
 * Visualizing ranking stability
 * Visualizing cross-task insights
+
+Details can be found in [Wiesenfarth et al. (2019)](https://arxiv.org/abs/1910.05121).
 
 # Visualizing assessment data
 
@@ -58,7 +60,7 @@ rankingHeatmap(ranking)
 
 # Visualizing ranking stability
 
-The ranking robustness can by analyzed with respect to the ranking method used (see [paper](https://arxiv.org/abs/1910.05121) for different ranking methods).
+The ranking robustness can by analyzed with respect to the ranking method used (see [Wiesenfarth et al. (2019)](https://arxiv.org/abs/1910.05121) for different ranking methods).
 
 ## Line plots
 Line plots visualize the robustness of ranking across different ranking methods. Each algorithm is represented by one colored line.
