@@ -1,6 +1,24 @@
+#' @export
 violin <- function(x,...) UseMethod("violin")
+
+#' @export
 violin.default <- function(x, ...) stop("not implemented for this class")
 
+#' Creates a violin plot
+#'
+#' Creates a violin plot from a bootstrapped, ranked assessment data set.
+#'
+#' @param x The bootstrapped, ranked assessment data set.
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize ranking stability
+#' @export
 violin.bootstrap.list=function(x,...){
   ken=melt(kendall.bootstrap.list(x))
   colnames(ken)[2]="Task"
@@ -15,16 +33,16 @@ violin.bootstrap.list=function(x,...){
   print(knitr::kable(as.data.frame(ss)))
 
   # drop task if no kendall could be computed
-    noResults <- sapply(split(ss,ss$Task), 
+    noResults <- sapply(split(ss,ss$Task),
                         function(x) all(is.na(x[,-1])))
     if (any(noResults)) {
-      cat("\nNo Kendall's tau could be calculated for any bootstrap sample in task ", 
+      cat("\nNo Kendall's tau could be calculated for any bootstrap sample in task ",
               names(noResults)[noResults],
               " because of missing variability. Task dropped from figure.",fill=F)
       ken <- ken %>% filter(Task %in% names(noResults)[!noResults])
-    
+
     }
-  
+
   xAxisText <- element_blank()
 
   # Show task names as tick mark labels only for multi-task data set
@@ -49,8 +67,6 @@ violin.bootstrap.list=function(x,...){
                                 max(max(ken$value),1)))
 }
 
-
-
 kendall.bootstrap.list=function(x){
   ken=lapply(1:length(x$bootsrappedRanks),function(Task){
     id=match(rownames( x$bootsrappedRanks[[Task]]),
@@ -70,7 +86,6 @@ kendall.bootstrap.list=function(x){
   return(ken)
 
 }
-
 
 density.bootstrap.list=function(x,...){
   ken=melt(kendall.bootstrap.list(x))
