@@ -1,6 +1,8 @@
+#' @export
 report <- function(object,...) UseMethod("report")
-report.default <- function(object, ...) stop("not implemented for this class")
 
+#' @export
+report.default <- function(object, ...) stop("not implemented for this class")
 
 #' Generates a benchmarking report with bootstrapping results
 #'
@@ -58,7 +60,7 @@ report.bootstrap.list=function(object,
                                                    fixed=T)[[1]][1],".Rmd"))
   }
   file.copy(file.path(system.file("appdir", package = "challengeR"),
-                      "reportMultiple.Rmd"),
+                      "report.Rmd"),
             tempReport,
             overwrite = TRUE)
 
