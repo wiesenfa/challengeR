@@ -1,9 +1,8 @@
 ### Ranking stability: Ranking variability via bootstrap approach
 
-Blob plot of bootstrap results over the different tasks separated
+A blob plot of bootstrap results over the different tasks separated
 by algorithm allows another perspective on the assessment data. This gives deeper insights into the characteristics
-of tasks and the ranking uncertainty of the algorithms in each
-task. 
+of tasks and the ranking uncertainty of the algorithms in each task.
 <!-- 1000 bootstrap Rankings were performed for each task. -->
 <!-- Each algorithm is considered separately and for each subtask (x-axis) all observed ranks across bootstrap samples (y-axis) are displayed. Additionally, medians and IQR is shown in black. -->
 
@@ -41,7 +40,7 @@ if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
 
 An alternative representation is provided by a stacked
 frequency plot of the observed ranks, separated by algorithm. Observed ranks across bootstrap samples are
-displayed with coloring according to task. For algorithms that
+displayed with coloring according to the task. For algorithms that
 achieve the same rank in different tasks for the full assessment
 data set, vertical lines are on top of each other. Vertical lines
 allow to compare the achieved rank of each algorithm over
@@ -52,7 +51,6 @@ different tasks.
 
 
 ```{r stackedFrequencies_bootstrap_byAlgorithm,fig.width=7,fig.height = 5}
-#stabilityByAlgorithm.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
   stabilityByAlgorithm(boot_object,
                        ordering=ordering_consensus,

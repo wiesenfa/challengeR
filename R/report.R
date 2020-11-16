@@ -1,6 +1,8 @@
+#' @export
 report <- function(object,...) UseMethod("report")
-report.default <- function(object, ...) stop("not implemented for this class")
 
+#' @export
+report.default <- function(object, ...) stop("not implemented for this class")
 
 #' Generates a benchmarking report with bootstrapping results
 #'
@@ -22,7 +24,7 @@ report.default <- function(object, ...) stop("not implemented for this class")
 #' @param clean A boolean indicating whether intermediate files (e.g. individual plots) should be kept. Using \code{TRUE} will clean
 #'   intermediate files that are created during rendering.
 #' @param fig.format A vector of strings containing the file format of the figures that are not removed if \code{clean} is set to \code{FALSE}.
-#'   The options are "jpeg", "png" and "pdf",  e.g. \code{fig.format = c("jpeg", "png", "pdf")}.
+#'   The options are "jpeg", "png" and "pdf", e.g. \code{fig.format = c("jpeg", "png", "pdf")}.
 #' @param dpi A positive integer specifying the resolution of the generated plot (\code{fig.format} "jpeg" or "png") in dots per inch (DPI).
 #' @param open A boolean specifying whether the report should be opened with the default system viewer after generation.
 #' @param ... Further arguments passed to or from other functions.
@@ -58,7 +60,7 @@ report.bootstrap.list=function(object,
                                                    fixed=T)[[1]][1],".Rmd"))
   }
   file.copy(file.path(system.file("appdir", package = "challengeR"),
-                      "reportMultiple.Rmd"),
+                      "report.Rmd"),
             tempReport,
             overwrite = TRUE)
 

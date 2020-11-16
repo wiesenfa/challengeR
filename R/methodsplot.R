@@ -1,6 +1,28 @@
+#' @export
 methodsplot <- function(x,...) UseMethod("methodsplot")
+
+#' @export
 methodsplot.default <- function(x, ...) stop("not implemented for this class")
 
+#' Creates line plots
+#'
+#' Create line plots that visualize the robustness of ranking across different ranking methods from a challenge object.
+#'
+#' @param x The challenge object.
+#' @param na.treat Indicates how missing perfomance values are treated if sanity check is enabled. It can be 'na.rm', numeric value or function.
+#'   For a numeric value or function, NAs will be replaced by the specified values. For 'na.rm', rows that contain missing values will be removed.
+#' @param methods A list of ranking methods that should be incorporated.
+#' @param ordering
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize ranking stability
+#' @export
 methodsplot.challenge=function(x,
                                na.treat=NULL,
                                methods=list(testBased=.%>%test() %>% rank(ties.method = "min"),

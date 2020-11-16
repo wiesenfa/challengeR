@@ -5,7 +5,7 @@
 #'
 #' @param object The challenge object.
 #' @param FUN The aggregation function, e.g. mean, median, min, max, function(x), quantile(x, probs=0.05).
-#' @param ties.method A string specifying how ties are treated, see \code{\link{base::rank}}.
+#' @param ties.method A string specifying how ties are treated, see [base::rank()].
 #' @param ... Further arguments passed to or from other functions.
 #'
 #' @return An S3 object of class "ranked.list" to represent a ranked assessment data set.
@@ -32,7 +32,7 @@ aggregateThenRank=function(object,FUN,ties.method = "min",...){
 #' If algorithms have the same number of significant test results, then they obtain the same rank.
 #'
 #' @param object The challenge object.
-#' @param ties.method A string specifying how ties are treated, see \code{\link{base::rank}}.
+#' @param ties.method A string specifying how ties are treated, see [base::rank()].
 #' @param ... Further arguments passed to or from other functions.
 #'
 #' @return An S3 object of class "ranked.list" to represent a ranked assessment data set.
@@ -55,14 +55,14 @@ testThenRank=function(object, ties.method = "min",...){
 
 #' Performs ranking via rank-then-aggregate
 #'
-#' Performs ranking by first computing a rank for each case for each algorithm (”rank first”).
+#' Performs ranking by first computing a rank for each case for each algorithm ("rank first").
 #' The final rank is based on the aggregated ranks for the cases. This ranking method handles missing values implicitly
 #' by assigning the worst rank to missing algorithm performances.
 #'
 #'
 #' @param object The challenge object.
 #' @param FUN The aggregation function, e.g., mean, median, min, max, function(x), quantile(x, probs=0.05).
-#' @param ties.method A string specifying how ties are treated, see \code{\link{base::rank}}.
+#' @param ties.method A string specifying how ties are treated, see [base::rank()].
 #'
 #' @return An S3 object of class "ranked.list" to represent a ranked assessment data set.
 #'

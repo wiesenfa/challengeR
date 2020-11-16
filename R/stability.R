@@ -1,11 +1,41 @@
+#' @export
 stability <- function(x,...) UseMethod("stability")
+
+#' @export
 stability.default <- function(x, ...) stop("not implemented for this class")
+
+#' @export
 stabilityByAlgorithm <- function(x,...) UseMethod("stabilityByAlgorithm")
+
+#' @export
 stabilityByAlgorithm.default <- function(x, ...) stop("not implemented for this class")
+
+#' @export
 stabilityByTask <- function(x,...) UseMethod("stabilityByTask")
+
+#' @export
 stabilityByTask.default <- function(x, ...) stop("not implemented for this class")
 
-
+#' Creates a blob plot across tasks
+#'
+#' Creates a blob plots visualizing the ranking variability across tasks.
+#'
+#' @param x The ranked asssessment data set.
+#' @param ordering
+#' @param probs
+#' @param max_size
+#' @param freq
+#' @param shape
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize cross-task insights
+#' @export
 stability.ranked.list=function(x,
                                ordering,
                                probs=c(.025,.975),
@@ -27,23 +57,23 @@ stability.ranked.list=function(x,
 
   if (!freq) {
     p = ggplot(dd)+
-          geom_count(aes(algorithm ,
+          geom_count(aes(algorithm,
                          rank,
-                         color=algorithm ,
+                         color=algorithm,
                          size = stat(prop*100)))
   } else {
     p=ggplot(dd)+
         geom_count(aes(algorithm,
-                       rank
-                       ,color=algorithm ))
+                       rank,
+                       color=algorithm ))
   }
 
   p+scale_size_area(max_size = max_size)+
-    stat_summary(aes(algorithm ,rank ),
+    stat_summary(aes(algorithm, rank),
                  geom="point",
                  shape=shape,
                  fun.data=function(x) data.frame(y=median(x)),...)+
-    stat_summary(aes(algorithm ,rank ),
+    stat_summary(aes(algorithm, rank),
                  geom="linerange",
                  fun.data=function(x) data.frame(ymin=quantile(x,probs[1]),
                                                  ymax=quantile(x,probs[2])))+
@@ -67,8 +97,29 @@ rankdist.bootstrap.list=function(x,...){
   rankDist
 }
 
-
-
+#' Creates blob plots or stacked frequency plots stratified by algorithm
+#'
+#' Creates blob plots (\code{stacked = FALSE}) or stacked frequency plots (\code{stacked = TRUE}) for each algorithm
+#' from a bootstrapped, ranked assessment data set.
+#'
+#' @param x The bootstrapped, ranked assessment data set.
+#' @param ordering
+#' @param stacked A boolean specifying whether a stacked frequency plot (\code{stacked = TRUE}) or blob plot (\code{stacked = FALSE}) should be created.
+#' @param probs
+#' @param max_size
+#' @param shape
+#' @param freq
+#' @param single
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize cross-task insights
+#' @export
 stabilityByAlgorithm.bootstrap.list=function(x,
                                              ordering,
                                              stacked = FALSE,
@@ -77,16 +128,16 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                                              shape=4,#only for !stacked
                                              freq=FALSE, #only for stacked
                                              single=FALSE,...) {
-  
+
   if (length(x$data) < 2) {
     stop("The stability of rankings by algorithm cannot be computed for less than two tasks.")
   }
-  
+
   rankDist=rankdist.bootstrap.list(x)
-  
+
   if (!missing(ordering)) rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
                                                                       levels=ordering))
-  
+
   if (!stacked){
     if (single==FALSE){
       pl <- ggplot(rankDist)+
@@ -112,7 +163,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                            breaks=c(1,seq(5,max(5,max(rankDist$rank)),by=5)))+
         xlab("Task")+
         ylab("Rank")
- 
+
     } else {
       pl=list()
       for (alg in ordering){
@@ -146,7 +197,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
       names(pl) = names(x$matlist)
       class(pl) <- "ggList"
     }
-    
+
   } else { #stacked
     rankDist=rankDist%>%
       group_by(task)%>%
@@ -165,12 +216,12 @@ stabilityByAlgorithm.bootstrap.list=function(x,
     colnames(results)[3]="task"
     if (!missing(ordering)) results=results%>%mutate(algorithm=factor(.data$algorithm,
                                                                       levels=ordering))
-    
+
     if (single==FALSE){
       pl<- ggplot(rankDist) +
         facet_wrap(vars(algorithm))+
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-      
+
       if (freq){
         pl <- pl +   geom_bar(aes(rank,
                                   n,
@@ -186,7 +237,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                               stat = "identity")+
           ylab("Proportion (%)")
       }
-      
+
      pl <-  pl +
         geom_vline(aes(xintercept=rank,
                        color=task),
@@ -204,7 +255,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
         pl[[alg]]=ggplot(rankDist.alg)+
           facet_wrap(vars(algorithm))+
           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-        
+
         if (freq){
           pl[[alg]] <- pl[[alg]] +   geom_bar(aes(rank,
                                                   n,
@@ -220,8 +271,8 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                                               stat = "identity")+
             ylab("Proportion (%)")
         }
-        
-        pl[[alg]] <- pl[[alg]] + 
+
+        pl[[alg]] <- pl[[alg]] +
           geom_vline(aes(xintercept=rank,
                          color=task),
                      size=.4,
@@ -236,9 +287,28 @@ stabilityByAlgorithm.bootstrap.list=function(x,
   pl
 }
 
-
-
-
+#' Creates blob plots stratified by task
+#'
+#' Creates blob plots for each task from a bootstrapped, ranked assessment data set.
+#'
+#' @param x The bootstrapped, ranked assessment data set.
+#' @param ordering
+#' @param probs
+#' @param max_size
+#' @param size.ranks
+#' @param shape
+#' @param showLabelForSingleTask A boolean specifying whether the task name should be used as title for a single-task data set.
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @seealso `browseVignettes("challengeR")`
+#'
+#' @family functions to visualize ranking stability
+#' @family functions to visualize cross-task insights
+#' @export
 stabilityByTask.bootstrap.list=function(x,
                                         ordering,
                                         probs=c(.025,.975),
