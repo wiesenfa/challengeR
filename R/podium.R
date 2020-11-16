@@ -110,7 +110,7 @@ podium.ranked.list=function(object,
 #' @param places.col
 #' @param legendfn
 #' @param layout.heights
-#' @param ...
+#' @param ... Further arguments passed to or from other functions.
 #'
 #' @return
 #'
