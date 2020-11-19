@@ -81,7 +81,7 @@ arXiv:1910.05121*
 
 # Usage
 
-Each of the following steps have to be run to generate the report: (1)
+Each of the following steps has to be run to generate the report: (1)
 Load package, (2) load data, (3) perform ranking, (4) perform
 bootstrapping and (5) generation of the report
 
