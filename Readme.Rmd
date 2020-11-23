@@ -1,12 +1,15 @@
 ---
-title: Methods and open-source toolkit for analyzing and visualizing challenge results
+title: "Methods and open-source toolkit for analyzing and visualizing challenge results"
 output:
-  pdf_document:
-    toc: yes
-    toc_depth: '3'
   github_document:
     toc: yes
-    toc_depth: 1
+    toc_depth: '1'
+  html_document:
+    toc: yes
+    toc_depth: '1'
+  pdf_document:
+    toc: yes
+    toc_depth: '1'
 editor_options:
   chunk_output_type: console
 ---
@@ -23,26 +26,26 @@ knitr::opts_chunk$set(
 ```
 
 
-Note that this is ongoing work (version `r packageVersion("challengeR")`), there may be updates with possibly major changes. *Please make sure that you use the most current version!* 
+Note that this is ongoing work (version `r packageVersion("challengeR")`), there may be updates with possibly major changes. *Please make sure that you use the latest version!*
 
-Change log at the end of this document.
+The change log can be found in section "Changes".
 
 # Introduction
 
 The current framework is a tool for analyzing and visualizing challenge results in the field of biomedical image analysis and beyond.
 
-Biomedical challenges have become the de facto standard for benchmarking biomedical image analysis algorithms. While the number of challenges is steadily increasing, surprisingly little effort has been invested in ensuring high quality design, execution and reporting for these international competitions. Specifically, results analysis and visualization in the event of uncertainties have been given almost no attention in the literature. 
+Biomedical challenges have become the de facto standard for benchmarking biomedical image analysis algorithms. While the number of challenges is steadily increasing, surprisingly little effort has been invested in ensuring high quality design, execution and reporting for these international competitions. Specifically, results analysis and visualization in the event of uncertainties have been given almost no attention in the literature.
 
-Given these shortcomings, the current framework aims to enable fast and wide adoption of comprehensively analyzing and visualizing the results of single-task and multi-task challenges and applying them to a number of simulated and real-life challenges to demonstrate their specific strengths and weaknesses. This approach offers an intuitive way to gain important insights into the relative and absolute performance of algorithms, which cannot be revealed by commonly applied visualization techniques.
+Given these shortcomings, the current framework aims to enable fast and wide adoption of comprehensively analyzing and visualizing the results of single-task and multi-task challenges. This approach offers an intuitive way to gain important insights into the relative and absolute performance of algorithms, which cannot be revealed by commonly applied visualization techniques.
 
 # Installation
 
 Requires R version >= 3.5.2 (https://www.r-project.org).
 
-Further, a recent version of Pandoc (>= 1.12.3) is required. RStudio (https://rstudio.com) automatically includes this so you do not need to download Pandoc if you plan to use rmarkdown from the RStudio IDE, otherwise you’ll need to install Pandoc for your platform (https://pandoc.org/installing.html). Finally, if you want to generate a pdf report you will need to have LaTeX installed (e.g. MiKTeX, MacTeX or TinyTeX).
+Further, a recent version of Pandoc (>= 1.12.3) is required. RStudio (https://rstudio.com) automatically includes this so you do not need to download Pandoc if you plan to use rmarkdown from the RStudio IDE, otherwise you’ll need to install Pandoc for your platform (https://pandoc.org/installing.html). Finally, if you want to generate a PDF report you will need to have LaTeX installed (e.g. MiKTeX, MacTeX or TinyTeX).
 
 
-To get the current development version of the R package from Github:
+To get the latest released version (master branch) of the R package from GitHub:
 
 ```{r, eval=F,R.options,}
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
@@ -51,9 +54,9 @@ BiocManager::install("Rgraphviz", dependencies = TRUE)
 devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
 ```
 
-If you are asked whether you want to update installed packages and you type "a" for all, you might need administrator rights to update R core packages. You can also try to type "n" for updating no packages. If you are asked "Do you want to install from sources the packages which need compilation? (Yes/no/cancel)", you can safely type "no".
+If you are asked whether you want to update installed packages and you type "a" for all, you might need administrator permissions to update R core packages. You can also try to type "n" for updating no packages. If you are asked "Do you want to install from sources the packages which need compilation? (Yes/no/cancel)", you can safely type "no".
 
-If you get *Warning messages* (in contrast to *Error* messages), these might not be problematic and you can try to proceed. 
+If you get *warning* messages (in contrast to *error* messages), these might not be problematic and you can try to proceed. If you encounter errors during the setup, looking into the "Troubleshooting" section might be worth it.
 
 # Terms of use
 Licenced under GPL-3. If you use this software for a publication, cite
@@ -63,7 +66,9 @@ Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Ko
 
  
 # Usage
-Each of the following steps have to be run to generate the report: (1) Load package, (2) load data, (3) perform ranking, (4) perform bootstrapping and (5) generation of the report
+Each of the following steps has to be run to generate the report: (1) Load package, (2) load data, (3) perform ranking, (4) perform bootstrapping and (5) generation of the report
+
+Here, we provide a step-by-step guide that leads you to your final report.
 
 ## 1. Load package
 Load package
@@ -75,12 +80,12 @@ library(challengeR)
 ## 2. Load data
 
 ### Data requirements
-Data requires the following *columns*  
+Data requires the following *columns*:
 
-* a *task identifier* in case of multi-task challenges.
-* a *test case identifier* 
-* the *algorithm name* 
-* the *metric value* 
+* *task identifier* in case of multi-task challenges (string or numeric)
+* *test case identifier* (string or numeric)
+* *algorithm identifier* (string or numeric)
+* *metric value* (numeric)
 
 In case of missing metric values, a missing observation has to be provided (either as blank field or "NA").
 
@@ -95,7 +100,7 @@ print(knitr::kable(a[order(a$Task,a$TestCase,a$Algorithm),],row.names=F))
 
 
 
-### Load data
+### 2.1 Load data from file
 If you have assessment data at hand stored in a csv file (if you want to use simulated data skip the following code line) use
 ```{r, eval=F, echo=T}
 data_matrix=read.csv(file.choose()) # type ?read.csv for help
@@ -106,17 +111,17 @@ This allows to choose a file interactively, otherwise replace *file.choose()* by
 
 
 
+### 2.2 Simulate data
 
-
-For illustration purposes, in the following simulated data is generated *instead* (skip the following code chunk if you have already loaded data). The data is also stored as "data_matrix.csv" in the repository.
+In the following, simulated data is generated *instead* for illustration purposes (skip the following code chunk if you have already loaded data). The data is also stored as "inst/extdata/data_matrix.csv" in the repository.
 ```{r, eval=F, echo=T}
 if (!requireNamespace("permute", quietly = TRUE)) install.packages("permute")
 
-n=50
+n <- 50
 
 set.seed(4)
-strip=runif(n,.9,1)
-c_ideal=cbind(task="c_ideal",
+strip <- runif(n,.9,1)
+c_ideal <- cbind(task="c_ideal",
             rbind(
               data.frame(alg_name="A1",value=runif(n,.9,1),case=1:n),
               data.frame(alg_name="A2",value=runif(n,.8,.89),case=1:n),
@@ -126,97 +131,95 @@ c_ideal=cbind(task="c_ideal",
             ))
 
 set.seed(1)
-c_random=data.frame(task="c_random",
+c_random <- data.frame(task="c_random",
                        alg_name=factor(paste0("A",rep(1:5,each=n))),
                        value=plogis(rnorm(5*n,1.5,1)),case=rep(1:n,times=5)
                        )
 
-strip2=seq(.8,1,length.out=5)
-a=permute::allPerms(1:5)
-c_worstcase=data.frame(task="c_worstcase",
+strip2 <- seq(.8,1,length.out=5)
+a <- permute::allPerms(1:5)
+c_worstcase <- data.frame(task="c_worstcase",
                      alg_name=c(t(a)),
                      value=rep(strip2,nrow(a)),
                      case=rep(1:nrow(a),each=5)
                      )
-c_worstcase=rbind(c_worstcase,
+c_worstcase <- rbind(c_worstcase,
                 data.frame(task="c_worstcase",alg_name=1:5,value=strip2,case=max(c_worstcase$case)+1)
           )
-c_worstcase$alg_name=factor(c_worstcase$alg_name,labels=paste0("A",1:5))
+c_worstcase$alg_name <- factor(c_worstcase$alg_name,labels=paste0("A",1:5))
 
-data_matrix=rbind(c_ideal, c_random, c_worstcase)
+data_matrix <- rbind(c_ideal, c_random, c_worstcase)
 
 ```
 
 
-## 3 Perform ranking 
+## 3. Perform ranking
 
 ### 3.1 Define challenge object
-Code differs slightly for single and multi task challenges.
+Code differs slightly for single- and multi-task challenges.
 
-In case of a single task challenge use
+In case of a single-task challenge use
 
 ```{r, eval=F, echo=T}
 # Use only task "c_random" in object data_matrix
-  dataSubset=subset(data_matrix, task=="c_random")
+dataSubset <- subset(data_matrix, task=="c_random")
 
-  challenge=as.challenge(dataSubset,
-                        # Specify how to refer to the task in plots and reports
-                        taskName="Task 1",
-                        # Specify which column contains the algorithm, 
-                        # which column contains a test case identifier 
-                        # and which contains the metric value:
-                        algorithm="alg_name", case="case", value="value", 
-                        # Specify if small metric values are better
-                        smallBetter = FALSE)
+challenge <- as.challenge(dataSubset,
+                          # Specify which column contains the algorithms, 
+                          # which column contains a test case identifier 
+                          # and which contains the metric value:
+                          algorithm = "alg_name", case = "case", value = "value", 
+                          # Specify if small metric values are better
+                          smallBetter = FALSE)
 ```
 
 *Instead*, for a multi-task challenge use 
 
 ```{r, eval=F, echo=T}
 # Same as above but with 'by="task"' where variable "task" contains the task identifier
-  challenge=as.challenge(data_matrix, 
-                         by="task", 
-                         algorithm="alg_name", case="case", value="value", 
-                         smallBetter = FALSE)
+challenge=as.challenge(data_matrix, 
+                       by = "task", 
+                       algorithm = "alg_name", case = "case", value = "value", 
+                       smallBetter = FALSE)
 ```
 
 
-### 3.2 Perform ranking 
+### 3.2 Configure ranking
 
 Different ranking methods are available, choose one of them:
 
 - for "aggregate-then-rank" use (here: take mean for aggregation)
 ```{r, eval=F, echo=T}
-ranking=challenge%>%aggregateThenRank(FUN = mean, # aggregation function, 
-                                                  # e.g. mean, median, min, max, 
-                                                  # or e.g. function(x) quantile(x, probs=0.05)
-                                      na.treat=0, # either "na.rm" to remove missing data, 
-                                                  # set missings to numeric value (e.g. 0) 
-                                                  # or specify a function, 
-                                                  # e.g. function(x) min(x)
-                                      ties.method = "min" # a character string specifying 
-                                                          # how ties are treated, see ?base::rank
-                                            )  
+ranking <- challenge%>%aggregateThenRank(FUN = mean, # aggregation function, 
+                                                     # e.g. mean, median, min, max, 
+                                                     # or e.g. function(x) quantile(x, probs=0.05)
+                                         na.treat = 0, # either "na.rm" to remove missing data, 
+                                                       # set missings to numeric value (e.g. 0) 
+                                                       # or specify a function, 
+                                                       # e.g. function(x) min(x)
+                                         ties.method = "min" # a character string specifying 
+                                                             # how ties are treated, see ?base::rank
+                                        )  
 ```
 
-- *alternatively*, for  "rank-then-aggregate" with arguments as above (here: take mean for aggregation):
+- *alternatively*, for "rank-then-aggregate" with arguments as above (here: take mean for aggregation)
 ```{r, eval=F, echo=T}
-ranking=challenge%>%rankThenAggregate(FUN = mean,
-                                      ties.method = "min"
-                                      )
+ranking <- challenge%>%rankThenAggregate(FUN = mean,
+                                         ties.method = "min"
+                                        )
 ```
 
-- *alternatively*, for test-then-rank based on Wilcoxon signed rank test:
+- *alternatively*, for test-then-rank based on Wilcoxon signed rank test
 ```{r, eval=F, echo=T}
-ranking=challenge%>%testThenRank(alpha=0.05, # significance level
-                                 p.adjust.method="none",  # method for adjustment for
-                                                          # multiple testing, see ?p.adjust
-                                 na.treat=0, # either "na.rm" to remove missing data,
-                                             # set missings to numeric value (e.g. 0)
-                                             # or specify a function, e.g. function(x) min(x)
-                                 ties.method = "min" # a character string specifying
-                                                     # how ties are treated, see ?base::rank
-                     )
+ranking <- challenge%>%testThenRank(alpha = 0.05, # significance level
+                                    p.adjust.method = "none", # method for adjustment for
+                                                              # multiple testing, see ?p.adjust
+                                    na.treat = 0, # either "na.rm" to remove missing data,
+                                                  # set missings to numeric value (e.g. 0)
+                                                  # or specify a function, e.g. function(x) min(x)
+                                    ties.method = "min" # a character string specifying
+                                                        # how ties are treated, see ?base::rank
+                                   )
 
 ```
 
@@ -225,32 +228,32 @@ ranking=challenge%>%testThenRank(alpha=0.05, # significance level
 Perform bootstrapping with 1000 bootstrap samples using one CPU
 ```{r, eval=F, echo=T}
 set.seed(1)
-ranking_bootstrapped=ranking%>%bootstrap(nboot=1000)
+ranking_bootstrapped <- ranking%>%bootstrap(nboot = 1000)
 ```
 
 If you want to use multiple CPUs (here: 8 CPUs), use
 
 ```{r, eval=F, echo=T}
 library(doParallel)
-registerDoParallel(cores=8)  
+registerDoParallel(cores = 8)  
 set.seed(1)
-ranking_bootstrapped=ranking%>%bootstrap(nboot=1000, parallel=TRUE, progress = "none")
+ranking_bootstrapped <- ranking%>%bootstrap(nboot = 1000, parallel = TRUE, progress = "none")
 stopImplicitCluster()
 ```
 
 
 
 ## 5. Generate the report
-Generate report in PDF, HTML or DOCX format. Code differs slightly for single and multi task challenges.
+Generate report in PDF, HTML or DOCX format. Code differs slightly for single- and multi-task challenges.
 
-### 5.1 For single task challenges
+### 5.1 For single-task challenges
 ```{r, eval=F, echo=T}
 ranking_bootstrapped %>% 
-  report(title="singleTaskChallengeExample", # used for the title of the report
+  report(title = "singleTaskChallengeExample", # used for the title of the report
          file = "filename", 
          format = "PDF", # format can be "PDF", "HTML" or "Word"
-         latex_engine="pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
-         clean=TRUE #optional. Using TRUE will clean intermediate files that are created during rendering.
+         latex_engine = "pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+         clean = TRUE #optional. Using TRUE will clean intermediate files that are created during rendering.
         ) 
 
 ```
@@ -264,35 +267,35 @@ If argument "file" is omitted, the report is  created in a temporary folder with
 
 
 
-### 5.1 For multi task challenges
-Same as for single task challenges, but additionally consensus ranking (rank aggregation across tasks) has to be given.
+### 5.2 For multi-task challenges
+Same as for single-task challenges, but additionally consensus ranking (rank aggregation across tasks) has to be given.
 
-Compute ranking consensus across tasks (here: consensus ranking according to mean ranks across tasks):
+Compute ranking consensus across tasks (here: consensus ranking according to mean ranks across tasks)
  
 ```{r, eval=F, echo=T}
 # See ?relation_consensus for different methods to derive consensus ranking
-meanRanks=ranking%>%consensus(method = "euclidean") 
+meanRanks <- ranking%>%consensus(method = "euclidean") 
 meanRanks # note that there may be ties (i.e. some algorithms have identical mean rank)
 ```
 
 Generate report as above, but with additional specification of consensus ranking
 ```{r, eval=F, echo=T}
 ranking_bootstrapped %>% 
-  report(consensus=meanRanks,
-         title="multiTaskChallengeExample",
+  report(consensus = meanRanks,
+         title = "multiTaskChallengeExample",
          file = "filename", 
          format = "PDF", # format can be "PDF", "HTML" or "Word"
-         latex_engine="pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+         latex_engine = "pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
         )
 ```
 
 # Troubleshooting
 
-In this section are compiled issues that the users reported.
+In this section we provide an overview of issues that the users reported and how they were solved.
 
 ### RStudio specific
 
-#### - Warnings while installing the Github repository
+#### - Warnings while installing the GitHub repository
 ##### Error:
 
 While trying to install the current version of the repository:
@@ -314,10 +317,10 @@ Actually there is no need of installing Rtools, it is not really used in the too
 
 “If you are asked whether you want to update installed packages and you type “a” for all, you might need administrator rights to update R core packages. You can also try to type “n” for updating no packages. If you are asked “Do you want to install from sources the packages which need compilation? (Yes/no/cancel)”, you can safely type “no”.”
 
-#### - Unable to install the current version of the tool from Github
+#### - Unable to install the current version of the tool from GitHub
 ##### Error:
 
-While trying the current version of the tool from github, it was unable to install. 
+While trying the current version of the tool from GitHub, it was unable to install.
 
 The error message was:
 
@@ -339,10 +342,10 @@ The problem was that some of the packages that were built under R3.6.1 had been 
 The solution was to update R3.6.1 to R3.6.3. Another way would have been to reset the single packages to the versions built under R3.6.1
 
 
-#### - Unable to install the toolkit from Github
+#### - Unable to install the toolkit from GitHub
 ##### Error:
 
-While trying the current version of the tool from github, it was unable to install. 
+While trying the current version of the tool from GitHub, it was unable to install.
 
 ```{r, eval=F, echo=T}
  devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
@@ -436,12 +439,12 @@ I moved to the following ones :
 
 
 
-### Related to MikText
+### Related to MiKTeX
 
 #### - Missing packages
 ##### Error:
 
-While generating the PDF with Miktext (2.9), the following error showed up: 
+While generating the PDF with MiKTeX (2.9), the following error showed up:
 
 ```{r, eval=F, echo=T}
 fatal pdflatex - gui framework cannot be initialized
@@ -457,15 +460,15 @@ Open your MiKTeX Console --> Settings, select "Always install missing packages o
 #### - Unable to generate report
 ##### Error:
 
-While generating the PDF with Miktext (2.9):
+While generating the PDF with MiKTeX (2.9):
 
 ```{r, eval=F, echo=T}
 ranking_bootstrapped %>% 
-  report(title="singleTaskChallengeExample", # used for the title of the report
+  report(title = "singleTaskChallengeExample", # used for the title of the report
          file = "filename", 
          format = "PDF", # format can be "PDF", "HTML" or "Word"
-         latex_engine="pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
-         clean=TRUE #optional. Using TRUE will clean intermediate files that are created during rendering.
+         latex_engine = "pdflatex", #LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
+         clean = TRUE #optional. Using TRUE will clean intermediate files that are created during rendering.
         ) 
 
 ```
@@ -528,13 +531,14 @@ The solution was to restart RStudio.
   
 # Team
 
-The developer team includes members from both Computer Assisted Medical Interventions (CAMI) and Biostatistics Division from the German Cancer Research Center (DKFZ): 
+The developer team includes members from both division of Computer Assisted Medical Interventions (CAMI) and Biostatistics at the German Cancer Research Center (DKFZ): 
 
 - Manuel Wiesenfarth 
 - Annette Kopp-Schneider
 - Annika Reinke
 - Matthias Eisenmann
 - Laura Aguilera Saiz
+- Elise Récéjac
 - Lena Maier-Hein
   
 # Reference
