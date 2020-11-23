@@ -1,8 +1,8 @@
 ---
-title: "Quick-start with challengeR"
+title: "Quickstart"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Quick-start with challengeR}
+  %\VignetteIndexEntry{Quickstart}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This tutorial intends to give customized scripts to generate reports quickly, without going through all the installation and usage steps in detail.
+This tutorial intends to give customized scripts to generate reports quickly, without going through all the installation and usage steps given in the README in detail.
 
 The tutorial contains the following scripts, which are included in the "vignettes" directory:
 
@@ -33,11 +33,11 @@ setwd("myWorkingDirectoryFilePath")
 
 2. Open the script.
 
-3. Select all the text from the script file (CTRL+a), and run all the code (CTRL+enter).
+3. Click "Source".
 
-4. The report will be generated in the previously specified working directory ("myWorkingDirectoryFilePath").
+4. The report will be generated in the previously specified working directory.
 
-5. Check out the report, and the script to modify and adapt the desired parameters.
+5. Check out the report, adapt the script to fit your configuration.
 
 
 # Usage
@@ -46,34 +46,20 @@ Each script contains the following steps, as described in the README:
 
 1. Load package
 
-2. Load data (randomly generated?)
+2. Load data (generated randomly)
 
 3. Perform ranking
-- Define challenge object
-- Perform ranking
 
-4. Uncertainity analisys (bootstrapping)
+4. Uncertainty analysis (bootstrapping)
 
 5. Generate report
 
 The scrips will be now explained in more detail:
 
-#### SingleTask_aggregate-then-rank.R
+* **SingleTask_aggregate-then-rank.R:** In this script a single-task evaluation will be performed. The applied ranking method is "metric-based aggregation". It begins by aggregating metric values across all test cases for each algorithm. This aggregate is then used to compute a rank for each algorithm. 
 
-As the name indicates, in this script a single task evaluation will be performed. The applied ranking method is "metric-based aggregation". It is the most commonly applied method, and it begins by aggregating metric values across all test cases for each algorithm. This aggregate is then used to compute a rank for each algorithm. 
+* **MultiTask_rank-then-aggregate.R:** In this script a multi-task evaluation will be performed. The applied ranking method is "case-based aggregation". It begins with computing a rank for each test case for each algorithm (”rank first”). The final rank is based on the aggregated test-case ranks. Distance-based approaches for rank aggregation can also be used.
 
-#### MultiTask_rank-then-aggregate.R
+* **MultiTask_test-then-rank.R:** In this script a multi-task evaluation will be performed. The applied ranking method is "significance ranking". In a complementary approach, statistical hypothesis tests are computed for each possible pair of algorithms to assess differences in metric values between the algorithms. Then ranking is performed according to the resulting relations or according to the number of significant one-sided test results. In the latter case, if algorithms have the same number of significant test results then they obtain the same rank. Various test statistics can be used.
 
-As the name indicates, in this script a multi task evaluation will be performed. The applied ranking method is "case-based aggregation". It is the second most commonly applied method, and it begins with computing a rank for each test case for each algorithm (”rank first”). The final rank is based on the aggregated test-case ranks. Distance-based approaches for rank aggregation can also be used.
-
-#### MultiTask_test-then-rank.R
-
-As the name indicates, in this script a multi task evaluation will be performed. The applied ranking method is "significance ranking". In a complementary approach, statistical hypothesis tests are computed for each possible pair of algorithms to assess differences in metric values between the algorithms. Then ranking is performed according to the resulting relations or according to the number of significant one-sided test results. In the latter case, if algorithms have the same number of significant test results then they obtain the same rank. Various test statistics can be used.
-
-
-For more hints, see the README.
-
-# Terms of use
-Licenced under GPL-3. If you use this software for a publication, cite
-
-Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
+For more hints, see the README and the package documentation.
