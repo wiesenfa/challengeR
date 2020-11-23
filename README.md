@@ -133,7 +133,7 @@ If you have assessment data at hand stored in a csv file (if you want to
 use simulated data skip the following code line) use
 
 ``` r
-data_matrix=read.csv(file.choose()) # type ?read.csv for help
+data_matrix <- read.csv(file.choose()) # type ?read.csv for help
 ```
 
 This allows to choose a file interactively, otherwise replace
@@ -209,10 +209,10 @@ challenge <- as.challenge(dataSubset,
 
 ``` r
 # Same as above but with 'by="task"' where variable "task" contains the task identifier
-challenge=as.challenge(data_matrix, 
-                       by = "task", 
-                       algorithm = "alg_name", case = "case", value = "value", 
-                       smallBetter = FALSE)
+challenge <- as.challenge(data_matrix, 
+                          by = "task", 
+                          algorithm = "alg_name", case = "case", value = "value", 
+                          smallBetter = FALSE)
 ```
 
 ### 3.2 Configure ranking
@@ -342,11 +342,9 @@ ranking_bootstrapped %>%
 In this section we provide an overview of issues that the users reported
 and how they were solved.
 
-### RStudio specific
+## Issues related to RStudio
 
-#### \- Warnings while installing the GitHub repository
-
-##### Error:
+### Issue: Rtools is missing
 
 While trying to install the current version of the repository:
 
@@ -364,7 +362,7 @@ Therefore, Rtools was installed via a separate executable:
 <https://cran.r-project.org/bin/windows/Rtools/> and the warning
 disappeared.
 
-##### Solution:
+#### Solution:
 
 Actually there is no need of installing Rtools, it is not really used in
 the toolkit. Insted, choose not to install it when it is asked. See
@@ -376,12 +374,9 @@ packages. You can also try to type “n” for updating no packages. If you
 are asked “Do you want to install from sources the packages which need
 compilation? (Yes/no/cancel)”, you can safely type “no”.”
 
-#### \- Unable to install the current version of the tool from GitHub
+### Issue: Package versions are mismatching
 
-##### Error:
-
-While trying the current version of the tool from GitHub, it was unable
-to install.
+Installing the current version of the tool from GitHub failed.
 
 The error message was:
 
@@ -399,17 +394,14 @@ Error: Failed to install 'challengeR' from GitHub:
 The problem was that some of the packages that were built under R3.6.1
 had been updated, but the current installed version was still R3.6.1.
 
-##### Solution:
+#### Solution:
 
 The solution was to update R3.6.1 to R3.6.3. Another way would have been
-to reset the single packages to the versions built under R3.6.1
+to reset the single packages to the versions built under R3.6.1.
 
-#### \- Unable to install the toolkit from GitHub
+### Issue: Package is missing
 
-##### Error:
-
-While trying the current version of the tool from GitHub, it was unable
-to install.
+Installing the current version of the tool from GitHub failed.
 
 ``` r
  devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
@@ -425,7 +417,7 @@ Error: .onLoad failed in loadNamespace() for 'pkgload', details:
 
 The problem was that the packages ‘backports’ had not been installed.
 
-##### Solution:
+#### Solution:
 
 The solution was to install ‘backports’ manually.
 
@@ -433,12 +425,10 @@ The solution was to install ‘backports’ manually.
  install.packages("backports")
 ```
 
-#### \- Unable to install R
+### Issue: Packages are not detected correctly
 
-##### Error:
-
-While trying to install the package in the R, after running the
-following commands:
+While trying to install the package after running the following
+commands:
 
 ``` r
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
@@ -456,55 +446,13 @@ ERROR:
 2: packages ‘BiocVersion’, ‘Rgraphviz’ are not available (for R version 3.6.1)
 ```
 
-##### Solution:
+#### Solution:
 
 The solution was to restart RStudio.
 
-#### \- Incorrect column order
+## Issues related to MiKTeX
 
-##### Error:
-
-When naming the columns “task” and “case”, R was confused because the
-arguments in the challenge object are also called like this and it
-produced the following error:
-
-``` r
-Error in table(object[[task]][[algorithm]], object[[task]][[case]]) : all arguments must have the same length
-```
-
-##### Solution:
-
-The solution was to rename the columns.
-
-#### \- Wrong versions of packages
-
-##### Error:
-
-While running this command :
-
-``` r
- devtools::install_github("wiesenfa/challengeR", dependencies = TRUE)
-```
-
-I had the following errors : - Error : the package ‘purrr’ has been
-compiled with version of R 3.6.3 - Error : the package ‘ggplot2’ has
-been compiled with version of R 3.6.3 - Error in loadNamespace(j \<-
-i\[\[L\]\], c(lib.loc, .libPaths()), versionCheck = vI\[\[j\]\])
-namespace ‘glue’ 1.3.1 is already loaded, but \>= 1.3.2 is required
-
-##### Solution:
-
-To solve the issue I changed the versions of the packages. I had the
-following versions : - purrr 0.3.4 - ggplot2 3.3.2 - glue 1.3.1
-
-I moved to the following ones : - purrr 0.3.3 - ggplot2 3.3.0 - glue
-1.4.2
-
-### Related to MiKTeX
-
-#### \- Missing packages
-
-##### Error:
+### Issue: Missing packages
 
 While generating the PDF with MiKTeX (2.9), the following error showed
 up:
@@ -521,9 +469,7 @@ Open your MiKTeX Console –\> Settings, select “Always install missing
 packages on-the-fly”. Then generate the report. Once the report is
 generated, you can reset the settings to your preferred ones.
 
-#### \- Unable to generate report
-
-##### Error:
+### Issue: Unable to generate report
 
 While generating the PDF with MiKTeX (2.9):
 
@@ -551,7 +497,7 @@ In system2(..., stdout = if (use_file_stdout()) f1 else FALSE, stderr = f2) :
   '"pdflatex"' not found
 ```
 
-##### Solution:
+#### Solution:
 
 The solution was to restart RStudio.
 
