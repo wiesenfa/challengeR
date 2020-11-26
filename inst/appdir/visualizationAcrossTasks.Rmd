@@ -1,3 +1,5 @@
+\newpage
+
 # Visualization of cross-task insights
 
 The algorithms are ordered according to consensus ranking.
@@ -29,6 +31,7 @@ stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+
 
 ```
 
+\newpage
 
 ## Characterization of tasks
 

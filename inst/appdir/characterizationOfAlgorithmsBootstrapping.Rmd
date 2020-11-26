@@ -38,6 +38,8 @@ if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
 
 <!-- Stacked frequencies of observed ranks across bootstrap samples are displayed with colouring according to subtask. Vertical lines provide original (non-bootstrap) rankings for each subtask. -->
 
+\newpage
+
 An alternative representation is provided by a stacked
 frequency plot of the observed ranks, separated by algorithm. Observed ranks across bootstrap samples are
 displayed with coloring according to the task. For algorithms that
