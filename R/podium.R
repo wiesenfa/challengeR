@@ -14,8 +14,9 @@ podium.default <- function(object, ...) stop("not implemented for this class")
 #' @param lines.show
 #' @param lines.alpha
 #' @param lines.lwd
-#' @param col
+#' @param lines.lty
 #' @param lines.col
+#' @param col
 #' @param dots.pch
 #' @param dots.cex
 #' @param places.lty
@@ -38,8 +39,9 @@ podium.ranked.list=function(object,
                             lines.show = TRUE,
                             lines.alpha = 0.2,
                             lines.lwd = 1,
-                            col,
+                            lines.lty=1,
                             lines.col = col,
+                            col,
                             dots.pch = 19,
                             dots.cex = 1,
                             places.lty = 2,
@@ -73,6 +75,7 @@ podium.ranked.list=function(object,
              lines.show = lines.show,
              lines.alpha = lines.alpha,
              lines.lwd = lines.lwd,
+             lines.lty = lines.lty,
              col=col,
              lines.col = lines.col,
              dots.pch = dots.pch,
@@ -102,8 +105,9 @@ podium.ranked.list=function(object,
 #' @param lines.show
 #' @param lines.alpha
 #' @param lines.lwd
-#' @param col
+#' @param lines.lty
 #' @param lines.col
+#' @param col
 #' @param dots.pch
 #' @param dots.cex
 #' @param places.lty
@@ -125,6 +129,7 @@ podium.challenge=function(object,
                           xlab = NULL, ylab = NULL,
                           lines.show = FALSE, lines.alpha = 0.2,
                           lines.lwd = 1,
+                          lines.lty = 1,
                           col,lines.col = col,
                           dots.pch = 19, dots.cex = 1,
                           places.lty = 2, places.col = 1,
@@ -193,12 +198,20 @@ podium.challenge=function(object,
       o <- order(r)
       performances <- (values[i, ])[o]
       places <- (dotplaces[names(r)] + ((r - 1) * nalgs))[o]
-      fn(places, performances, col = col[names(r)[o]], ...)
+      fn(places, performances, 
+         col = col[names(r)[o]], 
+         pch = switch((length(dots.pch)!=1)+1,
+                      dots.pch,
+                      dots.pch[names(r)[o]]), 
+         lty = switch((length(lines.lty)!=1)+1,
+                      lines.lty,
+                      lines.lty[names(r)[o]]),
+         ...)
     }
   }
   if (lines.show) drawthe(linesegments, linecols, lwd = lines.lwd)
 
-  drawthe(points, col, pch = dots.pch, cex = dots.cex)
+  drawthe(points, col,  cex = dots.cex)
 
   legendfn(orderedAlgorithms,
            col[orderedAlgorithms])
