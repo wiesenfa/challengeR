@@ -50,14 +50,13 @@ significanceMap.ranked.list=function(object,
   # Remove title for single-task data set
   if (length(res) == 1) {
     res[[1]]$labels$title <- NULL
+    return(res[[1]])
   } else {
     names(res) = names(object$matlist)
-
+    class(res) <- "ggList"
+    return(res)
   }
-
-  class(res) <- "ggList"
-  res
-}
+ }
 
 
 significanceMap.data.frame=function(object,

@@ -44,12 +44,13 @@ rankingHeatmap.ranked.list=function (x,ties.method="min",...) {
   # Remove title for single-task data set
   if (length(a) == 1) {
     a[[1]]$labels$title <- NULL
+    return(a[[1]])
   } else {
     names(a) = names(x$matlist)
+    class(a) <- "ggList"
+    return(a)
   }
 
-  class(a) <- "ggList"
-  a
 }
 
 #' Creates a ranking heatmap
