@@ -5,7 +5,7 @@ Algorithms are color-coded, and the area of each blob at position $\left( A_i, \
 
 \bigskip
 
-```{r blobplot_bootstrap,fig.width=9, fig.height=9}
+```{r blobplot_bootstrap,fig.width=9, fig.height=9, results='hide'}
 showLabelForSingleTask <- FALSE
 
 if (length(names(boot_object$bootsrappedRanks)) > 1) {
