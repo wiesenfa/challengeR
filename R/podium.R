@@ -47,7 +47,7 @@ podium.ranked.list=function(object,
                             places.lty = 2,
                             places.col = 1,
                             legendfn = function(algs, cols) {
-                              legend("topleft", algs, lwd = 1, col = cols, bg = "white")
+                              legend("topright", algs, lwd = 1, col = cols, bg = "white")
                             },
                             layout.heights=c(1,0.4),
                             ...){
