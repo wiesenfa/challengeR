@@ -126,7 +126,10 @@ Algorithms within a task are ranked according to the following ranking scheme:
 
 ```{r,results='asis'}
 a=(  lapply(object$FUN.list[1:2],function(x) {
-                 if (!is.character(x)) return(paste0("aggregate using function ",
+                if (class(x)== "standardGeneric") return(paste0("aggregate using function ",
+                                                                x@generic
+                                                                )) 
+                else if (!is.character(x)) return(paste0("aggregate using function ",
                                                      paste(gsub("UseMethod","",
                                                                 deparse(functionBody(x))),
                                                            collapse=" ")
