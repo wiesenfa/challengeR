@@ -68,7 +68,7 @@ as.challenge=function(object,
 
   # sanity checks
   if (check) {
-
+ 
     if (!is.null(by) && !is.null(taskName)) {
       warning("Argument 'taskName' is ignored for multi-task data set.")
     }
@@ -160,7 +160,8 @@ as.challenge=function(object,
   }
   if (check==TRUE && (any(sapply(missingData, function(x) nrow(x))>0) |any(n.missing>0)))  {
     if (is.null(na.treat)) message("For aggregate-then-rank, na.treat will have to be specified. ",
-                                   "For rank-then-aggregate, missings will implicitly lead to the algorithm ranked last for the missing test case."
+                                   "For rank-then-aggregate, missings will implicitly lead to the algorithm ranked last for the missing test case.",
+                                   "na.treat obligatory if report is intended to be compiled."
                                )
     else if (is.numeric(na.treat)) message("All missings have been replaced by the value ", na.treat,".\n")
     else if (is.character(na.treat) && na.treat=="na.rm") message("All missings have been removed.")

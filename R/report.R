@@ -45,6 +45,13 @@ report.bootstrap.list=function(object,
                                dpi = 150, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
                                open=TRUE,...){
 
+  # if any missing perforamnce value and na.treat not given in as.challenge stop
+  if (is.null(attr(object$data,"na.treat")) && 
+      any(sapply(object$data, 
+                 function(task) any(is.na(task[[attr(ranking$data,"value")]]))))) {
+    stop("Please specify na.treat in as.challenge().")
+  }
+  
   # Copy the report file to a temporary directory before processing it, in
   # case we don't have write permissions to the current working dir (which
   # can happen when deployed).
