@@ -213,8 +213,6 @@ podium.challenge=function(object,
 
   drawthe(points, col,  cex = dots.cex)
 
-  legendfn(orderedAlgorithms,
-           col[orderedAlgorithms])
 
   par(mar = c(mar[1], mar[2], 0, mar[4]))
   barplot(nranks[barorder,],
@@ -231,4 +229,6 @@ podium.challenge=function(object,
        labels = NA, lwd = par("lwd"))
   box()
   par(opar)
+  legendfn(orderedAlgorithms,
+           col[orderedAlgorithms])
 }
