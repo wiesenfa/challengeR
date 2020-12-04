@@ -20,7 +20,7 @@ Same as in Section \ref{blobByTask} but now ordered according to consensus.
 
 \bigskip
 
-```{r blobplot_bootstrap_byTask,fig.width=9, fig.height=9}
+```{r blobplot_bootstrap_byTask,fig.width=9, fig.height=9, results='hide'}
 #stabilityByTask.bootstrap.list
 if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
   stabilityByTask(boot_object,
