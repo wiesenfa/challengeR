@@ -58,7 +58,7 @@ A dendrogram is a visualization approach based on hierarchical clustering. It de
 
 
 ```{r dendrogram_complete, fig.width=6, fig.height=5,out.width='60%'}
-if (length(object$matlist)>2) {
+if (n.tasks>2) {
   dendrogram(object,
              dist = "symdiff",
              method="complete")
@@ -69,7 +69,7 @@ if (length(object$matlist)>2) {
 
 
 ```{r dendrogram_average, fig.width=6, fig.height=5,out.width='60%'}
-if (length(object$matlist)>2)   
+if (n.tasks>2)   
   dendrogram(object,
              dist = "symdiff",
              method="average")
@@ -83,7 +83,7 @@ if (length(object$matlist)>2)
 <!-- \bigskip -->
 
 <!-- ```{r ,eval=T,fig.width=12, fig.height=6,include=FALSE, fig.keep="none"} -->
-<!-- if (length(object$matlist)>2) { -->
+<!-- if (n.tasks>2) { -->
 <!--   netw=network(object, -->
 <!--                method = "symdiff",  -->
 <!--                edge.col=grDevices::grey.colors, -->
@@ -101,7 +101,7 @@ if (length(object$matlist)>2)
 <!-- ``` -->
 
 <!-- ```{r network, fig.width=addy, fig.height=6,out.width='100%',dev=NULL} -->
-<!-- if (length(object$matlist)>2) { -->
+<!-- if (n.tasks>2) { -->
 <!--   plot(netw, -->
 <!--        layoutType = "neato", -->
 <!--        fixedsize=TRUE, -->

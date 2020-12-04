@@ -13,7 +13,7 @@ of tasks and the ranking uncertainty of the algorithms in each task.
 
 ```{r blobplot_bootstrap_byAlgorithm,fig.width=7,fig.height = 5}
 #stabilityByAlgorithm.bootstrap.list
-if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
+if (n.tasks<=6 & n.algorithms<=10 ){
   stabilityByAlgorithm(boot_object,
                        ordering=ordering_consensus,
                        max_size = 9,
@@ -53,7 +53,7 @@ different tasks.
 
 
 ```{r stackedFrequencies_bootstrap_byAlgorithm,fig.width=7,fig.height = 5}
-if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
+if (n.tasks<=6 & n.algorithms<=10 ){
   stabilityByAlgorithm(boot_object,
                        ordering=ordering_consensus,
                        stacked = TRUE,

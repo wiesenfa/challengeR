@@ -22,7 +22,7 @@ Same as in Section \ref{blobByTask} but now ordered according to consensus.
 
 ```{r blobplot_bootstrap_byTask,fig.width=9, fig.height=9, results='hide'}
 #stabilityByTask.bootstrap.list
-if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
+if (n.tasks<=6 & n.algorithms<=10 ){
   stabilityByTask(boot_object,
                   ordering=ordering_consensus,
                   max_size = 9,
@@ -42,7 +42,7 @@ if (length(boot_object$matlist)<=6 &nrow((boot_object$matlist[[1]]))<=10 ){
                                ordering=ordering_consensus,
                                size.ranks=.25*theme_get()$text$size,
                                size=4,
-                               shape=4) + scale_color_manual(values=cols) + ggtitle(subt)
+                               shape=4) + scale_color_manual(values=cols) + ggtitle(subt)+ theme(legend.position = "bottom")
   }
   print(pl)
 }
