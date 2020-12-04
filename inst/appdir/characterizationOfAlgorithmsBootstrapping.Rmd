@@ -64,7 +64,10 @@ if (n.tasks<=6 & n.algorithms<=10 ){
   pl=stabilityByAlgorithm(boot_object,
                           ordering=ordering_consensus,
                           stacked = TRUE,
-                          single = T)
+                          single = T) %++%
+    theme(legend.position = ifelse(n.tasks>20,
+                                   yes = "bottom",
+                                   no = "right"))
   print(pl)
 }
 
