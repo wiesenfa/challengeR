@@ -27,7 +27,9 @@ if (n.tasks<=6 & n.algorithms<=10 ){
                   ordering=ordering_consensus,
                   max_size = 9,
                   size=4,
-                  shape=4) + scale_color_manual(values=cols)
+                  shape=4) + 
+    scale_color_manual(values=cols)  +
+    guides(color = FALSE)
 } else {
   pl=list()
   for (subt in names(boot_object$bootsrappedRanks)){
@@ -42,7 +44,11 @@ if (n.tasks<=6 & n.algorithms<=10 ){
                                ordering=ordering_consensus,
                                size.ranks=.25*theme_get()$text$size,
                                size=4,
-                               shape=4) + scale_color_manual(values=cols) + ggtitle(subt)+ theme(legend.position = "bottom")
+                               shape=4) + 
+      scale_color_manual(values=cols)  +
+      guides(color = FALSE) + 
+      ggtitle(subt)+ 
+      theme(legend.position = "bottom")
   }
   print(pl)
 }
