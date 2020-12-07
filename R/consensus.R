@@ -9,7 +9,7 @@ consensus.default <- function(object, ...) stop("not implemented for this class"
 #' Computes a consensus ranking (rank aggregation) across tasks.
 #'
 #' @param object The ranked asssessment data set.
-#' @param method A string specifying the method to derive the consensus ranking, see [relations::consensus()] for the methods. Consensus ranking according to mean ranks across tasks if method="euclidean" where in case of ties (equal ranks for multiple algorithms) the average rank is used, i.e. ties.method="average" .
+#' @param method A string specifying the method to derive the consensus ranking, see [relations::consensus()] for the methods. Consensus ranking according to mean ranks across tasks if method="euclidean" where in case of ties (equal ranks for multiple algorithms) the average rank is used, i.e. ties.method="average".
 #' @param ... Further arguments passed to or from other functions.
 #'
 #' @return
