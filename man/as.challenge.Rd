@@ -31,7 +31,7 @@ as.challenge(
 \item{taskName}{A string specifying the task name for single-task data set that does not contain a task column.
 This argument is optional for a single-task data set and is ignored for a multi-task data set.}
 
-\item{annotator}{Not supported}
+\item{annotator}{If multiple annotators annotated the test cases, a string specifying the name of the column that contains the annotator identifiers. Only applies to rang-then-aggregate. Use with caution: Currently not tested.}
 
 \item{smallBetter}{A boolean specifying whether small performance values indicate better algorithm performance.}
 
