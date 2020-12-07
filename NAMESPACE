@@ -31,7 +31,6 @@ export(
   "rankThenAggregate",
   "rankingHeatmap", "rankingHeatmap.ranked.list", "relation_dissimilarity.ranked.list",
   "report", "report.bootstrap.list",
-  "second",
   "select.if", "select.if.aggregated.list", "select.if.comparedRanks.list", "select.if.list", "select.if.ranked.list",
   "significanceMap",
   "spearmansFootrule", "spearmansWeightedFootrule",
