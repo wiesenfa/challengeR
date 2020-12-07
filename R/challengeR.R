@@ -39,7 +39,7 @@
 #' @param by A string specifying the name of the column that contains the task identifiers. Required for multi-task data set.
 #' @param taskName A string specifying the task name for single-task data set that does not contain a task column.
 #'   This argument is optional for a single-task data set and is ignored for a multi-task data set.
-#' @param annotator Not supported
+#' @param annotator If multiple annotators annotated the test cases, a string specifying the name of the column that contains the annotator identifiers. Only applies to rang-then-aggregate. Use with caution: Currently not tested.
 #' @param smallBetter A boolean specifying whether small performance values indicate better algorithm performance.
 #' @param na.treat Indicates how missing perfomance values are treated if sanity check is enabled. It can be 'na.rm', numeric value or function.
 #'   For a numeric value or function, NAs will be replaced by the specified values. For 'na.rm', rows that contain missing values will be removed.
@@ -116,7 +116,7 @@ as.challenge=function(object,
           }
           print(as.data.frame(missingData[[task]]))
           object[[task]]=as.data.frame(object[[task]] %>%
-                                         complete(task,
+                                         complete(!!as.symbol(by),
                                                   !!as.symbol(algorithm),
                                                   !!as.symbol(case)))
         }
