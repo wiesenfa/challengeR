@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{The ranked asssessment data set.}
 
-\item{method}{A string specifying the method to derive the consensus ranking, see \code{\link[relations:consensus]{relations::consensus()}} for the methods.}
+\item{method}{A string specifying the method to derive the consensus ranking, see \code{\link[relations:consensus]{relations::consensus()}} for the methods. Consensus ranking according to mean ranks across tasks if method="euclidean" where in case of ties (equal ranks for multiple algorithms) the average rank is used, i.e. ties.method="average".}
 
 \item{...}{Further arguments passed to or from other functions.}
 }

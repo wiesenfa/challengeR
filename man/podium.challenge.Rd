@@ -12,6 +12,7 @@
   lines.show = FALSE,
   lines.alpha = 0.2,
   lines.lwd = 1,
+  lines.lty = 1,
   col,
   lines.col = col,
   dots.pch = 19,

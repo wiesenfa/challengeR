@@ -4,16 +4,16 @@
 \alias{boxplot.ranked.list}
 \title{Creates dot- and boxplots}
 \usage{
-\method{boxplot}{ranked.list}(x, color = "blue", jitter.width = 0.25, ...)
+\method{boxplot}{ranked.list}(x, jitter.width = 0.25, ...)
 }
 \arguments{
 \item{x}{The ranked assessment data set.}
 
-\item{color}{A string specifying the color of the dots.}
-
 \item{jitter.width}{A numeric value specifying the jitter width of the dots.}
 
 \item{...}{Further arguments passed to or from other functions.}
+
+\item{color}{A string specifying the color of the dots.}
 }
 \value{
 
