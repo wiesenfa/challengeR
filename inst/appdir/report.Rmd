@@ -274,7 +274,6 @@ boxplot(object, size=.8)
 ```{r, include=FALSE, fig.keep="none",dev=NULL}
 cex.legend = 1.2
 plot.new()
-algs=ordering_consensus
 
 # bottom legend  
   # get number of columns
@@ -282,6 +281,7 @@ algs=ordering_consensus
     ncol.legend <- n.algorithms + 1
     while(legend.width>12){
       ncol.legend <- ncol.legend-1
+      algs=ordering_consensus
       l=legend("bottom", 
                paste0(1:length(algs),": ",algs), 
                 xpd=NA, 
@@ -299,7 +299,7 @@ algs=ordering_consensus
   h<-hh<- grconvertY(l$rect$h, to='ndc') - grconvertY(0, to='ndc')
   nrow.legend=length(unique(l$text$y))
 
-legend.height = nrow.legend* max( cex.legend * par()$cin[2],max(strheight(algs, units = "inches", cex = cex.legend)))   
+legend.height = nrow.legend* max( cex.legend * par()$cin[2],max(strheight(ordering_consensus, units = "inches", cex = cex.legend)))   
 addy= 6+ legend.height
 
 ```
