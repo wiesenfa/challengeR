@@ -11,7 +11,7 @@ test_that("significance map for single-task data set has no title", {
 
   ranking <- challenge%>%aggregateThenRank(FUN=median, ties.method="min")
 
-  actualPlot <- significanceMap(ranking)[[1]]
+  actualPlot <- significanceMap(ranking)
   expect_is(actualPlot, "ggplot")
   expect_equal(actualPlot$labels$title, NULL)
 })

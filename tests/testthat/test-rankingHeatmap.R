@@ -11,7 +11,7 @@ test_that("ranking heatmap for single-task data set has no title", {
 
   ranking <- challenge%>%aggregateThenRank(FUN=median, ties.method="min")
 
-  actualPlot <- rankingHeatmap(ranking)[[1]]
+  actualPlot <- rankingHeatmap(ranking)
   expect_is(actualPlot, "ggplot")
   expect_equal(actualPlot$labels$title, NULL)
 })

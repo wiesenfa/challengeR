@@ -11,7 +11,7 @@ test_that("boxplot for ranked single-task data set has no title", {
 
   ranking <- challenge%>%aggregateThenRank(FUN=median, ties.method="min")
 
-  actualPlot <- boxplot(ranking)[[1]]
+  actualPlot <- boxplot(ranking)
   expect_is(actualPlot, "ggplot")
   expect_equal(actualPlot$labels$title, NULL)
 })
@@ -52,3 +52,4 @@ test_that("boxplots for ranked multi-task data set have titles", {
    expect_is(actualPlotTask2, "ggplot")
    expect_equal(actualPlotTask2$labels$title, "T2")
 })
+
