@@ -51,6 +51,11 @@ stability.ranked.list=function(x,
           value.name="rank") %>% dplyr::rename(task="L1")
 
   if (!missing(ordering)) {
+    if (is.numeric(ordering) & !is.null(names(ordering)) ){
+      ordering <- names(ordering)[order(ordering)]
+    } else if (!is.character(ordering)){
+      stop("Argument ordering has to be a named vector of ranks or a vector of algorithm names in the ranking order.")
+    }
     dd=dd%>%mutate(algorithm=factor(.data$algorithm,
                                     levels=ordering))
   } else dd=dd%>%mutate(algorithm=factor(.data$algorithm))
@@ -135,9 +140,17 @@ stabilityByAlgorithm.bootstrap.list=function(x,
 
   rankDist=rankdist.bootstrap.list(x)
 
-  if (!missing(ordering)) rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
-                                                                      levels=ordering))
-
+  if (!missing(ordering)) {
+    if (is.numeric(ordering) & !is.null(names(ordering)) ){
+      ordering <- names(ordering)[order(ordering)]
+    } else if (!is.character(ordering)){
+      stop("Argument ordering has to be a named vector of ranks or a vector of algorithm names in the ranking order.")
+    }
+    
+    rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
+                                                levels=ordering))
+  }
+  
   if (!stacked){
     if (single==FALSE){
       pl <- ggplot(rankDist)+
@@ -214,9 +227,17 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                               value.name="rank") %>%
       dplyr::select(-.data$variable)
     colnames(results)[3]="task"
-    if (!missing(ordering)) results=results%>%mutate(algorithm=factor(.data$algorithm,
-                                                                      levels=ordering))
-
+    if (!missing(ordering)) {
+      if (is.numeric(ordering) & !is.null(names(ordering)) ){
+        ordering <- names(ordering)[order(ordering)]
+      } else if (!is.character(ordering)){
+        stop("Argument ordering has to be a named vector of ranks or a vector of algorithm names in the ranking order.")
+      }
+      
+      results=results%>%mutate(algorithm=factor(.data$algorithm,
+                                                levels=ordering))
+    }
+    
     if (single==FALSE){
       pl<- ggplot(rankDist) +
         facet_wrap(vars(algorithm))+
@@ -322,6 +343,12 @@ stabilityByTask.bootstrap.list=function(x,
                          value.name = "full.rank")
   colnames(ranks)[4]="task"
   if (!missing(ordering)) {
+    if (is.numeric(ordering) & !is.null(names(ordering)) ){
+      ordering <- names(ordering)[order(ordering)]
+    } else if (!is.character(ordering)){
+      stop("Argument ordering has to be a named vector of ranks or a vector of algorithm names in the ranking order.")
+    }
+    
     ranks$algorithm=factor(ranks$algorithm,
                            levels=ordering)
     rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
