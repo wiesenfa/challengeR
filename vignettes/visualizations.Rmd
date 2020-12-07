@@ -48,8 +48,7 @@ boxplot(ranking)
 ## Podium plots
 Upper part of the podium plot: Algorithms are color-coded, and each colored dot in the plot represents a performance value achieved with the respective algorithm. The actual value is encoded by the y-axis. Each podium (here: $p = 5$) represents one possible rank, ordered from best (1) to worst (here: 5). The assignment of values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding test case.Note that the plot part above each podium place is further subdivided into $p$ “columns”, where each column represents one algorithm. Dots corresponding to identical test cases are connected by a line, producing the spaghetti structure shown here. Lower part: Bar charts represent the relative frequency at which each algorithm actually achieves the rank encoded by the podium place.
 ```{r}
-# The podium plot is not available as an encapsulated function yet.
-# podium(challenge, xlab = "Podium",  ylab = "Metric value")
+ podium(ranking)
 ```
 
 ## Ranking heatmaps
