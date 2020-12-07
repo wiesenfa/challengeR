@@ -75,7 +75,7 @@ A ranking object containing the bootstrapping samples has to be created which se
 
 ```{r bootstrapping, results = "hide"}
 set.seed(1)
-rankingBootstrapped <- ranking%>%bootstrap(nboot = 10)
+rankingBootstrapped <- ranking%>%bootstrap(nboot = 1000)
 ```
 
 ## Blob plots
