@@ -7,27 +7,23 @@ export(
   "aggregateThenRank",
   "as.challenge",
   "as.relation.challenge.incidence", "as.relation.ranked.list",
-  "bootstrap", "bootstrap.ranked.list", #"bootstrap.default",
+  "bootstrap", "bootstrap.ranked.list", 
   "boxplot.ranked.list", "boxplot.bootstrap.list", "boxplot.comparedRanks.list",
-  #"check_strict_preference",
-  "compareRanks",    "compareRanks.ranked",    "compareRanks.ranked.list", # "compareRanks.default",
-  "consensus",       "consensus.ranked.list", #"consensus.default",
+   "compareRanks",       "compareRanks.ranked.list", 
+  "consensus",       "consensus.ranked.list", 
   "Decision", "decision.challenge",
   "default_colors",
   "density.bootstrap.list",
   "dendrogram", "dendrogram.ranked.list",
   "extract.workflow",
   "kendall",    "kendall.bootstrap.list",
-  # "merge.list",
   "lineplot.challenge",
   "methodsplot","methodsplot.challenge",
   "network", "plot.network",
-  "podium","podium.ranked.list", "podium.challenge",#"podium.default",
+  "podium","podium.ranked.list", "podium.challenge",
   "print.aggregated", "print.aggregated.list", "print.comparedRanks",    "print.ranked", "print.ranked.list",
-  #"quickmerge.list",
-  "rank", "rank.aggregated.list", "rank.aggregatedRanks.list", "rank.challenge", #"rank.default",
-  "rankFrequencies", "rankFrequencies.bootstrap",    "rankFrequencies.bootstrap.list", #"rankFrequencies.default",
-  #"rankNA2",
+   "rank", "rank.aggregated.list", "rank.aggregatedRanks.list", "rank.challenge", 
+  "rankFrequencies", "rankFrequencies.bootstrap",    "rankFrequencies.bootstrap.list", 
   "rankThenAggregate",
   "rankingHeatmap", "rankingHeatmap.ranked.list", "relation_dissimilarity.ranked.list",
   "report", "report.bootstrap.list",
@@ -40,7 +36,7 @@ export(
   "stabilityByAlgorithm.bootstrap.list",
   "stabilityByTask.bootstrap.list",
   "subset",
-  "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", #"which.top",
+  "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", 
   "test",    "test.challenge", "test.default",
   "testThenRank",
   "violin", "violin.bootstrap.list",
@@ -123,7 +119,6 @@ S3method(winnerFrequencies, bootstrap.list)
 
 
 S3method(compareRanks,default)
-S3method(compareRanks,ranked)
 S3method(compareRanks,ranked.list)
 
 S3method(merge,list)
