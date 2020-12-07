@@ -44,7 +44,7 @@ export(
   "test",    "test.challenge", "test.default",
   "testThenRank",
   "violin", "violin.bootstrap.list",
-  "winner", "winner.bootstrap",    "winner.bootstrap.list", "winner.default", "winner.ranked",    "winner.ranked.list",
+  "winner",   "winner.bootstrap.list", "winner.default",    "winner.ranked.list",
   "winnerFrequencies",    "winnerFrequencies.bootstrap", "winnerFrequencies.bootstrap.list",    "winnerFrequencies.default"
   )
 
@@ -110,9 +110,7 @@ S3method(dendrogram, default)
 S3method(dendrogram, ranked.list)
 
 S3method(winner, default)
-S3method(winner, ranked)
 S3method(winner, ranked.list)
-S3method(winner, bootstrap)
 S3method(winner, bootstrap.list)
 
 S3method(rankFrequencies, default)
