@@ -58,8 +58,13 @@ bootstrappingEnabled = params$bootstrappingEnabled
 
 ```{r }
 object = params$object
+
 if (isMultiTask) {
-  ordering_consensus=names(params$consensus)
+      if (is.numeric(params$consensus) & !is.null(names(params$consensus)) ){
+      ordering_consensus <- names(params$consensus)[order(params$consensus)]
+    } else if (is.character(ordering)){
+      ordering_consensus=names(params$consensus)
+    } else stop("Argument ordering has to be a named vector of ranks or a vector of algorithm names in the ranking order.")
 } else
 {
   ordering_consensus=names(sort(t(object$matlist[[1]][,"rank",drop=F])["rank",]))
