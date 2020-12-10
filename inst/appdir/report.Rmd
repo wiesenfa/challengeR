@@ -317,7 +317,7 @@ par(pin=c(par()$pin[1],6),
         cex.lab=1.5,
         cex.main=1.7)
 
-if (oh>0) par(omi=c(legend.height+grconvertY(3, from="lines",to='inches'),0,0,0))
+par(omi=c(legend.height+grconvertY(3, from="lines",to='inches'),0,0,0))
 
 l1=par('usr')[1] 
 l2=par('usr')[3] - (par()$mai[1]/par()$pin[2]) 

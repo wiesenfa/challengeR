@@ -48,7 +48,7 @@ report.bootstrap.list=function(object,
   # if any missing perforamnce value and na.treat not given in as.challenge stop
   if (is.null(attr(object$data,"na.treat")) && 
       any(sapply(object$data, 
-                 function(task) any(is.na(task[[attr(ranking$data,"value")]]))))) {
+                 function(task) any(is.na(task[[attr(object$data,"value")]]))))) {
     stop("Please specify na.treat in as.challenge().")
   }
   
