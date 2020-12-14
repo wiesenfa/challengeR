@@ -263,7 +263,7 @@ if (isMultiTask) {
 \bigskip
 
 ```{r boxplots}
-boxplot(object, size=.8)
+boxplot(object, size=.8) %++% scale_color_manual(values=cols)
 ```
 
 \newpage
