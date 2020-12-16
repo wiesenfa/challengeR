@@ -72,7 +72,11 @@ might be worth it.
 
 # Terms of use
 
-Licenced under GPL-3. If you use this software for a publication, cite
+Copyright (c) German Cancer Research Center (DKFZ). All rights reserved.
+
+challengeR is available under license GPLv2 or any later version.
+
+If you use this software for a publication, please cite:
 
 Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein,
 L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for

@@ -59,7 +59,11 @@ If you are asked whether you want to update installed packages and you type "a" 
 If you get *warning* messages (in contrast to *error* messages), these might not be problematic and you can try to proceed. If you encounter errors during the setup, looking into the "Troubleshooting" section might be worth it.
 
 # Terms of use
-Licenced under GPL-3. If you use this software for a publication, cite
+Copyright (c) German Cancer Research Center (DKFZ). All rights reserved.
+
+challengeR is available under license GPLv2 or any later version.
+
+If you use this software for a publication, please cite:
 
 Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
 
