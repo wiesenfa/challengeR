@@ -6,7 +6,7 @@ Date: 2020-04-18
 Author: Manuel Wiesenfarth, Matthias Eisenmann, Laura Aguilera Saiz, Annette Kopp-Schneider
 Maintainer: Manuel Wiesenfarth <m.wiesenfarth@dkfz.de>
 Description: Analyzing assessment data of biomedical image analysis competitions and visualization of results.
-License: GPL-3
+License: GPL (>= 2)
 Depends:
   R (>= 3.5.2),
   ggplot2 (>= 3.3.0),
