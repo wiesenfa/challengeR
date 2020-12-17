@@ -105,7 +105,7 @@ print(knitr::kable(a[order(a$Task,a$TestCase,a$Algorithm),],row.names=F))
 
 
 ### 2.1 Load data from file
-If you have assessment data at hand stored in a csv file (if you want to use simulated data skip the following code line) use
+If you have assessment data at hand stored in a csv file (if you want to use simulated data, skip the following code line) use
 ```{r, eval=F, echo=T}
 data_matrix <- read.csv(file.choose()) # type ?read.csv for help
 
@@ -292,6 +292,8 @@ ranking_bootstrapped %>%
          latex_engine = "pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
         )
 ```
+The consensus ranking is given according to mean ranks across tasks if method="euclidean" where in case of ties (equal ranks for multiple algorithms) the average rank is used, i.e. ties.method="average".
+
 
 # Troubleshooting
 

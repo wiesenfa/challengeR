@@ -2,18 +2,18 @@ Methods and open-source toolkit for analyzing and visualizing challenge
 results
 ================
 
-  - [Introduction](#introduction)
-  - [Installation](#installation)
-  - [Terms of use](#terms-of-use)
-  - [Usage](#usage)
-  - [Troubleshooting](#troubleshooting)
-  - [Changes](#changes)
-  - [Team](#team)
-  - [Reference](#reference)
+-   [Introduction](#introduction)
+-   [Installation](#installation)
+-   [Terms of use](#terms-of-use)
+-   [Usage](#usage)
+-   [Troubleshooting](#troubleshooting)
+-   [Changes](#changes)
+-   [Team](#team)
+-   [Reference](#reference)
 
 Note that this is ongoing work (version 0.3.3), there may be updates
 with possibly major changes. *Please make sure that you use the latest
-version\!*
+version!*
 
 The change log can be found in section “Changes”.
 
@@ -39,9 +39,9 @@ visualization techniques.
 
 # Installation
 
-Requires R version \>= 3.5.2 (<https://www.r-project.org>).
+Requires R version &gt;= 3.5.2 (<https://www.r-project.org>).
 
-Further, a recent version of Pandoc (\>= 1.12.3) is required. RStudio
+Further, a recent version of Pandoc (&gt;= 1.12.3) is required. RStudio
 (<https://rstudio.com>) automatically includes this so you do not need
 to download Pandoc if you plan to use rmarkdown from the RStudio IDE,
 otherwise you’ll need to install Pandoc for your platform
@@ -92,7 +92,7 @@ bootstrapping and (5) generation of the report
 Here, we provide a step-by-step guide that leads you to your final
 report.
 
-## 1\. Load package
+## 1. Load package
 
 Load package
 
@@ -100,17 +100,17 @@ Load package
 library(challengeR)
 ```
 
-## 2\. Load data
+## 2. Load data
 
 ### Data requirements
 
 Data requires the following *columns*:
 
-  - *task identifier* in case of multi-task challenges (string or
+-   *task identifier* in case of multi-task challenges (string or
     numeric)
-  - *test case identifier* (string or numeric)
-  - *algorithm identifier* (string or numeric)
-  - *metric value* (numeric)
+-   *test case identifier* (string or numeric)
+-   *algorithm identifier* (string or numeric)
+-   *metric value* (numeric)
 
 In case of missing metric values, a missing observation has to be
 provided (either as blank field or “NA”).
@@ -121,7 +121,7 @@ prediction (and thus NA or a blank field for missing value is inserted),
 the data set might look like this:
 
 | Task | TestCase | Algorithm | MetricValue |
-| :--- | :------- | :-------- | ----------: |
+|:-----|:---------|:----------|------------:|
 | T1   | case1    | A1        |       0.266 |
 | T1   | case1    | A2        |       0.202 |
 | T1   | case2    | A1        |       0.573 |
@@ -134,7 +134,7 @@ the data set might look like this:
 ### 2.1 Load data from file
 
 If you have assessment data at hand stored in a csv file (if you want to
-use simulated data skip the following code line) use
+use simulated data, skip the following code line) use
 
 ``` r
 data_matrix <- read.csv(file.choose()) # type ?read.csv for help
@@ -188,7 +188,7 @@ c_worstcase$alg_name <- factor(c_worstcase$alg_name,labels=paste0("A",1:5))
 data_matrix <- rbind(c_ideal, c_random, c_worstcase)
 ```
 
-## 3\. Perform ranking
+## 3. Perform ranking
 
 ### 3.1 Define challenge object
 
@@ -223,9 +223,7 @@ challenge <- as.challenge(data_matrix,
 
 Different ranking methods are available, choose one of them:
 
-  - for “aggregate-then-rank” use (here: take mean for aggregation)
-
-<!-- end list -->
+-   for “aggregate-then-rank” use (here: take mean for aggregation)
 
 ``` r
 ranking <- challenge%>%aggregateThenRank(FUN = mean, # aggregation function, 
@@ -240,10 +238,8 @@ ranking <- challenge%>%aggregateThenRank(FUN = mean, # aggregation function,
                                         )  
 ```
 
-  - *alternatively*, for “rank-then-aggregate” with arguments as above
+-   *alternatively*, for “rank-then-aggregate” with arguments as above
     (here: take mean for aggregation)
-
-<!-- end list -->
 
 ``` r
 ranking <- challenge%>%rankThenAggregate(FUN = mean,
@@ -251,10 +247,8 @@ ranking <- challenge%>%rankThenAggregate(FUN = mean,
                                         )
 ```
 
-  - *alternatively*, for test-then-rank based on Wilcoxon signed rank
+-   *alternatively*, for test-then-rank based on Wilcoxon signed rank
     test
-
-<!-- end list -->
 
 ``` r
 ranking <- challenge%>%testThenRank(alpha = 0.05, # significance level
@@ -268,7 +262,7 @@ ranking <- challenge%>%testThenRank(alpha = 0.05, # significance level
                                    )
 ```
 
-## 4\. Perform bootstrapping
+## 4. Perform bootstrapping
 
 Perform bootstrapping with 1000 bootstrap samples using one CPU
 
@@ -287,7 +281,7 @@ ranking_bootstrapped <- ranking%>%bootstrap(nboot = 1000, parallel = TRUE, progr
 stopImplicitCluster()
 ```
 
-## 5\. Generate the report
+## 5. Generate the report
 
 Generate report in PDF, HTML or DOCX format. Code differs slightly for
 single- and multi-task challenges.
@@ -340,6 +334,10 @@ ranking_bootstrapped %>%
          latex_engine = "pdflatex"#LaTeX engine for producing PDF output. Options are "pdflatex", "lualatex", and "xelatex"
         )
 ```
+
+The consensus ranking is given according to mean ranks across tasks if
+method=“euclidean” where in case of ties (equal ranks for multiple
+algorithms) the average rank is used, i.e. ties.method=“average”.
 
 # Troubleshooting
 
@@ -469,7 +467,7 @@ There is an issue with installing missing packages in LaTeX.
 
 ##### Solution:
 
-Open your MiKTeX Console –\> Settings, select “Always install missing
+Open your MiKTeX Console –&gt; Settings, select “Always install missing
 packages on-the-fly”. Then generate the report. Once the report is
 generated, you can reset the settings to your preferred ones.
 
@@ -509,33 +507,33 @@ The solution was to restart RStudio.
 
 #### Version 0.3.3
 
-  - Force line break to avoid that authors exceed the page in generated
+-   Force line break to avoid that authors exceed the page in generated
     PDF reports
 
 #### Version 0.3.2
 
-  - Correct names of authors
+-   Correct names of authors
 
 #### Version 0.3.1
 
-  - Refactoring
+-   Refactoring
 
 #### Version 0.3.0
 
-  - Major bug fix release
+-   Major bug fix release
 
 #### Version 0.2.5
 
-  - Bug fixes
+-   Bug fixes
 
 #### Version 0.2.4
 
-  - Automatic insertion of missings
+-   Automatic insertion of missings
 
 #### Version 0.2.3
 
-  - Bug fixes
-  - Reports for subsets (top list) of algorithms: Use
+-   Bug fixes
+-   Reports for subsets (top list) of algorithms: Use
     e.g. `subset(ranking_bootstrapped, top=3) %>% report(...)` (or
     `subset(ranking, top=3) %>% report(...)` for report without
     bootstrap results) to only show the top 3 algorithms according to
@@ -547,20 +545,19 @@ The solution was to restart RStudio.
     neglect excluded algorithms. Only available for single-task
     challenges (for multi-task challenges not sensible because each task
     would contain a different set of algorithms).
-  - Reports for subsets of tasks: Use e.g. `subset(ranking_bootstrapped,
-    tasks=c("task1", "task2","task3")) %>% report(...)` to restrict
-    report to tasks “task1”, “task2”,"task3. You may want to recompute
-    the consensus ranking before using `meanRanks=subset(ranking,
-    tasks=c("task1", "task2", "task3"))%>%consensus(method =
-    "euclidean")`
+-   Reports for subsets of tasks: Use
+    e.g. `subset(ranking_bootstrapped, tasks=c("task1", "task2","task3")) %>% report(...)`
+    to restrict report to tasks “task1”, “task2”,"task3. You may want to
+    recompute the consensus ranking before using
+    `meanRanks=subset(ranking, tasks=c("task1", "task2", "task3"))%>%consensus(method = "euclidean")`
 
 #### Version 0.2.1
 
-  - Introduction in reports now mentions e.g. ranking method, number of
+-   Introduction in reports now mentions e.g. ranking method, number of
     test cases,…
-  - Function `subset()` allows selection of tasks after bootstrapping,
+-   Function `subset()` allows selection of tasks after bootstrapping,
     e.g. `subset(ranking_bootstrapped,1:3)`
-  - `report()` functions gain argument `colors` (default:
+-   `report()` functions gain argument `colors` (default:
     `default_colors`). Change e.g. to `colors=viridisLite::inferno`
     which “is designed in such a way that it will analytically be
     perfectly perceptually-uniform, both in regular form and also when
@@ -570,13 +567,13 @@ The solution was to restart RStudio.
 
 #### Version 0.2.0
 
-  - Improved layout in case of many algorithms and tasks (while probably
+-   Improved layout in case of many algorithms and tasks (while probably
     still not perfect)
-  - Consistent coloring of algorithms across figures
-  - `report()` function can be applied to ranked object before
+-   Consistent coloring of algorithms across figures
+-   `report()` function can be applied to ranked object before
     bootstrapping (and thus excluding figures based on bootstrapping),
     i.e. in the example `ranking %>% report(...)`
-  - bug fixes
+-   bug fixes
 
 # Team
 
@@ -584,13 +581,13 @@ The developer team includes members from both division of Computer
 Assisted Medical Interventions (CAMI) and Biostatistics at the German
 Cancer Research Center (DKFZ):
 
-  - Manuel Wiesenfarth
-  - Annette Kopp-Schneider
-  - Annika Reinke
-  - Matthias Eisenmann
-  - Laura Aguilera Saiz
-  - Elise Récéjac
-  - Lena Maier-Hein
+-   Manuel Wiesenfarth
+-   Annette Kopp-Schneider
+-   Annika Reinke
+-   Matthias Eisenmann
+-   Laura Aguilera Saiz
+-   Elise Récéjac
+-   Lena Maier-Hein
 
 # Reference
 

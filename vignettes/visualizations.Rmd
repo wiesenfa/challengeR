@@ -110,6 +110,7 @@ For cross-task insights, a consensus ranking (rank aggregation across tasks) has
 ```{r}
 meanRanks <- ranking%>%consensus(method = "euclidean")
 ```
+The consensus ranking is given according to mean ranks across tasks if method="euclidean" where in case of ties (equal ranks for multiple algorithms) the average rank is used, i.e. ties.method="average".
 
 ## Characterization of algorithms
 
