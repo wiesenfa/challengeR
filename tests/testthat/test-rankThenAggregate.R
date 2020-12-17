@@ -129,7 +129,7 @@ test_that("rank-then-aggregate raises error for invalid ties method", {
   challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
 
   expect_error(challenge%>%rankThenAggregate(FUN = mean, ties.method = "maxx"),
-               "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
+               "'arg' should be one of", fixed = TRUE)
 })
 
 test_that("rank-then-aggregate raises error for invalid ties method even when no ties present", {
@@ -140,7 +140,7 @@ test_that("rank-then-aggregate raises error for invalid ties method even when no
   challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
 
   expect_error(challenge%>%rankThenAggregate(FUN = mean, ties.method = "maxx"),
-               "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
+               "'arg' should be one of", fixed = TRUE)
 })
 
 test_that("rank-then-aggregate by mean works with two algorithms for two cases", {

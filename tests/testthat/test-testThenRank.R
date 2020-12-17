@@ -115,7 +115,7 @@ test_that("test-then-rank raises error for invalid ties method", {
   challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
 
   expect_error(challenge%>%testThenRank(ties.method = "maxx"),
-               "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
+               "'arg' should be one of", fixed = TRUE)
 })
 
 test_that("test-then-rank raises error for invalid ties method even when no ties present", {
@@ -132,7 +132,7 @@ test_that("test-then-rank raises error for invalid ties method even when no ties
   challenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter = TRUE)
 
   expect_error(challenge%>%testThenRank(ties.method = "maxx"),
-               "'arg' should be one of \"average\", \"first\", \"last\", \"random\", \"max\", \"min\"", fixed = TRUE)
+               "'arg' should be one of", fixed = TRUE)
 })
 
 test_that("test-then-rank raises error when no NA treatment specified but NAs are contained", {
