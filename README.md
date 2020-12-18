@@ -93,6 +93,11 @@ Each of the following steps has to be run to generate the report: (1)
 Load package, (2) load data, (3) perform ranking, (4) perform
 bootstrapping and (5) generation of the report
 
+You can find R scripts for quickstart in the directory “vignettes”. An
+overview of all available plots is provided in the “Visualizations”
+vignette demonstrating the use of their corresponding plot functions as
+well.
+
 Here, we provide a step-by-step guide that leads you to your final
 report.
 
