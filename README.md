@@ -70,6 +70,10 @@ might not be problematic and you can try to proceed. If you encounter
 errors during the setup, looking into the “Troubleshooting” section
 might be worth it.
 
+For Linux users: Some system libraries might be missing. Check the
+output in the R console for further hints carefully during the
+installation of packages.
+
 # Terms of use
 
 Copyright (c) German Cancer Research Center (DKFZ). All rights reserved.
