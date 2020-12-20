@@ -1,0 +1,442 @@
+---
+params:
+  object: NA
+  colors: NA
+  name: NULL
+  consensus: NA
+  isMultiTask: NA
+  bootstrappingEnabled: NA
+  fig.format: NULL
+  dpi: NULL
+title: "Benchmarking report for `r params$name` "
+author: "created by challengeR v`r packageVersion('challengeR')`"
+date: "`r Sys.setlocale('LC_TIME', 'English'); format(Sys.time(), '%d %B, %Y')`"
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- This text is outcommented -->
+<!-- R code chunks start with "```{r }" and end with "```" -->
+<!-- Please do not change anything inside of code chunks, otherwise any latex code is allowed -->
+
+<!-- inline code with `r 0` -->
+
+
+```{r setup, include=FALSE}
+options(width=80)
+#out.format <- knitr::opts_knit$get("out.format")
+out.format <- knitr::opts_knit$get("rmarkdown.pandoc.to")
+
+img_template <- switch( out.format,
+                     docx = list("img-params"=list(dpi=150,
+                                               fig.width=6,
+                                               fig.height=6,
+                                               out.width="504px",
+                                               out.height="504px")),
+                     {
+                       # default
+                       list("img-params"=list( fig.width=7,
+                                               fig.height = 3,
+                                               dpi=300))
+                     } )
+
+knitr::opts_template$set( img_template )
+
+knitr::opts_chunk$set(echo = F) # ,#fig.width=7,fig.height = 3,dpi=300,
+
+if (out.format != "docx") knitr::opts_chunk$set(fig.align = "center")
+if (!is.null(params$fig.format)) knitr::opts_chunk$set(dev = params$fig.format) # can be vector, e.g. fig.format=c('jpeg','png', 'pdf')
+if (!is.null(params$dpi)) knitr::opts_chunk$set(dpi = params$dpi) 
+
+theme_set(theme_light())
+
+isMultiTask = params$isMultiTask
+bootstrappingEnabled = params$bootstrappingEnabled
+
+```
+
+
+```{r }
+object = params$object
+
+if (isMultiTask) {
+      if (is.numeric(params$consensus) & !is.null(names(params$consensus)) ){
+      ordering_consensus <- names(params$consensus)[order(params$consensus)]
+    } else if (is.character(ordering)){
+      ordering_consensus=names(params$consensus)
+    } else stop("Argument ordering has to be a named vector of ranks or a vector of algorithm names in the ranking order.")
+} else
+{
+  ordering_consensus=names(sort(t(object$matlist[[1]][,"rank",drop=F])["rank",]))
+}
+color.fun=params$colors
+
+```
+
+```{r }
+
+challenge_multiple=object$data
+ranking.fun=object$FUN
+
+cols_numbered=cols=color.fun(length(ordering_consensus))
+names(cols)=ordering_consensus
+names(cols_numbered)= paste(1:length(cols),names(cols))
+
+if (bootstrappingEnabled) {
+  boot_object = params$object
+  challenge_multiple=boot_object$data
+
+  ranking.fun=boot_object$FUN
+  object=challenge_multiple%>%ranking.fun
+  object$FUN.list = boot_object$FUN.list
+
+  object$fulldata=boot_object$fulldata  # only not NULL if subset of algorithms used
+}
+
+n.tasks <- length(object$matlist)
+n.algorithms <- nrow((object$matlist[[1]]))
+```
+
+This document presents a systematic report on the benchmark study "`r params$name`". Input data comprises raw metric values for all algorithms and cases. Generated plots are:
+
+```{r, child=if (!isMultiTask && !bootstrappingEnabled) system.file("appdir", "overviewSingleTaskNoBootstrapping.Rmd", package="challengeR")}
+
+```
+
+```{r, child=if (!isMultiTask && bootstrappingEnabled) system.file("appdir", "overviewSingleTaskBootstrapping.Rmd", package="challengeR")}
+
+```
+
+```{r, child=if (isMultiTask && !bootstrappingEnabled) system.file("appdir", "overviewMultiTaskNoBootstrapping.Rmd", package="challengeR")}
+
+```
+
+```{r, child=if (isMultiTask && bootstrappingEnabled) system.file("appdir", "overviewMultiTaskBootstrapping.Rmd", package="challengeR")}
+
+```
+
+Details can be found in Wiesenfarth et al. (2019).
+
+```{r,results='asis'}
+
+if (isMultiTask) {
+  cat("# Rankings\n")
+} else {
+  cat("# Ranking")
+}
+
+```
+
+
+Algorithms within a task are ranked according to the following ranking scheme:
+
+```{r,results='asis'}
+a=(  lapply(object$FUN.list[1:2],function(x) {
+                if (class(x)== "standardGeneric") return(paste0("aggregate using function ",
+                                                                x@generic
+                                                                )) 
+                else if (!is.character(x)) return(paste0("aggregate using function ",
+                                                     paste(gsub("UseMethod","",
+                                                                deparse(functionBody(x))),
+                                                           collapse=" ")
+                                                     ))
+                 else if (x=="rank") return(x)
+                 else return(paste0("aggregate using function ",x))
+  }))
+cat("&nbsp; &nbsp; *",paste0(a,collapse=" then "),"*",sep="")
+
+if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="significance") cat("\n\n Column 'prop_significance' is equal to the number of pairwise significant test results for a given algorithm divided by the number of algorithms.")
+```
+
+```{r,results='asis'}
+
+if (isMultiTask) {
+  cat("Ranking for each task:\n")
+  
+  for (t in 1:n.tasks){
+    cat("\n",names(object$matlist)[t],": ")
+    n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
+
+    numberOfAlgorithms <- length(levels(challenge_multiple[[t]][[attr(challenge_multiple, "algorithm")]]))
+    
+    cat("\nThe analysis is based on",
+        numberOfAlgorithms,
+        "algorithms and",
+        n.cases,
+        "cases.",
+        attr(object$data,"n.missing")[[t]], "missing cases have been found in the data set. ")
+    
+    if (nrow(attr(object$data,"missingData")[[t]])>0)  {
+      if(attr(object$data,"n.missing")[[t]]==0 ) cat("However, ")
+      else if(attr(object$data,"n.missing")[[t]]>0 ) cat("Additionally, ")
+      cat("performance of not all algorithms has been observed for all cases in task '",
+          names(object$matlist)[t],
+          "'. Therefore, missings have been inserted in the following cases:")
+      print(knitr::kable(as.data.frame(attr(object$data,"missingData")[[t]])))
+    }
+    
+    if (nrow(attr(object$data,"missingData")[[t]])>0 | attr(object$data,"n.missing")[[t]]>0)  {
+      if (is.numeric(attr(object$data,"na.treat"))) cat("All missings have been replaced by values of", attr(object$data,"na.treat"),".\n")
+      else if (is.character(attr(object$data,"na.treat")) && attr(object$data,"na.treat")=="na.rm") cat("All missings have been removed.")
+      else if (is.function(attr(object$data,"na.treat"))) {
+        cat("Missings have been replaced using function ")
+        print(attr(object$data,"na.treat"))
+      }
+      else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing case.")
+    }
+    
+    x=object$matlist[[t]]
+    print(knitr::kable(x[order(x$rank),]))
+  }
+} else {
+
+  n.cases=nrow(challenge_multiple[[1]])/length(unique(challenge_multiple[[1]][[attr(challenge_multiple,"algorithm")]]))
+  
+  # Is subset of algorithms used?
+  if (!is.null(object$fulldata[[1]])) {
+    cat("The top ",
+        length(levels(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
+        " out of ",
+        length(levels(object$fulldata[[1]][[attr(challenge_multiple, "algorithm")]])),
+        " algorithms are considered.\n")
+    cat("\nThe analysis is based on",
+        n.cases,
+        "cases. ")
+  } else {
+    cat("\nThe analysis is based on",
+        length(levels(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
+        "algorithms and",
+        n.cases,
+        "cases. ")
+  }
+
+  cat(attr(object$data,"n.missing")[[1]], "missing cases have been found in the data set. ")
+
+  if (nrow(attr(object$data,"missingData")[[1]])>0)  {
+    
+    if(attr(object$data,"n.missing")[[1]]==0 ) cat("However, ")
+    else if(attr(object$data,"n.missing")[[1]]>0 ) cat("Additionally, ")
+    cat("performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:")
+    print(knitr::kable(as.data.frame(attr(object$data,"missingData")[[1]])))
+   }
+  
+  if (nrow(attr(object$data,"missingData")[[1]])>0 | attr(object$data,"n.missing")[[1]]>0)  {
+    if (is.numeric(attr(object$data,"na.treat"))) cat("All missings have been replaced by values of", attr(object$data,"na.treat"),".\n")
+    else if (is.character(attr(object$data,"na.treat")) && attr(object$data,"na.treat")=="na.rm") cat("All missings have been removed.")
+    else if (is.function(attr(object$data,"na.treat"))) {
+      cat("Missings have been replaced using function ")
+      print(attr(object$data,"na.treat"))
+    }
+      else if (is.character(object$FUN.list[[1]]) && object$FUN.list[[1]]=="rank") cat("Missings lead to the algorithm ranked last for the missing case.")
+  }
+  cat("\n\nRanking:")
+  
+  x=object$matlist[[1]]
+  print(knitr::kable(x[order(x$rank),]))
+}
+
+```
+
+\bigskip
+
+
+```{r, child=if (isMultiTask) system.file("appdir", "consensusRanking.Rmd", package="challengeR")}
+
+```
+
+\newpage
+
+# Visualization of raw assessment data
+
+```{r,results='asis'}
+
+if (isMultiTask) {
+  cat("The algorithms are ordered according to the computed ranks for each task.")
+}
+
+```
+
+## Dot- and boxplot
+
+*Dot- and boxplots* for visualizing raw assessment data separately for each algorithm. Boxplots representing descriptive statistics over all cases (median, quartiles and outliers) are combined with horizontally jittered dots representing individual cases.
+
+\bigskip
+
+```{r boxplots}
+boxplot(object, size=.8) %++% scale_color_manual(values=cols)
+```
+
+\newpage
+
+## Podium plot
+*Podium plots* (see also Eugster et al., 2008) for visualizing raw assessment data. Upper part (spaghetti plot): Participating algorithms are color-coded, and each colored dot in the plot represents a metric value achieved with the respective algorithm. The actual metric value is encoded by the y-axis. Each podium (here: $p$=`r length(ordering_consensus)`) represents one possible rank, ordered from best (1) to last (here: `r length(ordering_consensus)`). The assignment of metric values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding case. Note that the plot part above each podium place is further subdivided into $p$ "columns", where each column represents one participating algorithm (here: $p=$ `r length(ordering_consensus)`).  Dots corresponding to identical cases are connected by a line, leading to the shown spaghetti structure. Lower part: Bar charts represent the relative frequency for each algorithm to achieve the rank encoded by the podium place. 
+
+```{r, include=FALSE, fig.keep="none",dev=NULL}
+cex.legend = 1.2
+plot.new()
+
+# bottom legend  
+  # get number of columns
+    legend.width=1e5 #arbitrarily large
+    ncol.legend <- n.algorithms + 1
+    while(legend.width>12){
+      ncol.legend <- ncol.legend-1
+      algs=ordering_consensus
+      l=legend("bottom", 
+               paste0(1:length(algs),": ",algs), 
+                xpd=NA, 
+                lwd = 1, col =  cols, 
+                bg = NA,
+                ncol=ncol.legend,
+                bty="n",
+                cex=cex.legend, seg.len=1.1,
+                title="Rank: Alg.",
+                title.adj = 0,
+               plot=F) 
+      legend.width=grconvertX(l$rect$w,"user","inches")
+    }
+  w=0 
+  h<-hh<- grconvertY(l$rect$h, to='ndc') - grconvertY(0, to='ndc')
+  nrow.legend=length(unique(l$text$y))
+
+legend.height = nrow.legend* max( cex.legend * par()$cin[2],max(strheight(ordering_consensus, units = "inches", cex = cex.legend)))   
+addy= 6+ legend.height
+
+```
+
+
+```{r podium,eval=T,fig.width=12, fig.height=addy}
+#c(bottom, left, top, right
+op <- par(no.readonly = TRUE)
+
+hh<- grconvertY(legend.height, from="inches",to='ndc')
+par(pin=c(par()$pin[1],6),
+        omd=c(0, 1, hh, 1),
+        mar=c(par('mar')[1:3], 0)+c(-.5,0.5,-.5,0),
+        cex.axis=1.5,
+        cex.lab=1.5,
+        cex.main=1.7)
+
+par(omi=c(legend.height+grconvertY(3, from="lines",to='inches'),0,0,0))
+
+l1=par('usr')[1] 
+l2=par('usr')[3] - (par()$mai[1]/par()$pin[2]) 
+ 
+  
+set.seed(38)
+podium(object,
+       col=cols,
+       lines.show = T, lines.alpha = .4,
+       dots.cex=.9,
+       ylab="Metric value",
+       layout.heights=c(1,.35),
+       legendfn = function(algs, cols) {
+         legend(l1,l2, 
+                paste0(1:length(algs),": ",algs), 
+                xpd=NA, 
+                lwd = 1, col =  cols, 
+                bg = NA,
+                ncol=ncol.legend,
+                bty="n",
+                cex=cex.legend, seg.len=1.1,
+                title="Rank: Alg.",
+                title.adj = 0
+         ) 
+       }
+)
+par(op)
+  
+```
+
+\newpage
+
+## Ranking heatmap
+*Ranking heatmaps* for visualizing raw assessment data. Each cell $\left( i, A_j \right)$ shows the absolute frequency of cases in which algorithm $A_j$ achieved rank $i$.
+
+\bigskip
+
+```{r rankingHeatmap,fig.width=9, fig.height=9,out.width='70%'}
+rankingHeatmap(object)
+```
+
+\newpage
+
+# Visualization of ranking stability
+
+```{r, child=if (bootstrappingEnabled) system.file("appdir", "visualizationBlobPlots.Rmd", package="challengeR")}
+
+```
+
+```{r, child=if (bootstrappingEnabled) system.file("appdir", "visualizationViolinPlots.Rmd", package="challengeR")}
+
+```
+
+\newpage
+
+## *Significance maps* for visualizing ranking stability based on statistical significance
+
+*Significance maps* depict incidence matrices of
+pairwise significant test results for the one-sided Wilcoxon signed rank test at a 5\% significance level with adjustment for multiple testing according to Holm. Yellow shading indicates that metric values from the algorithm on the x-axis were significantly superior to those from the algorithm on the y-axis, blue color indicates no significant difference.
+
+
+\bigskip
+
+```{r significancemap,fig.width=6, fig.height=6,out.width='200%'}
+significanceMap(object,alpha=0.05,p.adjust.method="holm")
+```
+
+\newpage
+
+## Ranking robustness to ranking methods
+*Line plots* for visualizing ranking robustness across different ranking methods. Each algorithm is represented by one colored line. For each ranking method encoded on the x-axis, the height of the line represents the corresponding rank. Horizontal lines indicate identical ranks for all methods.
+
+\bigskip
+
+```{r lineplot,fig.width=8, fig.height=6,out.width='95%'}
+
+if (n.tasks<=6 &n.algorithms<=10 ){
+  methodsplot(challenge_multiple,
+              ordering = ordering_consensus,
+              na.treat=object$call[[1]][[1]]$na.treat) + 
+    scale_color_manual(values=cols) 
+} else {
+  for (subt in names(challenge_multiple)){
+    dd=as.challenge(challenge_multiple[[subt]],
+                    value=attr(challenge_multiple,"value"), 
+                    algorithm=attr(challenge_multiple,"algorithm") ,
+                    case=attr(challenge_multiple,"case"),
+                    annotator = attr(challenge_multiple,"annotator"), 
+                    by=attr(challenge_multiple,"by"),
+                    smallBetter = attr(challenge_multiple,"smallBetter"),
+                    na.treat=object$call[[1]][[1]]$na.treat
+    )
+    
+    print(methodsplot(dd,
+                      ordering = ordering_consensus) + 
+            ggtitle(subt) +
+            scale_color_manual(values=cols) +
+            theme(legend.position = ifelse(n.algorithms>20,
+                                           yes = "bottom",
+                                           no = "right"))
+          
+    )
+  }
+}
+```
+
+
+
+```{r, child=if (isMultiTask) system.file("appdir", "visualizationAcrossTasks.Rmd", package="challengeR")}
+
+```
+
+\newpage
+
+# References
+
+Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
+
+M. J. A. Eugster, T. Hothorn, and F. Leisch, “Exploratory
+and inferential analysis of benchmark experiments,”
+Institut fuer Statistik, Ludwig-Maximilians-Universitaet Muenchen, Germany, Technical Report 30,
+2008. [Online]. Available: http://epub.ub.uni-muenchen.de/4134/.

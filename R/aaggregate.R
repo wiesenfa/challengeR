@@ -1,3 +1,21 @@
+# Copyright (c) German Cancer Research Center (DKFZ)
+# All rights reserved.
+#
+# This file is part of challengeR.
+#
+# challengeR is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# challengeR is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with challengeR. If not, see <https://www.gnu.org/licenses/>.
+
 test <- function(x,...) UseMethod("test")
 test.default <- function(x, ...) stop("not implemented for this class")
 test.challenge=function(x,...) aggregate.challenge(x=x,
@@ -6,14 +24,14 @@ test.challenge=function(x,...) aggregate.challenge(x=x,
 
 #' Title
 #'
-#' @param x 
-#' @param FUN 
-#' @param na.treat 
-#' @param alpha 
-#' @param p.adjust.method 
-#' @param parallel 
-#' @param progress 
-#' @param ... 
+#' @param x
+#' @param FUN
+#' @param na.treat
+#' @param alpha
+#' @param p.adjust.method
+#' @param parallel
+#' @param progress
+#' @param ...
 #'
 #' @return
 #' @export
@@ -22,20 +40,21 @@ test.challenge=function(x,...) aggregate.challenge(x=x,
 aggregate.challenge=function(x,
                              FUN=mean,
                              na.treat, #either "na.rm", numeric value or function
-                             alpha=0.05, p.adjust.method="none",# only needed for significance 
+                             alpha=0.05, p.adjust.method="none",# only needed for significance
                              parallel=FALSE,
                              progress="none",...){
   call=as.list(match.call())
-  
+  if (missing(na.treat) && !is.null(attr(x,"na.treat"))) na.treat <- attr(x, "na.treat")
+
   if (missing(na.treat)){ #na.treat only optional if no missing values in data set
     if (!inherits(x,"list")){
       if (!any(is.na(x[,attr(x, "value")]))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
     } else {
-      if (!any(sapply(x, 
+      if (!any(sapply(x,
                       function(task) any(is.na(task[,attr(x, "value")]))))) na.treat="na.rm" # there are no missings so set na.treat by dummy "na.rm" has no effect
     }
-  }
-  
+  } else attr(x,"na.treat") <- na.treat
+
   res1=do.call("Aggregate",list(object=x,
                                 x=attr(x,"value"),
                                 algorithm=attr(x,"algorithm"),
@@ -45,29 +64,29 @@ aggregate.challenge=function(x,
                                 progress=progress,
                                 case=attr(x,"case"),
                                 alpha=alpha, p.adjust.method=p.adjust.method,
-                                largeBetter=attr(x,"largeBetter") # only needed for significance
+                                smallBetter=attr(x,"smallBetter") # only needed for significance
   ))
-  
+
   call2=call("Aggregate",
-             object=call$x, 
+             object=call$x,
              x=attr(x,"value"),
              algorithm=attr(x,"algorithm"),
              FUN=call$FUN,
              na.treat=na.treat,
              parallel=parallel,progress=progress,
-             case=attr(x,"case"), 
-             alpha=alpha, p.adjust.method=p.adjust.method, 
-             largeBetter=attr(x,"largeBetter") # only needed for significance 
+             case=attr(x,"case"),
+             alpha=alpha, p.adjust.method=p.adjust.method,
+             smallBetter=attr(x,"smallBetter") # only needed for significance
   )
 
-  if (inherits(x,"list")){    
+  if (inherits(x,"list")){
     res=list(FUN = . %>% (call2),
              call=list(call2),
              FUN.list=list(FUN),
              data=x,
              matlist=res1$matlist,
              isSignificance=res1$isSignificance)
-    
+
     class(res)=c("aggregated.list",class(res))
   } else {
     res=list(FUN = . %>% (call2),
@@ -76,55 +95,23 @@ aggregate.challenge=function(x,
              data=x,
              mat=res1$mat,
              isSignificance=res1$isSignificance)
-    
+
     class(res)=c("aggregated",class(res))
-    
-  }  
+
+  }
   res
 
 }
-
-
-aggregate.ranked <-function(x,
-                            FUN=mean, ...                      ){
-  call=match.call(expand.dots = F)  
-  call=call("aggregate.ranked",
-            x=call$x,
-            FUN=FUN)
-  algorithm=attr(x$data,"algorithm")
-  mat=x$mat
-  what="rank"
-  xmean <- aggregate(mat[,what], 
-                     by=list(mat[,algorithm]), 
-                     FUN=function(z) do.call(FUN,args=list(x=z)))
-  names(xmean)=c(algorithm,paste0(what,
-                                  "_",
-                                  strsplit(capture.output(suppressWarnings(print(methods(FUN),
-                                                                                 byclass=T)))[1],
-                                           " ")[[1]][2]
-                                  )
-                 )
-  rownames(xmean)=xmean[,1]
-  xmean=xmean[,-1,drop=F]
-  res=list(FUN = . %>% (x$FUN) %>%  (call),
-           FUN.list=c(x$FUN.list,FUN),
-           call=c(x$call,call),
-           data=x$data,
-           mat=xmean)
-  class(res)=c("aggregatedRanks",class(res))
-  res
-}
-
 
 
 aggregate.ranked.list <-function(x,
-                                 FUN=mean,      
+                                 FUN=mean,
                                  ...){
-  call=match.call(expand.dots = F)  
+  call=match.call(expand.dots = F)
   call=call("aggregate.ranked.list",
             x=call$x,
             FUN=FUN)
-  
+
   algorithm=attr(x$data,"algorithm")
   resmatlist=Aggregate.list(x$matlist,
                             x="rank",
@@ -140,63 +127,59 @@ aggregate.ranked.list <-function(x,
   )
   class(res)=c("aggregatedRanks.list",class(res))
   res
-  
+
 }
-
-
-
 
 
 aggregate.bootstrap.list <-function(x,
                                     what="metric",
                                     FUN=mean,
                                     ...){
-  call=match.call(expand.dots = T)  
+  call=match.call(expand.dots = T)
   if (is.character(FUN)) FUN=try(eval(parse(text=FUN)),
                                  silent = T)
   FUNname=as.character(call$FUN)
-  
+
   if (!is.function(FUN)) stop("FUN has to be a function (possibly as character)")
-  matlist=llply(1:length(x$bootsrappedRank), 
-                function(i.piece){ 
+  matlist=llply(1:length(x$bootsrappedRank),
+                function(i.piece){
                   if (what=="ranks") xmean <- as.data.frame(apply(x$bootsrappedRank[[i.piece]],1,FUN=FUN))
-                  else xmean <- as.data.frame(apply(x$bootsrappedAggregate[[i.piece]],1,FUN=FUN)) 
+                  else xmean <- as.data.frame(apply(x$bootsrappedAggregate[[i.piece]],1,FUN=FUN))
                   names(xmean)=paste0(what,"_",FUNname)
                  xmean
                 })
-  
-  
+
+
   names(matlist)=names(x$bootsrappedRank)
   res=list(FUN = . %>% (call),
            call=list(call),
            data=x,
            matlist=matlist)
-  
+
   class(res)=c("aggregated.list",class(res))
   res
 }
 
 aggregate.bootstrap<-function(x,what="metric",FUN=mean,
                               ...            ){
-  call=match.call(expand.dots = T)  
+  call=match.call(expand.dots = T)
   if (is.character(FUN)) FUN=try(eval(parse(text=FUN)),silent = T)
   FUNname=as.character(call$FUN)
-  
+
   if (!is.function(FUN)) stop("FUN has to be a function (possibly as character)")
-  
+
   if (what=="ranks") xmean <- as.data.frame(apply(x$bootsrappedRank,
                                                   1,
                                                   FUN=FUN))
   else xmean <- as.data.frame(apply(x$bootsrappedAggregate,
                                     1,
-                                    FUN=FUN)) 
+                                    FUN=FUN))
   names(xmean)=paste0(what,"_",FUNname)
   res=list(FUN = . %>% (call),
            call=list(call),
            data=x,
            mat=xmean)
-  
+
   class(res)=c("aggregated",class(res))
   res
 }
-

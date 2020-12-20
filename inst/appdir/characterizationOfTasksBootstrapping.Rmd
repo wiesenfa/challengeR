@@ -1,0 +1,55 @@
+### Visualizing bootstrap results
+To investigate which tasks separate algorithms well (i.e., lead to a stable ranking), a blob plot is recommended.
+
+Bootstrap results can be shown in a blob plot showing one plot for each
+task. In this view, the spread of the blobs for each algorithm
+can be compared across tasks. Deviations from the diagonal indicate deviations
+from the consensus ranking (over tasks). Specifically, if rank
+distribution of an algorithm is consistently below the diagonal,
+the algorithm performed better in this task than on average
+across tasks, while if the rank distribution of an algorithm
+is consistently above the diagonal, the algorithm performed
+worse in this task than on average across tasks. At the bottom
+of each panel, ranks for each algorithm in the tasks are provided.
+
+
+<!-- Shows which subtask leads to stable ranking and in which subtask ranking is more uncertain. -->
+
+
+Same as in Section \ref{blobByTask} but now ordered according to consensus.
+
+\bigskip
+
+```{r blobplot_bootstrap_byTask,fig.width=9, fig.height=9, results='hide'}
+#stabilityByTask.bootstrap.list
+if (n.tasks<=6 & n.algorithms<=10 ){
+  stabilityByTask(boot_object,
+                  ordering=ordering_consensus,
+                  max_size = 9,
+                  size=4,
+                  shape=4) + 
+    scale_color_manual(values=cols)  +
+    guides(color = FALSE)
+} else {
+  pl=list()
+  for (subt in names(boot_object$bootsrappedRanks)){
+    a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
+           matlist=list(boot_object$matlist[[subt]]))
+    names(a$bootsrappedRanks)=names(a$matlist)=subt
+    class(a)="bootstrap.list"
+    r=boot_object$matlist[[subt]]
+    
+    pl[[subt]]=stabilityByTask(a,
+                               max_size = 9,
+                               ordering=ordering_consensus,
+                               size.ranks=.25*theme_get()$text$size,
+                               size=4,
+                               shape=4) + 
+      scale_color_manual(values=cols)  +
+      guides(color = FALSE) + 
+      ggtitle(subt)+ 
+      theme(legend.position = "bottom")
+  }
+  print(pl)
+}
+```

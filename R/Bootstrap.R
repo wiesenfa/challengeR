@@ -1,76 +1,57 @@
+# Copyright (c) German Cancer Research Center (DKFZ)
+# All rights reserved.
+#
+# This file is part of challengeR.
+#
+# challengeR is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# challengeR is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with challengeR. If not, see <https://www.gnu.org/licenses/>.
+
 bootstrap <- function(object,...) UseMethod("bootstrap")
 bootstrap.default <- function(object, ...) stop("not implemented for this class")
 
 
-bootstrap.ranked=function(object,
-                          nboot, 
-                          parallel=FALSE,
-                          progress="text",...){
-  data=object$data
-  algorithm=attr(data,"algorithm")
-  by=attr(data,"case")
-  index=unique(data[[by]])
-  # stop if only 1 data set or less than 3 algorithms
-    if (length(index)==1 |  length(unique(data[[algorithm]]))<=2 ) stop("There need to be at least 2 unique values in ", 
-                                                                        by, 
-                                                                        "and at least 3 unique in ",
-                                                                        algorithm)
-
-  drawsample=function(piece,...){ 
-    bootIndex=data.frame(sample(index,
-                                size=length(index),
-                                replace=TRUE))
-    colnames(bootIndex)=by
-    bootData=merge(bootIndex,data,by=by)
-    # bootIndex=sample(index,size=length(index),replace=TRUE)
-    # bootData=bind_rows(lapply(bootIndex,function(zz) data[data[[by]]==zz,]))
-    #3rd alternative (untested)
-    # bootIndex=sample(index,size=length(index),replace=TRUE)
-    #bootData=bind_rows(split(data,data[[by]])[bootIndex]))
-    attr(bootData,"inverseOrder")=attr(object$data,"inverseOrder")
-    attr(bootData,"algorithm")=attr(object$data,"algorithm")
-    attr(bootData,"case")=attr(object$data,"case")
-    attr(bootData,"check")=FALSE
-    object$FUN(bootData)$mat
-  }
-  res=llply(.data=1:nboot, 
-            .fun =drawsample , 
-            .parallel=parallel,
-            .progress=progress)
-
-  rankmat=res[[1]][,-1,drop=F]
-  for (j in 2:length(res)){
-    rankmat=merge(rankmat,
-                  res[[j]][,-1,drop=F],
-                  by="row.names", 
-                  suffixes = c(paste0(".",j-1),
-                               paste0(".",j))) #maybe replayce by plyr::join() which is supposed to be faster
-    rownames(rankmat)=rankmat[,"Row.names"]
-    rankmat=rankmat[,-1]
-  }
-  aggmat=res[[1]][,-2,drop=F]
-  for (j in 2:length(res)){
-    aggmat=merge(aggmat,
-                 res[[j]][,-2,drop=F],
-                 by="row.names", 
-                 suffixes = c(paste0(".",j-1),
-                              paste0(".",j))) 
-    rownames(aggmat)=aggmat[,"Row.names"]
-    aggmat=aggmat[,-1]
-  }
-  
-  res=list(bootsrappedRanks=rankmat,
-           bootsrappedAggregate=aggmat, 
-           data=data,
-           mat=object$mat,
-           FUN=object$FUN,
-           FUN.list=object$FUN.list)
-  class(res)="bootstrap"
-  res
-}
-
-
-
+#' Performs bootstrapping
+#'
+#' Performs bootstrapping on a ranked assessment data set and applies the ranking method to each bootstrap sample. One bootstrap sample of
+#' a task with \code{n} cases consists of \code{n} cases randomly drawn with replacement from this task.
+#' A total of \code{nboot} of these bootstrap samples are drawn.
+#'
+#' @param object The ranked assessment data set.
+#' @param nboot The number of bootstrap samples.
+#' @param parallel A boolean specifying whether parallel processing should be enabled.
+#' @param progress A string specifying the type of progress indication.
+#' @param ... Further arguments passed to or from other functions.
+#'
+#' @return An S3 object of class "bootstrap.list" to represent a bootstrapped, ranked assessment data set.
+#'
+#' @examples
+#'
+#' \dontrun{
+#'  # perform bootstrapping with 1000 bootstrap samples using one CPU
+#'  set.seed(1)
+#'  ranking_bootstrapped <- bootstrap(ranking, nboot = 1000)
+#' }
+#'
+#' \dontrun{
+#'  # perform bootstrapping using multiple CPUs (here: 8 CPUs)
+#'  library(doParallel)
+#'  registerDoParallel(cores=8)
+#'  set.seed(1)
+#'  ranking_bootstrapped <- bootstrap(ranking, nboot = 1000, parallel = TRUE, progress = "none")
+#'  stopImplicitCluster()
+#' }
+#'
+#' @export
 bootstrap.ranked.list=function(object,
                                nboot,
                                parallel=FALSE,
@@ -78,9 +59,9 @@ bootstrap.ranked.list=function(object,
                                ...){
   algorithm=attr(object$data,"algorithm")
   by=attr(object$data,"case")
-  
+
   # exclude if only 1 data set or less than 3 algorithms
-  tidy.data.id=sapply(object$data, 
+  tidy.data.id=sapply(object$data,
                       function(data.subset) {
                         ifelse((length(unique(data.subset[[by]]))==1 |  length(unique(data.subset[[algorithm]]))<=2 ),
                                yes=FALSE,
@@ -88,22 +69,22 @@ bootstrap.ranked.list=function(object,
                         })
   tidy.data=object$data[tidy.data.id]
   tidy.matlist=object$matlist[tidy.data.id]
-  
-  res= llply(1:nboot, 
+
+  res= llply(1:nboot,
              function(it){
                # draw 1 sample for each task
                bootDatalist = lapply(tidy.data, function(data.subset) {
                  index = unique(data.subset[[by]])
-                 
+
                  # bootIndex=sample(index,size=length(index),replace=TRUE)
                  # bootData=bind_rows(lapply(bootIndex,function(zz) data.subset[data.subset[[by]]==zz,]))
                  # faster:
-                 bootIndex = data.frame(sample(index, 
-                                               size = length(index), 
+                 bootIndex = data.frame(sample(index,
+                                               size = length(index),
                                                replace = TRUE))
                  colnames(bootIndex) = by
-                 bootData = merge(bootIndex, 
-                                  data.subset, 
+                 bootData = merge(bootIndex,
+                                  data.subset,
                                   by = by)
                  bootData
                })
@@ -112,48 +93,29 @@ bootstrap.ranked.list=function(object,
                attr(bootDatalist, "case") = attr(object$data, "case")
                attr(bootDatalist, "check") = FALSE
                object$FUN(bootDatalist)$mat
-             }, 
-             .parallel = parallel, 
+             },
+             .parallel = parallel,
              .progress = progress)
 
-  
-  
-  # rankmatlist=lapply(res[[1]],function(z) z[,"rank",drop=F])
-  # for (j in 2:length(res)){
-  #   rankmatlist=merge.list(rankmatlist,lapply(res[[j]],function(z) z[,"rank",drop=F]),by="row.names", suffixes = c(paste0(".",j-1),paste0(".",j)))
-  #   rankmatlist=lapply(rankmatlist, function(z) {
-  #     rownames(z)=z[,"Row.names"]
-  #     z=z[,-1]
-  #     })
-  # }
-  # 
-  # aggmatlist=lapply(res[[1]],function(z) z[,-2,drop=F])
-  # for (j in 2:length(res)){
-  #   aggmatlist=merge.list(aggmatlist,lapply(res[[j]],function(z) z[,-2,drop=F]),by="row.names", suffixes = c(paste0(".",j-1),paste0(".",j)))
-  #   aggmatlist=lapply(aggmatlist, function(z) {
-  #     rownames(z)=z[,"Row.names"]
-  #     z=z[,-1]
-  #     })
-  # }
   rankmatlist = lapply(res[[1]],
                        function(z) z[, "rank", drop = F]
                        )
   for (j in 2:length(res)) {
-    rankmatlist = quickmerge.list(rankmatlist, 
-                                  lapply(res[[j]], 
+    rankmatlist = quickmerge.list(rankmatlist,
+                                  lapply(res[[j]],
                                          function(z)  z[, "rank", drop = F]))
   }
-  
-  aggmatlist = lapply(res[[1]], 
+
+  aggmatlist = lapply(res[[1]],
                       function(z) z[, -2, drop = F])
   for (j in 2:length(res)) {
-    aggmatlist = quickmerge.list(aggmatlist, 
-                                 lapply(res[[j]], 
+    aggmatlist = quickmerge.list(aggmatlist,
+                                 lapply(res[[j]],
                                         function(z) z[, -2, drop = F]))
   }
-  
+
   final=list(bootsrappedRanks=rankmatlist,
-             bootsrappedAggregate=aggmatlist, 
+             bootsrappedAggregate=aggmatlist,
              data=object$data,
              matlist=tidy.matlist,
              FUN=object$FUN,
@@ -246,6 +208,3 @@ winnerFrequencies.bootstrap.list=function(object,...){
   names(res)=names(object$bootsrappedRanks)
   res
 }
-
-
-

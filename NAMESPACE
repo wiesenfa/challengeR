@@ -1,55 +1,50 @@
-#exportPattern("^[[:alpha:]]+")
-
+S3method("+",ggList)
+S3method(print,ggList)
+export("%++%")
+#export("%+%")
 export(
-  "aggregate.bootstrap", "aggregate.bootstrap.list", "aggregate.challenge", "aggregate.ranked", "aggregate.ranked.list",
-  "aggregateList", #?
-  "aggregateThenRank", 
+  "aggregate.bootstrap", "aggregate.bootstrap.list", "aggregate.challenge", "aggregate.ranked.list",
+  "aggregateThenRank",
   "as.challenge",
   "as.relation.challenge.incidence", "as.relation.ranked.list",
-  "bootstrap", "bootstrap.ranked", "bootstrap.ranked.list", #"bootstrap.default",
-  "boxplot.ranked", "boxplot.ranked.list", "boxplot.bootstrap.list", "boxplot.comparedRanks.list",
-  #"check_strict_preference", 
-  "compareRanks",    "compareRanks.ranked",    "compareRanks.ranked.list", # "compareRanks.default",
-  "consensus",       "consensus.ranked.list", #"consensus.default", 
+  "bootstrap", "bootstrap.ranked.list", 
+  "boxplot.ranked.list", "boxplot.bootstrap.list", "boxplot.comparedRanks.list",
+   "compareRanks",       "compareRanks.ranked.list", 
+  "consensus",       "consensus.ranked.list", 
   "Decision", "decision.challenge",
-  "blobplot","blobplot.ranked",
   "default_colors",
-  "density.bootstrap.list", 
-  "extract.workflow", 
-  "kendall",    "kendall.bootstrap.list", 
-  #  "melt.aggregated.list",    "melt.ranked", "melt.ranked.list", 
-  # "merge.list", 
-  "lineplot.challenge", 
-  "methodsplot","methodsplot.challenge","methodsplot.ranked",
+  "density.bootstrap.list",
+  "dendrogram", "dendrogram.ranked.list",
+  "extract.workflow",
+  "kendall",    "kendall.bootstrap.list",
+  "lineplot.challenge",
+  "methodsplot","methodsplot.challenge",
   "network", "plot.network",
-  "podium", "podium.ranked","podium.ranked.list", "podium.challenge",#"podium.default", 
-  "print.aggregated", "print.aggregated.list", "print.comparedRanks",    "print.ranked", "print.ranked.list", 
-  #"quickmerge.list", 
-  "rank",    "rank.aggregated", "rank.aggregated.list", "rank.aggregatedRanks", "rank.aggregatedRanks.list", "rank.challenge", #"rank.default",
-  "rankFrequencies", "rankFrequencies.bootstrap",    "rankFrequencies.bootstrap.list", #"rankFrequencies.default", 
-  #"rankNA2",
+  "podium","podium.ranked.list", "podium.challenge",
+  "print.aggregated", "print.aggregated.list", "print.comparedRanks",    "print.ranked", "print.ranked.list",
+   "rank", "rank.aggregated.list", "rank.aggregatedRanks.list", "rank.challenge", 
+  "rankFrequencies", "rankFrequencies.bootstrap",    "rankFrequencies.bootstrap.list", 
   "rankThenAggregate",
-  "rankingHeatmap","rankingHeatmap.ranked","rankingHeatmap.ranked.list", "relation_dissimilarity.ranked.list",
-  "report", "report.bootstrap", "report.bootstrap.list", 
-  "second", 
+  "rankingHeatmap", "rankingHeatmap.ranked.list", "relation_dissimilarity.ranked.list",
+  "report", "report.bootstrap.list",
   "select.if", "select.if.aggregated.list", "select.if.comparedRanks.list", "select.if.list", "select.if.ranked.list",
-  "significanceMap", 
-  "spearmansFootrule", "spearmansWeightedFootrule", 
-  "splitby", 
-  "stability", "stabilityByAlgorithm", "stabilityByAlgorithmStacked","stabilityByTask",
-  "stability.ranked.list", "stability.bootstrap","relation_dissimilarity",
-  "stabilityByAlgorithm.bootstrap.list",   
-  "stabilityByAlgorithmStacked.bootstrap.list",
+  "significanceMap",
+  "spearmansFootrule", "spearmansWeightedFootrule",
+  "splitby",
+  "stability", "stabilityByAlgorithm", "stabilityByTask",
+  "stability.ranked.list", "relation_dissimilarity",
+  "stabilityByAlgorithm.bootstrap.list",
   "stabilityByTask.bootstrap.list",
-  "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", "subset.ranked","subset.bootstrap",#"which.top",
-  "test",    "test.challenge", "test.default", 
+  "subset",
+  "subset.aggregated.list",    "subset.comparedRanks.list", "subset.list", "subset.ranked.list", "subset.bootstrap.list", 
+  "test",    "test.challenge", "test.default",
   "testThenRank",
-  "violin", "violin.bootstrap.list","violin.bootstrap",
-  "winner", "winner.bootstrap",    "winner.bootstrap.list", "winner.default", "winner.ranked",    "winner.ranked.list", 
+  "violin", "violin.bootstrap.list",
+  "winner",   "winner.bootstrap.list", "winner.default",    "winner.ranked.list",
   "winnerFrequencies",    "winnerFrequencies.bootstrap", "winnerFrequencies.bootstrap.list",    "winnerFrequencies.default"
   )
- 
- 
+
+
 importFrom("dplyr", "bind_rows","group_by","summarise","select_if","filter","mutate","right_join","anti_join","ungroup","arrange","desc")
 importFrom("rlang",":=",".data","!!")
 importFrom("reshape2","melt", "acast")
@@ -63,7 +58,8 @@ importFrom("viridisLite", "viridis","cividis")
 importFrom("ggplot2", "aes","aes_string","geom_abline", "geom_bar", "geom_boxplot", "geom_count", "geom_density", "geom_jitter",
     "geom_line", "geom_point", "geom_raster", "geom_step", "geom_text", "geom_violin","annotate","guide_legend",
     "geom_vline", "ggplot", "ggtitle","vars","xlab","ylab","scale_size_area","theme_get","rel","geom_hline","ggplot_build","scale_fill_manual",
-    "scale_y_continuous","coord_cartesian", "element_text", "facet_wrap", "position_jitter", "stat", "stat_summary", "theme", "unit","guides","scale_fill_viridis_c")
+    "scale_y_continuous","coord_cartesian", "element_text", "facet_wrap", "position_jitter", "stat", "stat_summary", "theme", "unit","guides","scale_fill_viridis_c",
+    "theme_set", "theme_light", "scale_color_manual", "element_blank")
 importFrom("grDevices", "col2rgb", "gray", "rgb", "grey")
 importFrom("graphics", "abline", "axis", "barplot", "box", "layout",
                "legend", "par", "plot", "points", "segments","boxplot", "stripchart", "title", "grconvertX", "plot.new")
@@ -85,7 +81,6 @@ S3method(print, aggregated.list)
 S3method(print, ranked.list)
 
 S3method(aggregate, challenge)
-S3method(aggregate, ranked)
 S3method(aggregate, ranked.list)
 S3method(aggregate, bootstrap.list)
 S3method(aggregate, bootstrap)
@@ -94,31 +89,24 @@ S3method(test, default)
 S3method(test, challenge)
 
 S3method(Aggregate, default)
-S3method(Aggregate, data.frame)
 S3method(Aggregate, list)
 
 S3method(Rank, default)
-S3method(Rank, data.frame)
 S3method(Rank, list)
 
 S3method(rank, default)
 S3method(rank, challenge)
-S3method(rank, aggregated)
 S3method(rank, aggregated.list)
-S3method(rank, aggregatedRanks)
 S3method(rank, aggregatedRanks.list)
 
-S3method(blobplot, default)
-S3method(blobplot, ranked)
-
 S3method(bootstrap, default)
-S3method(bootstrap, ranked)
 S3method(bootstrap, ranked.list)
 
+S3method(dendrogram, default)
+S3method(dendrogram, ranked.list)
+
 S3method(winner, default)
-S3method(winner, ranked)
 S3method(winner, ranked.list)
-S3method(winner, bootstrap)
 S3method(winner, bootstrap.list)
 
 S3method(rankFrequencies, default)
@@ -131,16 +119,13 @@ S3method(winnerFrequencies, bootstrap.list)
 
 
 S3method(compareRanks,default)
-S3method(compareRanks,ranked)
 S3method(compareRanks,ranked.list)
 
 S3method(merge,list)
 
 S3method(melt,ranked.list)
-S3method(melt,ranked)
 S3method(melt,aggregated.list)
 
-S3method(boxplot,ranked)
 S3method(boxplot,ranked.list)
 S3method(boxplot,comparedRanks.list)
 S3method(boxplot,bootstrap.list)
@@ -156,13 +141,9 @@ S3method(subset,bootstrap.list)
 S3method(subset,aggregated.list)
 S3method(subset,ranked.list)
 S3method(subset,comparedRanks.list)
-S3method(subset,ranked)
-S3method(subset,bootstrap)
-
 
 S3method(podium,default)
 S3method(podium,challenge)
-S3method(podium,ranked)
 S3method(podium,ranked.list)
 
 S3method(network,default)
@@ -180,7 +161,7 @@ S3method(subset,ranked.list)
 S3method(subset,list)
 S3method(subset,comparedRanks.list)
 S3method(subset,aggregated.list)
- 
+
 S3method(decision,challenge)
 S3method(decision,default)
 
@@ -188,48 +169,32 @@ S3method(lineplot,challenge)
 S3method(lineplot,default)
 
 S3method(methodsplot,challenge)
-S3method(methodsplot,ranked)
 S3method(methodsplot,default)
 
 S3method(significanceMap,data.frame)
-S3method(significanceMap,ranked)
 S3method(significanceMap,ranked.list)
 S3method(significanceMap,default)
 
-
-
 S3method(violin,bootstrap.list)
-S3method(violin,bootstrap)
 S3method(violin,default)
 
-
-#S3method(rankingHeatmap,challenge)
-S3method(rankingHeatmap,ranked)
 S3method(rankingHeatmap,ranked.list)
 S3method(rankingHeatmap,default)
 
 S3method(relation_dissimilarity,ranked.list)
 S3method(relation_dissimilarity,default)
- 
+
 S3method(stabilityByTask,bootstrap.list)
 S3method(stabilityByTask,default)
-S3method(stability,bootstrap)
 S3method(stability,default)
 S3method(stability,ranked.list)
 
 S3method(stabilityByAlgorithm,bootstrap.list)
 S3method(stabilityByAlgorithm,default)
 
-S3method(stabilityByAlgorithmStacked,bootstrap.list)
-S3method(stabilityByAlgorithmStacked,default)
-
 S3method(consensus,ranked.list)
 S3method(consensus,default)
- 
+
 S3method(report,bootstrap.list)
-S3method(report,ranked)
 S3method(report,ranked.list)
-S3method(report,bootstrap)
 S3method(report,default)
-
-

@@ -1,0 +1,167 @@
+---
+title: "Visualizations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Visualizations}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(challengeR)
+```
+
+The package offers an intuitive way to gain important insights into the relative and absolute performance of algorithms. It enables you to generate a benchmarking report that contains visualizations and respective explanations. An overview of all available visualizations is provided on this page demonstrating the use of their corresponding plot functions. This might be of interest if you want to generate the plots separately (e.g. to apply other styles).
+
+The provided plots are described in the following sections:
+
+* Visualizing assessment data
+* Visualizing ranking stability
+* Visualizing cross-task insights
+
+Details can be found in [Wiesenfarth et al. (2019)](https://arxiv.org/abs/1910.05121).
+
+# Visualizing assessment data
+
+```{r}
+data <- read.csv(system.file("extdata", "data_matrix.csv", package = "challengeR", mustWork = TRUE))
+
+challenge <- as.challenge(data, by = "task", algorithm = "alg_name", case = "case", value = "value", smallBetter = FALSE)
+
+ranking <- challenge%>%aggregateThenRank(FUN = mean, ties.method = "min")
+```
+
+## Dot- and boxplots
+Dot- and boxplots visualize the assessment data separately for each algorithm. Boxplots representing descriptive statistics for all test cases
+(median, quartiles and outliers) are combined with horizontally jittered dots representing individual test cases.
+```{r boxplot}
+boxplot(ranking)
+```
+
+## Podium plots
+Upper part of the podium plot: Algorithms are color-coded, and each colored dot in the plot represents a performance value achieved with the respective algorithm. The actual value is encoded by the y-axis. Each podium (here: $p = 5$) represents one possible rank, ordered from best (1) to worst (here: 5). The assignment of values (i.e. colored dots) to one of the podiums is based on the rank that the respective algorithm achieved on the corresponding test case.Note that the plot part above each podium place is further subdivided into $p$ “columns”, where each column represents one algorithm. Dots corresponding to identical test cases are connected by a line, producing the spaghetti structure shown here. Lower part: Bar charts represent the relative frequency at which each algorithm actually achieves the rank encoded by the podium place.
+```{r podium,fig.width=5}
+ podium(ranking,
+        layout.heights = c(.6, 0.4))
+```
+
+## Ranking heatmaps
+In a ranking heatmap, each cell $\left( i, A_j \right)$ shows the absolute frequency of cases in which algorithm $A_j$ achieved rank $i$.
+```{r rankingHeatmap}
+rankingHeatmap(ranking)
+```
+
+# Visualizing ranking stability
+
+The ranking robustness can by analyzed with respect to the ranking method used (see [Wiesenfarth et al. (2019)](https://arxiv.org/abs/1910.05121) for different ranking methods).
+
+## Line plots
+Line plots visualize the robustness of ranking across different ranking methods. Each algorithm is represented by one colored line.
+For each ranking method encoded on the x-axis, the height of the line represents the corresponding rank. Horizontal lines indicate identical ranks for all methods.
+```{r lineplot, fig.width = 7}
+methodsplot(challenge)
+```
+
+For a specific ranking method, the ranking stability can be investigated via bootstrapping and the testing approach.
+
+A ranking object containing the bootstrapping samples has to be created which serves as the basis for the plots.
+
+```{r bootstrapping, results = "hide"}
+set.seed(1)
+rankingBootstrapped <- ranking%>%bootstrap(nboot = 1000)
+```
+
+## Blob plots
+
+Blob plots for visualizing ranking stability are based on bootstrap sampling. Algorithms are color-coded, and the area of each blob at position $\left( A_i, \text{rank } j \right)$ is proportional to the relative frequency $A_i$ achieved rank $j$ (here across $b = 1000$ bootstrap samples). The median rank for each algorithm is indicated by a black cross. 95% bootstrap intervals across bootstrap samples (ranging from the 2.5th to
+the 97.5th percentile of the bootstrap distribution) are indicated by black lines.
+
+```{r stabilityByTask1, fig.width = 7}
+stabilityByTask(rankingBootstrapped)
+```
+
+## Violin plots
+
+Violin plots provide a more condensed way to analyze bootstrap results. In these plots, the focus is on the comparison of the ranking list computed on the full assessment data and the individual bootstrap samples, respectively. Kendall’s $\tau$ is chosen for comparison as it is has an upper and lower bound (+1/-1). Kendall’s $\tau$ is computed for each pair of rankings, and a violin plot that simultaneously depicts a boxplot and a density plot is generated from the results.
+
+```{r violin, results = "hide"}
+violin(rankingBootstrapped)
+```
+
+## Significance maps
+
+Significance maps visualize ranking stability based on statistical significance. They depict incidence matrices of pairwise significant test results for the one-sided Wilcoxon signed rank test at 5% significance level with adjustment for multiple testing according to Holm. Yellow shading indicates that performance values of the algorithm on the x-axis are significantly superior to those from the algorithm on the y-axis, blue color indicates no significant difference.
+
+```{r significanceMap}
+significanceMap(ranking)
+```
+
+# Visualizing cross-task insights
+
+For cross-task insights, a consensus ranking (rank aggregation across tasks) has to be given additionally. The consensus ranking according to mean ranks across tasks is computed here.
+
+```{r}
+meanRanks <- ranking%>%consensus(method = "euclidean")
+```
+The consensus ranking is given according to mean ranks across tasks if method="euclidean" where in case of ties (equal ranks for multiple algorithms) the average rank is used, i.e. ties.method="average".
+
+## Characterization of algorithms
+
+The primary goal of most multi-task challenges is to identify methods that consistently outperform competing algorithms across all tasks. We propose the followig methods for analyzing this:
+
+### Blob plots visualizing the ranking variability across tasks
+
+Blob plots visualize the distribution of ranks across tasks. All ranks that an algorithm achieved in any task are displayed along the y-axis, with the area of the blob being proportional to the frequency. If all tasks provided the same stable ranking, narrow intervals around the diagonal would be expected. Consensus rankings above algorithm names highlight the presence of ties.
+
+```{r stability, fig.width = 5, fig.height = 4}
+stability(ranking, ordering = names(meanRanks))
+```
+
+### Blob plots visualizing the ranking variability based on bootstrapping
+
+This variant of the blob plot approach involves replacing the algorithms on the x-axis with the tasks and then generating a separate plot for each algorithm. This allows assessing the variability of rankings for each algorithm across multiple tasks and bootstrap samples. Here, color coding is used for the tasks, and separation by algorithm enables a relatively straightforward strength-weaknesses analysis for individual methods.
+
+```{r stabilityByAlgorithm1, fig.width = 7, fig.height = 5}
+stabilityByAlgorithm(rankingBootstrapped, ordering = names(meanRanks))
+```
+
+### Stacked frequency plots visualizing the ranking variability based on bootstrapping
+
+An alternative representation is provided by a stacked frequency plot of the observed ranks, separated by algorithm. Observed ranks across bootstrap samples are displayed with coloring according to the task. For algorithms that achieve the same rank in different tasks for the full assessment data set, vertical lines are on top of each other. Vertical lines allow to compare the achieved rank of each algorithm over different tasks.
+
+```{r stabilityByAlgorithm2, fig.width = 7, fig.height = 5}
+stabilityByAlgorithm(rankingBootstrapped, ordering = names(meanRanks), stacked = TRUE)
+```
+
+## Characterization of tasks
+
+It may also be useful to structure the analysis around the different tasks. This section proposes visualizations to analyze and compare tasks of a competition.
+
+### Blob plots visualizing bootstrap results
+
+Bootstrap results can be shown in a blob plot showing one plot for each task. Algorithms should be ordered according to
+the consensus ranking. In this view, the spread of the blobs for each algorithm can be compared across tasks. Deviations from the diagonal indicate deviations from the consensus ranking (over tasks). Specifically, if rank distribution of an algorithm is consistently below the diagonal, the algorithm performed better in this task than on average across tasks, while if the rank distribution of an algorithm is consistently above the diagonal, the algorithm performed worse in this task than on average across tasks. At the bottom of each panel, ranks for each algorithm in the tasks are provided.
+
+```{r stabilityByTask2, fig.width = 7, fig.height = 3.5}
+stabilityByTask(rankingBootstrapped, ordering = names(meanRanks))
+```
+
+### Violin plots visualizing bootstrap results
+
+To obtain a more condensed visualization, violin plots (see above) can be applied separately to all tasks. The overall stability of the rankings can then be compared by assessing the locations and lengths of the violins.
+
+### Cluster analysis
+
+There is increasing interest in assessing the similarity of the tasks, e.g., for pre-training a machine learning algorithm. A potential approach to this could involve the comparison of the rankings for a challenge. Given the same teams participate in all tasks, it may be of interest to cluster tasks into groups where rankings of algorithms are similar and to identify tasks which lead to very dissimilar rankings of algorithms. To enable such an analysis, we propose the generation of a dendrogram from hierarchical cluster analysis. Here, it depicts clusters according to a chosen distance measure (Spearman’s footrule) as well as a chosen agglomeration method (complete agglomeration).
+
+
+```{r dendrogram, fig.width = 7, fig.height = 3.5}
+dendrogram(ranking)
+```

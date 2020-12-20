@@ -1,0 +1,2 @@
+* Visualization of assessment data: Dot- and boxplot, podium plot and ranking heatmap
+* Visualization of ranking stability: Significance map, line plot

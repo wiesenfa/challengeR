@@ -1,13 +1,34 @@
 Package: challengeR
 Type: Package
 Title: Analyzing assessment data of biomedical image analysis competitions and visualization of results
-Version: 0.3.3
-Date: 2020-04-18
-Author: Manuel Wiesenfarth, Annette Kopp-Schneider
+Version: 1.0.0
+Date: 2020-12-20
+Author: Manuel Wiesenfarth, Matthias Eisenmann, Laura Aguilera Saiz, Annette Kopp-Schneider
 Maintainer: Manuel Wiesenfarth <m.wiesenfarth@dkfz.de>
 Description: Analyzing assessment data of biomedical image analysis competitions and visualization of results.
-License: GPL-3
-Depends: R (>= 3.5.2), purrr, ggplot2
-Imports: knitr, plyr, rlang, rmarkdown, viridisLite, methods,graph, tidyr, reshape2, dplyr, relations
-Suggests: foreach, doParallel, ggpubr,Rgraphviz
-
+License: GPL (>= 2)
+Depends:
+  R (>= 3.5.2),
+  ggplot2 (>= 3.3.0),
+  purrr (>= 0.3.3)
+Imports:
+  dplyr (>= 0.8.5),
+  graph (>= 1.64.0),
+  knitr (>= 1.28),
+  methods (>= 3.6.0),
+  plyr (>= 1.8.6),
+  relations (>= 0.6-9),
+  reshape2 (>= 1.4.3),
+  rlang (>= 0.4.5),
+  rmarkdown (>= 2.1),
+  tidyr (>= 1.0.2),
+  viridisLite (>= 0.3.0)
+Suggests:
+  doParallel (>= 1.0.15),
+  foreach (>= 1.4.8),
+  ggpubr (>= 0.2.5),
+  Rgraphviz (>= 2.30.0),
+  testthat (>= 2.1.0)
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
