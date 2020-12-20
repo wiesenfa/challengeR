@@ -11,12 +11,6 @@ results
 -   [Team](#team)
 -   [Reference](#reference)
 
-Note that this is ongoing work (version 0.3.3), there may be updates
-with possibly major changes. *Please make sure that you use the latest
-version!*
-
-The change log can be found in section “Changes”.
-
 # Introduction
 
 The current framework is a tool for analyzing and visualizing challenge
@@ -513,6 +507,18 @@ In system2(..., stdout = if (use_file_stdout()) f1 else FALSE, stderr = f2) :
 The solution was to restart RStudio.
 
 # Changes
+
+#### Version 1.0.0
+
+-   Revision of the underlying data structure
+-   Roxygen documentation for main functionality
+-   Vignettes for quickstart and overview of available plots
+    demonstrating the use of their corresponding plot functions
+-   Introduction of unit tests (package coverage &gt;70%)
+-   Troubleshooting section covering potential issues during setup
+-   Finally: Extensive bug fixes and improvements (for a complete
+    overview please check the [Phabricator
+    tasks](https://phabricator.mitk.org/search/query/vtj0qOqH5qL6/))
 
 #### Version 0.3.3
 

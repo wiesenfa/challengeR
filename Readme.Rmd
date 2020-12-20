@@ -25,11 +25,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-Note that this is ongoing work (version `r packageVersion("challengeR")`), there may be updates with possibly major changes. *Please make sure that you use the latest version!*
-
-The change log can be found in section "Changes".
-
 # Introduction
 
 The current framework is a tool for analyzing and visualizing challenge results in the field of biomedical image analysis and beyond.
@@ -454,6 +449,15 @@ The solution was to restart RStudio.
 
 
 # Changes
+
+#### Version 1.0.0
+- Revision of the underlying data structure
+- Roxygen documentation for main functionality
+- Vignettes for quickstart and overview of available plots demonstrating the use of their corresponding plot functions
+- Introduction of unit tests (package coverage >70%)
+- Troubleshooting section covering potential issues during setup
+- Finally: Extensive bug fixes and improvements (for a complete overview please check the [Phabricator tasks](https://phabricator.mitk.org/search/query/vtj0qOqH5qL6/))
+
 
 #### Version 0.3.3
 - Force line break to avoid that authors exceed the page in generated PDF reports
