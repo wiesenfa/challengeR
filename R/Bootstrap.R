@@ -60,10 +60,10 @@ bootstrap.ranked.list=function(object,
   algorithm=attr(object$data,"algorithm")
   by=attr(object$data,"case")
 
-  # exclude if only 1 test case or only 1 algorithm
+  # exclude if only 1 data set or less than 3 algorithms
   tidy.data.id=sapply(object$data,
                       function(data.subset) {
-                        ifelse((length(unique(data.subset[[by]]))==1 |  length(unique(data.subset[[algorithm]]))<=1 ),
+                        ifelse((length(unique(data.subset[[by]]))==1 |  length(unique(data.subset[[algorithm]]))<=2 ),
                                yes=FALSE,
                                no=TRUE)
                         })
