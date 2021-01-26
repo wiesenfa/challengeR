@@ -371,8 +371,6 @@ rankingHeatmap(object)
 
 ```
 
-\newpage
-
 ## *Significance maps* for visualizing ranking stability based on statistical significance
 
 *Significance maps* depict incidence matrices of
