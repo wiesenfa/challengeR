@@ -483,3 +483,54 @@ test_that("Word report for multi-task data set with bootstrapping is created", {
   }
 
 })
+
+test_that("PDF report for multi-task data set with bootstrapping is created (#algorithms < #tasks)", {
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.80, case="C1"),
+                       data.frame(algo="A2", value=0.60, case="C1"),
+                       data.frame(algo="A1", value=0.85, case="C2"),
+                       data.frame(algo="A2", value=0.65, case="C2")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.20, case="C1"),
+                       data.frame(algo="A2", value=0.30, case="C1"),
+                       data.frame(algo="A1", value=0.25, case="C2"),
+                       data.frame(algo="A2", value=0.35, case="C2")
+                     ))
+  dataTask3 <- cbind(task="T3",
+                     rbind(
+                       data.frame(algo="A1", value=0.10, case="C1"),
+                       data.frame(algo="A2", value=0.80, case="C1"),
+                       data.frame(algo="A1", value=0.15, case="C2"),
+                       data.frame(algo="A2", value=0.85, case="C2")
+                     ))
+
+  data <- rbind(dataTask1, dataTask2, dataTask3)
+
+  challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE)
+
+  ranking <- challenge%>%aggregateThenRank(FUN=median, ties.method="min")
+
+  meanRanks <- ranking%>%consensus(method = "euclidean")
+
+  set.seed(1)
+  rankingBootstrapped <- ranking%>%bootstrap(nboot=10)
+
+  rankingBootstrapped %>%
+    report(consensus=meanRanks,
+           title="Test Challenge",
+           file="testthat_multi_task_bootstrapping_more_tasks_than_algorithms",
+           format="PDF",
+           clean=TRUE,
+           open=FALSE)
+
+  expect_true(file.exists("testthat_multi_task_bootstrapping_more_tasks_than_algorithms.pdf"))
+
+  # Clean up
+  if (file.exists("testthat_multi_task_bootstrapping_more_tasks_than_algorithms.pdf")) {
+    file.remove("testthat_multi_task_bootstrapping_more_tasks_than_algorithms.pdf")
+  }
+
+})
