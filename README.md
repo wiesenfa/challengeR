@@ -76,10 +76,11 @@ challengeR is available under license GPLv2 or any later version.
 
 If you use this software for a publication, please cite:
 
-Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein,
-L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
-analyzing and visualizing challenge results. *arXiv preprint
-arXiv:1910.05121*
+Wiesenfarth, M., Reinke, A., Landman, B.A., Eisenmann, M., Aguilera
+Saiz, L., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. Methods
+and open-source toolkit for analyzing and visualizing challenge results.
+*Sci Rep* **11**, 2369 (2021).
+<https://doi.org/10.1038/s41598-021-82017-6>
 
 # Usage
 
@@ -606,10 +607,11 @@ Cancer Research Center (DKFZ):
 
 # Reference
 
-Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein,
-L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for
-analyzing and visualizing challenge results. *arXiv preprint
-arXiv:1910.05121*
+Wiesenfarth, M., Reinke, A., Landman, B.A., Eisenmann, M., Aguilera
+Saiz, L., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. Methods
+and open-source toolkit for analyzing and visualizing challenge results.
+*Sci Rep* **11**, 2369 (2021).
+<https://doi.org/10.1038/s41598-021-82017-6>
 
 <img src="DKFZ_Logo.png" width="300px" />
 <img src="HIP_Logo.png" width="340px" />
