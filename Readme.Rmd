@@ -62,7 +62,7 @@ challengeR is available under license GPLv2 or any later version.
 
 If you use this software for a publication, please cite:
 
-Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
+Wiesenfarth, M., Reinke, A., Landman, B.A., Eisenmann, M., Aguilera Saiz, L., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. Methods and open-source toolkit for analyzing and visualizing challenge results. *Sci Rep* **11**, 2369 (2021). https://doi.org/10.1038/s41598-021-82017-6
 
 
  
@@ -450,6 +450,13 @@ The solution was to restart RStudio.
 
 # Changes
 
+#### Version 1.0.1
+- Fix error raised in case there are more tasks than algorithms contained in the dataset ([T28193](https://phabricator.mitk.org/T28193))
+- Drop restriction that at least three algorithms are required for bootstrapping ([T28194](https://phabricator.mitk.org/T28194))
+- Avoid blank pages in PDF report when bootstrapping is disabled ([T28201](https://phabricator.mitk.org/T28201))
+- Handle tasks having only one case for bootstrapping ([T28202](https://phabricator.mitk.org/T28202))
+- Update citation ([T28210](https://phabricator.mitk.org/T28210))
+
 #### Version 1.0.0
 - Revision of the underlying data structure
 - Roxygen documentation for main functionality
@@ -508,7 +515,7 @@ The developer team includes members from both division of Computer Assisted Medi
   
 # Reference
 
-Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. *arXiv preprint arXiv:1910.05121*
+Wiesenfarth, M., Reinke, A., Landman, B.A., Eisenmann, M., Aguilera Saiz, L., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. Methods and open-source toolkit for analyzing and visualizing challenge results. *Sci Rep* **11**, 2369 (2021). https://doi.org/10.1038/s41598-021-82017-6
 
 <img src="DKFZ_Logo.png" width="300px" />
 <img src="HIP_Logo.png" width="340px" />

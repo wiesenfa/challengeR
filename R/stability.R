@@ -225,7 +225,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
           xlab("Task")+
           ylab("Rank")
       }
-      names(pl) = names(x$matlist)
+      names(pl) = ordering
       class(pl) <- "ggList"
     }
 
@@ -319,7 +319,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                      data=results.alg) +
           xlab("Rank")
       }
-      names(pl) = names(x$matlist)
+      names(pl) = ordering
       class(pl) <- "ggList"
     }
   }

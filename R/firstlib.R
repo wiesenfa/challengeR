@@ -23,7 +23,7 @@
                         ver,
                         " loaded. \n",
                         #                       "Note: Layouting in case of many algorithms or tasks is not yet optimized. Please be patient, we are steadily working on improving the package",
-                        "\nPlease cite as:\n   Wiesenfarth, M., Reinke, A., Landman, B.A., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. (2019). Methods and open-source toolkit for analyzing and visualizing challenge results. arXiv preprint arXiv:1910.05121\n",
+                        "\nPlease cite as:\n   Wiesenfarth, M., Reinke, A., Landman, B.A., Eisenmann, M., Aguilera Saiz, L., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. Methods and open-source toolkit for analyzing and visualizing challenge results. Sci Rep 11, 2369 (2021). https://doi.org/10.1038/s41598-021-82017-6\n",
                         domain = NULL,
                         appendLF = TRUE)
 }

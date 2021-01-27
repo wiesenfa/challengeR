@@ -9,3 +9,5 @@ The ranking list based on the full assessment data is pairwise compared with the
 ```{r violin, results='asis'}
 violin(boot_object)
 ```
+
+\newpage

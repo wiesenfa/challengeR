@@ -60,13 +60,22 @@ bootstrap.ranked.list=function(object,
   algorithm=attr(object$data,"algorithm")
   by=attr(object$data,"case")
 
-  # exclude if only 1 data set or less than 3 algorithms
+  # exclude if only 1 test case or only 1 algorithm
   tidy.data.id=sapply(object$data,
                       function(data.subset) {
-                        ifelse((length(unique(data.subset[[by]]))==1 |  length(unique(data.subset[[algorithm]]))<=2 ),
+                        ifelse((length(unique(data.subset[[by]]))==1 |  length(unique(data.subset[[algorithm]]))<=1 ),
                                yes=FALSE,
                                no=TRUE)
                         })
+  
+  if (sum(tidy.data.id)==0) {
+    if (length(object$matlist)>1) stop("All tasks only contained 1 test case. Bootstrapping with 1 test case not sensible.")
+    else stop("Only 1 test case included. Bootstrapping with 1 test case not sensible.")
+  }
+  if (sum(tidy.data.id)<length(object$matlist)) message("Task(s) ", 
+                                                        paste(names(tidy.data.id)[!tidy.data.id], collapse = ", "),
+                                                        " with only 1 test case excluded from bootstrapping.")   
+  
   tidy.data=object$data[tidy.data.id]
   tidy.matlist=object$matlist[tidy.data.id]
 
