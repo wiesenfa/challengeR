@@ -450,6 +450,13 @@ The solution was to restart RStudio.
 
 # Changes
 
+#### Version 1.0.1
+- Fix error raised in case there are more tasks than algorithms contained in the dataset ([T28193](https://phabricator.mitk.org/T28193))
+- Drop restriction that at least three algorithms are required for bootstrapping ([T28194](https://phabricator.mitk.org/T28194))
+- Avoid blank pages in PDF report when bootstrapping is disabled ([T28201](https://phabricator.mitk.org/T28201))
+- Handle tasks having only one case for bootstrapping ([T28202](https://phabricator.mitk.org/T28202))
+- Update citation ([T28210](https://phabricator.mitk.org/T28210))
+
 #### Version 1.0.0
 - Revision of the underlying data structure
 - Roxygen documentation for main functionality
