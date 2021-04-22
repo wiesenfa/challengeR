@@ -26,7 +26,7 @@ The provided plots are described in the following sections:
 * Visualizing ranking stability
 * Visualizing cross-task insights
 
-Details can be found in [Wiesenfarth et al. (2019)](https://arxiv.org/abs/1910.05121).
+Details can be found in [Wiesenfarth et al. (2021)](https://rdcu.be/ceiaN).
 
 # Visualizing assessment data
 
@@ -60,7 +60,7 @@ rankingHeatmap(ranking)
 
 # Visualizing ranking stability
 
-The ranking robustness can by analyzed with respect to the ranking method used (see [Wiesenfarth et al. (2019)](https://arxiv.org/abs/1910.05121) for different ranking methods).
+The ranking robustness can by analyzed with respect to the ranking method used (see [Wiesenfarth et al. (2021)](https://rdcu.be/ceiaN) for different ranking methods).
 
 ## Line plots
 Line plots visualize the robustness of ranking across different ranking methods. Each algorithm is represented by one colored line.
