@@ -534,3 +534,55 @@ test_that("PDF report for multi-task data set with bootstrapping is created (#al
   }
 
 })
+
+
+
+test_that("PDF report is created when all metric values are identical", {
+  n <- 10
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1",value=rep(1,n,),case=as.character(1:n)),
+                       data.frame(algo="A2",value=rep(1,n,),case=as.character(1:n))
+                       ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.20, case="C1"),
+                       data.frame(algo="A2", value=0.30, case="C1"),
+                       data.frame(algo="A1", value=0.25, case="C2"),
+                       data.frame(algo="A2", value=0.35, case="C2")
+                     ))
+  dataTask3 <- cbind(task="T3",
+                     rbind(
+                       data.frame(algo="A1", value=0.10, case="C1"),
+                       data.frame(algo="A2", value=0.80, case="C1"),
+                       data.frame(algo="A1", value=0.15, case="C2"),
+                       data.frame(algo="A2", value=0.85, case="C2")
+                     ))
+  
+  data <- rbind(dataTask1, dataTask2, dataTask3)
+  
+  challenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE)
+  
+  ranking <- challenge%>%aggregateThenRank(FUN=median, ties.method="min")
+  
+  meanRanks <- ranking%>%consensus(method = "euclidean")
+  
+  set.seed(1)
+  rankingBootstrapped <- ranking%>%bootstrap(nboot=3)
+  
+  rankingBootstrapped %>%
+    report(consensus=meanRanks,
+           title="Test Challenge",
+           file="testthat_allMetricValues_identical",
+           format="PDF",
+           clean=TRUE,
+           open=FALSE)
+  
+  expect_true(file.exists("testthat_allMetricValues_identical.pdf"))
+  
+  # Clean up
+  if (file.exists("testthat_allMetricValues_identical.pdf")) {
+    file.remove("testthat_allMetricValues_identical.pdf")
+  }
+  
+})
