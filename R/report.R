@@ -63,7 +63,7 @@ report.bootstrap.list=function(object,
                                dpi = 150, # DPI, relevant for bitmaps if clean==FALSE and fig.format specified
                                open=TRUE,...){
 
-  # if any missing perforamnce value and na.treat not given in as.challenge stop
+  # if any missing performance value and na.treat not given in as.challenge stop
   if (is.null(attr(object$data,"na.treat")) && 
       any(sapply(object$data, 
                  function(task) any(is.na(task[[attr(object$data,"value")]]))))) {

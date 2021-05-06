@@ -509,6 +509,13 @@ The solution was to restart RStudio.
 
 # Changes
 
+#### Version 1.0.2
+
+-   Fix error when all metric values are the same
+    ([T28453](https://phabricator.mitk.org/T28453))
+-   Fix wrong numer of algorithms shown in report summary
+    ([T28465](https://phabricator.mitk.org/T28465))
+
 #### Version 1.0.1
 
 -   Fix error raised in case there are more tasks than algorithms

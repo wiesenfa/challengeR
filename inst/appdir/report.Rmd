@@ -157,7 +157,7 @@ if (isMultiTask) {
     cat("\n",names(object$matlist)[t],": ")
     n.cases=nrow(challenge_multiple[[t]])/length(unique(challenge_multiple[[t]][[attr(challenge_multiple,"algorithm")]]))
 
-    numberOfAlgorithms <- length(levels(challenge_multiple[[t]][[attr(challenge_multiple, "algorithm")]]))
+    numberOfAlgorithms <- length(unique(challenge_multiple[[t]][[attr(challenge_multiple, "algorithm")]]))
     
     cat("\nThe analysis is based on",
         numberOfAlgorithms,
@@ -195,16 +195,16 @@ if (isMultiTask) {
   # Is subset of algorithms used?
   if (!is.null(object$fulldata[[1]])) {
     cat("The top ",
-        length(levels(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
+        length(unique(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
         " out of ",
-        length(levels(object$fulldata[[1]][[attr(challenge_multiple, "algorithm")]])),
+        length(unique(object$fulldata[[1]][[attr(challenge_multiple, "algorithm")]])),
         " algorithms are considered.\n")
     cat("\nThe analysis is based on",
         n.cases,
         "cases. ")
   } else {
     cat("\nThe analysis is based on",
-        length(levels(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
+        length(unique(challenge_multiple[[1]][[attr(challenge_multiple, "algorithm")]])),
         "algorithms and",
         n.cases,
         "cases. ")

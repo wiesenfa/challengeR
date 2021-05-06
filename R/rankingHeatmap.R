@@ -103,9 +103,14 @@ rankingHeatmap.challenge=function(x,
   ncases=length(unique(task[[attr(x,"case")]]))
   ggplot(dat)+
     geom_raster(aes(algorithm, rank, fill= Count))+
-    geom_hline(yintercept = seq(1.5,max(task$rank)-.5,by=1),
+    geom_hline(yintercept = seq(1.5,
+                                max(max(task$rank)-.5,
+                                    1.5),
+                                by=1),
                color=grey(.8),size=.3)+
-    geom_vline(xintercept = seq(1.5,length(unique(dat$algorithm))-.5,by=1),
+    geom_vline(xintercept = seq(1.5,
+                                length(unique(dat$algorithm))-.5,
+                                by=1),
                color=grey(.8),size=.3)+
     scale_fill_viridis_c(direction = -1,
                          limits=c(0,ncases)
