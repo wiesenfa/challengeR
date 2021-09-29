@@ -28,7 +28,7 @@ for (subt in names(boot_object$bootsrappedRanks)){
                              shape=4,
                              showLabelForSingleTask=showLabelForSingleTask) + 
     scale_color_manual(values=cols) +
-    guides(color = FALSE)
+    guides(color = 'none')
 
 }
 
