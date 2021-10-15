@@ -24,7 +24,7 @@ Algorithms are color-coded, and the area of each blob at position $\left( A_i, \
 #stability.ranked.list
 stability(object,ordering=ordering_consensus,max_size=9,size=8,shape=4)+
   scale_color_manual(values=cols) +
-  guides(color = FALSE)
+  guides(color = 'none')
 ```
 
 

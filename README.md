@@ -33,9 +33,9 @@ visualization techniques.
 
 # Installation
 
-Requires R version &gt;= 3.5.2 (<https://www.r-project.org>).
+Requires R version \>= 3.5.2 (<https://www.r-project.org>).
 
-Further, a recent version of Pandoc (&gt;= 1.12.3) is required. RStudio
+Further, a recent version of Pandoc (>= 1.12.3) is required. RStudio
 (<https://rstudio.com>) automatically includes this so you do not need
 to download Pandoc if you plan to use rmarkdown from the RStudio IDE,
 otherwise you’ll need to install Pandoc for your platform
@@ -152,7 +152,7 @@ quotation marks.
 
 In the following, simulated data is generated *instead* for illustration
 purposes (skip the following code chunk if you have already loaded
-data). The data is also stored as “inst/extdata/data\_matrix.csv” in the
+data). The data is also stored as “inst/extdata/data_matrix.csv” in the
 repository.
 
 ``` r
@@ -471,7 +471,7 @@ There is an issue with installing missing packages in LaTeX.
 
 ##### Solution:
 
-Open your MiKTeX Console –&gt; Settings, select “Always install missing
+Open your MiKTeX Console –> Settings, select “Always install missing
 packages on-the-fly”. Then generate the report. Once the report is
 generated, you can reset the settings to your preferred ones.
 
@@ -509,6 +509,11 @@ The solution was to restart RStudio.
 
 # Changes
 
+#### Version 1.0.3
+
+-   Fix ggplot warning in various places of the report
+    ([T28710](https://phabricator.mitk.org/T28710))
+
 #### Version 1.0.2
 
 -   Fix error when all metric values are the same
@@ -535,7 +540,7 @@ The solution was to restart RStudio.
 -   Roxygen documentation for main functionality
 -   Vignettes for quickstart and overview of available plots
     demonstrating the use of their corresponding plot functions
--   Introduction of unit tests (package coverage &gt;70%)
+-   Introduction of unit tests (package coverage >70%)
 -   Troubleshooting section covering potential issues during setup
 -   Finally: Extensive bug fixes and improvements (for a complete
     overview please check the [Phabricator
@@ -583,7 +588,7 @@ The solution was to restart RStudio.
     would contain a different set of algorithms).
 -   Reports for subsets of tasks: Use
     e.g. `subset(ranking_bootstrapped, tasks=c("task1", "task2","task3")) %>% report(...)`
-    to restrict report to tasks “task1”, “task2”,"task3. You may want to
+    to restrict report to tasks “task1”, “task2”,“task3. You may want to
     recompute the consensus ranking before using
     `meanRanks=subset(ranking, tasks=c("task1", "task2", "task3"))%>%consensus(method = "euclidean")`
 
