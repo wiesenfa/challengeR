@@ -105,9 +105,12 @@ stability.ranked.list=function(x,
                 linetype="dotted")+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
     guides(size = guide_legend(title="%"))+
-    scale_y_continuous(minor_breaks=NULL,
-                       limits=c(1,max(5,max(dd$rank))),
-                       breaks=c(1,seq(5,max(5,max(dd$rank)),by=5)))+
+    scale_y_continuous(minor_breaks=NULL, 
+                       limits = c(1, max(dd$rank)), 
+                       breaks = ifelse(max(dd$rank)>5, 
+                                       yes = c(1, seq(5, max(dd$rank), by=5)), 
+                                       no = 1:max(dd$rank) ) )+
+
     xlab("Algorithm")+
     ylab("Rank")
 
@@ -189,9 +192,11 @@ stabilityByAlgorithm.bootstrap.list=function(x,
         facet_wrap(vars(algorithm))+
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
         guides(size = guide_legend(title="%"))+
-        scale_y_continuous(minor_breaks=NULL,
-                           limits=c(1,max(5,max(rankDist$rank))),
-                           breaks=c(1,seq(5,max(5,max(rankDist$rank)),by=5)))+
+        scale_y_continuous(minor_breaks=NULL, 
+                           limits = c(1, max(rankDist$rank)) , 
+                           breaks = ifelse(max(rankDist$rank)>5, 
+                                           yes = c(1, seq(5, max(rankDist$rank), by=5)), 
+                                           no = 1:max(rankDist$rank) ) )+
         xlab("Task")+
         ylab("Rank")
 
@@ -219,9 +224,11 @@ stabilityByAlgorithm.bootstrap.list=function(x,
           facet_wrap(vars(algorithm))+
           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
           guides(size = guide_legend(title="%"))+
-          scale_y_continuous(minor_breaks=NULL,
-                             limits=c(1,max(5,max(rankDist$rank))),
-                             breaks=c(1,seq(5,max(5,max(rankDist$rank)),by=5)))+
+          scale_y_continuous(minor_breaks=NULL, 
+                             limits = c(1, max(rankDist$rank)) , 
+                             breaks = ifelse(max(rankDist$rank)>5, 
+                                             yes = c(1, seq(5, max(rankDist$rank), by=5)), 
+                                             no = 1:max(rankDist$rank) ) )+
           xlab("Task")+
           ylab("Rank")
       }
@@ -401,9 +408,11 @@ stabilityByTask.bootstrap.list=function(x,
     coord_cartesian(clip = 'off')+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
     guides(size = guide_legend(title="%"))+
-    scale_y_continuous(minor_breaks=NULL,
-                       limits=c(.4,max(5,max(rankDist$rank))),
-                       breaks=c(1,seq(5,max(5,max(rankDist$rank)),by=5)))+
+    scale_y_continuous(minor_breaks=NULL, 
+                       limits = c(.4, max(rankDist$rank)) , 
+                       breaks = ifelse(max(rankDist$rank)>5, 
+                                       yes = c(1, seq(5, max(rankDist$rank), by=5)), 
+                                       no = 1:max(rankDist$rank) ) )+
     xlab("Algorithm")+
     ylab("Rank")
 
