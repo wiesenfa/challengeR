@@ -63,11 +63,11 @@ stability.ranked.list=function(x,
   if (length(x$data) < 2) {
     stop("The stability of rankings across tasks cannot be computed for less than two tasks.")
   }
-
+  
   dd=melt(x,
           measure.vars="rank",
           value.name="rank") %>% dplyr::rename(task="L1")
-
+  
   if (!missing(ordering)) {
     if (is.numeric(ordering) & !is.null(names(ordering)) ){
       ordering <- names(ordering)[order(ordering)]
@@ -77,20 +77,20 @@ stability.ranked.list=function(x,
     dd=dd%>%mutate(algorithm=factor(.data$algorithm,
                                     levels=ordering))
   } else dd=dd%>%mutate(algorithm=factor(.data$algorithm))
-
+  
   if (!freq) {
     p = ggplot(dd)+
-          geom_count(aes(algorithm,
-                         rank,
-                         color=algorithm,
-                         size = stat(prop*100)))
+      geom_count(aes(algorithm,
+                     rank,
+                     color=algorithm,
+                     size = stat(prop*100)))
   } else {
     p=ggplot(dd)+
-        geom_count(aes(algorithm,
-                       rank,
-                       color=algorithm ))
+      geom_count(aes(algorithm,
+                     rank,
+                     color=algorithm ))
   }
-
+  
   p+scale_size_area(max_size = max_size)+
     stat_summary(aes(algorithm, rank),
                  geom="point",
@@ -105,15 +105,13 @@ stability.ranked.list=function(x,
                 linetype="dotted")+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
     guides(size = guide_legend(title="%"))+
-    scale_y_continuous(minor_breaks=NULL, 
-                       limits = c(1, max(dd$rank)), 
-                       breaks = ifelse(max(dd$rank)>5, 
-                                       yes = c(1, seq(5, max(dd$rank), by=5)), 
-                                       no = 1:max(dd$rank) ) )+
-
+    scale_y_continuous(minor_breaks=NULL,
+                       limits=c(1, max(dd$rank)),
+                       breaks=seq(1, max(dd$rank), by=(max(dd$rank)-1)))+
+    
     xlab("Algorithm")+
     ylab("Rank")
-
+  
 }
 
 
@@ -154,13 +152,13 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                                              shape=4,#only for !stacked
                                              freq=FALSE, #only for stacked
                                              single=FALSE,...) {
-
+  
   if (length(x$data) < 2) {
     stop("The stability of rankings by algorithm cannot be computed for less than two tasks.")
   }
-
+  
   rankDist=rankdist.bootstrap.list(x)
-
+  
   if (!missing(ordering)) {
     if (is.numeric(ordering) & !is.null(names(ordering)) ){
       ordering <- names(ordering)[order(ordering)]
@@ -192,14 +190,12 @@ stabilityByAlgorithm.bootstrap.list=function(x,
         facet_wrap(vars(algorithm))+
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
         guides(size = guide_legend(title="%"))+
-        scale_y_continuous(minor_breaks=NULL, 
-                           limits = c(1, max(rankDist$rank)) , 
-                           breaks = ifelse(max(rankDist$rank)>5, 
-                                           yes = c(1, seq(5, max(rankDist$rank), by=5)), 
-                                           no = 1:max(rankDist$rank) ) )+
+        scale_y_continuous(minor_breaks=NULL,
+                           limits=c(1, max(rankDist$rank)),
+                           breaks=seq(1, max(rankDist$rank), by=(max(rankDist$rank)-1)))+
         xlab("Task")+
         ylab("Rank")
-
+      
     } else {
       pl=list()
       for (alg in ordering){
@@ -224,18 +220,16 @@ stabilityByAlgorithm.bootstrap.list=function(x,
           facet_wrap(vars(algorithm))+
           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
           guides(size = guide_legend(title="%"))+
-          scale_y_continuous(minor_breaks=NULL, 
-                             limits = c(1, max(rankDist$rank)) , 
-                             breaks = ifelse(max(rankDist$rank)>5, 
-                                             yes = c(1, seq(5, max(rankDist$rank), by=5)), 
-                                             no = 1:max(rankDist$rank) ) )+
+          scale_y_continuous(minor_breaks=NULL,
+                             limits=c(1, max(rankDist$rank)),
+                             breaks=seq(1, max(rankDist$rank), by=(max(rankDist$rank)-1)))+
           xlab("Task")+
           ylab("Rank")
       }
       names(pl) = ordering
       class(pl) <- "ggList"
     }
-
+    
   } else { #stacked
     rankDist=rankDist%>%
       group_by(task)%>%
@@ -246,7 +240,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
       ungroup%>%
       data.frame%>%
       mutate(rank=as.factor(.data$rank))
-
+    
     results= melt.ranked.list(x,
                               measure.vars="rank",
                               value.name="rank") %>%
@@ -267,7 +261,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
       pl<- ggplot(rankDist) +
         facet_wrap(vars(algorithm))+
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-
+      
       if (freq){
         pl <- pl +   geom_bar(aes(rank,
                                   n,
@@ -283,8 +277,8 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                               stat = "identity")+
           ylab("Proportion (%)")
       }
-
-     pl <-  pl +
+      
+      pl <-  pl +
         geom_vline(aes(xintercept=rank,
                        color=task),
                    size=.4,
@@ -301,7 +295,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
         pl[[alg]]=ggplot(rankDist.alg)+
           facet_wrap(vars(algorithm))+
           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-
+        
         if (freq){
           pl[[alg]] <- pl[[alg]] +   geom_bar(aes(rank,
                                                   n,
@@ -317,7 +311,7 @@ stabilityByAlgorithm.bootstrap.list=function(x,
                                               stat = "identity")+
             ylab("Proportion (%)")
         }
-
+        
         pl[[alg]] <- pl[[alg]] +
           geom_vline(aes(xintercept=rank,
                          color=task),
@@ -379,7 +373,7 @@ stabilityByTask.bootstrap.list=function(x,
     rankDist=rankDist%>%mutate(algorithm=factor(.data$algorithm,
                                                 levels=ordering))
   }
-
+  
   blobPlot <- ggplot(rankDist)+
     geom_count(aes(algorithm ,
                    rank,
@@ -408,18 +402,16 @@ stabilityByTask.bootstrap.list=function(x,
     coord_cartesian(clip = 'off')+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
     guides(size = guide_legend(title="%"))+
-    scale_y_continuous(minor_breaks=NULL, 
-                       limits = c(.4, max(rankDist$rank)) , 
-                       breaks = ifelse(max(rankDist$rank)>5, 
-                                       yes = c(1, seq(5, max(rankDist$rank), by=5)), 
-                                       no = 1:max(rankDist$rank) ) )+
+    scale_y_continuous(minor_breaks=NULL,
+                       limits=c(.4, max(rankDist$rank)),
+                       breaks=seq(1, max(rankDist$rank), by=(max(rankDist$rank)-1)))+
     xlab("Algorithm")+
     ylab("Rank")
-
+  
   # Create multi-panel plot with task names as labels for multi-task data set or single-task data set when explicitly specified
   if (length(x$data) > 1 || showLabelForSingleTask == TRUE) {
     blobPlot <- blobPlot + facet_wrap(vars(task))
   }
-
+  
   return(blobPlot)
 }
