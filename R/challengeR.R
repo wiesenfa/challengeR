@@ -83,7 +83,7 @@ as.challenge=function(object,
                       check=TRUE) {
 
   object=as.data.frame(object[,c(value, algorithm, case, by, annotator)])
-
+  object[[algorithm]] <- as.factor(object[[algorithm]])
   # sanity checks
   if (check) {
  
