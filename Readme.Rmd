@@ -450,12 +450,17 @@ The solution was to restart RStudio.
 
 # Changes
 
+#### Version 1.0.4
+- Fix NaN values cause error ([T28746](https://phabricator.mitk.org/T28746))
+- Fix Bars and dots don't match in podium plot ([T29167](https://phabricator.mitk.org/T29167))
+- Fix y-axis of blob plots always scaled to 5 ([T28966](https://phabricator.mitk.org/T28966))
+
 #### Version 1.0.3
 - Fix ggplot warning in various places of the report ([T28710](https://phabricator.mitk.org/T28710))
 
 #### Version 1.0.2
 - Fix error when all metric values are the same ([T28453](https://phabricator.mitk.org/T28453))
-- Fix wrong numer of algorithms shown in report summary ([T28465](https://phabricator.mitk.org/T28465))
+- Fix wrong number of algorithms shown in report summary ([T28465](https://phabricator.mitk.org/T28465))
 
 #### Version 1.0.1
 - Fix error raised in case there are more tasks than algorithms contained in the dataset ([T28193](https://phabricator.mitk.org/T28193))

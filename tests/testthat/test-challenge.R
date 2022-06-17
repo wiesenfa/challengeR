@@ -177,7 +177,7 @@ test_that("missing algorithm performances are added as NAs for single-task chall
     data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-                 "Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
+                 "Performance of not all algorithms has been observed for all cases.\nTherefore, missings have been inserted in the following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
@@ -194,7 +194,7 @@ test_that("multi-task data set containing one task is interpreted as single-task
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_message(actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-                 "Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
+                 "Performance of not all algorithms has been observed for all cases.\nTherefore, missings have been inserted in the following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
@@ -217,7 +217,7 @@ test_that("missing algorithm performances are added as NAs for multi-task challe
   data <- rbind(dataTask1, dataTask2)
 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-                 "Performance of not all algorithms has been observed for all cases in task 'T1'. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
+                 "Performance of not all algorithms has been observed for all cases in task 'T1'.\nTherefore, missings have been inserted in the following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, NA, NA, 0.6))
@@ -390,7 +390,7 @@ test_that("user is notified of missing algorithm performance when multi-task dat
 
   # do not specify parameter "by" to interpret multi-task data set as single-task data set
   expect_message(as.challenge(data, taskName="New task", algorithm="algo", case="case", value="value", smallBetter=FALSE),
-                 "Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
+                 "Performance of not all algorithms has been observed for all cases.\nTherefore, missings have been inserted in the following cases:", fixed=TRUE)
 })
 
 test_that("NAs are replaced by numeric value for single-task challenge", {
@@ -520,7 +520,7 @@ test_that("automatically added NAs are replaced by numeric value for single-task
     data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0),
-                 "Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
+                 "Performance of not all algorithms has been observed for all cases.\nTherefore, missings have been inserted in the following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.0, 0.0, 0.6))
@@ -543,7 +543,7 @@ test_that("automatically added NAs are replaced by numeric value for multi-task 
   data <- rbind(dataTask1, dataTask2)
 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0),
-                 "Performance of not all algorithms has been observed for all cases in task 'T1'. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
+                 "Performance of not all algorithms has been observed for all cases in task 'T1'.\nTherefore, missings have been inserted in the following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A1", "A2", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.0, 0.0, 0.6))
@@ -560,7 +560,7 @@ test_that("automatically added NAs are removed for single-task challenge", {
     data.frame(algo="A2", value=0.6, case="C2"))
 
   expect_message(actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm"),
-                 "Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
+                 "Performance of not all algorithms has been observed for all cases.\nTherefore, missings have been inserted in the following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.6))
@@ -583,7 +583,7 @@ test_that("automatically added NAs are removed for multi-task challenge", {
   data <- rbind(dataTask1, dataTask2)
 
   expect_message(actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat="na.rm"),
-                 "Performance of not all algorithms has been observed for all cases in task 'T1'. Therefore, missings have been inserted in the following cases:", fixed=TRUE)
+                 "Performance of not all algorithms has been observed for all cases in task 'T1'.\nTherefore, missings have been inserted in the following cases:", fixed=TRUE)
 
   expect_equal(as.vector(actualChallenge$T1$algo), c("A1", "A2"))
   expect_equal(as.vector(actualChallenge$T1$value), c(0.8, 0.6))
@@ -593,4 +593,41 @@ test_that("automatically added NAs are removed for multi-task challenge", {
   expect_equal(as.vector(actualChallenge$T2$value), c(0.2, 0.3, 0.4))
   expect_equal(as.vector(actualChallenge$T2$case), c("C1", "C2", "C1"))
 })
+
+test_that("class of 'algorithm' column must be 'factor' for single-task challenge", {
+  data <- rbind(
+    data.frame(algo="A1", value=0.8, case="C1"),
+    data.frame(algo="A1", value=0.7, case="C2"),
+    data.frame(algo="A2", value=0.6, case="C1"),
+    data.frame(algo="A2", value=0.5, case="C2"))
+  
+  actualChallenge <- as.challenge(data, taskName="T1", algorithm="algo", case="case", value="value", smallBetter=FALSE, na.treat=0)
+  
+  expect_equal(class(actualChallenge$T1$algo), "factor")
+})  
+
+test_that("class of 'algorithm' column must be 'factor' for multi-task challenge", {
+  dataTask1 <- cbind(task="T1",
+                     rbind(
+                       data.frame(algo="A1", value=0.81, case="C1"),
+                       data.frame(algo="A2", value=0.72, case="C1"),
+                       data.frame(algo="A1", value=0.65, case="C2"),
+                       data.frame(algo="A2", value=0.95, case="C2")
+                     ))
+  dataTask2 <- cbind(task="T2",
+                     rbind(
+                       data.frame(algo="A1", value=0.75, case="C1"),
+                       data.frame(algo="A2", value=0.82, case="C1"),
+                       data.frame(algo="A1", value=0.66, case="C2"),
+                       data.frame(algo="A2", value=0.84, case="C2")
+                     ))
+  
+  data <- rbind(dataTask1, dataTask2)
+  
+  actualChallenge <- as.challenge(data, by="task", algorithm="algo", case="case", value="value", smallBetter=TRUE)
+  
+  expect_equal(class(actualChallenge$T1$algo), "factor")
+  expect_equal(class(actualChallenge$T2$algo), "factor")
+})
+
 
