@@ -125,11 +125,11 @@ as.challenge=function(object,
                     by=c( algorithm,case))
         if (nrow(missingData[[task]])>0) {
              if (length(object) == 1 ) { # single task
-            message("Performance of not all algorithms has been observed for all cases. Therefore, missings have been inserted in the following cases:")
+            message("Performance of not all algorithms has been observed for all cases.\nTherefore, missings have been inserted in the following cases:")
           } else { # multi task
             message("Performance of not all algorithms has been observed for all cases in task '",
                     task,
-                    "'. Therefore, missings have been inserted in the following cases:")
+                    "'.\nTherefore, missings have been inserted in the following cases:")
 
           }
           print(as.data.frame(missingData[[task]]))
@@ -176,12 +176,16 @@ as.challenge=function(object,
       }
     }
   }
-  if (check==TRUE && (any(sapply(missingData, function(x) nrow(x))>0) |any(n.missing>0)))  {
-    if (is.null(na.treat)) message("For aggregate-then-rank, na.treat will have to be specified. ",
-                                   "For rank-then-aggregate, missings will implicitly lead to the algorithm ranked last for the missing test case.",
-                                   "na.treat obligatory if report is intended to be compiled."
-                               )
-    else if (is.numeric(na.treat)) message("All missings have been replaced by the value ", na.treat,".\n")
+
+  if (check==TRUE && (any(sapply(missingData, function(x) nrow(x))>0) | any(n.missing>0)))  {
+    ##
+    ## The message below was disabled because it can cause misinformation even we supply na.treat to as.challenge object
+    ##
+    # if (is.null(na.treat)) message("For aggregate-then-rank, na.treat will have to be specified. ",
+    #                                "For rank-then-aggregate, missings will implicitly lead to the algorithm ranked last for the missing test case.",
+    #                                "na.treat obligatory if report is intended to be compiled."
+    #                            )
+    if (is.numeric(na.treat)) message("All missings have been replaced by the value ", na.treat,".\n")
     else if (is.character(na.treat) && na.treat=="na.rm") message("All missings have been removed.")
     else if (is.function(na.treat)) {
       message("Missings have been replaced using function ")
