@@ -91,6 +91,13 @@ stability.ranked.list=function(x,
                      color=algorithm ))
   }
   
+  # Define breaks before creating Blob plot
+  if (max(dd$rank)>5) {
+    breaks = c(1, seq(5, max(dd$rank), by=5))
+  } else {
+    breaks = seq(1, max(dd$rank))
+  }
+  
   p+scale_size_area(max_size = max_size)+
     stat_summary(aes(algorithm, rank),
                  geom="point",
@@ -106,9 +113,8 @@ stability.ranked.list=function(x,
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
     guides(size = guide_legend(title="%"))+
     scale_y_continuous(minor_breaks=NULL,
-                       limits=c(1, max(dd$rank)),
-                       breaks=seq(1, max(dd$rank), by=(max(dd$rank)-1)))+
-    
+                       limits=c(.4, max(dd$rank)),
+                       breaks=breaks)+
     xlab("Algorithm")+
     ylab("Rank")
   
@@ -172,6 +178,14 @@ stabilityByAlgorithm.bootstrap.list=function(x,
   
   if (!stacked){
     if (single==FALSE){
+      
+      # Define breaks before creating Blob plot
+      if (max(rankDist$rank)>5) {
+        breaks = c(1, seq(5, max(rankDist$rank), by=5))
+      } else {
+        breaks = seq(1, max(rankDist$rank))
+      }
+      
       pl <- ggplot(rankDist)+
         geom_count(aes(task ,
                        rank,
@@ -191,8 +205,8 @@ stabilityByAlgorithm.bootstrap.list=function(x,
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
         guides(size = guide_legend(title="%"))+
         scale_y_continuous(minor_breaks=NULL,
-                           limits=c(1, max(rankDist$rank)),
-                           breaks=seq(1, max(rankDist$rank), by=(max(rankDist$rank)-1)))+
+                           limits=c(.4, max(rankDist$rank)),
+                           breaks=breaks)+
         xlab("Task")+
         ylab("Rank")
       
@@ -201,6 +215,14 @@ stabilityByAlgorithm.bootstrap.list=function(x,
       for (alg in ordering){
         rankDist.alg=subset(rankDist,
                             rankDist$algorithm==alg)
+        
+        # Define breaks before creating Blob plot
+        if (max(rankDist$rank)>5) {
+          breaks = c(1, seq(5, max(rankDist$rank), by=5))
+        } else {
+          breaks = seq(1, max(rankDist$rank))
+        }
+        
         pl[[alg]]=ggplot(rankDist.alg)+
           geom_count(aes(task ,
                          rank,
@@ -221,8 +243,8 @@ stabilityByAlgorithm.bootstrap.list=function(x,
           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))+
           guides(size = guide_legend(title="%"))+
           scale_y_continuous(minor_breaks=NULL,
-                             limits=c(1, max(rankDist$rank)),
-                             breaks=seq(1, max(rankDist$rank), by=(max(rankDist$rank)-1)))+
+                             limits=c(.4, max(rankDist$rank)),
+                             breaks=breaks)+
           xlab("Task")+
           ylab("Rank")
       }
@@ -374,6 +396,13 @@ stabilityByTask.bootstrap.list=function(x,
                                                 levels=ordering))
   }
   
+  # Define breaks before creating Blob plot
+  if (max(rankDist$rank)>5) {
+    breaks = c(1, seq(5, max(rankDist$rank), by=5))
+  } else {
+    breaks = seq(1, max(rankDist$rank))
+  }
+  
   blobPlot <- ggplot(rankDist)+
     geom_count(aes(algorithm ,
                    rank,
@@ -404,14 +433,14 @@ stabilityByTask.bootstrap.list=function(x,
     guides(size = guide_legend(title="%"))+
     scale_y_continuous(minor_breaks=NULL,
                        limits=c(.4, max(rankDist$rank)),
-                       breaks=seq(1, max(rankDist$rank), by=(max(rankDist$rank)-1)))+
+                       breaks=breaks)+
     xlab("Algorithm")+
     ylab("Rank")
   
-  # Create multi-panel plot with task names as labels for multi-task data set or single-task data set when explicitly specified
-  if (length(x$data) > 1 || showLabelForSingleTask == TRUE) {
-    blobPlot <- blobPlot + facet_wrap(vars(task))
-  }
+    # Create multi-panel plot with task names as labels for multi-task data set or single-task data set when explicitly specified
+    if (length(x$data) > 1 || showLabelForSingleTask == TRUE) {
+      blobPlot <- blobPlot + facet_wrap(vars(task))
+    }
   
   return(blobPlot)
 }
