@@ -94,3 +94,26 @@ test_that("two sequential bootstrappings yield same results", {
   expect_equal(rankingBootstrapped1, rankingBootstrapped2)
 })
 
+
+test_that("two parallel bootstrappings yield same results", {
+  data <- read.csv(system.file("extdata", "data_matrix.csv", package="challengeR", mustWork=TRUE))
+
+  challenge <- as.challenge(data, by="task", algorithm="alg_name", case="case", value="value", smallBetter=FALSE)
+
+  ranking <- challenge%>%rankThenAggregate(FUN=mean, ties.method="min")
+
+  library(doParallel)
+  numCores <- detectCores(logical=FALSE)
+  registerDoParallel(cores=numCores)
+
+  set.seed(1, kind="L'Ecuyer-CMRG")
+  rankingBootstrapped1 <- ranking%>%bootstrap(nboot=10, parallel=TRUE, progress="none")
+
+  set.seed(1, kind="L'Ecuyer-CMRG")
+  rankingBootstrapped2 <- ranking%>%bootstrap(nboot=10, parallel=TRUE, progress="none")
+
+  stopImplicitCluster()
+
+  expect_equal(rankingBootstrapped1, rankingBootstrapped2)
+})
+
