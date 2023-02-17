@@ -78,3 +78,19 @@ test_that("Multi task bootstrapping, only one task with >1 test case continued w
 })
 
 
+test_that("two sequential bootstrappings yield same results", {
+  data <- read.csv(system.file("extdata", "data_matrix.csv", package="challengeR", mustWork=TRUE))
+
+  challenge <- as.challenge(data, by="task", algorithm="alg_name", case="case", value="value", smallBetter=FALSE)
+
+  ranking <- challenge%>%rankThenAggregate(FUN=mean, ties.method="min")
+
+  set.seed(1)
+  rankingBootstrapped1 <- ranking%>%bootstrap(nboot=10)
+
+  set.seed(1)
+  rankingBootstrapped2 <- ranking%>%bootstrap(nboot=10)
+
+  expect_equal(rankingBootstrapped1, rankingBootstrapped2)
+})
+
