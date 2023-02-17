@@ -57,6 +57,10 @@ bootstrap.ranked.list=function(object,
                                parallel=FALSE,
                                progress="text",
                                ...){
+  if (parallel & RNGkind()[1] != "L'Ecuyer-CMRG") {
+    warning("To ensure reproducibility please use kind = \"L'Ecuyer-CMRG\" in set.seed(), e.g. set.seed(1, kind = \"L'Ecuyer-CMRG\").")
+  }
+
   algorithm=attr(object$data,"algorithm")
   by=attr(object$data,"case")
 
