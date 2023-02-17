@@ -130,7 +130,7 @@ test_that("parallel bootstrapping raises warning if RNG \"L'Ecuyer-CMRG\" is not
   set.seed(1, kind="Super-Duper")
 
   expect_warning(rankingBootstrapped <- ranking%>%bootstrap(nboot=10, parallel=TRUE, progress="none"),
-                 "To ensure reproducibility please use kind = \"L'Ecuyer-CMRG\" in set.seed(), e.g. set.seed(1, kind = \"L'Ecuyer-CMRG\").", fixed = TRUE)
+                 "To ensure reproducibility, please use RNG kind = \"L'Ecuyer-CMRG\" in set.seed(), e.g. set.seed(1, kind = \"L'Ecuyer-CMRG\").", fixed = TRUE)
 
   stopImplicitCluster()
 })
