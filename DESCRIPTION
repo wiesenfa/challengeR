@@ -3,7 +3,7 @@ Type: Package
 Title: Analyzing assessment data of biomedical image analysis competitions and visualization of results
 Version: 1.0.4
 Date: 2022-10-15
-Author: Manuel Wiesenfarth, Matthias Eisenmann, Laura Aguilera Saiz, Annette Kopp-Schneider
+Author: Manuel Wiesenfarth, Matthias Eisenmann, Laura Aguilera Saiz, Annette Kopp-Schneider, Ali Emre Kavur
 Maintainer: Manuel Wiesenfarth <m.wiesenfarth@dkfz.de>
 Description: Analyzing assessment data of biomedical image analysis competitions and visualization of results.
 License: GPL (>= 2)

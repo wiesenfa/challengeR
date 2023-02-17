@@ -515,7 +515,7 @@ The solution was to restart RStudio.
   
 # Team
 
-The developer team includes members from both division of Computer Assisted Medical Interventions (CAMI) and Biostatistics at the German Cancer Research Center (DKFZ): 
+The developer team includes members from both division of Intelligent Medical Systems (IMSY) and Biostatistics at the German Cancer Research Center (DKFZ): 
 
 - Manuel Wiesenfarth 
 - Annette Kopp-Schneider
@@ -524,6 +524,7 @@ The developer team includes members from both division of Computer Assisted Medi
 - Laura Aguilera Saiz
 - Elise Récéjac
 - Lena Maier-Hein
+- Ali Emre Kavur
   
 # Reference
 
