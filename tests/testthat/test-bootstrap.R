@@ -1,4 +1,4 @@
-test_that("Single task bootstrapping with 1 test case stopped with message", {
+test_that("single-task bootstrapping with 1 test case stopped with message", {
   dataTask1 <- cbind(task="T1",
                    rbind(
                      data.frame(algo="A1", value=0.8, case="C1"),
@@ -11,14 +11,12 @@ challenge <- as.challenge(dataTask1,  algorithm="algo", case="case", value="valu
 ranking <- challenge%>%aggregateThenRank(FUN=median, ties.method="min")
 
 set.seed(1)
-
-
 expect_error(rankingBootstrapped <- ranking%>%bootstrap(nboot=10),
              "Only 1 test case included. Bootstrapping with 1 test case not sensible.", fixed = TRUE)
 })
 
 
-test_that("Multi task bootstrapping, all tasks with 1 test case stopped with message", {
+test_that("multi-task bootstrapping, all tasks with 1 test case stopped with message", {
   dataTask1 <- cbind(task="T1",
                      rbind(
                        data.frame(algo="A1", value=0.8, case="C1"),
@@ -47,7 +45,7 @@ test_that("Multi task bootstrapping, all tasks with 1 test case stopped with mes
 })
 
 
-test_that("Multi task bootstrapping, only one task with >1 test case continued with message", {
+test_that("multi-task bootstrapping, only one task with >1 test case continued with message", {
   dataTask1 <- cbind(task="T1",
                      rbind(
                        data.frame(algo="A1", value=0.8, case="C1"),
@@ -117,3 +115,22 @@ test_that("two parallel bootstrappings yield same results", {
   expect_equal(rankingBootstrapped1, rankingBootstrapped2)
 })
 
+
+test_that("parallel bootstrapping raises warning if RNG \"L'Ecuyer-CMRG\" is not used", {
+  data <- read.csv(system.file("extdata", "data_matrix.csv", package="challengeR", mustWork=TRUE))
+
+  challenge <- as.challenge(data, by="task", algorithm="alg_name", case="case", value="value", smallBetter=FALSE)
+
+  ranking <- challenge%>%rankThenAggregate(FUN=mean, ties.method="min")
+
+  library(doParallel)
+  numCores <- detectCores(logical=FALSE)
+  registerDoParallel(cores=numCores)
+
+  set.seed(1, kind="Super-Duper")
+
+  expect_warning(rankingBootstrapped <- ranking%>%bootstrap(nboot=10, parallel=TRUE, progress="none"),
+                 "To ensure reproducibility please use kind = \"L'Ecuyer-CMRG\" in set.seed(), e.g. set.seed(1, kind = \"L'Ecuyer-CMRG\").", fixed = TRUE)
+
+  stopImplicitCluster()
+})
