@@ -230,7 +230,7 @@ ranking <- challenge%>%testThenRank(alpha = 0.05, # significance level
 
 Perform bootstrapping with 1000 bootstrap samples using one CPU
 ```{r, eval=F, echo=T}
-set.seed(1, kind = "L'Ecuyer-CMRG")
+set.seed(123, kind = "L'Ecuyer-CMRG")
 ranking_bootstrapped <- ranking%>%bootstrap(nboot = 1000)
 ```
 
@@ -238,8 +238,9 @@ If you want to use multiple CPUs (here: 8 CPUs), use
 
 ```{r, eval=F, echo=T}
 library(doParallel)
+library(doRNG)
 registerDoParallel(cores = 8)  
-set.seed(1, kind = "L'Ecuyer-CMRG")
+registerDoRNG(123)
 ranking_bootstrapped <- ranking%>%bootstrap(nboot = 1000, parallel = TRUE, progress = "none")
 stopImplicitCluster()
 ```

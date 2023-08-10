@@ -26,7 +26,7 @@ bootstrap.default <- function(object, ...) stop("not implemented for this class"
 #' a task with \code{n} cases consists of \code{n} cases randomly drawn with replacement from this task.
 #' A total of \code{nboot} of these bootstrap samples are drawn.
 #'
-#' To ensure reproducibility, please use RNG kind = "L'Ecuyer-CMRG" in set.seed(), e.g. set.seed(1, kind = "L'Ecuyer-CMRG").
+#' To ensure reproducibility, please use the doRNG package on Windows or RNG kind = "L'Ecuyer-CMRG" in set.seed(), e.g. set.seed(1, kind = "L'Ecuyer-CMRG").
 #'
 #' @param object The ranked assessment data set.
 #' @param nboot The number of bootstrap samples.
@@ -40,15 +40,16 @@ bootstrap.default <- function(object, ...) stop("not implemented for this class"
 #'
 #' \dontrun{
 #'  # perform bootstrapping with 1000 bootstrap samples using one CPU
-#'  set.seed(1, kind="L'Ecuyer-CMRG")
+#'  set.seed(123, kind="L'Ecuyer-CMRG")
 #'  ranking_bootstrapped <- bootstrap(ranking, nboot = 1000)
 #' }
 #'
 #' \dontrun{
 #'  # perform bootstrapping using multiple CPUs (here: 8 CPUs)
 #'  library(doParallel)
-#'  registerDoParallel(cores=8)
-#'  set.seed(1, kind="L'Ecuyer-CMRG")
+#'  library(doRNG)
+#'  registerDoParallel(cores = 8)
+#'  registerDoRNG(123)
 #'  ranking_bootstrapped <- bootstrap(ranking, nboot = 1000, parallel = TRUE, progress = "none")
 #'  stopImplicitCluster()
 #' }
@@ -59,10 +60,6 @@ bootstrap.ranked.list=function(object,
                                parallel=FALSE,
                                progress="text",
                                ...){
-  if (parallel & RNGkind()[1] != "L'Ecuyer-CMRG") {
-    warning("To ensure reproducibility, please use RNG kind = \"L'Ecuyer-CMRG\" in set.seed(), e.g. set.seed(1, kind = \"L'Ecuyer-CMRG\").")
-  }
-
   algorithm=attr(object$data,"algorithm")
   by=attr(object$data,"case")
 

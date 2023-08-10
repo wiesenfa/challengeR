@@ -25,6 +25,7 @@ Imports:
   viridisLite (>= 0.3.0)
 Suggests:
   doParallel (>= 1.0.15),
+  doRNG (>= 1.8.6),
   foreach (>= 1.4.8),
   ggpubr (>= 0.2.5),
   Rgraphviz (>= 2.30.0),
