@@ -230,7 +230,7 @@ ranking <- challenge%>%testThenRank(alpha = 0.05, # significance level
 
 Perform bootstrapping with 1000 bootstrap samples using one CPU
 ```{r, eval=F, echo=T}
-set.seed(1)
+set.seed(123, kind = "L'Ecuyer-CMRG")
 ranking_bootstrapped <- ranking%>%bootstrap(nboot = 1000)
 ```
 
@@ -238,8 +238,9 @@ If you want to use multiple CPUs (here: 8 CPUs), use
 
 ```{r, eval=F, echo=T}
 library(doParallel)
+library(doRNG)
 registerDoParallel(cores = 8)  
-set.seed(1)
+registerDoRNG(123)
 ranking_bootstrapped <- ranking%>%bootstrap(nboot = 1000, parallel = TRUE, progress = "none")
 stopImplicitCluster()
 ```
@@ -450,6 +451,10 @@ The solution was to restart RStudio.
 
 # Changes
 
+#### Version 1.0.5
+
+- Ensure reproducibility with parallel bootstrapping ([T29361](https://phabricator.mitk.org/T29361))
+
 #### Version 1.0.4
 - Fix NaN values cause error ([T28746](https://phabricator.mitk.org/T28746))
 - Fix Bars and dots don't match in podium plot ([T29167](https://phabricator.mitk.org/T29167))
@@ -477,7 +482,6 @@ The solution was to restart RStudio.
 - Troubleshooting section covering potential issues during setup
 - Finally: Extensive bug fixes and improvements (for a complete overview please check the [Phabricator tasks](https://phabricator.mitk.org/search/query/vtj0qOqH5qL6/))
 
-
 #### Version 0.3.3
 - Force line break to avoid that authors exceed the page in generated PDF reports
 
@@ -492,7 +496,6 @@ The solution was to restart RStudio.
 
 #### Version 0.2.5
 - Bug fixes
-
 
 #### Version 0.2.4
 - Automatic insertion of missings
@@ -515,7 +518,7 @@ The solution was to restart RStudio.
   
 # Team
 
-The developer team includes members from both division of Computer Assisted Medical Interventions (CAMI) and Biostatistics at the German Cancer Research Center (DKFZ): 
+The developer team includes members from both division of Intelligent Medical Systems (IMSY) and Biostatistics at the German Cancer Research Center (DKFZ): 
 
 - Manuel Wiesenfarth 
 - Annette Kopp-Schneider
@@ -524,10 +527,13 @@ The developer team includes members from both division of Computer Assisted Medi
 - Laura Aguilera Saiz
 - Elise Récéjac
 - Lena Maier-Hein
+- Ali Emre Kavur
   
 # Reference
 
 Wiesenfarth, M., Reinke, A., Landman, B.A., Eisenmann, M., Aguilera Saiz, L., Cardoso, M.J., Maier-Hein, L. and Kopp-Schneider, A. Methods and open-source toolkit for analyzing and visualizing challenge results. *Sci Rep* **11**, 2369 (2021). https://doi.org/10.1038/s41598-021-82017-6
 
-<img src="DKFZ_Logo.png" width="300px" />
-<img src="HIP_Logo.png" width="340px" />
+</br>
+<img src="Helmholtz_Imaging_Logo.svg" height="70px" />
+</br></br>
+<img src="DKFZ_Logo.png" height="100px" />
