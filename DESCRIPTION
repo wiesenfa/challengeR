@@ -1,8 +1,8 @@
 Package: challengeR
 Type: Package
 Title: Analyzing assessment data of biomedical image analysis competitions and visualization of results
-Version: 1.0.4
-Date: 2022-10-15
+Version: 1.0.5
+Date: 2023-08-10
 Author: Manuel Wiesenfarth, Matthias Eisenmann, Laura Aguilera Saiz, Annette Kopp-Schneider, Ali Emre Kavur
 Maintainer: Manuel Wiesenfarth <m.wiesenfarth@dkfz.de>
 Description: Analyzing assessment data of biomedical image analysis competitions and visualization of results.
