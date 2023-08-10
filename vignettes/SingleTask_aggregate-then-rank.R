@@ -56,9 +56,10 @@ ranking=challenge%>%aggregateThenRank(FUN = mean, na.treat=0, ties.method = "min
 ## 4\. Perform bootstrapping
 
 library(doParallel)
-registerDoParallel(cores=8)  
-set.seed(1)
-ranking_bootstrapped=ranking%>%bootstrap(nboot=1000, parallel=TRUE, progress = "none")
+library(doRNG)
+registerDoParallel(cores=8)
+registerDoRNG(1)
+ranking_bootstrapped=ranking%>%bootstrap(nboot=1000, parallel=TRUE, progress="none")
 stopImplicitCluster()
 
 ## 5\. Generate the report
