@@ -127,11 +127,11 @@ test_that("extraction of task subset from bootstrap ranking works for multi-task
   expect_equal(length(rankingBootstrappedSubset$data), 1)
   expect_is(rankingBootstrappedSubset$data$T2, "data.frame")
 
-  expect_equal(length(rankingBootstrappedSubset$bootsrappedRanks), 1)
-  expect_is(rankingBootstrappedSubset$bootsrappedRanks$T2, "data.frame")
+  expect_equal(length(rankingBootstrappedSubset$bootstrappedRanks), 1)
+  expect_is(rankingBootstrappedSubset$bootstrappedRanks$T2, "data.frame")
 
-  expect_equal(length(rankingBootstrappedSubset$bootsrappedAggregate), 1)
-  expect_is(rankingBootstrappedSubset$bootsrappedAggregate$T2, "data.frame")
+  expect_equal(length(rankingBootstrappedSubset$bootstrappedAggregate), 1)
+  expect_is(rankingBootstrappedSubset$bootstrappedAggregate$T2, "data.frame")
 })
 
 test_that("extraction of task subset from bootstrap ranking works for single-task data set", {
@@ -158,11 +158,11 @@ test_that("extraction of task subset from bootstrap ranking works for single-tas
   expect_equal(length(rankingBootstrappedSubset$data), 1)
   expect_is(rankingBootstrappedSubset$data$T1, "data.frame")
 
-  expect_equal(length(rankingBootstrappedSubset$bootsrappedRanks), 1)
-  expect_is(rankingBootstrappedSubset$bootsrappedRanks$T1, "data.frame")
+  expect_equal(length(rankingBootstrappedSubset$bootstrappedRanks), 1)
+  expect_is(rankingBootstrappedSubset$bootstrappedRanks$T1, "data.frame")
 
-  expect_equal(length(rankingBootstrappedSubset$bootsrappedAggregate), 1)
-  expect_is(rankingBootstrappedSubset$bootsrappedAggregate$T1, "data.frame")
+  expect_equal(length(rankingBootstrappedSubset$bootstrappedAggregate), 1)
+  expect_is(rankingBootstrappedSubset$bootstrappedAggregate$T1, "data.frame")
 })
 
 test_that("extraction of task subset from bootstrap ranking raises an error for invalid task name", {

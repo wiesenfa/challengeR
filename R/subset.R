@@ -177,16 +177,16 @@ subset.bootstrap.list=function(x,
   if (!missing(top)){
     objectTop <- subset.ranked.list(x, top = top)
 
-    objectTop$bootsrappedRanks[[1]] <- objectTop$bootsrappedRanks[[1]][rownames(objectTop$matlist[[1]]),]
-    objectTop$bootsrappedAggregate[[1]] <- objectTop$bootsrappedAggregate[[1]][rownames(objectTop$matlist[[1]]),]
+    objectTop$bootstrappedRanks[[1]] <- objectTop$bootstrappedRanks[[1]][rownames(objectTop$matlist[[1]]),]
+    objectTop$bootstrappedAggregate[[1]] <- objectTop$bootstrappedAggregate[[1]][rownames(objectTop$matlist[[1]]),]
     return(objectTop)
   } else if (!missing(tasks)){
     if (is.character(tasks) && any(!tasks%in%names(x$matlist))) {
       stop("There is/are no task(s) called ",paste(tasks[!tasks%in%names(x$matlist)],collapse = " and "),".")
     }
 
-    res=list(bootsrappedRanks=x$bootsrappedRanks[tasks],
-             bootsrappedAggregate=x$bootsrappedAggregate[tasks],
+    res=list(bootstrappedRanks=x$bootstrappedRanks[tasks],
+             bootstrappedAggregate=x$bootstrappedAggregate[tasks],
              matlist=x$matlist[tasks],
              data=x$data[tasks],
              FUN=x$FUN

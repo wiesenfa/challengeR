@@ -141,16 +141,16 @@ aggregate.bootstrap.list <-function(x,
   FUNname=as.character(call$FUN)
 
   if (!is.function(FUN)) stop("FUN has to be a function (possibly as character)")
-  matlist=llply(1:length(x$bootsrappedRank),
+  matlist=llply(1:length(x$bootstrappedRank),
                 function(i.piece){
-                  if (what=="ranks") xmean <- as.data.frame(apply(x$bootsrappedRank[[i.piece]],1,FUN=FUN))
-                  else xmean <- as.data.frame(apply(x$bootsrappedAggregate[[i.piece]],1,FUN=FUN))
+                  if (what=="ranks") xmean <- as.data.frame(apply(x$bootstrappedRank[[i.piece]],1,FUN=FUN))
+                  else xmean <- as.data.frame(apply(x$bootstrappedAggregate[[i.piece]],1,FUN=FUN))
                   names(xmean)=paste0(what,"_",FUNname)
                  xmean
                 })
 
 
-  names(matlist)=names(x$bootsrappedRank)
+  names(matlist)=names(x$bootstrappedRank)
   res=list(FUN = . %>% (call),
            call=list(call),
            data=x,
@@ -168,10 +168,10 @@ aggregate.bootstrap<-function(x,what="metric",FUN=mean,
 
   if (!is.function(FUN)) stop("FUN has to be a function (possibly as character)")
 
-  if (what=="ranks") xmean <- as.data.frame(apply(x$bootsrappedRank,
+  if (what=="ranks") xmean <- as.data.frame(apply(x$bootstrappedRank,
                                                   1,
                                                   FUN=FUN))
-  else xmean <- as.data.frame(apply(x$bootsrappedAggregate,
+  else xmean <- as.data.frame(apply(x$bootstrappedAggregate,
                                     1,
                                     FUN=FUN))
   names(xmean)=paste0(what,"_",FUNname)

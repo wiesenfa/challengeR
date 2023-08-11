@@ -32,10 +32,10 @@ if (n.tasks<=6 & n.algorithms<=10 ){
     guides(color = 'none')
 } else {
   pl=list()
-  for (subt in names(boot_object$bootsrappedRanks)){
-    a=list(bootsrappedRanks=list(boot_object$bootsrappedRanks[[subt]]),
+  for (subt in names(boot_object$bootstrappedRanks)){
+    a=list(bootstrappedRanks=list(boot_object$bootstrappedRanks[[subt]]),
            matlist=list(boot_object$matlist[[subt]]))
-    names(a$bootsrappedRanks)=names(a$matlist)=subt
+    names(a$bootstrappedRanks)=names(a$matlist)=subt
     class(a)="bootstrap.list"
     r=boot_object$matlist[[subt]]
     
