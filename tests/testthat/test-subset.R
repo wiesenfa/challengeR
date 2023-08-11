@@ -151,8 +151,8 @@ test_that("top 2 performing algorithms are extracted from bootstrap ranking and 
   expect_equal(as.vector(rankingBootstrappedSubset$data$T1$case), c("C1", "C1", "C2", "C2"))
   expect_equal(as.vector(rankingBootstrappedSubset$data$T1$task), c("T1", "T1", "T1", "T1"))
 
-  expect_equal(dim(rankingBootstrappedSubset$bootsrappedRanks$T1), c(2, 10))
-  expect_equal(dim(rankingBootstrappedSubset$bootsrappedAggregate$T1), c(2, 10))
+  expect_equal(dim(rankingBootstrappedSubset$bootstrappedRanks$T1), c(2, 10))
+  expect_equal(dim(rankingBootstrappedSubset$bootstrappedAggregate$T1), c(2, 10))
 
   # check that full data set is preserved
   expect_equal(rankingBootstrappedSubset$fulldata$T1, challenge$T1)

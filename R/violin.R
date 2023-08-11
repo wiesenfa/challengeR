@@ -86,14 +86,14 @@ violin.bootstrap.list=function(x,...){
 }
 
 kendall.bootstrap.list=function(x){
-  ken=lapply(1:length(x$bootsrappedRanks),function(Task){
-    id=match(rownames( x$bootsrappedRanks[[Task]]),
+  ken=lapply(1:length(x$bootstrappedRanks),function(Task){
+    id=match(rownames( x$bootstrappedRanks[[Task]]),
              rownames(x$matlist[[Task]]) )
-    sapply(x$bootsrappedRanks[[Task]],
+    sapply(x$bootstrappedRanks[[Task]],
            function(bootSample) suppressWarnings(kendall(bootSample,
                                                          x$matlist[[Task]]$rank[id])))
   } )
-  names(ken)=names((x$bootsrappedRanks))
+  names(ken)=names((x$bootstrappedRanks))
 
   if (sum(is.na(x))>0){
    cat("Bootstrap samples without variability in rankings (all algorithms ranked 1) excluded.\n Frequency of such samples by task:\n",fill = T)

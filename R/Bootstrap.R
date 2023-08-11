@@ -126,8 +126,8 @@ bootstrap.ranked.list=function(object,
                                         function(z) z[, -2, drop = F]))
   }
 
-  final=list(bootsrappedRanks=rankmatlist,
-             bootsrappedAggregate=aggmatlist,
+  final=list(bootstrappedRanks=rankmatlist,
+             bootstrappedAggregate=aggmatlist,
              data=object$data,
              matlist=tidy.matlist,
              FUN=object$FUN,
@@ -152,12 +152,12 @@ rankFrequencies.default <- function(object, ...) stop("not implemented for this 
 rankFrequencies.bootstrap=function(object, who,...){
   if (is.data.frame(who)) who=rownames(who)
   if (length(who)==1){
-    res=table(t(object$bootsrappedRanks[rownames(object$bootsrappedRanks)==who,]))
+    res=table(t(object$bootstrappedRanks[rownames(object$bootstrappedRanks)==who,]))
     cat("\n",who,"\n")
     print(res)
   } else {
     res=lapply(who, function(w){
-      rr=table(t(object$bootsrappedRanks[rownames(object$bootsrappedRanks)==w,]))
+      rr=table(t(object$bootstrappedRanks[rownames(object$bootstrappedRanks)==w,]))
     cat(w,"\n")
       print(rr)
       cat("\n")
@@ -170,7 +170,7 @@ rankFrequencies.bootstrap=function(object, who,...){
 
 rankFrequencies.bootstrap.list=function(object, who,...){
   if (is.data.frame(who)) who=rownames(who)
-  res=lapply(object$bootsrappedRanks,function(bootMat){
+  res=lapply(object$bootstrappedRanks,function(bootMat){
     if (length(who)==1){
       res=table(t(bootMat[rownames(bootMat)==who,]))
       cat("\n",who,"\n")
@@ -198,8 +198,8 @@ winnerFrequencies.default <- function(object, ...) stop("not implemented for thi
 
 # Achtung: bester rank muss ==1 sein und nicht z.B. 1.5
 winnerFrequencies.bootstrap=function(object,...){
-  rankings_dicho=ifelse(object$bootsrappedRanks==1,1,0)
-  winnerFrequencies=data.frame(winnerFrequency=rowSums(rankings_dicho),row.names = rownames(object$bootsrappedRanks))
+  rankings_dicho=ifelse(object$bootstrappedRanks==1,1,0)
+  winnerFrequencies=data.frame(winnerFrequency=rowSums(rankings_dicho),row.names = rownames(object$bootstrappedRanks))
   res=merge(object$mat,winnerFrequencies,by="row.names",...)
   rownames(res)=res[,1]
   res=res[,-1]
@@ -209,14 +209,14 @@ winnerFrequencies.bootstrap=function(object,...){
 }
 
 winnerFrequencies.bootstrap.list=function(object,...){
-  res=lapply(1:length(object$bootsrappedRanks),function(id){
-    rankings_dicho=ifelse(object$bootsrappedRanks[[id]]==1,1,0)
-    winnerFrequencies=data.frame(winnerFrequency=rowSums(rankings_dicho),row.names = rownames(object$bootsrappedRanks[[id]]))
+  res=lapply(1:length(object$bootstrappedRanks),function(id){
+    rankings_dicho=ifelse(object$bootstrappedRanks[[id]]==1,1,0)
+    winnerFrequencies=data.frame(winnerFrequency=rowSums(rankings_dicho),row.names = rownames(object$bootstrappedRanks[[id]]))
     res=merge(object$matlist[[id]],winnerFrequencies,by="row.names",...)
     rownames(res)=res[,1]
     res=res[,-1]
     res
   })
-  names(res)=names(object$bootsrappedRanks)
+  names(res)=names(object$bootstrappedRanks)
   res
 }

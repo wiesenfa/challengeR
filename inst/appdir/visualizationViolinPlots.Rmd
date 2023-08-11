@@ -2,7 +2,7 @@
 
 ## *Violin plot* for visualizing ranking stability based on bootstrapping \label{violin}
 
-The ranking list based on the full assessment data is pairwise compared with the ranking lists based on the individual bootstrap samples (here $b=$ `r ncol(boot_object$bootsrappedRanks[[1]])` samples). For each pair of rankings, Kendall's $\tau$ correlation is computed. Kendall’s $\tau$ is a scaled index determining the correlation between the lists. It is computed by evaluating the number of pairwise concordances and discordances between ranking lists and produces values between $-1$ (for inverted order) and $1$ (for identical order). A violin plot, which simultaneously depicts a boxplot and a density plot, is generated from the results.
+The ranking list based on the full assessment data is pairwise compared with the ranking lists based on the individual bootstrap samples (here $b=$ `r ncol(boot_object$bootstrappedRanks[[1]])` samples). For each pair of rankings, Kendall's $\tau$ correlation is computed. Kendall’s $\tau$ is a scaled index determining the correlation between the lists. It is computed by evaluating the number of pairwise concordances and discordances between ranking lists and produces values between $-1$ (for inverted order) and $1$ (for identical order). A violin plot, which simultaneously depicts a boxplot and a density plot, is generated from the results.
 
 \bigskip
 

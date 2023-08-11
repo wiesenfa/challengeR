@@ -122,7 +122,7 @@ stability.ranked.list=function(x,
 
 
 rankdist.bootstrap.list=function(x,...){
-  rankDist=melt(lapply(x$bootsrappedRanks,t),
+  rankDist=melt(lapply(x$bootstrappedRanks,t),
                 value.name="rank") %>% dplyr::rename(algorithm="Var2",task="L1")
   rankDist
 }
